@@ -1,0 +1,80 @@
+Starting
+wahoo!
+/scratch/p319950/data/data_fiducial
+/scratch/p319950/data/data_H2p
+/scratch/p319950/data/data_H1p
+/scratch/p319950/data/data_H1m
+/scratch/p319950/data/data_H2m
+/scratch/p319950/data/data_ombh22p
+/scratch/p319950/data/data_ombh21p
+/scratch/p319950/data/data_ombh21m
+/scratch/p319950/data/data_ombh22m
+/scratch/p319950/data/data_omch22p
+/scratch/p319950/data/data_omch21p
+/scratch/p319950/data/data_omch21m
+/scratch/p319950/data/data_omch22m
+/scratch/p319950/data/data_ns2p
+/scratch/p319950/data/data_ns1p
+/scratch/p319950/data/data_ns1m
+/scratch/p319950/data/data_ns2m
+/scratch/p319950/data/data_As2p
+/scratch/p319950/data/data_As1p
+/scratch/p319950/data/data_As1m
+/scratch/p319950/data/data_As2m
+/scratch/p319950/data/data_mnu2p
+/scratch/p319950/data/data_mnu1p
+/scratch/p319950/data/data_mnu1m
+/scratch/p319950/data/data_mnu2m
+/scratch/p319950/data/data_w02p
+/scratch/p319950/data/data_w01p
+/scratch/p319950/data/data_w01m
+/scratch/p319950/data/data_w02m
+Starting computation
+Convergence bispectrum SNR^2:
+[0.7688760976582436, 2.938651624217254, 5.069856366926036, 6.421524219091706, 7.144028082487125, 7.529056673784893, 7.750407272601163, 7.899799002203735]
+Shear bispectrum SNR^2:
+[53.8449450120048, 323.90247789647987, 791.4981476282778, 1360.5571050080957, 1960.4255568930241, 2540.210343520133, 3074.988422705832, 3554.9509402895305]
+Done
+
+###############################################################################
+Hábrók Cluster
+Job 15757407 for user p319950
+Finished at: Mon Mar 17 14:01:17 CET 2025
+
+Job details:
+============
+
+Job ID                         : 15757407
+Name                           : JFSNR
+User                           : p319950
+Partition                      : regularshort
+Nodes                          : node97
+Number of Nodes                : 1
+Cores                          : 64
+Number of Tasks                : 1
+State                          : COMPLETED  
+Submit                         : 2025-03-17T12:43:23
+Start                          : 2025-03-17T12:47:19
+End                            : 2025-03-17T14:01:12
+Reserved walltime              : 06:00:00
+Used walltime                  : 01:13:53
+Used CPU time                  : 03:48:12 (Efficiency:  4.83%)
+% User (Computation)           : 96.29%
+% System (I/O)                 :  3.71%
+Total memory reserved          : 200G
+Maximum memory used            : 133.31G
+Hints and tips      :
+ 1) The program efficiency is low. Your program is not using the assigned cores
+    effectively. Please check if you are using all the cores you requested.
+    You may also need to check the file in- and output pattern of your program.
+ *) For more information on these issues see:
+    https://wiki.hpc.rug.nl/habrok/additional_information/job_hints
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Hábrók in your publications:
+
+https://wiki.hpc.rug.nl/habrok/introduction/scientific_output
+
+################################################################################

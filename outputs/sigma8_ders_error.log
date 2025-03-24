@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home3/p319950/ResearchProject/sigma8_ders.py", line 35, in <module>
+    for i in len(num_pars):
+             ^^^^^^^^^^^^^
+TypeError: object of type 'int' has no len()

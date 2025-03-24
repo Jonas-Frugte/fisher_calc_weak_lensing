@@ -1,0 +1,8 @@
+/home3/p319950/ResearchProject/cosm_setup.py:543: IntegrationWarning: The integral is probably divergent, or slowly convergent.
+  return scipy.integrate.quad(
+/home3/p319950/ResearchProject/cosm_setup.py:543: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
+  in the extrapolation table.  It is assumed that the requested tolerance
+  cannot be achieved, and that the returned result (if full_output = 1) is 
+  the best which can be obtained.
+  return scipy.integrate.quad(
+slurmstepd: error: *** JOB 14882646 ON node104 CANCELLED AT 2025-01-29T09:04:58 DUE TO TIME LIMIT ***

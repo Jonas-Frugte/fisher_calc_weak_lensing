@@ -1,0 +1,136 @@
+Starting
+now running setup.py as cosm_setup
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+Obtaining cosmological results.
+Cosmological results created.
+Took fiducial values for k_nls
+[[0.82015779 0.81584443 0.80649823 0.80138648]
+ [0.80408647 0.80767869 0.81496525 0.81866063]
+ [0.8366163  0.82408811 0.79827169 0.78496938]
+ [0.82641348 0.81877607 0.80399765 0.79685199]
+ [0.83134015 0.82138363 0.80109942 0.79076222]
+ [0.8106574  0.81098128 0.81162832 0.81195145]
+ [0.82093083 0.81622385 0.80616011 0.80077354]]
+Done
+
+###############################################################################
+Hábrók Cluster
+Job 15342749 for user p319950
+Finished at: Mon Feb 24 15:02:13 CET 2025
+
+Job details:
+============
+
+Job ID                         : 15342749
+Name                           : JFS8DER
+User                           : p319950
+Partition                      : himemmedium
+Nodes                          : memory3
+Number of Nodes                : 1
+Cores                          : 1
+Number of Tasks                : 1
+State                          : COMPLETED  
+Submit                         : 2025-02-24T10:57:23
+Start                          : 2025-02-24T10:57:24
+End                            : 2025-02-24T15:02:09
+Reserved walltime              : 20:00:00
+Used walltime                  : 04:04:45
+Used CPU time                  : 04:04:17 (Efficiency: 99.81%)
+% User (Computation)           : 100.00%
+% System (I/O)                 :  0.00%
+Total memory reserved          : 50G
+Maximum memory used            : 274.59M
+Hints and tips      :
+ 1) You requested much more CPU memory than your program used.
+    Please reduce the requested amount of memory.
+ *) For more information on these issues see:
+    https://wiki.hpc.rug.nl/habrok/additional_information/job_hints
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Hábrók in your publications:
+
+https://wiki.hpc.rug.nl/habrok/introduction/scientific_output
+
+################################################################################
