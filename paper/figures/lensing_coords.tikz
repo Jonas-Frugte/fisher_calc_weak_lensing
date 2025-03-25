@@ -1,0 +1,53 @@
+\begin{tikzpicture}    
+    % Set up the 3D plot environment
+    \tdplotsetmaincoords{60}{110}
+    \begin{scope}[tdplot_main_coords]
+
+            % Draw the main coordinate axes
+            \draw[thick, ->] (-3,0,0) -- (3,0,0) node[anchor=north east] {$x$};
+            \draw[thick, ->] (0,-3,0) -- (0,3,0) node[anchor=north west] {$y$};
+            \draw[thick, ->] (0,0,-3) -- (0,0,3) node[anchor=south] {$z$};
+
+            % Draw axes of r tilde, y tilde, x tilde
+            \draw[very thick, dashed] (0, 0, 0) -- ({2*sin(45)*cos(45)},{2*sin(45)*sin(45)},{2*cos(45)});
+            \draw[very thick, ->] ({2*sin(45)*cos(45)},{2*sin(45)*sin(45)},{2*cos(45)}) -- ({3.5*sin(45)*cos(45)},{3.5*sin(45)*sin(45)},{3.5*cos(45)}) node[anchor=south west] {$\tilde r$};
+            \draw[very thick, ->] ({2*sin(45)*cos(45)},{2*sin(45)*sin(45)},{2*cos(45)}) -- ({2*sin(45)*cos(45) + 1.5*cos(45)*cos(45)},{2*sin(45)*sin(45) + 1.5*cos(45)*sin(45)},{2*cos(45) - 1.5*sin(45)}) node[anchor=south west] {$\tilde y$};
+            \draw[very thick, ->] ({2*sin(45)*cos(45)},{2*sin(45)*sin(45)},{2*cos(45)}) -- ({2*sin(45)*cos(45) - 1.5*sin(45)},{2*sin(45)*sin(45) +1.5*cos(45)},{2*cos(45)}) node[anchor=south west] {$\tilde x$};
+                    % Draw parametric surface for a sphere with great arcs at 22.5 degree intervals
+        \foreach \u in {0,22.5,...,180} { % Latitude intervals of 22.5 degrees
+        \foreach \v in {0,5,...,360} { % Small steps for smoothness in longitude
+            % Calculate coordinates for each point on the surface
+            \pgfmathsetmacro\x{2*sin(\u)*cos(\v)}
+            \pgfmathsetmacro\y{2*sin(\u)*sin(\v)}
+            \pgfmathsetmacro\z{2*cos(\u)}
+
+            % Calculate next point in the longitude direction for smoothness
+            \pgfmathsetmacro\lx{2*sin(\u)*cos(\v+5)}
+            \pgfmathsetmacro\ly{2*sin(\u)*sin(\v+5)}
+            \pgfmathsetmacro\lz{2*cos(\u)}
+
+            % Draw line segments along latitude to form great arcs
+            \draw[opacity=0.4] (\x,\y,\z) -- (\lx,\ly,\lz);
+        }
+    }
+
+    \foreach \v in {0,22.5,...,360} { % Longitude intervals of 22.5 degrees
+        \foreach \u in {0,5,...,180} { % Small steps for smoothness in latitude
+            % Calculate coordinates for each point on the surface
+            \pgfmathsetmacro\x{2*sin(\u)*cos(\v)}
+            \pgfmathsetmacro\y{2*sin(\u)*sin(\v)}
+            \pgfmathsetmacro\z{2*cos(\u)}
+
+            % Calculate next point in the latitude direction for smoothness
+            \pgfmathsetmacro\nx{2*sin(\u+5)*cos(\v)}
+            \pgfmathsetmacro\ny{2*sin(\u+5)*sin(\v)}
+            \pgfmathsetmacro\nz{2*cos(\u+5)}
+
+            % Draw line segments along longitude to form great arcs
+            \draw[opacity=0.4] (\x,\y,\z) -- (\nx,\ny,\nz);
+        }
+    }
+            
+
+    \end{scope}
+\end{tikzpicture}    
