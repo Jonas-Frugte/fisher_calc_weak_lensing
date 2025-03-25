@@ -3,7 +3,7 @@ import multiprocessing
 import Fisher_calc as vis
 from itertools import *
 
-lmin = 50
+lmin = 2
 lmax = 2000
 stepsizes = [1, 5, 10]
 num_bispec_samples = 100
@@ -31,7 +31,8 @@ for tracer in ['c', 's', 'both']:
         result = fisher_calc_wrapper((i, j), tracer)
         mat[i, j] = result
         mat[j, i] = result  # Symmetric assignment
-        
+    
+    np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}.txt', mat)
     print(mat)
 
 

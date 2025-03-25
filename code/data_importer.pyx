@@ -33,7 +33,7 @@ def get_k_max():
     return k_max
 
 # specifies the noise that will be used for cmb lensing
-cdef int conv_noise_type = 1
+cdef int conv_noise_type = 2
 # type values correspond to:
 # 0: S0 noise curves
 # 1: sigma = 1, Delta_P = 6 (stage 3 toshiya)
@@ -48,8 +48,8 @@ conv_noise_data_array = np.loadtxt(filepath_convergence_noise_file_path)
 cdef double[:, :] conv_noise_data = conv_noise_data_array
 
 # conv noise from quadratic estimator
-cdef double[:] ls_cmbn = np.loadtxt('cmb_noise_files/ls_10_3000_32.txt')
-ls_cmbn_np_array = np.loadtxt('cmb_noise_files/ls_10_3000_32.txt') # need to also have a np array version to easily convert noise values from convergence to lens potential below
+cdef double[:] ls_cmbn = np.loadtxt('cmb_noise_files/ls_1_3000_64.txt')
+ls_cmbn_np_array = np.loadtxt('cmb_noise_files/ls_1_3000_64.txt') # need to also have a np array version to easily convert noise values from convergence to lens potential below
 cdef double lmin_cmbn = ls_cmbn[0]
 cdef int lnum_cmbn = len(ls_cmbn)
 cdef double lmax_cmbn = ls_cmbn[lnum_cmbn - 1]
@@ -214,14 +214,7 @@ cpdef double lps(double l, char* type1, char* type2, double[:] lps_cc_data, doub
     else:
         return interp.logspace_linear_interp(l, k_min, k_max, k_num, lps_cs_data)
 
-cdef double scale_factor(double chi, double[:] scale_factor_data) noexcept nogil:
-
-    # if chi > 13999.0:
-    #     chi = 13999.0
-    #     printf("jerkin' my peanits rn")
-    # if chi < chi_min:
-    #     chi = chi_min * 1.5
-    
+cdef double scale_factor(double chi, double[:] scale_factor_data) noexcept nogil:    
     return interp.linear_interp(chi, chi_min, chi_max, chi_num, scale_factor_data)
 
 cdef double window_func(double chi, char* type, double[:] window_c_data, double[:] window_s_data) noexcept nogil:
@@ -422,7 +415,7 @@ cdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
             noise = interp.logspace_linear_interp(l, lmin_cmbn, lmax_cmbn, lnum_cmbn, cmbn_301)
 
     if type1[0] == b's' and type2[0] == b's':
-        noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30 # 8 * 10.0 ** (-10) # this should actually be in sterradain, but that gives wrong results so for now we have it like this, also I'm not sure where this factor of 8 came from
+        noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30 # 8 * 10.0 ** (-10) # this should actually be in sterradain, but that gives wrong results so for now we have it like this
     return noise
 
 cdef double lps_f_obs(int l, char* type1, char* type2) noexcept nogil:
