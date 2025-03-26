@@ -66,6 +66,6 @@ def all_bs_SNR2():
 
     pass
 
-# ps_SNR2()
+ps_SNR2()
 single_bs_SNR2()
 # all_bs_SNR2()

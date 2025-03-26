@@ -54,7 +54,6 @@ cdef double lmin_cmbn = ls_cmbn[0]
 cdef int lnum_cmbn = len(ls_cmbn)
 cdef double lmax_cmbn = ls_cmbn[lnum_cmbn - 1]
 
-cdef double[:] cmbn_41sqrt2 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma4_DeltaT1_DeltaP1.41.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 cdef double[:] cmbn_301 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma3_DeltaT0_DeltaP1.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 cdef double[:] cmbn_106 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma1_DeltaT0_DeltaP6.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 

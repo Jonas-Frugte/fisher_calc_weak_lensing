@@ -9,6 +9,6 @@
 
 echo "Starting"
 source /home3/p319950/venvs/mainenv/bin/activate
-cd /home3/p319950/ResearchProject
+cd /home3/p319950/ResearchProject/fisher_calc_weak_lensing/code
 python3 -u cmb_noise_fast_runner.py
 echo "Done"
