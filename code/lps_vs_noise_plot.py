@@ -48,7 +48,7 @@ sigma_rms_S4 = 0.3  # e.g. the Euclid ellipticity dispersion
 # Number density per steradian (converted from per arcmin^2)
 # actually shouldn't be computed to get proper ratio with galaxy lensing spectrum, no idea why
 arcmin2_to_steradian = (np.pi / (180 * 60)) ** 2
-n_g_S3 = 3
+n_g_S3 = 5
 n_g_S4 = 30 # / arcmin2_to_steradian
 
 # converts from shear to lensing potential noise
@@ -59,7 +59,7 @@ gal_nps_S4 = np.array([sigma_rms_S4 ** 2 / (n_g_S4) for l in l_values]) * conver
 
 # galaxy lensing plot
 axs[0].loglog(l_values, l_values**4 * gal_lps, label='Galaxy lensing potential powerspectrum', color='black')
-axs[0].loglog(l_values, l_values**4 * gal_nps_S3, label=r'S3 Noise, $n_g = 3 \text{arcmin}^{-2}$', linestyle='dashed')
+axs[0].loglog(l_values, l_values**4 * gal_nps_S3, label=r'S3 Noise, $n_g = 5 \text{arcmin}^{-2}$', linestyle='dashed')
 axs[0].loglog(l_values, l_values**4 * gal_nps_S4, label=r'S4 Noise, $n_g = 30 \text{arcmin}^{-2}$', linestyle='dashed')
 axs[0].set_xlabel('$l$')
 axs[0].set_ylabel(r'$l^4 C_l^{\psi_g\psi_g}$')
@@ -92,4 +92,4 @@ fig.tight_layout()
 
 # Save the figure as a vector-based format for inclusion in papers
 #plt.savefig("spectraplusnoise.pdf", format="pdf", dpi=300)
-plt.savefig("spectraplusnoise.png", format="png", dpi=300)
+plt.savefig("spectraplusnoise.pdf", format="pdf", dpi=300)
