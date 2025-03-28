@@ -415,7 +415,7 @@ class lensing_spectra:
   
   def law_cosines(self, x, y, z):
     # gives cosine of angle between vector x and y, where we know the magnitudes of x, y, z and that x + y + z = 0 vector
-    return (x**2 + y**2 - z**2) / (2 * x * y)
+    return -1 * (x**2 + y**2 - z**2) / (2 * x * y)
   
   def F_2(self, k1, k2, k3, z):
     '''
@@ -435,6 +435,25 @@ class lensing_spectra:
     term_3 = (2. / 7.) * self.law_cosines(k1, k2, k3)**2 * self.c(k1, z) * self.c(k2, z)
     return term_1 + term_2 + term_3
   
+  def F_2_tree(self, k1, k2, k3, z):
+    '''
+    tree level kernel
+
+    Parameters:
+    k_1, k_2 : floats
+      wavenumbers
+    z : float
+      redshift
+
+    Returns:
+    float
+    '''
+    # set a = b = c = 1
+    term_1 = (5. / 7.)
+    term_2 = 0.5 * self.law_cosines(k1, k2, k3) * (k1 / k2 + k2 / k1)
+    term_3 = (2. / 7.) * self.law_cosines(k1, k2, k3)**2
+    return term_1 + term_2 + term_3
+  
   def mbs(self, k_1, k_2, k_3, z):
     '''
     Parameters:
@@ -447,6 +466,20 @@ class lensing_spectra:
     float
     '''
     term = lambda p_1, p_2, p_3 : 2 * self.F_2(p_1, p_2, p_3, z) * self.mps(p_1, z) * self.mps(p_2, z)
+    return term(k_1, k_2, k_3) + term(k_2, k_3, k_1) + term(k_3, k_1, k_2) # mfw the permutation is cyclic
+
+  def mbs_tree(self, k_1, k_2, k_3, z):
+    '''
+    Parameters:
+    k_1, k_2, k_3 : floats
+      wavenumbers
+    z : float
+      redshift
+
+    Returns:
+    float
+    '''
+    term = lambda p_1, p_2, p_3 : 2 * self.F_2_tree(p_1, p_2, p_3, z) * self.mps(p_1, z) * self.mps(p_2, z)
     return term(k_1, k_2, k_3) + term(k_2, k_3, k_1) + term(k_3, k_1, k_2) # mfw the permutation is cyclic
   
   # approximate expression of wigner_3j symbol based on appendix in paper "Cosmological parameters from lensing power spectrum and bispectrum tomography"
@@ -503,6 +536,48 @@ class lensing_spectra:
       def integrand(chi):
           return chi**2 * self.scale_factor(chi)**(-3) * self.window_func(chi, types[0]) * self.window_func(chi, types[1]) * self.window_func(chi, types[2]) \
           * self.mbs(l1/chi, l2/chi, l3/chi, self.results.redshift_at_comoving_radial_distance(chi))
+      
+      integration_result = scipy.integrate.quad(integrand, 0, self.chi_last_scatter, limit = 500, epsabs = 1e-02, epsrel = 1e-02)[0]
+
+      wigner_factor = np.abs(self.wigner_3j_approx_nocheck(l1, l2, l3)) # TODO: check if this is okay
+      sqrt_factor = np.sqrt((2.0 * l1 + 1) * (2.0 * l2 + 1) * (2.0 * l3 + 1) / (4 * np.pi))
+      fraction_factor = 1 / (l1**2 * l2**2 * l3**2)
+      const_factor = self.rho_bar ** 3 * 8
+
+      # print(f"exact: Tuple (l1, l2, l3): ({l1}, {l2}, {l3})")
+      # print(f"exact: Integration Result: {integration_result}")
+      # print(f"exact: Wigner Factor: {wigner_factor}")
+      # print(f"exact: Sqrt Factor: {sqrt_factor}")
+      # print(f"exact: Fraction Factor: {fraction_factor}")
+      # print(f"exact: Const Factor: {const_factor}")
+      
+      return wigner_factor * sqrt_factor * fraction_factor * const_factor * integration_result
+    else:
+      #raise ValueError(f"l's did not satisfy triangle inequalities: {(l1, l2, l3)}")
+      return 0.
+    
+  def lbs_tree(self, l1, l2, l3, types):
+    '''
+    lensing bispectrum
+    
+    Parameters:
+    k_1, k_2, k_3: floats
+        wavenumbers
+    types: iterable of length 3 containing 'shear' and 'convergence'
+    
+    Returns:
+    float
+    '''
+    if (l1 + l2 + l3) % 2 == 0 and l3 <= l1 + l2 and l1 - l2 <= l3 and l2 - l1 <= l3:
+
+      # convert to float to prevent integer overflow problems
+      l1 = float(l1)
+      l2 = float(l2)
+      l3 = float(l3)
+
+      def integrand(chi):
+          return chi**2 * self.scale_factor(chi)**(-3) * self.window_func(chi, types[0]) * self.window_func(chi, types[1]) * self.window_func(chi, types[2]) \
+          * self.mbs_tree(l1/chi, l2/chi, l3/chi, self.results.redshift_at_comoving_radial_distance(chi))
       
       integration_result = scipy.integrate.quad(integrand, 0, self.chi_last_scatter, limit = 500, epsabs = 1e-02, epsrel = 1e-02)[0]
 

@@ -33,7 +33,7 @@ def get_k_max():
     return k_max
 
 # specifies the noise that will be used for cmb lensing
-cdef int conv_noise_type = 1
+cdef int conv_noise_type = 2
 # type values correspond to:
 # 0: S0 noise curves (old, remove)
 # 1: sigma = 1, Delta_P = 6 (stage 3 toshiya)
@@ -234,7 +234,8 @@ cdef double z_at_chi(double chi, double[:] z_at_chi_data) noexcept nogil:
 
 cdef double law_cosines(double x, double y, double z) noexcept nogil:
     # gives cosine of angle between vector x and y, where we know the magnitudes of x, y, z and that x + y + z = 0 vector
-    return (x**2 + y**2 - z**2) / (2 * x * y)
+    # 27/03/25 added -1 factor
+    return -1 * (x**2 + y**2 - z**2) / (2 * x * y)
 
 cpdef double F_2(double k1, double k2, double k3, double z_input, double[:, :] a_data, double[:, :] b_data, double[:, :] c_data) noexcept nogil:
     # cosine factors in term 2 and term 3 are determined by the delta^(3)(k_1, k_2, k_3) factor combined with law of cosines

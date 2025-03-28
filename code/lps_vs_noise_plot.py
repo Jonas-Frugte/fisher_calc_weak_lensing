@@ -59,8 +59,8 @@ gal_nps_S4 = np.array([sigma_rms_S4 ** 2 / (n_g_S4) for l in l_values]) * conver
 
 # galaxy lensing plot
 axs[0].loglog(l_values, l_values**4 * gal_lps, label='Galaxy lensing potential powerspectrum', color='black')
-axs[0].loglog(l_values, l_values**4 * gal_nps_S3, label=r'S3 Noise, $n_g = 5 \text{arcmin}^{-2}$', linestyle='dashed')
-axs[0].loglog(l_values, l_values**4 * gal_nps_S4, label=r'S4 Noise, $n_g = 30 \text{arcmin}^{-2}$', linestyle='dashed')
+axs[0].loglog(l_values, l_values**4 * gal_nps_S3, label=r'S3 Noise, $n_g = 5 \text{ arcmin}^{-2}$', linestyle='dashed')
+axs[0].loglog(l_values, l_values**4 * gal_nps_S4, label=r'S4 Noise, $n_g = 30 \text{ arcmin}^{-2}$', linestyle='dashed')
 axs[0].set_xlabel('$l$')
 axs[0].set_ylabel(r'$l^4 C_l^{\psi_g\psi_g}$')
 axs[0].legend()
@@ -92,4 +92,4 @@ fig.tight_layout()
 
 # Save the figure as a vector-based format for inclusion in papers
 #plt.savefig("spectraplusnoise.pdf", format="pdf", dpi=300)
-plt.savefig("spectraplusnoise.pdf", format="pdf", dpi=300)
+plt.savefig("/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/plots_and_figures/spectraplusnoise.pdf", format="pdf", dpi=300)
