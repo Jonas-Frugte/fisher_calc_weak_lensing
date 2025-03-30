@@ -66,7 +66,24 @@ class lensing_spectra:
     # power spectrum in units of Mpc^3, k in units of Mpc^-1, with input (z, k) on RHS 
     mps_swapped = self.results.get_matter_power_interpolator(nonlinear=True, hubble_units=False, k_hunit=False).P
     self.mps = lambda k, z : mps_swapped(z, k)
-    linear_mps_swapped = self.results.get_matter_power_interpolator(nonlinear=False, hubble_units=False, k_hunit=False).P
+    # self.z_k_interp = camb.get_matter_power_interpolator(
+    #   self.pars,
+    #   nonlinear=False, 
+    #   hubble_units=False, 
+    #   k_hunit=False,
+    #   zmin = 0,
+    #   zmax = 1100,
+    #   kmax = 2000,
+    #   return_z_k=True)
+    # checked interp range for power spectrum, kmin = 7e-6, kmax = 2e3, zmin = 0, zmax = 1100
+    linear_mps_swapped = camb.get_matter_power_interpolator(
+      self.pars,
+      nonlinear=False, 
+      hubble_units=False, 
+      k_hunit=False,
+      zmin = 0,
+      zmax = 1100,
+      kmax = 2000).P
     self.linear_mps = lambda k, z : linear_mps_swapped(z, k)
 
     self.lightspeed_kms = 299792 # speed of light in km / s
@@ -116,11 +133,13 @@ class lensing_spectra:
 
     pars = camb.CAMBparams()
     lmax = 10000
-    pars.set_cosmology(H0=self.H0, ombh2=self.ombh2, omch2=self.omch2, mnu=self.mnu, omk=0, tau=0.05)
+    pars.set_cosmology(H0=self.H0, ombh2=self.ombh2, omch2=self.omch2, mnu=self.mnu, omk=0, tau=0.063, neutrino_hierarchy='normal')
     pars.InitPower.set_params(As=self.As, ns=self.ns, r=0)
+    pars.InitPower.pivot_scalar = 0.05
     pars.set_for_lmax(lmax, lens_potential_accuracy=1)
     pars.set_matter_power(redshifts=self.redshifts, kmax=10000, nonlinear=True)
     pars.set_dark_energy(w=self.w0, wa=self.wa)
+    self.pars = pars
 
     self.results = camb.get_results(pars)
 
@@ -479,7 +498,8 @@ class lensing_spectra:
     Returns:
     float
     '''
-    term = lambda p_1, p_2, p_3 : 2 * self.F_2_tree(p_1, p_2, p_3, z) * self.mps(p_1, z) * self.mps(p_2, z)
+    # should this be linear or not?
+    term = lambda p_1, p_2, p_3 : 2 * self.F_2_tree(p_1, p_2, p_3, z) * self.linear_mps(p_1, z) * self.linear_mps(p_2, z)
     return term(k_1, k_2, k_3) + term(k_2, k_3, k_1) + term(k_3, k_1, k_2) # mfw the permutation is cyclic
   
   # approximate expression of wigner_3j symbol based on appendix in paper "Cosmological parameters from lensing power spectrum and bispectrum tomography"
@@ -489,30 +509,35 @@ class lensing_spectra:
     l2 = float(l2)
     l3 = float(l3)
 
-    L = l1 + l2 + l3
+    L = ( l1 + l2 + l3 )/ 2
 
     # does not check if L is even or triangle inequalities, does so in lbs_f and lbs_der directly instead to save on computing bispec if result should be zero anyway
 
-    L_half = L / 2.0
+    # L_half = L / 2.0
     
     # Common factors
-    factor = (-1)**L_half * (2 * 3.141592653589793)**(-0.5) * np.exp(3.0 / 2) * (L + 2)**(-0.25)
-    
-    # Power term for each fraction
-    term1 = (L_half - l1 + 0.5) / (L_half - l1 + 1)
-    term2 = (L_half - l2 + 0.5) / (L_half - l2 + 1)
-    term3 = (L_half - l3 + 0.5) / (L_half - l3 + 1)
+    # old:
+    # factor = (-1)**L_half * (2 * 3.141592653589793)**(-0.5) * np.exp(3.0 / 2) * (L + 2)**(-0.25)
+    # new:
+    factor = (-1)**L * np.sqrt(np.e / (2 * np.pi)) * (L + 1)**(-0.25)
 
-    # Raising to required powers
-    term1_pow = term1 ** (L_half - l1 + 1.0 / 4.0)
-    term2_pow = term2 ** (L_half - l2 + 1.0 / 4.0)
-    term3_pow = term3 ** (L_half - l3 + 1.0 / 4.0)
+    term = lambda li : (L-li+1)**(-0.25) * ( (L-li+0.5) / (L-li+1) )**(L-li+0.25)
+    return factor * term(l1) * term(l2) * term(l3)
 
-    # The denominator terms
-    denominator = ((L_half - l1 + 1)**0.25 * (L_half - l2 + 1)**0.25 * (L_half - l3 + 1)**0.25)
+    # term1 = (L_half - l1 + 0.5) / (L_half - l1 + 1)
+    # term2 = (L_half - l2 + 0.5) / (L_half - l2 + 1)
+    # term3 = (L_half - l3 + 0.5) / (L_half - l3 + 1)
+
+    # # Raising to required powers
+    # term1_pow = term1 ** (L_half - l1 + 1.0 / 4.0)
+    # term2_pow = term2 ** (L_half - l2 + 1.0 / 4.0)
+    # term3_pow = term3 ** (L_half - l3 + 1.0 / 4.0)
+
+    # # The denominator terms
+    # denominator = ((L_half - l1 + 1)**0.25 * (L_half - l2 + 1)**0.25 * (L_half - l3 + 1)**0.25)
     
-    # The final result
-    return factor * term1_pow * term2_pow * term3_pow / denominator
+    # # The final result
+    # return factor * term1_pow * term2_pow * term3_pow / denominator
   
   def lbs(self, l1, l2, l3, types):
     '''
@@ -537,7 +562,8 @@ class lensing_spectra:
           return chi**2 * self.scale_factor(chi)**(-3) * self.window_func(chi, types[0]) * self.window_func(chi, types[1]) * self.window_func(chi, types[2]) \
           * self.mbs(l1/chi, l2/chi, l3/chi, self.results.redshift_at_comoving_radial_distance(chi))
       
-      integration_result = scipy.integrate.quad(integrand, 0, self.chi_last_scatter, limit = 500, epsabs = 1e-02, epsrel = 1e-02)[0]
+      # this probably gives very inaccurate results!!
+      integration_result = scipy.integrate.quad(integrand, 0, self.chi_last_scatter, limit = 500, epsabs = 1e-03, epsrel = 1e-3)[0]
 
       wigner_factor = np.abs(self.wigner_3j_approx_nocheck(l1, l2, l3)) # TODO: check if this is okay
       sqrt_factor = np.sqrt((2.0 * l1 + 1) * (2.0 * l2 + 1) * (2.0 * l3 + 1) / (4 * np.pi))
@@ -579,12 +605,12 @@ class lensing_spectra:
           return chi**2 * self.scale_factor(chi)**(-3) * self.window_func(chi, types[0]) * self.window_func(chi, types[1]) * self.window_func(chi, types[2]) \
           * self.mbs_tree(l1/chi, l2/chi, l3/chi, self.results.redshift_at_comoving_radial_distance(chi))
       
-      integration_result = scipy.integrate.quad(integrand, 0, self.chi_last_scatter, limit = 500, epsabs = 1e-02, epsrel = 1e-02)[0]
+      integration_result = scipy.integrate.quad(integrand, 0, self.chi_last_scatter, limit = 500, epsabs = 1e-30, epsrel = 1e-02)[0]
 
       wigner_factor = np.abs(self.wigner_3j_approx_nocheck(l1, l2, l3)) # TODO: check if this is okay
       sqrt_factor = np.sqrt((2.0 * l1 + 1) * (2.0 * l2 + 1) * (2.0 * l3 + 1) / (4 * np.pi))
       fraction_factor = 1 / (l1**2 * l2**2 * l3**2)
-      const_factor = self.rho_bar ** 3 * 8
+      const_factor = self.rho_bar ** 3 * 8 # THIS FACTOR OF 8 IS SUSPICIOUS, CHECK LATER
 
       # print(f"exact: Tuple (l1, l2, l3): ({l1}, {l2}, {l3})")
       # print(f"exact: Integration Result: {integration_result}")
