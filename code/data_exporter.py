@@ -176,7 +176,7 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
 # first arguments of spectra class: H0=67.4, ombh2=0.0224, omch2=0.120, ns=0.965, As=2.1e-9, mnu=0.06, w0 = -1., wa = 0.
 
 par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0')
-fiducial_cosm_par = (67.4, 0.0224, 0.120, 0.965, 2.1e-9, 0.06, -1)
+fiducial_cosm_par = (67.4, 0.0223, 0.119, 0.965, 2.13e-9, 0.06, -1)
 num_pars = len(par_names)
 
 dx = 0.025 # if you change this here it also needs to be changed at end of data_importer.pyx !!!
