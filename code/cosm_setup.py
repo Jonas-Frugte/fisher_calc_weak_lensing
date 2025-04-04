@@ -6,6 +6,7 @@ import scipy
 import scipy.integrate
 import scipy.optimize
 import scipy.interpolate
+from scipy.interpolate import CubicSpline
 
 # np.seterr(all='warn')
 
@@ -86,6 +87,12 @@ class lensing_spectra:
       print('now calculating k_nls')
       self.zs_for_k_nls = np.linspace(0, 8, 101)
       self.k_nls, self.k_nl_errors, self.zs_for_k_nls_used = self.k_nl_exact(self.zs_for_k_nls)
+      
+    self.zs_for_k_nls_used_max = self.zs_for_k_nls_used[-1]
+    print(f'Max z for extended F_2: {self.zs_for_k_nls_used_max}')
+  
+    self._k_nl = CubicSpline(self.zs_for_k_nls_used, self.k_nls, bc_type='not-a-knot')
+
 
   def obtain_results(self):
     '''
@@ -134,6 +141,7 @@ class lensing_spectra:
     self.results = camb.get_results(pars)
 
     print('Cosmological results created.')
+
     
     pass
 
@@ -161,9 +169,9 @@ class lensing_spectra:
 
     return ell, C_phi_phi
   
-  def _k_nl(self, z):
-    # used quadratic interpolation for finer k_nl values but this sometimes gives negative k_nl values resulting in errors
-    return scipy.interpolate.interp1d(self.zs_for_k_nls_used, self.k_nls, kind = 'linear', bounds_error=False, fill_value = 'extrapolate')(z)
+  # def _k_nl(self, z):
+  #   # used quadratic interpolation for finer k_nl values but this sometimes gives negative k_nl values resulting in errors
+  #   return scipy.interpolate.interp1d(self.zs_for_k_nls_used, self.k_nls, kind = 'linear', bounds_error=False, fill_value = 'extrapolate')(z)
 
   def _k_nl_toshiya_like(self, z, k_min=1e-4, k_max=1000.0, num_k_samples=5000):
     """
@@ -301,13 +309,14 @@ class lensing_spectra:
       num_samples = int(kmax / 0.001) # denominator is stepsize in ls, used to be 0.001 which didn't give any issues
 
       ls = np.linspace(0, kmax, num_samples)
-      vals = np.array([np.abs(1 - l**3 * self.linear_mps(l, z) / (2 * np.pi**2)) for l in ls])
+      # removed 1 / (2pi^2) and put 4pi factor instead to be in line with toshiya
+      vals = np.array([np.abs(1 - 4 * np.pi * l**3 * self.linear_mps(l, z)) for l in ls])
       vals_min_index = np.argmin(vals)
       error = vals[vals_min_index]
       result = ls[vals_min_index]
 
       if vals_min_index == num_samples - 1:
-        print(f"Max z reached. \n k_nls = {results}, zs = {zs_used}")
+        print("Max z reached.")
         return results, errors, zs_used
       
       zs_used.append(z)
@@ -390,18 +399,15 @@ class lensing_spectra:
     Returns:
     float
     '''
-    if k > self.k_nl_max:
-      return 1.
-    else:
-      a_1 = self.matter_bispec_fit_params[0]
-      a_2 = self.matter_bispec_fit_params[1]
-      a_6 = self.matter_bispec_fit_params[5]
-      if self._Q_3(self.ns_eff(k, z)) < 0:
-        print(self._Q_3(self.ns_eff(k, z)), k, z)
-      numerator = 1 + self._sigma_8(z)**a_6 * np.sqrt(0.7 * self._Q_3(self.ns_eff(k, z))) * (self._q(k, z) * a_1)**(self.ns_eff(k, z) + a_2)
-      denominator = 1 + (self._q(k, z) * a_1)**(self.ns_eff(k, z) + a_2)
-    
-      return numerator / denominator
+    a_1 = self.matter_bispec_fit_params[0]
+    a_2 = self.matter_bispec_fit_params[1]
+    a_6 = self.matter_bispec_fit_params[5]
+    if self._Q_3(self.ns_eff(k, z)) < 0:
+      print(self._Q_3(self.ns_eff(k, z)), k, z)
+    numerator = 1 + self._sigma_8(z)**a_6 * np.sqrt(0.7 * self._Q_3(self.ns_eff(k, z))) * (self._q(k, z) * a_1)**(self.ns_eff(k, z) + a_2)
+    denominator = 1 + (self._q(k, z) * a_1)**(self.ns_eff(k, z) + a_2)
+  
+    return numerator / denominator
   
   def b(self, k, z):
     '''
@@ -416,17 +422,14 @@ class lensing_spectra:
     Returns:
     float
     '''
-    if k > self.k_nl_max:
-      return 1.
-    else:
-      a_3 = self.matter_bispec_fit_params[2]
-      a_7 = self.matter_bispec_fit_params[6]
-      a_8 = self.matter_bispec_fit_params[7]
+    a_3 = self.matter_bispec_fit_params[2]
+    a_7 = self.matter_bispec_fit_params[6]
+    a_8 = self.matter_bispec_fit_params[7]
 
-      numerator = 1 + 0.2 * a_3 * (self.ns_eff(k, z) + 3) * (self._q(k, z) * a_7) ** (self.ns_eff(k, z) + 3 + a_8)
-      denominator = 1 + (self._q(k, z) * a_7) ** (self.ns_eff(k, z) + 3.5 + a_8)
+    numerator = 1 + 0.2 * a_3 * (self.ns_eff(k, z) + 3) * (self._q(k, z) * a_7) ** (self.ns_eff(k, z) + 3 + a_8)
+    denominator = 1 + (self._q(k, z) * a_7) ** (self.ns_eff(k, z) + 3.5 + a_8)
 
-      return numerator / denominator
+    return numerator / denominator
   
   def c(self, k, z):
     '''
@@ -441,39 +444,18 @@ class lensing_spectra:
     Returns:
     float
     '''
-    if k > self.k_nl_max:
-      return 1.
-    else:
-      a_4 = self.matter_bispec_fit_params[3]
-      a_5 = self.matter_bispec_fit_params[4]
-      a_9 = self.matter_bispec_fit_params[8]
-      
-      numerator = 1 + (4.5 * a_4 / (1.5 + (self.ns_eff(k, z) + 3)**4)) * (self._q(k, z) * a_5)**(self.ns_eff(k, z) + 3 + a_9)
-      denominator = 1 + (self._q(k, z) * a_5)**(self.ns_eff(k, z) + 3.5 + a_9)
+    a_4 = self.matter_bispec_fit_params[3]
+    a_5 = self.matter_bispec_fit_params[4]
+    a_9 = self.matter_bispec_fit_params[8]
+    
+    numerator = 1 + (4.5 * a_4 / (1.5 + (self.ns_eff(k, z) + 3)**4)) * (self._q(k, z) * a_5)**(self.ns_eff(k, z) + 3 + a_9)
+    denominator = 1 + (self._q(k, z) * a_5)**(self.ns_eff(k, z) + 3.5 + a_9)
 
-      return numerator / denominator
+    return numerator / denominator
   
   def law_cosines(self, x, y, z):
     # gives cosine of angle between vector x and y, where we know the magnitudes of x, y, z and that x + y + z = 0 vector
     return -1 * (x**2 + y**2 - z**2) / (2 * x * y)
-  
-  def F_2(self, k1, k2, k3, z):
-    '''
-    effective kernel for matter bispec fitting func
-
-    Parameters:
-    k_1, k_2 : floats
-      wavenumbers
-    z : float
-      redshift
-
-    Returns:
-    float
-    '''
-    term_1 = (5. / 7.) * self.a(k1, z) * self.a(k2, z)
-    term_2 = 0.5 * self.law_cosines(k1, k2, k3) * (k1 / k2 + k2 / k1) * self.b(k1, z) * self.b(k2, z)
-    term_3 = (2. / 7.) * self.law_cosines(k1, k2, k3)**2 * self.c(k1, z) * self.c(k2, z)
-    return term_1 + term_2 + term_3
   
   def F_2_tree(self, k1, k2, k3, z):
     '''
@@ -493,6 +475,29 @@ class lensing_spectra:
     term_2 = 0.5 * self.law_cosines(k1, k2, k3) * (k1 / k2 + k2 / k1)
     term_3 = (2. / 7.) * self.law_cosines(k1, k2, k3)**2
     return term_1 + term_2 + term_3
+  
+  def F_2(self, k1, k2, k3, z):
+    '''
+    effective kernel for matter bispec fitting func
+
+    Parameters:
+    k_1, k_2 : floats
+      wavenumbers
+    z : float
+      redshift
+
+    Returns:
+    float
+    '''
+    # if z > self.zs_for_k_nls_used_max:
+    #   return self.F_2_tree(k1, k2, k3, z)
+    # else:
+    term_1 = (5. / 7.) * self.a(k1, z) * self.a(k2, z)
+    term_2 = 0.5 * self.law_cosines(k1, k2, k3) * (k1 / k2 + k2 / k1) * self.b(k1, z) * self.b(k2, z)
+    term_3 = (2. / 7.) * self.law_cosines(k1, k2, k3)**2 * self.c(k1, z) * self.c(k2, z)
+    return term_1 + term_2 + term_3
+
+  
   
   def mbs(self, k_1, k_2, k_3, z, model = 'nonlinear'):
     '''

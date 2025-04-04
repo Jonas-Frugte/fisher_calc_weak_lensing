@@ -11,7 +11,7 @@ spectra = cs.lensing_spectra(
 import numpy as np
 import matplotlib.pyplot as plt
 
-ls = np.arange(10, 2001, 50)
+ls = np.arange(10, 2001, 20)
 
 lbs_eq_ex_tree = np.array([
     spectra.lbs_flat(l, l, l, ('c', 'c', 'c'), model = 'tree') * float(l)**10 / (2 * np.pi)**2 / 8 for l in ls
