@@ -1,0 +1,1064 @@
+% !TEX root = /Users/jonasfrugte/Desktop/ResearchProject/paper.tex
+\documentclass[11pt]{article} % Choose a document class, like 'article', 'report', or 'revtex4-2' for scientific papers
+
+% Packages to enhance functionality
+\usepackage[utf8]{inputenc}   % Allows UTF-8 character encoding
+\usepackage{amsmath}          % For advanced math typesetting
+\usepackage{amssymb}          % Additional math symbols
+\usepackage{graphicx}         % For including images
+\usepackage{hyperref}         % For hyperlinks in the document
+\usepackage{cite}             % For handling references better
+\usepackage{geometry}         % For setting up page geometry
+\geometry{margin=1in}         % 1-inch margins all around
+\usepackage{authblk}          % For author affiliations
+\usepackage{siunitx}          % For consistent typesetting of units
+\usepackage{subcaption}       % For subfigures within a figure
+\usepackage{float}            % To control float positioning (e.g., figures/tables)
+\usepackage{enumitem}         % Better control over list formatting
+\usepackage{tocloft}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{shapes.geometric, arrows, backgrounds}
+\usepackage{empheq}
+\usepackage{booktabs}
+
+\usepackage{listings}
+\usepackage{xcolor} % For color customization (optional)
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{gray}\itshape,
+    showstringspaces=false,
+    frame=single, % Adds a frame around the code
+    breaklines=true % Wrap long lines
+}
+
+% some custom commands that should've already been in latex by default
+\DeclareRobustCommand{\d}{\ifmmode\text{d}\else d\fi}
+\DeclareRobustCommand{\Cov}{\ifmmode\text{Cov}\else d\fi}
+\newcommand{\br}[1]{\ensuremath{\left( #1 \right)}}
+\newcommand{\sbr}[1]{\ensuremath{\left[ #1 \right]}}
+
+\setlength{\cftbeforesecskip}{5pt}
+
+% Additional customizations (optional)
+\setlength{\parindent}{0pt}   % No paragraph indentation
+\setlength{\parskip}{1em}     % Add space between paragraphs
+
+\begin{document}
+
+\textbf{
+    \Huge \noindent 
+    Parameter Forecasts from Convergence $\times$ Shear Bispectra 
+    \vspace{0.5cm}
+    \\
+    \normalsize
+    Jonas Frugte, Daan Meerburg\\
+    24 October 2024
+    }\\
+\vspace{0.5cm}
+\hrule
+
+\begin{abstract}
+    abstract text
+\end{abstract}
+\vspace{0.5cm}
+\hrule
+
+\tableofcontents
+\pagebreak
+\section{Conventions}
+Use $\mathbf k$ for wave numbers (Fourier space), $l$ for multipole moments, $m$ for magnetic quantum number. $P^{XY}(k, \eta, \eta')$ and $B^{XYZ}(k_1,k_2,k_3, \eta_1, \eta_2, \eta_3)$ correspond to bi and power spectra of fields $X$, $Y$, and $Z$ in Fourier space. $P_l^{XY}(\eta,\eta')$ and $B_{l_1l_2l_3}^{XYZ}(\eta_1, \eta_2, \eta_3)$ correspond to the multipole moments of the bi and power spectra of fields $X$, $Y$, and $Z$. If all times are the same we may instead write only one time argument and if the time is current time then we omit the time argument entirely. In other words,
+$$
+P_l^{XY}(\eta):=P_l^{XY}(\eta,\eta), \quad P_l^{XY}:=P_l^{XY}(\eta_{\text{current}}), \quad \text{similarly for all other spectra}.
+$$
+If both fields are the same, we may only denote one field, e.g. 
+$$
+P_l^{X}(\eta) := P_l^{XX}(\eta).
+$$
+
+Our Fourier convention is
+\begin{align}
+    &\text{Forward Transform:} & \quad \tilde{f}(k) &= \int_{-\infty}^{\infty} f(x) \, e^{-i k x} \, dx\\
+    &\text{Inverse Transform:} & \quad f(x) &= \frac{1}{2\pi} \int_{-\infty}^{\infty} \tilde{f}(k) \, e^{i k x} \, dk
+\end{align}
+we choose this convention because it is in line with the convention used in the CAMB source code. We work in natural units where $c=1$.
+
+\section{Introduction}
+
+\begin{figure}[h!]
+    \centering
+    \input{figures/calc_flowchart.tikz}
+    \caption{Flowchart of steps involved in calculating the minimum error/uncertainty in cosmological parameter estimates using convergence and shear power- and bi-spectra.}
+\end{figure}
+
+\section{Weak Lensing}
+\subsection{Approximations Made / Regime}
+\subsection{Perturbed Photon Paths}
+Work in \textbf{conformal newtonian gauge}. In this section we'll work in units where $c=1$. Denoting conformal time and conformal radial distance by $\eta$ and $\chi$, respectively, the perturbed line element is given by
+\begin{equation}
+    \d s^2 = a^2(\eta)((1 + 2\Psi_N) \d \eta^2 - (1 + 2\Phi_N) \gamma_{ij}\d x^i \d x^j) 
+\end{equation}
+
+where $\gamma_{ij}$ is the unperturbed line element
+\begin{equation}
+    \gamma_{ij} = \d x^i \d x^j = \d \chi^2 + f^2_K(\chi)(\d \theta^2 + \sin ^2 \theta \d \phi ^2).
+\end{equation}
+From here of on work in first order in the scalar potentials $\Phi_N$ and $\Psi_N$. For lensing we consider null-geodesics so $\d s^2 = 0$ and we can rewrite the perturbed line element as
+\begin{equation}
+    \d \hat s^2 = (1 + 4\Psi)\d\eta^2 - \gamma_{ij} \d x^i \d x^j
+\end{equation}
+with $\Psi$ the \textbf{Weyl Potential} given by $\Psi := (\Psi_N - \Phi_N)/2$. A null geodesic $x^\mu(\hat\lambda)$ in terms of its affine parameter ($\hat \lambda$) satisfies the geodesic equation
+\begin{equation}
+    \frac{\d^2 x^\mu}{\d \hat\lambda^2} + \Gamma^\mu_{\nu\rho} \frac{\d x^\nu}{\d \hat\lambda}\frac{\d x^\rho}{\d\hat\lambda} = 0,
+\end{equation}
+with $\hat g_{\mu\nu}(\d x^\mu/\d \hat\lambda)(\d x^\nu / \d \hat \lambda) = 0$. 
+
+In the unperturbed there are incoming radial solutions of the form $\chi = \eta_0 - \eta$. We can express $\hat\lambda$ in terms of $\eta$ using The 0-component of the geodesic equation,
+\begin{equation}
+    \frac{\d^2\eta}{\d\hat\lambda^2} + 2(\frac{\d\eta}{\d\hat\lambda})^2\frac{\d\Psi}{\d\eta}+2\frac{\d\eta}{\d\hat\lambda}\frac{\d x^i}{\d\hat\lambda}\frac{\partial\Psi}{\partial x^i} = 0,
+\end{equation}
+where the derivative $\d\Psi/\d\eta = \partial_\eta\Psi+(\d x^i/\d\eta)\partial_i\Psi$ is along the perturbed ray. This allows us to rewrite the other (spatial) geodesic equations as
+\begin{equation}
+    \frac{\d^2x^i}{\d\eta^2} - 2\frac{\d x^i}{\d\eta}(\frac{\d\Psi}{\d\eta} + \frac{\d x^j}{\d\eta}\frac{\partial\Psi}{\partial x^j})+2\gamma^{ij}\frac{\partial\Psi}{\partial x^j}+\bar\Gamma^i_{jk}\frac{\d x^j}{\d\eta}\frac{\d x^k}{\d \eta} = 0,
+\end{equation}
+where $\bar\Gamma^i_{jk}$ are the connection coefficients of the unperturbed three geometry $\gamma_{ij}$. Without loss of generality we consider an observer located at the origin of the spatial coordinates, meaning we are interested in rays that end at $x^i = 0$. In that case $\d \chi/\d \eta = -1 + O(\Psi)$, $\d \theta/\d\eta = O(\Psi)$ and $\d \phi/\d\eta = O(\Psi)$ (with $\theta$ and $\phi$ angular spatial coordinates). For the case of such rays we can evaluate the connection coefficients and rewrite the spatial geodesic equations as
+\begin{gather}
+    \frac{\partial^2\chi}{\d\eta^2}+2\frac{\d\Psi}{\d\eta}=0,\\
+    \frac{\d^2\theta}{\d\eta^2}-2\frac{\d\ln f_K(\chi)}{\d\chi}\frac{\d\theta}{\d\eta}+\frac{2}{f^2_K(\chi)}\frac{\partial\Psi}{\partial\theta}=0,\\
+    \frac{\d^2\phi}{\d\eta^2} - 2\frac{\d \ln f_K(\chi)}{\d\chi}\frac{\d\phi}{\d\eta}+\frac{2}{f^2_K(\chi)}\frac{1}{\sin^2(\theta)}\frac{\partial\Psi}{\partial\phi}=0.
+\end{gather}
+Integrating twice and using the null condition we can rewrite the the first equation as
+\begin{equation}
+    \chi = \eta_0 - \eta - 2\int_{\eta_0}^\eta\Psi\d\eta',
+\end{equation}
+where the integral is along the ray. Since we are working at first order in $\Psi$ we can evaluate the integral along the unperturbed path, this is known as the \textbf{Born approximation}.\textit{Next follows a short discussion of why perturbations in observation time can be ignored, include?} Doing the same for the other two equations gives
+% TODO: make n a proper vector (bold)
+\begin{gather}
+    \theta(\eta_0 - \chi_*)=\theta_0 - \int_0^{\chi_*}\d\chi\frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}2\frac{\partial}{\partial \theta}\Psi(\chi\hat n, \eta_0 - \chi),\\
+    \phi(\eta_0 - \chi_*)=\theta_0 - \int_0^{\chi_*}\d\chi\frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}\frac{2}{\sin^2\theta}\frac{\partial}{\partial \phi}\Psi(\chi\hat n, \eta_0 - \chi),
+\end{gather}
+where $\theta_0$ and $\phi_0$ label the line of sight $\hat n$. The displacement vector $\mathbf{\alpha}$ indicates the infinitesimal displacement of the lensed rays from their unpetrubed observed angles and is related to $\theta$ and $\phi$ through
+$$
+\alpha_\theta = \theta - \theta_0, \quad \alpha_\phi = \sin^2\theta(\phi - \phi_0).
+$$
+This allows us to summarize the above results as
+\begin{equation}
+    \mathbf \alpha = -2 \int_0^{\chi_*}\d \chi \frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}\nabla_{\hat{\mathbf n}}\Psi(\chi\hat{\mathbf n};\eta_0 - \chi).
+\end{equation}
+When working in the weak field limit (i.e. small spacetime curvature) the $00$ component of Einsteins equations give us a poisson equation \cite{dodelson_modern_cosmology},
+\begin{equation}
+    -\nabla^2\Psi(\textbf{x}, \eta) =  4\pi G a(\eta)^2\delta\rho(\mathbf x, \eta)
+\end{equation}
+where $K$ is $0$, $1$, or $-1$ depending on the curvature of the universe, $\Delta = \partial_x^2 + \partial_y^2 + \partial_z^2$ is the 3 dimensional laplace operator, $\delta\bar\rho$ is the comoving total energy perturbation (evaluated in the rest-frame of the total energy). %TODO: proper definition for anisotropic stress and explain why we can ignore it
+
+\subsection{Convergence, shear}
+Quantities we are interested in measuring depend on how the lensing vector changes with the observation angle. \textbf{Magnification matrix} is defined by
+\begin{equation}
+    A_{ij} := \delta_{ij} + \frac{\partial}{\partial\theta_i}\alpha_i(\hat{\mathbf n}).
+\end{equation}
+This matrix can then be decomposed in the following form, which immediately gives us definitions for the \textbf{convergence}, $\kappa$, \textbf{shear}, $\gamma_1$ and $\gamma_2$, and \textbf{rotation}, $\omega$:
+\begin{equation}
+    A_ij(\hat{\mathbf n}) = \begin{pmatrix}
+        1 - \kappa - \gamma_1 & -\gamma_2 + \omega \\
+        -\gamma_2 - \omega & 1 - \kappa + \gamma_1
+    \end{pmatrix}.
+\end{equation}
+At 1st order $A$ is a symetric matrix by definition and so $\omega$ has to be 0, we will ignore it from here on out. Intuitively, A tells you how a small patch in the sky transforms due to weak lensing, i.e. if you have surface brightness $I$ then
+% TODO: make delta thick
+\begin{equation}
+    I_{\text{emitted}}(\hat{\mathbf{n}} + \mathbf{\delta}) = I_{\text{observed}}((\hat{\mathbf{n}} + \mathbf{\delta}) + \mathbf\alpha(\hat{\mathbf{n}} + \mathbf{\delta})) \approx I_{\text{observed}}((\hat{\mathbf{n}} + \mathbf{\alpha} + A_{ij}\delta_{j}).
+\end{equation}
+given that $|A_{ij}| = (1 - \kappa)^2 + \omega^2 - |\gamma|^2 = 1 - 2\kappa + O(\kappa^2, \gamma^2, \omega^2)$, we can interpret $\kappa$ as telling us about the overal magnification of the source. The $\gamma_i$ represent the area preserving distortion, i.e. stretching and squeezing in a specific direction.
+
+\subsection{lensing potential}
+Taking the derivative out of the integral in equation REF leads us to defining the \textbf{lensing potential}, $\psi$,
+\begin{equation}
+    \mathbf \alpha = \nabla_{\hat{\mathbf n}}\psi, \quad \psi(\hat{\mathbf n}) = -2 \int_0^{\chi_*} \d \chi \frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}\Psi(\chi\hat{\mathbf n}; \eta_0 - \chi).
+\end{equation}
+
+We can relate $\kappa$ and $\gamma$ directly to the lensing potential as
+% TODO: should these subscripts be theta and phi?
+\begin{equation}
+    \kappa = \frac{1}{2}\nabla^2\psi, \quad \gamma_1 = \frac{1}{2}(\partial_\theta^2 - \partial_\phi^2)\psi, \quad \gamma_2 = \partial_\theta\partial_\phi \psi.
+\end{equation}
+
+\subsection{Regarding window functions}
+The window function for light emitted from a source at fixed radius $\chi_*$ is $(\chi-\chi^*)/(\chi_*\chi)$, if the source is instead distributed over the radius as $p(\chi)$, with $p(\chi)$ normalized to integrate to 1, we generalize the window function as
+\begin{equation*}
+    W(\chi) = \int_0^{\chi_*}\d\chi' p(\chi')\frac{\chi'-\chi}{\chi'\chi}.
+\end{equation*}
+The integration limit is up to surface of last scattering because further than that no source can contribute to the observed image. In the case of an image of the CMB we can take $p(\chi')=\delta(\chi'-\chi_*)$, in which case the window function reduces back to $(\chi_*-\chi)/(\chi_*\chi)$. In the case of different sources, we will differentiate between their respective window functions with a subscript. In this case the factor that changes is the distribution function. The sources considered in this paper are only the CMB and selections of galaxies from galaxy surveys. 
+
+\section{Spherical Harmonics}
+\subsection{definition}
+The \textbf{spherical harmonics} $Y_{l}^{m}(\theta, \phi)$ with $l \geq 0$ and $-l\leq m\leq l$ are defined on a sphere in 3D space ($0\leq\theta\leq \pi$ and $0\leq\phi<2\pi$, also denoted $S^2$). They arise naturally when solutions of the laplace, helmholtz, and schrodinger equations in 3D space are decomposed into radial and angular parts, $f(r, \theta, \phi) = f_{\text{spher}}(r)f_{\text{angular}}(\theta, \phi)$. They can be written explicitely as
+\begin{equation}
+    Y^m_l(\theta, \phi) := \sqrt{\frac{2l+1}{4\pi}\frac{(l-m)!}{(l+m)!}}P_l^m(\cos\theta)e^{im\phi},
+\end{equation}
+where $P_l^m$ are \textbf{associated legendre functions}. They are defined in terms of the \textbf{legendre functions} as
+\begin{equation}
+    P_l^m(x) = \begin{cases}
+        (1-x^2)^{m/2}\frac{\d^m}{\d x^m}P_l(x), & m \geq 0,\\
+        (-1)^m\frac{(l+m)!}{(l-m)!}P_l^{-m}(x), & m < 0.
+    \end{cases}
+\end{equation}
+Finally, the legendre functions themselves are implicitly defined through the generating function
+% TODO: find source
+\begin{equation}
+    G(x, t) = \frac{1}{\sqrt{1 - 2xt + t^2}} = \sum_{l=0}^\infty P_l(x)t^l \implies P_l(x) = \frac{1}{l!}\frac{\d ^l}{\d t^l}G(x, 0).
+\end{equation}
+Here we require $x$ to be a real number between $-1$ and $1$ and $t$ a complex number with magnitude less than 1.
+
+\subsection{orthonormality}
+Defining the inner product
+\begin{equation}
+    \langle f(\theta, \phi)|g(\theta, \phi)\rangle := \int_0^{2\pi}\d\phi\int_0^\pi\sin\theta\d\theta f(\theta, \phi)^*g(\theta, \phi)
+\end{equation}
+on the space of functions from $S^2$ to $\mathbb C$, we can show that the spherical harmonics are orthonormal, i.e.
+\begin{equation}
+    \langle Y^{m'}_{l'} | Y^{m}_{l} \rangle = \delta_{mm'}\delta_{ll'}.
+\end{equation}
+
+We first show orthogonality of the associated legendre functions. They satisfy the differential equation
+\begin{equation}
+    \frac{\d}{\d x}((1-x^2)\frac{\d P^m_l(x)}{\d x}) + (l(l + 1) - \frac{m^2}{1 - x^2})P^m_l(x) = 0,
+\end{equation}
+on the interval $[-1, 1]$, which is of \textbf{Sturm-Liouville form},
+\begin{equation}
+    \frac{\d}{\d x}(p(x)\frac{\d y}{\d x}) + (-\lambda - q(x))y = 0.
+\end{equation}
+$\lambda$ is refered to as the eigenvalue of $y$ in this case. Some texts generalize the $\lambda$ term to $\lambda w(x)$, but we will not need these extra complications here. %TODO: find a ref
+It is a general result for $y_n$ and $y_m$ with distinct eigenvalues $\lambda_n$ and $\lambda_m$ that they are orthogonal. Consider the space of real functions on (wlog) $[-1, 1]$. We can define an inner product
+\begin{equation}
+    \langle f | g \rangle := \int_{-1}^1 f(x)g(x)\d x.
+\end{equation}
+In this case the sturm Liouville problem can be restated as finding the eigenvalues of a differential operator $\mathcal L$, i.e.
+\begin{equation}
+\mathcal L [y] = \lambda, \quad \mathcal L[y] := \frac{\d}{\d x}(p(x)\frac{\d y}{\d x}) - q(x)y.
+\end{equation}
+It can then be easily verified that $\mathcal L$ is a hermitian operator, i.e. $\langle \mathcal L f | g \rangle = \langle f | \mathcal L g \rangle $ if $p(x)$ vanishes on the boundaries. % TODO: verify the boundary part
+It is then a standard result that eigenvalues of the hermitian operator with distinct eigenvalues are orthogonal. Given that the $P^m_l$ are eigenfunctions of a sturm liouvilly problem with associated eigenvalues $l(l+1)$, they must be orthogonal. In the case that they are equal, we the integral can be analytically calculated, giving the result
+\begin{equation}
+    \int_{-1}^1 P^m_l(x)P^m_{l'}(x) \d x = \frac{2(l+m)!}{(2l+1)(l-m)!}\delta_{ll'}.
+\end{equation}
+Orthonormality of the spherical harmonics is than checked by using the definition in terms of the associated legendre functions. Define the normalisation constant of $Y_m^l$ as $N^m_l$, then
+\begin{gather}
+    \int \d\theta\d \phi \sin\theta (Y^m_l)^* Y^{m'}_{l'} = N_l^mN_{l'}^{m'} \int_0^{2\pi} e^{-im\phi}e^{im'\phi}\int_0^\pi P^m_l(\cos\theta)P^{m'}_{l'}(\cos\theta)\sin\theta\d\theta \\
+    = (N_l^m)^2 \delta_{mm'}\frac{2(l+m)!}{(2l+1)(l-m)!}\delta_{ll'} = \delta_{mm'}\delta_{ll'}.
+\end{gather}
+
+\subsection{completenes}
+Take an arbitrary function $f(\theta, \phi)$. Define harmonic coefficients $c_{lm} = \langle Y_l^m | f \rangle$, then we aim to prove that, for continuous $f$, $f(\theta, \phi) = \sum_{lm} c_{lm}Y^m_l(\theta\phi)$. We first require 2 intermediate results. The legendre addition formula is a well known resulting stating that
+\begin{equation}
+    P_l(\cos\gamma) = \frac{4\pi}{2l + 1} \sum_{-l\leq m \leq l} Y^m_l(\theta', \phi')^* Y^m_l(\theta, \phi),
+\end{equation}
+where $\gamma$ is the angle between the vectors pointing in the directions $(\theta', \phi')$ and $(\theta, \phi)$. Additionally, in E W Thompson % TODO: get proper ref
+it is shown that, for points at which $f$ is continuous,
+\begin{equation}
+   f(\theta, \phi) = \sum_{l\geq 0} \frac{2l + 1}{4\pi} \int^\pi_0\int^{2\pi}_{0}f(\theta',\phi')P_l(\cos\gamma)\sin\theta'\d\theta'\d\phi'.
+\end{equation}
+Putting these two results together we write 
+\begin{gather}
+    \sum_{lm} c_{lm}Y^m_l(\cos\theta\phi) = \sum_{lm} \int \d\phi'\d\theta'\sin\theta'Y^m_l(\theta',\phi')^*f(\theta',\phi')Y^m_l(\theta,\phi) \\
+    = \sum_l \int \d\theta'\d\phi'\sin\theta' P_l(\cos\gamma)\frac{2l+1}{4\pi}f(\theta',\phi') = f(\theta, \phi).
+\end{gather}
+Thus the spherical harmonics form a complete orthonormal basis of the real functions on $S^2$
+
+\section{Weak Lensing Statistics}
+\subsection{Lensing Potential Powerspectrum}
+Consider the lensing potential, $\psi$, then decomposing into spherical harmonics gives
+\begin{equation}
+    \psi(\hat{\mathbf n}) = \sum_{lm} \psi_{lm}Y_{lm}(\hat{\mathbf n}).
+\end{equation}
+On the other hand, consider the decomposition of $\Psi$ in fourier modes with the Fourier convention $\Psi(\mathbf x, \eta)=\int\frac{\d^3 \mathbf k}{(2\pi)^{3}}\Psi(\mathbf k, \eta)e^{i\mathbf k \cdot\mathbf x}$,
+\begin{equation}
+    \psi(\hat{\mathbf n}) = -2 \int_0^{\chi_*}\d \chi W(\chi) \int\frac{\d^3 \mathbf k}{(2\pi)^{3}}\Psi(\mathbf k, \eta_0 - \chi)e^{i\mathbf k \cdot\hat{\mathbf n}\chi}.
+\end{equation}
+We can than relate the multipole modes of $\psi$ to the fourier modes of $\Psi$ through % TODO: check sign convention here
+\begin{gather}
+    \psi_{lm} = \langle Y_l^m | \psi \rangle = \int\d^2\hat{\mathbf n} Y_l^m(\hat{\mathbf n})^* \psi(\hat{\mathbf n})\\ 
+    = -2\int\d^2\hat{\mathbf n} Y_l^m(\hat{\mathbf n})^* \int_0^{\chi_*}\d \chi W(\chi) \int\frac{\d^3 \mathbf k}{(2\pi)^{3}}\Psi(\mathbf k, \eta_0 - \chi)e^{i\mathbf k \cdot\hat{\mathbf n}\chi}
+\end{gather}
+Now define the power spectrum as
+\begin{equation}
+    \langle \Psi(\mathbf k, \eta)\Psi^*(\mathbf k',\eta')\rangle = \frac{2\pi^2}{k^3}P_\Psi(k, \eta, \eta')\delta(\mathbf k - \mathbf k'),
+\end{equation}
+with $\eta$ denoting the conformal time. This gives 
+%TODO: define the window function
+\begin{equation}
+    \langle \psi(\hat{\mathbf n})\psi(\hat{\mathbf n}') \rangle = 4\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int \frac{\d^3\mathbf k}{(2\pi)^6}\frac{2\pi^2}{k^3}P_\psi(k,\eta_0 - \chi, \eta_0-\chi')e^{i\mathbf k\cdot\hat {\mathbf n}\chi}e^{i\mathbf k\cdot\hat {\mathbf n}'\chi'},
+\end{equation}
+where we used that $\eta = \eta_0 - \chi$ along the unperturbed photon path (Born approximation), with $\eta_0$ the time at which the light ray hits earth. 
+We can use the result
+\begin{equation}
+    e^{i\mathbf k \cdot \hat {\mathbf n}\chi}=4\pi\sum_{lm}i^lj_l(k\chi )Y_l^m(\hat{\mathbf n})^*Y_l^m(\hat{\mathbf k}) = 4\pi\sum_{lm}i^lj_l(k\chi )Y_l^m(\hat{\mathbf n})Y_l^m(\hat{\mathbf k})^*,
+\end{equation}
+where $j_l$ is the spherical Bessel function (ELABORATE ON THIS?), to rewrite the above equation. Using both versions of the identity above, we immedatialy get a factor $Y_l^m(\hat{\mathbf k})Y_{l'}^{m'}(\hat{\mathbf k})^*$ in our integral. We can factor the differential element of $\d^3\mathbf k$ into a radial and angular part as $k^2\d k\d^2\Omega_k$, with $\Omega_k$ the solid angle, to apply the orthonormality condition of the spherical harmonics. Note that we take the same sequence of steps a number of times in other parts of the derivations of the lensing spectra. We thus obtain
+\begin{gather}
+    \langle \psi(\hat{\mathbf n})\psi(\hat{\mathbf n}') \rangle = 4(4\pi)^2\sum_{ll'mm'}i^{l+l'}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\\\times\int \frac{k^2\d k}{(2\pi)^6}\frac{2\pi^2}{k^3}j_l(k\chi)j_{l'}(k\chi')P_\psi(k,\eta_0 - \chi, \eta_0-\chi')Y_{lm}(\hat{\mathbf n})Y_{l'm'}(\hat{\mathbf n}')^*\delta_{ll'}\delta_{mm'}. \label{eq:lenspotcorrexpanded}
+\end{gather}
+The angular power spectrum is defined similarly to the power spectrum, i.e.
+\begin{equation}
+    \langle \psi_{lm}\psi_{l'm'}^* \rangle = \delta_{ll'}\delta_{mm'}C_l^\psi.
+\end{equation}
+Note that the correlation is independent of $m$ and $m'$. %TODO: explain how this relates to statistical isotropy
+We can thus read from equation \ref{eq:lenspotcorrexpanded} that
+\begin{gather}
+    C_l^\psi = 4(4\pi)^2(-1)^{l}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int \frac{k^2\d k}{(2\pi)^6}\frac{2\pi^2}{k^3}j_l(k\chi)j_{l}(k\chi')P_\psi(k,\eta_0 - \chi, \eta_0-\chi'),
+\end{gather}
+which can be simplified to
+\begin{gather}
+    C_l^\psi = (-1)^{l}\frac{2}{\pi^2}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int k^2\d kj_l(k\chi)j_{l}(k\chi')\frac{P_\psi(k,\eta_0 - \chi, \eta_0-\chi')}{k^3}.
+\end{gather}
+
+To further evaluate the integral we will make the standard \textbf{Limber approximation}. The Bessel functions peak sharply at $l=x$\footnote{Some sources use $x\approx l+1/2$ instead, which is slightly more accurate for larger scales (low $l$) and slightly less accurate for smaller scales.}, with the peak being increasingly sharp for higher $l$. Similarly to $\delta(x-x_0)f(x)=\delta(x-x_0)f(x_0)$, we thus take $j_l(k\chi)f(k)\approx j_l(k\chi)f(l/\chi)$. The Bessel functions satisfy an orthogonality condtion,
+\begin{equation}
+    \int k^2\d k j_l(k\chi)j_l(k\chi') = \frac{\pi}{2\chi^2}\delta(\chi-\chi').
+\end{equation}
+In combination with the Limber approximation we thus find
+\begin{equation}
+    \int k^2\d k j_l(k\chi)j_l(k\chi')f(k) \approx \frac{\pi}{2\chi^2}\delta(\chi-\chi')f(l/\chi).
+\end{equation}
+%TODO: how high? quantify limber approx, perhaps using convergence x LSS paper
+It allows us to write the Limber-approximate angular spectrum as
+\begin{gather}
+    C^\psi(l) = (-1)^{l}\frac{2}{\pi^2}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi') \frac{\pi}{2\chi^2}\delta(\chi-\chi')\frac{\chi^3}{l^3}P_\psi(l/\chi,\eta_0 - \chi, \eta_0-\chi')\\
+    = (-1)^{l}\frac{1}{l^3\pi}\int_0^{\chi_*}\chi\d \chi W(\chi)^2 P_\psi(l/\chi,\eta_0 - \chi, \eta_0-\chi).
+\end{gather}
+% The power spectrum of the potential can be related to the power spectrum of the matter density using the Poisson equation %TODO: create ref
+% For a flat universe in atter or dark energy domination we thus find the relation
+% \begin{equation}
+%     P_\Psi(k;\eta, \eta)=\frac{9\omega_m^2(\eta)H^4(\eta)}{8\pi^2} \frac{P_m(k, \eta)}{k},
+% \end{equation}
+% where we use the shorthand $P_m(k, \eta):=P_m(k,\eta,\eta)$. The lensing power spectrum is thus finally given in terms of the matter power spectrum as
+% \begin{equation}
+%     C_l^\psi=\underbrace{9\omega_m^2(\eta)H^4(\eta)}_{:=C(\eta)}\frac{1}{l^4}\int_0^{\chi_*}\d\chi\chi^2 W(\chi)^2P_m(l/\chi, \eta_0-\chi).
+% \end{equation}
+% We will henceforth denote the $\eta$ dependent factor outside of the integral as $C(\eta)$.
+\subsection{Lensing potential bispectrum}
+The derivation of the bispectrum proceeds similarly to that of the power spectrum. We aim to compute the bispectrum of the lensing potential fields of 3 (possibly distinct sources), $\psi_1$, $\psi_2$, $\psi_3$. 
+\begin{gather*}
+    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle = 
+    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{l_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}e^{i\mathbf k_i \cdot\hat{\mathbf n_i}\chi_i}} \\
+    \times \langle \prod_i\Psi(\mathbf k_i, \eta_0 - \chi_i) \rangle.
+\end{gather*}
+Defining the bispectrum of the graviational potential as
+\begin{equation*}
+    \langle \prod_{i=1,2,3}\Psi(\mathbf k_i, \eta_0 - \chi_i) \rangle = (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}),
+\end{equation*}
+we rewrite the lensing potential bispecrum as
+\begin{gather*}
+    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle = 
+    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{l_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}e^{i\mathbf k_i \cdot\hat{\mathbf n_i}\chi_i}}\\ \times (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
+\end{gather*}
+Now using the identity REF for the complex exponential:
+\begin{gather*}
+    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle \\ = 
+    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{l_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi\sum_{lm}i^{l}j_{l}(k_i\chi_i)Y_{l}^{m}(\hat{\mathbf n_i})Y_{l}^{m}(\hat{\mathbf k_i})^*}\\
+    \times (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}) \\
+    = \sbr{\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi i^{l_i}j_{l_i}(k_i\chi_i)Y_{l_i}^{m_i}(\hat{\mathbf k_i})^*}} (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
+\end{gather*}
+We can write the 3D dirac delta function in terms of spherical harmonics as
+\begin{equation*}
+    \delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3) = 8\int\d^3\mathbf x\prod_{i=1,2,3}\br{ \sum_{l_jm_j} i^{l_j}j_{l_j}(k_ix)Y_{l_j}^{m_j}(\hat{\mathbf k_i}) Y_{l_j}^{m_j}(\hat{\mathbf x})^* }.
+\end{equation*}
+This results in
+\begin{gather*}
+    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle= \prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi i^{l_i}j_{l_i}(k_i\chi_i)Y_{l_i}^{m_i}(\hat{\mathbf k_i})^*} \\
+    \times (2\pi)^38\int\d^3\mathbf x\prod_{i}\br{ \sum_{lm} i^{l}j_{l}(k_ix)Y_{l}^{m}(\hat{\mathbf k_i}) Y_{l}^{m}(\hat{\mathbf x})^* }B^\Psi(\{k_i\}, \{\eta_0-\chi_i\})\\
+    = (2\pi)^38\int\d^3\mathbf x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3}}4\pi (-1)^{l_i}j_{l_i}(k_i\chi_i)j_{l_i}(k_ix) Y_{l_i}^{m_i}(\hat{\mathbf x})^*} B^\Psi(\{k_i\}, \{\eta_0-\chi_i\})
+\end{gather*}
+The angular part of the $\mathbf x$ integral can be evaluated using the identity
+\begin{gather*}
+    \int \mathrm{d}\Omega_{\hat{n}} \, Y_{l_1 m_1}^*(\hat{x}) Y_{l_2 m_2}^*(\hat{n}) Y_{l_3 m_3}^*(\hat{n}) = (-1)^{m_1 + m_2 + m_3} 
+    \int \mathrm{d}\Omega_{\hat{n}} \, Y_{l_1 -m_1}(\hat{n}) Y_{l_2 -m_2}(\hat{n})Y_{l_3 -m_3}(\hat{n}) \\
+    = (-1)^{m_1 + m_2 + m_3} 
+    \sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix}
+    \begin{pmatrix} l_1 & l_2 & l_3 \\ -m_1 & -m_2 & -m_3 \end{pmatrix} \equiv A_{\mathbf{l}}^{\mathbf{m}},
+\end{gather*}
+giving
+\begin{gather*}
+    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle 
+    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3}}4\pi (-1)^{l_i}j_{l_i}(k_i\chi_i)j_{l_i}(k_ix)} \\ \times B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
+\end{gather*}
+Now applying the Limber approximation again:
+\begin{gather*}
+    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle 
+    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\frac{1}{(2\pi)^{3}}\frac{\pi}{2\chi_i^2}\delta(x-\chi_i)4\pi (-1)^{l_i}} \\ \times B^\Psi(\{l_i/\chi_i\}, \{\eta_0-\chi_i\}) \\
+    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int \chi^2\d \chi\prod_i\br{-2 W_i(\chi)\frac{1}{(2\pi)^{3}}\frac{\pi}{2\chi^2}4\pi (-1)^{l_i}} B^\Psi(\{l_i/\chi\}, \eta_0-\chi).
+\end{gather*}
+Finally, we aim to rewrite the above in terms of the angular bispectrum of the lensing potential. 
+
+The definition for the bispectrum of any set of randomly distributed spherical harmonic components $X^k_{lm}$ is CITE Hu 2000 
+\begin{equation*}
+    \langle (X_1)_{l_1m_1}(X_2)_{l_2m_2}(X_3)_{x_3m_3} \rangle = \begin{pmatrix}
+        l_1 & l_2 & l_3 \\ m_1 & m_2 & m_3
+    \end{pmatrix}
+    B_{l_1l_2l_3}^{X_1X_2X_3}.
+\end{equation*}
+Note the independence on $m_i$, this necesarilly follows from statistical isotropy. % TODO: add a short explanation here
+If $m_1+m_2+m_3\neq 0$, the associated Wigner-3j symbol vanishes and the bispectrum is set to zero.
+Also note that in this definition we have immediately generalized to include cross correlation between different fields $X_1$, $X_2$, $X_3$. This will be relevant later when we look at cross correlations between shear and convergence fields.
+
+Using the above definition and the symmetry property
+\begin{equation*}
+    \begin{pmatrix}
+        l_1 & l_2 & l_3\\
+        -m_1 & -m_2 & -m_3
+      \end{pmatrix}
+      =
+      (-1)^{l_1+l_2+l_3}
+      \begin{pmatrix}
+        l_1 & l_2 & l_3\\
+        m_1 & m_2 & m_3
+      \end{pmatrix}
+\end{equation*}
+we find
+\begin{gather*}
+    B^{\psi_1\psi_2\psi_3}_{l_1l_2l_3}
+    = (-1)^{l_1+l_2+l_3}
+    \sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix}
+    (2\pi)^3 8 \\
+    \times \int \chi^2\d \chi\prod_i\br{-2 W_i(\chi, \chi_*)\frac{1}{(2\pi)^{3}}\frac{\pi}{2\chi^2}4\pi (-1)^{l_i}} B^\Psi(\{l_i/\chi\}, \{\eta_0-\chi\}),
+\end{gather*}
+where we were able to drop the $(-1)^{m_1+m_2+m_3}$ factor due to the bispecrum vanishing if that sum doesn't equal $0$, as mentioned earlier. When all $m_i$ equal zero, the Wigner 3j-symbol gains a number of useful properties % TODO: discuss all of them
+In particular, it vanishes if $l_1+l_2+l_3$ is odd, meaning we can drop the $(-1)^{l_1+l_2+l_3}$ factor. Additionally cancelling common factors then gives
+\begin{align*}
+    B^{\psi_1\psi_2\psi_3}_{l_1l_2l_3}
+    =
+    -\sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix} 8 \int \frac{\d \chi }{\chi^4} W_1(\chi)W_2(\chi)W_3(\chi) B^\Psi(\{l_i/\chi\}, \eta_0-\chi).
+\end{align*}
+
+% \begin{gather*}
+%     = \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{l_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3/2}}4\pi\sum_{l_i'm_i'}i^{l_i'}j_{l_i'}(k_i\chi_i)Y_{l_i'}^{m_i'}(\hat{\mathbf n_i})Y_{l_i'}^{m_i'}(\hat{\mathbf k_i})^*}\\ 
+%     \times (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3) B_\Psi(k_1, k_2, k_3) \\
+%     = \prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3/2}}4\pi i^{l_i}j_{l_i}(k_i\chi_i)Y_{l_i}^{m_i}(\hat{\mathbf k_i})^*}\\ 
+%     \times (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3) B_\Psi(k_1, k_2, k_3) \\
+%     = \prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3/2}}4\pi i^{l_i}j_{l_i}(k_i\chi_i)Y_{l_i}^{m_i}(\hat{\mathbf k_i})^*}\\ 
+%     \times (2\pi)^3\sbr{ \int \d^3 \mathbf{x} \prod_i2\sum_{l_i'm_i'}i^{l_i'}j_{l_i'}(k_ix) Y_{l_i'm_i'}(\hat{\mathbf k}_i) Y_{l_i'm_i'}(\hat{\mathbf x})^* } B_\Psi(k_1, k_2, k_3) \\
+%     = \prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3/2}}4\pi i^{l_i}j_{l_i}(k_i\chi_i)}\\ 
+%     \times (2\pi)^3\sbr{ \int \d^3 \mathbf{x} \prod_i2i^{l_i}j_{l_i}(k_ix) Y_{l_im_i}(\hat{\mathbf x})^* } B_\Psi(k_1, k_2, k_3) \\
+%     = A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3/2}}4\pi i^{l_i}(2i^{l_i})j_{l_i}(k_i\chi_i)j_{l_i}(k_ix)}
+%     (2\pi)^3  B_\Psi(k_1, k_2, k_3) \\
+%     = A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\frac{1}{(2\pi)^{3/2}}4\pi i^{l_i}(2i^{l_i})\frac{\pi}{2\chi_i^2}\delta(x-\chi_i)}
+%     (2\pi)^3  B_\Psi(l_1/\chi, l_2/\chi, l_3/\chi) \\
+%     = A_{\mathbf l}^{\mathbf m}\int_0^{\chi_*} x^2\d x\prod_i\br{-2 W(x, \chi_*)\frac{1}{(2\pi)^{3/2}}4\pi i^{l_i}(2i^{l_i})\frac{\pi}{2x^2}}
+%     (2\pi)^3  B_\Psi(l_1/\chi, l_2/\chi, l_3/\chi) \\
+%     = A_{\mathbf{l}}^{\mathbf{m}} (-1)^{1 + l_1 + l_2 + l_3} 8 (2\pi)^{9/2} \int_0^{\chi_*} \frac{[W(\chi, \chi_*)]^3}{\chi^4} \, B_\Psi\left( \frac{l_1}{\chi}, \frac{l_2}{\chi}, \frac{l_3}{\chi} \right ) \, \mathrm{d}\chi.
+% \end{gather*}
+
+
+% TODO: mention that the definition of the bispectrum is different form power spectrum of Psi in terms of normalization constant
+% TODO: explain 3d dirac delta in terms of spherical harmonics (eq 78 thesis Luna)
+% TODO: explain that we used that int d^2 Omega Y Y Y = A_vec l^vec m (eq 82 thesis Luna)
+% using that d^3 k = k^2 d k d^2 Omega_k
+% TODO: fix this
+\subsection{Gravitational potential spectra in terms of matter spectra}
+% TODO: fix references and citations 
+To convert equations ... and ... to forms that we can directly evaluate we will need to replace the spectra of the graviational potential with matter spectra. Specifically, we define the matter power spectrum in agreement with the CAMB package documentation CITE and the matter bispectrum in agreement with CITE FITTING FUNC PAPER such that we can approximate it in terms of the matter power spectrum using hyperextended perturbation theory. The \textbf{density contrast} is defined as
+\begin{equation}
+    \delta(\mathbf x) := \frac{\rho(\mathbf x)-\bar \rho}{\bar\rho},
+\end{equation}
+and the matter spectra are defined in terms of the fourier transformed density contrast $\delta(\mathbf k)$ as 
+\begin{gather*}
+    \langle \delta(\mathbf k, \eta) \delta(\mathbf k', \eta)^* \rangle = (2\pi)^3\delta(\mathbf k - \mathbf k')P^\delta(\mathbf k, \eta),\\
+    \langle \delta(\mathbf k_1, \eta) \delta(\mathbf k_2, \eta) \delta(\mathbf k_3, \eta) \rangle = (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\delta(k_1, k_2, k_3, \eta).
+\end{gather*}
+The mean matter density of the universe, \( \bar{\rho} \), can be expressed in terms of the matter density parameter \( \Omega_m \) and the critical density \( \rho_c \) as 
+$$
+\bar{\rho}(\eta) = \frac{3 \Omega_m H_0^2}{8 \pi G}\frac{1}{a(\eta)^3},
+$$
+where $a(\eta)$ is the only time dependent factor on the right hand side.
+In the case of a flat universe ($K=0$) we can thus rewrite the Poisson equation REF (6.41 in modern cosmology) as
+\begin{equation}
+    -\nabla^2\Psi = 4\pi G a^2\br{\frac{3\Omega_m H_0^2}{8\pi G}\frac{1}{a^3}}\delta = \frac{3\Omega_m H_0^2}{2} \frac{1}{a}\delta \implies \Psi(k, \eta) = \frac{3\Omega_m H_0^2}{2}\frac{1}{a}\frac{\delta(k, \eta)}{k^2},
+\end{equation}
+where $\Psi(k,\eta)$ and $\delta(k,\eta)$ are functions in Fourier space. For the power- and bispectra we find
+\begin{gather*}
+    \langle \Psi(\mathbf k, \eta)\Psi^*(\mathbf k',\eta)\rangle = \frac{2\pi^2}{k^3}P^\Psi(k, \eta)\delta(\mathbf k - \mathbf k') \implies P^\Psi(k,\eta) = \frac{1}{k}(9\Omega_m^2H_0^4\pi) \frac{1}{a^2}P^\delta(k,\eta),\\
+    \langle \Psi(\mathbf k_1, \eta)\Psi(\mathbf k_2,\eta)\Psi(\mathbf k_3,\eta)\rangle = (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(k_1,k_2,k_3, \eta)\\ 
+    \implies B^\Psi(k_1,k_2,k_3, \eta) = \frac{1}{k_1^2k_2^2k_3^2}\br{\frac{3\Omega_m H_0^2}{2}}^3 \frac{1}{a^3}B^\delta(\{k_i\}, \eta).
+\end{gather*}
+We conclude this section by using the above equations to rewrite the lensing potential spectra (equations REF and REF) in terms of matter spectra 
+\begin{empheq}[box=\fbox]{align*}
+    P^{\psi_X\psi_Y}_l
+    & = (-1)^{l}\frac{9}{l^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)P^\delta(l/\chi,\eta_0-\chi),\\
+    B^{\psi_X\psi_Y\psi_Z}_{l_1l_2l_3} &= -\sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{l_1^2l_2^2l_3^2}\Omega_m^3H_0^6\\
+    & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{l_i/\chi\}, \eta_0-\chi).
+\end{empheq}
+
+% \begin{gather*}
+%     \langle \psi_{l_1m_1} \psi_{l_2m_2} \psi_{l_3m_3} \rangle = A_{\mathbf{l}}^{\mathbf{m}} (-1)^{l_1 + l_2 + l_3} 8 (2\pi)^{9/2} \int_0^{\chi_*} W(\chi, \chi_*)^3 \frac{\chi^2}{l_1^2l_2^2l_3^2} \br{\frac{3\Omega_m H^2}{2}}^3|_{\eta=\eta_0-\chi}\\
+%     \quad \times B^\delta\br{ \frac{l_1}{\chi}, \frac{l_2}{\chi}, \frac{l_3}{\chi}; \eta_0-\chi } \mathrm{d}\chi, \\
+%     C_l^\psi = \frac{72\pi^3}{l^4}\int_0^{\chi_*}\d \chi \chi^2(\Omega_m^2H^4)|_{\eta=\eta_0-\chi} C^\delta_{l/\chi}(\eta_0-\chi) W(\chi)^2.
+% \end{gather*}
+
+\subsection{Convergence and shear multipole moments}
+\paragraph{Convergence}
+% TODO: make notation of nabla nicer/more consistent
+
+Taking the harmonic decomposition of the convergence,
+\begin{equation}
+    \kappa(\hat{\mathbf n}) = \kappa_{lm}Y_l^m(\hat{\mathbf n}),
+\end{equation}
+you can relate it to the multipole moments of the lensing potential through CHECK FACTOR OF 2
+\begin{equation}
+    \kappa_{lm} = \frac{1}{2}(\nabla^2\psi)_{lm} = \frac{l(l+1)}{2}\psi_{lm}
+\end{equation}
+because the spherical harmonics are eigenfunctions of the Laplacian operator.
+
+\paragraph{Shear}
+On the other hand, the shear is given by
+\begin{equation}
+    \gamma = \gamma_1 + i\gamma_2 = \frac{1}{2}\eth_1(\eth_0\psi)
+\end{equation}
+where the spin raising operator, $\eth_s$ acts on a spin $s$ function defined on $S^2$ to create a spin $s+1$ function. The above equality is proven explicitely in appendix ... %TODO: write and cite appendix proving equivalence
+$\eth_s$ can be written in $(\theta, \phi)$ coordinates as
+\begin{equation}
+    \eth_s = -\sin^s\theta(\partial_\theta + \frac{i}{\sin\theta})\frac{1}{\sin^s\theta}.
+\end{equation}
+It is worth explaining that in this context a spin $s$ function referes to a function $_sf(\theta, \phi)$ that transforms under any rotation of coordinates by picking up a phase factor $e^{is\alpha}$, with $\alpha$ the angle of the rotation, i.e.
+\begin{equation}
+    f'(\theta', \phi') = e^{is\alpha}f(\theta, \phi).
+\end{equation}
+Shear is actually a spin 2 function, which can immediately be seen by observing that rotating a galaxy image stretched and squeezed through weak lensing by $180$ degrees gives the same stretching and squeezing, i.e. the same shear. It is thus expected that the shear is proportional to $\eth^2\psi$. 
+
+The spin weighted spherical harmonics, $_sY_l^m$ are eigenfunctions of the raising/lowering operator, in particular
+\begin{equation}
+    \eth_sY_l^m = \sqrt{(l-s)(l+s+1)} _{s+1}Y_l^m.
+\end{equation}
+Decomposing the shear as
+\begin{equation}
+    \gamma(\theta, \phi) = \gamma_{lm} {}_sY_l^m(\theta,\phi),
+\end{equation}
+we thus find
+\begin{equation}
+    \gamma_{lm} = \frac{1}{2}\sqrt{(l-1)(l)(l+1)(l+2)} \psi_{lm}
+\end{equation}
+
+\section{Cosmological Perturbation Theory}
+
+\section{Fisher Matrix Analysis}
+\subsection{Determining experimental parameters}
+Let's say we are conduction some experiment with parameters $p_i$ and we make a set of observations $d_j$. Then the \textbf{likelihood function}, $\mathcal L$, is defined as
+\begin{equation}
+    \mathcal(d_j|p_i) := P(d_j|p_i).
+\end{equation}
+We of course want to determine the reverse, i.e. the probability distribution of the parameters given some set of observations. Bayes' theorem tells us that
+\begin{equation}
+    P(w_i|d_j)=\frac{P(d_j|w_i)P(w_i)}{P(d_j)}.
+\end{equation}
+We can ignore the denominator (which we don't know) and get that
+\begin{equation}
+    P(w_i|d_j)\propto\mathcal L (d_j|w_i)P_{\text{prior}}(w_i).
+\end{equation}
+with the proportianality constant of course being determined by requiring the pdf to integrate to 1. The probability distribution of the parameters without any measurements is called the \textbf{prior probability} and is usually taken to be a uniform distribution, i.e. we can ignore it. If we have prior information about the constants, e.g. some minimum and maximum values of the parameters, then we can always incorporate this into our results by changing the prior function. The pdf on the left hand side of the above equation is also called the \textbf{posterior for }$w_i$. The parameters are then by finding the maximum of the probability distribution, i.e. by solving
+\begin{equation}
+    \frac{\partial \mathcal L}{\partial w_i}|_{w_{i,\text{ best fit}}}=0.
+\end{equation}
+If, for example, we only have one parameters $w$ and it represents the average of the data, we obtain the familiar value $w=\frac{1}{n}\sum_{i=1}^n d_i$.
+\subsection{Determing uncertainty in experimental parameters (Fisher matrix analysis)}
+% proof of cramer rao bound from "statistical inference" from george casella, Roger l berger
+The \textbf{Cramer-Rao Inequality} is based on the \textbf{Cauchy-Schwarz inequality} ($|Cov(X,Y)|^2\leq Var(X)Var(Y)$) and gives us a lower bound on the variance of an estimator. Specifically, let $X_1, ..., X_n$ be a sample with pdf $f(\mathbf x | \theta)$ and let $W(\mathbf X)=W(X_1, ..., X_n)$ be a sufficiently well behaved estimator. Then
+\begin{equation}
+    Var_\theta(W(\mathbf X)) \geq \frac{\br{\frac{\d}{\d\theta}E_\theta \sbr{ W(\mathbf X) }}^2}{E_\theta\sbr{\br{\frac{\partial}{\partial\theta}\log f(\mathbf X | \theta)}^2}}. \label{eq:cramerraobound}
+\end{equation}
+
+Now let's assume the following: we have only one parameter $\theta$, $W=\hat\theta$ is an \textbf{unbiased estimator} of $\theta$, we conduct $n$ measurements, and measurements are going to equal $\mu(\theta)$ for $\mu$ as some function of $\theta$ plus some parameter independent gaussian error $\sigma$, i.e. $$f(x|\theta)\propto e^{-\frac{-(x-\mu(\theta))^2}{2\sigma^2}}.$$
+In this case we can rewrite equation \eqref{eq:cramerraobound} as
+\begin{gather}
+    Var_\theta(\hat\theta(\mathbf X)) 
+    \geq \br{\frac{\d}{\d\theta}\theta}^2\br{E_\theta\sbr{\br{\sum_{i=1}^n \frac{(x_i-\mu(\theta))}{\sigma^2}\frac{\partial\mu(\theta)}{\partial\theta}}^2}}^{-1}
+    = \br{n\frac{\br{\frac{\partial\mu(\theta)}{\partial\theta}}^2}{\sigma^2}}^{-1}.
+\end{gather}
+A few comments are in order. First notice that the variance of the estimator of $\theta$ will in general depend on the true value of $\theta$. Given that we don't know the true value with certainty, the error is estimated by setting $\theta=\tilde\theta$, which is the most accurate estimate that we have, called the \textbf{fiducial value} of $\theta$. Second, the not so elegant form that we left the result in is on purpose. In the case of $m$ parameters $\theta_i$, $\mu$ will become a $\mathbb R^m \rightarrow \mathbb R$ function and we can generalize the above procedure to define the $m\times m$ \textbf{Fisher matrix} as
+\begin{equation}
+    F_{\theta_i\theta_j} := n\frac{\frac{\partial\mu}{\partial\theta_i}(\tilde\theta_k)\frac{\partial\mu}{\partial\theta_j}(\tilde\theta_k)}{\sigma^2},
+\end{equation}
+such that \begin{equation}
+    Var_{\theta_i}(\hat\theta_i) \geq \br{F^{-1}}_{\theta_i\theta_j}.
+\end{equation}
+To further generalize to the case of $n$ potentially different random variables $x_i$, each with associated $\mu_{x_i}$ error $\sigma_{x_i}$, we need to take into account that these RV's may be correlated and thus define the Fisher matrix as
+\begin{equation}
+    F_{\theta_i\theta_j} := \sum_{p, q=1}^n \frac{\partial\mu_{x_p}}{\partial\theta_i}(\tilde\theta_k)(\text{Cov}^{-1})_{x_px_q}\frac{\partial\mu_{x_q}}{\partial\theta_j}(\tilde\theta_k),
+\end{equation}
+where Cov is the covariance matrix associated with the random vector $(x_1, ..., x_n)$, $\text{Cov}_{x_px_q}:=\text{Cov}(x_p,x_q)$.
+This result is sufficiently general for our purposes and is what we will be using.
+\subsection{Fisher Matrices and Eigenvalues}
+As explained earlier, inverting the Fisher matrix gives us a (best case scenario) covariance matrix of the estimators of our experimental parameters. For any vector $\mathbf v$,
+\begin{equation*}
+    \mathbf{v}^T_j \Cov_{ij} \mathbf v_i = \langle (v_i \hat p_i)^2 \rangle.
+\end{equation*}
+In particular, if the covariance matrix thus has some very large eigenvalue $\lambda_L$ (large compared to the overal accuracy of our experiment) then our the corresponding parameter $v_i\hat p_i$ has a large variance and thus represents an approximate degeneracy in our parameters. Of course when looking at the Fisher matrix we instead look for the smallest eigenvalue.
+
+Another consideration related to the above is that if we have such an abnormally small eigenvalue we are likely to run into problems with inverting the Fisher matrix due in a context with numerical errors. For one, we are likely to have an eigenvalue go negative, which leads to a covariance matrix that is not positive semi definite (PSD) and will thus give unusable results. This is because (1) the smallest eigenvalue is sensitive to numerical errors due to being small (2) the errors on the eigenvalues is proportial to the condition number of the matrix \cite{Horn2012MatrixAnalysis}, specifically for a matrix $A$ with some perturbation $\Delta A$, the perturbation of eigenvalue $\lambda_i$ is bounded above as
+\begin{equation*}
+    |\Delta \lambda_i | \leq ||\Delta A || \kappa(A).
+\end{equation*}
+Here $\kappa(A)$ is the \textbf{condition number} defined as the largest eigenvalue divided by the smallest eigenvalue. If a ``small'' eigenvalue exists the condition number will thus be ``large''. 
+
+\subsection{Adapting fisher matrix to our use case}
+Literally applying definition REF gives our fisher matrix element $F_{\alpha\beta}$, with $\alpha$ and $\beta$ parameters of our cosmology, as
+\begin{equation*}
+    F_{\alpha\beta} = \sum_{\text{distinct signals}}\sum_{\text{distinct signals prime}} B^{XYZ}_{l_1l_2l_3}\br{\Cov^{-1}}^{XYZ,X'Z'Y'}_{l_1l_2l_3,l_1'l_2'l_3'}B^{X'Y'Z'}_{l_1'l_2'l_3'}
+\end{equation*}
+here the sum over $XYZ$ and $l_1l_2l_3$ as well as over $X'Y'Z'$ and $l_1'l_2'l_3'$ is over distinct combinations, i.e. applying the same permutation on, e.g., $XYZ$ and $l_1l_2l_3$ yields a new term that isn't counted because it's not actually a distinct signal.
+
+The sum can be broken up as
+\begin{gather*}
+    \sum_{\text{distinct signals}} = \underbrace{\sum_{l_1=l_2=l_3}\sum_{\{XYZ\}}}_{\text{sum }1} + \underbrace{\sum_{l_1=l_2\neq l_3}\sum_{\{XY\}Z}}_{\text{sum }2} + \underbrace{\sum_{l_1<l_2<l_3}\sum_{XYZ}}_{\text{sum }3}.
+\end{gather*}
+Here we use set notation $\{\cdot\}$ to denote that we don't count a permutation of these two indices as a distinct signal. In other words,
+\begin{gather*}
+    \{\{XYZ\}|X,Y,Z\in\{\psi_\kappa, \psi_\gamma\}\} = \{\psi_\kappa\psi_\kappa\psi_\kappa, \psi_\kappa\psi_\kappa\psi_\gamma, \psi_\kappa\psi_\gamma\psi_\gamma, \psi_\gamma\psi_\gamma\psi_\gamma\}, \\
+    \{\{XY\}Z|X,Y,Z\in\{\psi_\kappa, \psi_\gamma\}\} = \{\psi_\kappa\psi_\kappa\psi_\kappa, \psi_\kappa\psi_\gamma\psi_\kappa, \psi_\gamma\psi_\gamma\psi_\kappa,\psi_\kappa\psi_\kappa\psi_\gamma, \psi_\kappa\psi_\gamma\psi_\gamma, \psi_\gamma\psi_\gamma\psi_\gamma\}.
+\end{gather*}
+
+It follows to show that the sets that these sums sum over form a partition of the set of all distinct signals. Clearly all 3 sets are pairwise disjoint (no common elements) because of the criteria for the $l_i$'s. To show that their union covers the set of distinct signals, consider any signal. It's $l$ configuration will trivially correspond to exactly one of the three sums. If it is sum 1, then we are free to permute the $XYZ$'s by virtue of the $l$'s being identical so we will be able to match the $XYZ$ configuration to one of the elements of $\{\{XYZ\}\}$. Similarly, if the $l$ configuration corresponds to sum 2, then we are free to permute the $XY$ configuration to match with one of the elements of $\{\{XY\}Z\}$. The $Z$ value doesn't matter because any $Z$ value is accounted for. For sum 3 we can argue that we can switch around the order of the $l$'s to satisfy $l_1 < l2 < l3$ and the corresponding $XYZ$ configuration will be in summed over set because all $XYZ$ combinations are counted here. Finally it is easy to see that distinct signal is counted more than once.
+
+\paragraph{Covariance matrix}
+Every element of the Fisher matrix is essentially an inner product weighted by the inverse covariance matrix. We can choose how we order vectors of bispectra derivatives. Organize the vectors according to the sum 1, 2, and 3 parts first. We then order by $l$ configuration first. Within each $l$ configuration we can choose any ordering for the $XYZ$ orderings which doesn't change our calculation as long as we stay consistent. In this ordering, the covariance matrix can be seen as a block matrix, with every block corresponding to a specific combination of 2 $l$ configurations. With the way we decomposed the sum, it's easy to see that no $l$ configuration is the permutation of another. If we compute the covariance according to the purely gaussian approximation, the covariance between the bispectrum estimators of two $l$ configurations that are not a permutation of eachother vanishes. This means that the covariance matrix becomes a diagonal block matrix blocks of size $4 \times 4$ (sum 1), $6 \times 6$ (sum 2), and $8 \times 8$ (sum 3). Computing the inverse is then reduced to computing the inverse of the individual block matrices. The block matrices for sum 1 and 2 don't have a particularly nice form (cite paper about multiple tracer fisher matrices for bispectra) but for sum 3 the inverse of the block matrix corresponding to $l_1l_2l_3$ is
+\begin{equation*}
+    (\Cov_{l_1l_2l_3}^{-1})^{XYZ, X'Y'Z'} = \hat C_{l_1}^{X,X'}\hat C_{l_2}^{Y,Y'}\hat C_{l_3}^{Z,Z'}.
+\end{equation*}
+\begin{equation*}
+    (\Cov)^{XYZ, X'Y'Z'} = C_{l_1}^{X,X'} C_{l_2}^{Y,Y'} C_{l_3}^{Z,Z'}.
+\end{equation*}
+As can be seen from
+\begin{equation*}
+    \sum_{X'Y'Z'} = \hat C_{l_1}^{X,X'}\hat C_{l_2}^{Y,Y'}\hat C_{l_3}^{Z,Z'} C_{l_1}^{X'X''}C_{l_2}^{Y'Y''}C_{l_3}^{Z'Z''} = \delta_{XX''}\delta_{YY''}\delta_{ZZ''} = \delta_{XYZ, X''Y''Z''}
+\end{equation*}
+
+It's worth mentioning that due to all $l$'s being distinct in each configuration of sum 3 the Wick contraction corresponding to each element of the covariance matrix can only be done in one way and we thus only have one term. In the sum 2 we get two terms due to $l_1$ and $l_2$ being identical. In sum 3 we similarly get 6 terms corresponding to all possible Wick contractions being nonzero.
+
+
+
+
+% With some carefull consideration, it can be established that the sum can be understood as a sum over all possible $XYZ$ configurations (counting different permutations as different terms) and a sum over all possible $l_1l_2l_3$ configurations satisfying $l1\leq l2 \leq l3$ (i.e. not counting permutations) with a factor $O_{l1l2l3}^{XYZ}$ to take into account additional overcounting, i.e.
+% \begin{equation*}
+%     \sum_{\text{distinct signals}} B_{l_1l_2l_3}^{XYZ} = \sum_{X,Y,Z \in \{\psi_\kappa, \psi_\gamma\}}\sum_{l_1\leq l_2\leq l_3} (OB^{XYZ}_{l_1l_2l_3})^{-1} B_{l_1l_2l_3}^{XYZ}.
+% \end{equation*}
+% $OB$ counts the distinct permutations of $XYZ$ that leave $(l_1, l_2, l_3)$ the same, (``O'' for overcounting and ``B'' for bispecrum). It's explicit form is not very pretty and is given as e.g. a Python function as
+% \begin{lstlisting}
+% def OB(X : str, Y : str, Z : str, l1 : int, l2 : int, l3 : int) -> int:
+%     '''
+%     counts the amount of ways to order XYZ that leave l1l2l3 the same
+%     (!) assumes that XYZ only have two different possible values that they can take (psi_kappa and psi_gamma)
+%     '''
+%     if l1 == l2 and l2 == l3:
+%         if not (X == Y and Y == Z):
+%             return 3
+%         else:
+%             return 1
+%     elif l1 == l2:
+%         if X == Y:
+%             return 1
+%         else:
+%             return 2
+%     elif l2 == l3:
+%         if Y == Z:
+%             return 1
+%         else:
+%             return 2
+%     elif l1 == l3:
+%         if X == Z:
+%             return 1
+%         else:
+%             return 2
+%     else:
+%         return 1
+% \end{lstlisting}
+% Because bispectra with different unordered $l_1l_2l_3$ configurations will have zero covariance with eachother (at least in the gaussian approximation) the covariance matrix will take the form of block matrices on the diagonal and zero elsewhere. Each block matrix corresponds to a different $l_1l_2l_3$ configurations and each the entries correspond to the different choices for $XYZ$. We thus now have
+% \begin{equation*}
+%     F_{\alpha\beta} = \sum_{l_1 \leq l_2 \leq l_3} \sum_{X,Y,Z,X',Y',Z'\in{\psi_{\gamma}, \psi_{\kappa}}} (OB^{XYZ}_{l_1l_2l_3})^{-1}B^{XYZ}_{l_1l_2l_3}
+%     \br{\Cov^{-1}_{l_1l_2l_3}}^{XYZ,X'Z'Y'}
+%     (OB^{X'Y'Z'}_{l_1'l_2'l_3'})^{-1}B^{X'Y'Z'}_{l_1'l_2'l_3'}.
+% \end{equation*}
+% Notice that the covariance matrix notation now changed as well. Here we are referring to the inverse of the ($8\times 8$) block matrix corresponding to $l_1l_2l_3$ configuration. We next aim to calculate the inverse of this matrix. Under the gaussian approximation % TODO : discuss this
+% we can wick contract to get
+% \begin{gather*}
+%     \br{\Cov_{l_1l_2l_3}}^{XYZ,X'Z'Y'} = C^{XX'}_{l1} C^{YY'}_{l2} C^{ZZ'}_{l3} + \delta_{l_1l_2} C^{XY'}_{l1} C^{YX'}_{l2} C^{ZZ'}_{l3} + \delta_{l_1l_3} C^{XZ'}_{l1} C^{YY'}_{l2} C^{ZX'}_{l3} \\
+%     + \delta_{l_2l_3} C^{XX'}_{l1} C^{YZ'}_{l2} C^{ZY'}_{l3} + \delta_{l_1l_2}\delta_{l_2l_3} (C^{XZ'}_{l1} C^{YX'}_{l2} C^{ZY'}_{l3} + C^{XY'}_{l1} C^{YZ'}_{l2} C^{ZX'}_{l3})
+% \end{gather*}
+% CHECK IF CORRECT AND IF I CAN STILL SIMPLIFY THIS
+
+% The inverse of this matrix is
+% \begin{equation*}
+%     M^{\alpha\beta} = \frac{1}{\Delta^{l_1l_2l_3}} \sum_{\text{dist. perms ijk}} \hat C^{ip} \hat C^{jq} \hat C^{kr}, \quad \alpha = ijk, \; \beta = pqr,
+% \end{equation*}
+% with
+% \begin{equation*}
+%     \hat C := \begin{pmatrix}
+%         C^{\psi_\kappa\psi_\kappa} & C^{\psi_\kappa\psi_\gamma}\\
+%         C^{\psi_\kappa\psi_\gamma} & C^{\psi_\gamma\psi_\gamma}
+%     \end{pmatrix}^{-1}.
+% \end{equation*}
+% At this point the Fisher matrix can be written as
+% \begin{gather*}
+%     F_{\theta_1\theta_2}=\sum_{\alpha\beta}\sum_{\text{distinct $l$ configs}}\sum_{\text{distinct $l'$ configs}}\partial_{\theta_1}B^\alpha_{l_1l_2l_3}M^{\alpha\beta}_{l_1l_2l_3}\partial_{\theta_2}B^\beta_{l_1'l_2'l_3'}\delta_{\{l_1l_2l_3\}\{l_1'l_2'l_3'\}}
+% \end{gather*}
+
+% For the powerspectra we get a similar but simpler equation.
+% \begin{gather*}
+%     F_{\alpha\beta} = \sum_{\text{distinc signals}} P^{XY}_{l}(\Cov^{-1})_{l, l'}^{XY, X'Y'}P^{X'Y'}_{l'} \\
+%     = \sum_{l} \sum_{X,Y,X',Y'\in\{\psi_\kappa,\psi_\gamma\}}(OP^{XY})^{-1}P^{XY}_{l}(\Cov_l^{-1})^{XY,X'Y'}(OP^{X'Y'})^{-1}P^{X'Y'}_{l}
+% \end{gather*}
+% with $OP$ given below.
+% \begin{lstlisting}
+%     def OP(X : str, Y : str) -> int:
+%         '''
+%         counts the amount of ways to order XY that leave ll the same
+%         in contrast to OB, behaviour doesn't change for different l values so they aren't taken as an argument
+%         (!) assumes that XY only have two different possible values that they can take (psi_kappa and psi_gamma)
+%         '''
+%         if X == Y:
+%             return 1
+%         else:
+%             return 2
+%     \end{lstlisting}
+% Each (uninverted) block matrix is of the form
+% \begin{equation*}
+%     (\Cov_l)^{XY} = P^{XX'}_l P^{YY'}_l + P^{XY'}_l P^{YX'}_l.
+% \end{equation*}
+
+% \subsection{More on the fisher}
+% Start with the following sum:
+% \begin{equation}
+%     \sum_{ijkpqr}\sum_{l_1l_2l_3}\frac{1}{6}B^{pqr}_{l_1l_2l_3}(C^{-1})^{ip}_{l_1}(C^{-1})^{jq}_{l_2}(C^{-1})^{kr}_{l_3} B^{ijk}_{l_3}.
+% \end{equation}
+% The sum over $l_1l_2l_3$ makes the summand of the $ijkpqr$ sum symmetric in its $ijk$ and $pqr$ indices. We can thus express the above as a sum over unordered $ijk$ and $pqr$ denoted by $\alpha$ and $\beta$ as
+% \begin{equation}
+%     \cdots = \sum_{\alpha\beta}\sum_{l_1l_2l_3} B^\alpha_{l_1l_2l_3} (M_1)^{\alpha\beta}_{l_1l_2l_3} B^\beta_{l_1l_2l_3},
+% \end{equation}
+% where
+% \begin{gather*}
+%     M_1^{\alpha\beta} = \\ \frac{1}{6}
+% \begin{pmatrix}
+% \hat{C}^{TT}\hat{C}^{TT}\hat{C}^{TT} & 3\hat{C}^{TT}\hat{C}^{TT}\hat{C}^{TE} & 3\hat{C}^{TT}\hat{C}^{TE}\hat{C}^{TE} & \hat{C}^{TE}\hat{C}^{TE}\hat{C}^{TE} \\
+% 3\hat{C}^{TT}\hat{C}^{TT}\hat{C}^{TE} & 3\hat{C}^{EE}\hat{C}^{TT}\hat{C}^{TT} + 6\hat{C}^{TE}\hat{C}^{TE}\hat{C}^{TT} & 3\hat{C}^{TE}\hat{C}^{TE}\hat{C}^{TE} + 6\hat{C}^{TT}\hat{C}^{EE}\hat{C}^{TE} & 3\hat{C}^{TE}\hat{C}^{TE}\hat{C}^{EE} \\
+% 3\hat{C}^{TT}\hat{C}^{TE}\hat{C}^{TE} & 3\hat{C}^{TE}\hat{C}^{TE}\hat{C}^{TE} + 6\hat{C}^{TT}\hat{C}^{EE}\hat{C}^{TE} & 6\hat{C}^{EE}\hat{C}^{TE}\hat{C}^{TE} + 3\hat{C}^{TT}\hat{C}^{EE}\hat{C}^{EE} & 3\hat{C}^{TE}\hat{C}^{EE}\hat{C}^{EE} \\
+% \hat{C}^{TE}\hat{C}^{TE}\hat{C}^{TE} & 3\hat{C}^{TE}\hat{C}^{TE}\hat{C}^{EE} & 3\hat{C}^{TE}\hat{C}^{EE}\hat{C}^{EE} & \hat{C}^{EE}\hat{C}^{EE}\hat{C}^{EE}
+% \end{pmatrix}.
+% \end{gather*}
+% This matrix is essentially of the form
+% \begin{gather*}
+%     M_1^{\alpha\beta} = \frac{1}{6} \sum_{\text{dist. perms ijk}} \sum_{\text{dist. perms pqr}} \hat C^{ip} \hat C^{jq} \hat C^{kr}
+% \end{gather*}
+% The matrix given by
+% \begin{gather*}
+%     M_2^{\alpha\beta} = \sum_{\text{all perms ijk}} C^{ip} C^{jq} C^{kr}
+% \end{gather*}
+% is the inverse of $M_1$. This can be checked. By definition:
+% \begin{gather*}
+%     M_1^{\alpha\beta}M_2^{\beta\gamma} = \frac{1}{6}\sum_{ijk}\br{\sum_{\text{dist. perms ijk}} \sum_{\text{dist. perms pqr}} \hat C^{ip} \hat C^{jq} \hat C^{kr}}\br{\sum_{\text{all perms ijk}} C^{pn} C^{qm} C^{rw}}.
+% \end{gather*}
+% Now notice that on the 2nd sum of left factor the amount of terms will be
+% \begin{equation*}
+%     \frac{(\text{total \# of indices (3)})!}{(\text{\# indicies of type }\psi_\gamma)!(\text{\# indicies of type }\psi_\kappa)!}.
+% \end{equation*}
+% On the other hand, when summing over the $pqr$'s, the each term will ``line up'' with the ordering with some of the terms of the second factor. The amount of factors it will line up with equals
+% \begin{equation*}
+%     (\text{\# indicies of type }\psi_\gamma)!(\text{\# indicies of type }\psi_\kappa)!.
+% \end{equation*} 
+% So multiplying the two (i.e. counting the total number of indices) we get $3!=6$ identical terms, which cancels with the $1/6$ factor. We thus find
+% \begin{equation*}
+%     M_1^{\alpha\beta}M_2^{\beta\gamma} = \sum_{\text{dist. perms ijk}} \delta_{in}\delta_{jm}\delta_{kw} = \delta_{\alpha\beta}.
+% \end{equation*}
+% In the last step we used that if we only look at $ijk$ configurations as distinct if they are not permutations of each other, then the sum above is just the normal delta factor in an identity matrix.
+
+\subsection{Shear noise}
+In the absence of lensing, galaxies will generally still look elliptical rather than perfectly spherical. This \textbf{intrinsic ellipticity} is a major cause of noise when measuring lensing shear. We can define the ellipticity of a galaxy image (or any type of object, for that matter) in terms of \textbf{quadrupole moments} of the surface brightness as
+\begin{equation*}
+	e_1 = \frac{I_{xx} - I_{yy}}{I_{xx} + I_{yy}}, \quad e_2 = \frac{2I_{xy}}{I_{xx} + I_{yy}},
+\end{equation*}
+where
+\begin{equation*}
+	I_{ij} = \int \d x\d y I(x,y)ij, \quad i,j\in\{x,y\},
+\end{equation*}
+and the galaxy is centered on $(x,y)=0$.
+
+The connection with lensing shear is then made by taylor expanding and using the lensing matrix. If we have unlensed ellipiticities $e_i^\text{true}$ and lensed ellipticities $e_i^{\text{obs}}$, then \cite{dodelson_modern_cosmology}
+\begin{gather*}
+	e_1^{\text{obs}} = \br{1-2\sbr{e_1^{\text{true}}\gamma_1+e_2^{\text{true}}\gamma_2}}e_1^{\text{true}} + 2\gamma_1,\\
+	e_2^{\text{obs}} = \br{1-2\sbr{e_1^{\text{true}}\gamma_1+e_2^{\text{true}}\gamma_2}}e_2^{\text{true}} + 2\gamma_2.
+\end{gather*}
+In the case of weak lensing, $\gamma_i, \kappa \ll 1$, thus the above reduces to $\gamma_i \approx (e_i^{\text{obs}} - e^{\text{true}}_i)/2$. The analysis thusfar was quietly done in real space, but taking the harmonic transform of $\gamma_i$ is trivial under the approximation we just made. We thus find the error due to intrinsic ellipticity in harmonic space to equal $ \langle \gamma_{i,l}^2\rangle \approx \langle \br{e_{i,l}^\text{true}}^2\rangle/4$. In a real survey we don't measure the shear for individual galaxies, but instead average it over small patches of the sky. The size of each patch is chosen to balance between signal to noise ratio of the shear measurement and resolution of the shear map. If there are $N$ galaxies observed per patch, then the noise is given by
+$$
+\langle \br{\hat \gamma_{i,l}  - \gamma_{i,l}^{\text{true}}}^2\rangle \approx \frac{\langle \br{e_{i,l}^\text{true}}^2\rangle}{4N}.
+$$
+We don't know the exact value for the right hand side either, so we use the standard estimator for that. There is no correlation between two patches, i.e. the noise is white noise and thus scale independent. Finally, we want to look at the noise in $\gamma_l\gamma_{l'}^*$. We thus get
+\begin{equation*}
+	C^{\gamma\gamma,\;\text{obs}}_l = C^{\gamma\gamma, \;\text{true}}_l + N_l^{\gamma\gamma},
+\end{equation*} 
+with
+\begin{equation*}
+	 N_l^{\gamma\gamma} = \frac{1}{4}\frac{e_{\text{RMS}}}{N}, \quad e_{\text{RMS}}:=\sqrt{\frac{1}{N}\sum^N_{i=1}\sbr{(e_{1, i} - \bar e_1)^2 + (e_{2,i}-\bar e_2)^2}}.
+\end{equation*}
+
+Typically $e_{RMS} / 4 \sim 0.3$ \cite{Kilbinger_2015}.
+
+The EUCLID team aims for a noise of about 20 percent and thus require at least $\sim 4 \times 10^8$ galaxies measured per patch, giving an absolute error of \cite{2024}
+$$
+N_l^{\gamma\gamma} \approx 8 \times 10^{-10} \quad \text{(EUCLID)}.
+$$
+
+\subsection{Convergence Noise}
+\subsubsection{Optimal Estimator}
+In practice, the lensing potential cannot be directly measured but is instead estimated based on the temperature, $\Theta$, $E$-mode polarization, $E$, and $B$-mode polarization, $B$, fields.
+
+Define some axes $x$ and $y$ on a small patch of the sky and let $\mathbf E$ be the electric field of the CMB radiation, then the \textbf{linear polarization Stokes parameters} are defined as
+\begin{equation*}
+	Q := E_xE^*_x - E_yE_y^*, \quad U := E_xE_y^* + E_yE_x^*.
+\end{equation*} 
+By looking at a sufficiently small patch of the sky we can apply the \textbf{flat sky limit}, in which case we take a 2D Fourier transform over the approximately flat patch instead of working with spherical harmonics. In this case we find $Q(\mathbf k)$ and $U(\mathbf k)$. In Fourier space we can instead work with the more convenient $E$ and $B$ modes, defined as
+\begin{gather*}
+	E(\mathbf k)=\cos 2\phi_{\mathbf k} Q(\mathbf k) + \sin 2\phi_{\mathbf k} U(\mathbf k),\\
+	B(\mathbf k)=-\sin 2\phi_{\mathbf k} Q(\mathbf k) + \cos 2\phi_{\mathbf k} U(\mathbf k),
+\end{gather*}
+where $\phi_\textbf{k}$ is the angle of $\mathbf k$ with the $(1,0)$  vector (i.e. $k_{\hat{\mathbf{x}}}$).
+$E$ corresponds to the curl free component of the polarization field and behaves like a scalar under transformations. $B$ corresponds to the rest of the polarization field and behaves like a semi-scalar under transformations. The Fourier components are thus related to the real space fields as
+\begin{gather*}
+\Theta(\mathbf{\hat{n}}) = \int \frac{d^2 k}{(2\pi)^2} \Theta(\mathbf{k}) e^{i \mathbf{k} \cdot \mathbf{\hat{n}}}, \\
+[Q \pm iU](\mathbf{\hat{n}}) = -\int \frac{d^2 k}{(2\pi)^2} \left[ E(\mathbf{k}) \pm iB(\mathbf{k}) \right] e^{\pm 2i \varphi_{\mathbf{k}}} e^{i \mathbf{k} \cdot \mathbf{\hat{n}}}, \\
+\phi(\mathbf{\hat{n}}) = \int \frac{d^2 K}{(2\pi)^2} \phi(\mathbf{K}) e^{i \mathbf{K} \cdot \mathbf{\hat{n}}}.
+\end{gather*}
+
+As discussed earlier, lensing acts in real space as 
+\begin{equation*}
+    X(\hat n) = \tilde X(\hat {\mathbf n} + \nabla \phi(\hat{\mathbf n})) \approx \tilde X(\hat{\mathbf n}) + \nabla \phi \cdot \nabla \tilde X |_{\hat{\mathbf{n}}},
+\end{equation*}
+with $X$ any of $\Theta$, $Q \pm iU$ and $\tilde X$ the corresponding \textit{unlensed} field. In Fourier space this naturally takes the form of a convolution. The changes in Fourier moments due to lensing are thus given by \cite{Hu_2002}
+\begin{gather*}
+    \delta \Theta(\mathbf{k}) = \int \frac{d^2 k'}{(2\pi)^2} \tilde{\Theta}(\mathbf{k'}) W(\mathbf{k'}, \mathbf{K}), \\[8pt]
+    \delta E(\mathbf{k}) = \int \frac{d^2 k'}{(2\pi)^2} 
+    \left[ \tilde{E}(\mathbf{k'}) \cos 2\varphi_{k'k} - \tilde{B}(\mathbf{k'}) \sin 2\varphi_{k'k} \right] W(\mathbf{k'}, \mathbf{K}), \\[8pt]
+    \delta B(\mathbf{k}) = \int \frac{d^2 k'}{(2\pi)^2} 
+    \left[ \tilde{B}(\mathbf{k'}) \cos 2\varphi_{k'k} + \tilde{E}(\mathbf{k'}) \sin 2\varphi_{k'k} \right] W(\mathbf{k'}, \mathbf{K}),
+\end{gather*}
+
+\noindent where \( \varphi_{k'k} \equiv \varphi_{k'} - \varphi_k \), \( \mathbf{K} = \mathbf{k} - \mathbf{k'} \), and
+\begin{gather*}
+    W(\mathbf{k}, \mathbf{K}) = -[\mathbf{k} \cdot \mathbf{K}] \phi(\mathbf{K}).
+\end{gather*}
+
+For power spectra in 2D Fourier space we use the definition
+\begin{equation*}
+    \langle x(\mathbf k)x'(\mathbf k') \rangle = (2\pi)^2\delta(\mathbf k + \mathbf k')C_k^{xx'}
+\end{equation*}
+unless stated otherwise. We will denote unlensed powerspectra with a tilde on top. $C^{xx'}(k)$ denotes the observed power spectrum is related to the true (but still lensed) spectrum as
+\begin{equation*}
+    C^{xx', \text{ obs}}(k) = B(k)^2C^{xx', \text{ true}}(k) + \delta_{xx'}N^x(k).
+\end{equation*}
+We are then able to express the power spectra of the lensed fields in terms of the unlensed fields as
+\begin{equation*}
+    \langle x(\mathbf k)x'(\mathbf k') \rangle = f_{xx'}(\mathbf k, \mathbf k') \phi(\mathbf k + \mathbf k'),
+\end{equation*}
+where $f_{xx'}$ is a function of 2 wavenumbers and unlensed power spectra. Specific values of $f$ for different combinations of $x$ and $x'$ can be found in ... %TODO: fix this
+We can then set up an estimator for $\phi$ using a weighted integral of the Fourier modes measured for $x$ and $x'$ by allowing for a filter function $F_{xx'}(\mathbf k, \mathbf k')$. This gives the estimator
+\begin{equation*}
+    \hat\phi_{xx'}(\mathbf k) = \frac{\int \frac{\d^2k'}{(2\pi)^2}x(\mathbf k')x'(\mathbf k - \mathbf k') F_{xx'}(\mathbf k', \mathbf k - \mathbf k')}{\int \frac{\d^2k'}{(2\pi)^2}f_{xx'}(\mathbf k', \mathbf k - \mathbf k') F_{xx'}(\mathbf k', \mathbf k - \mathbf k')}.
+\end{equation*}
+It's easily checked that $\langle \hat\phi_{xx'} \rangle = \phi$ regardless of the filter function used. Minimizing for the variance of the estimator gives
+\begin{equation}
+    F_{xx'}(\mathbf{k}_1, \mathbf{k}_2) = 
+    \frac{C_{k_1}^{x'x'} C_{k_2}^{xx} f_{xx'}(\mathbf{k}_1, \mathbf{k}_2) 
+    - C_{k_1}^{xx'} C_{k_2}^{xx'} f_{xx'}(\mathbf{k}_2, \mathbf{k}_1)}
+    {C_{k_1}^{xx} C_{k_2}^{x'x'} C_{k_1}^{x'x'} C_{k_2}^{xx} 
+    - \left( C_{k_1}^{xx'} C_{k_2}^{xx'} \right)^2}.
+\end{equation}
+With this estimator we assume that the unlensed powerspectra have been determined through other means (e.g. a simulation).
+With optimal weighting the noise becomes
+\begin{equation*}
+    \langle \hat\phi_{xy}(\mathbf K) \hat\phi_{x'y'}(\mathbf K') \rangle = (2\pi)^2\delta(\mathbf K - \mathbf K') [C^{\phi \phi}_K + K^{-2}N_{xyx'y'}(K)],
+\end{equation*}
+where
+\begin{equation*}
+    N_{xyx'y'}(K):=K^{-2}A_{xy}(K)A_{x'y'}(K)\int\frac{\d^2 k'}{(2\pi)^2}F_{xy}(\mathbf k', \mathbf k - \mathbf k')\br{
+        F_{x'y'}(\mathbf k', \mathbf k - \mathbf k') C_{k'}^{xx'}C^{yy'}_{k - k'} + F_{x'y'}(\mathbf k - \mathbf k', \mathbf k') C_{k'}^{xy'}C^{yx'}_{k - k'}
+    }.
+\end{equation*}
+
+\subsubsection{Noise}
+We partition the sky into a finite number of pixels of size (in solid angle) $\Omega_{\text{pix}}$. We take into account detector beam width and homogenous noise, but not boundary effects or inhomogeneous noise. %TODO: justify this or take it into account
+In real space the observed field relates to the true (but still lensed) field as
+\begin{equation*}
+    X^{\text{obs}}(\hat{\mathbf n}) = \int \d\Omega' X^{\text{true}}(\hat{\mathbf n}') B(\hat{\mathbf n}, \hat{\mathbf n}') + \eta(\hat{\mathbf n}),
+\end{equation*}
+where $B$ is the beam pattern and $\eta$ is the noise map stemming from any number of experimental sources of error.
+
+In the case of an isotropic uniform beam, the beam pattern can be written as a function of $\hat{\mathbf n} - \hat{\mathbf n}'$ and the Fourier transform gives 
+\begin{equation*}
+    X^{\text{obs}}(\mathbf k) = X^{\text{true}}(\mathbf k)B(\mathbf k) + \eta(\mathbf k),
+\end{equation*}
+with
+\begin{equation*}
+    B(\mathbf k) = e^{-\frac{k^2\theta_{\text{FWHM}}^2}{4\ln 2}},
+\end{equation*}
+and $\theta_{\text{FWHM}}$ the angle for full width at half minimum.
+By using a likelihood approach we obtain the estimator of the lensed power spectrum given by
+\begin{equation*}
+    \hat C^{XX}(k) = B(\mathbf k)^{-2}\br{X^{\text{obs}}(\mathbf k)X^{\text{obs}}(\mathbf k)^* - N(k)}
+\end{equation*}
+with variance
+\begin{equation*}
+    \Cov(\hat C^{XX}(k), \hat C^{XX}(k')) = 2\sbr{C(k) + N(k)B(k)^{-2}}\delta(\mathbf k - \mathbf k').
+\end{equation*}
+The noise as calculated in eq ... % TODO: ref 
+is thus given by using
+\begin{equation*}
+    C^{XY, \text{ obs}}(k) = \langle \hat C^{XY}(k) \rangle = B(\mathbf k)^{-2}(C)
+\end{equation*}
+\subsection{Power and bispectrum estimators}
+\subsection{Combining experimental and theoretical (shot noise?) uncertainty}
+%Let's say you are looking at a field $X_l$ and have some experimental error $E_l$, uncorrelated with $X_l$ and with mean $0$ (so no systematic error). Then
+%\begin{equation*}
+%	\langle (X+E)(X+E)^*\rangle = \langle X X^*\rangle + \langle EE^* \rangle.
+%\end{equation*}
+
+In the case of an error expressed as
+\begin{gather*}
+	\text{``We measure the amplitude of the CMB lensing} \\\text{
+	power spectrum at state-of-the-art 2.3\% precision, [...]"}
+\end{gather*}
+we can quantify this as
+\begin{equation*}
+	\hat P^X_l = P_l^X(1+E),
+\end{equation*}
+where $E\sim \mathcal N(0, \sigma^2)$ and in the example above $\sigma = 0.023$. It thus follows that
+
+
+
+
+%TODO: mention SNR
+
+\section{Current/Future Experiments Considered}
+\subsection{Atacama Cosmology Telescope (ACT)}
+Using the results of the sixth data release of the ACT, DR6, the lensing power spectrum was determined with state of the art accuracy in the range $40<l<763$, \cite{ACT_lps_measurement} . They worked with averages over non-overlapping multipole bins seen in \ref{fig:act_lps_errors}. Running a number of simulatutions of their measurement, they found the full covariance matrix of the lensing power spectrum measurement, also seen in figure \ref{fig:act_lps_errors}.
+\begin{figure}
+\centering
+\begin{subfigure}{0.45\textwidth}
+    %\label{tab:lensing_bandpowers}
+    \begin{tabular}{ccc}
+        \toprule
+        \([L_{\text{min}} ~ L_{\text{max}}]\) & \( L_b \) & \( 10^7 [L(L+1)]^2 C_L^{\phi\phi} / 4 \) \\
+        \midrule
+        \([40 ~ 66]\)   & 53.0  & \( 2.354 \pm 0.157 \) \\
+        \([67 ~ 101]\)  & 83.5  & \( 1.822 \pm 0.096 \) \\
+        \([102 ~ 145]\) & 123.0 & \( 1.368 \pm 0.068 \) \\
+        \([146 ~ 199]\) & 172.0 & \( 1.000 \pm 0.054 \) \\
+        \([200 ~ 264]\) & 231.5 & \( 0.758 \pm 0.047 \) \\
+        \([265 ~ 339]\) & 301.5 & \( 0.617 \pm 0.048 \) \\
+        \([340 ~ 426]\) & 382.5 & \( 0.439 \pm 0.039 \) \\
+        \([427 ~ 526]\) & 476.0 & \( 0.409 \pm 0.032 \) \\
+        \([527 ~ 638]\) & 582.0 & \( 0.249 \pm 0.027 \) \\
+        \([639 ~ 763]\) & 700.5 & \( 0.156 \pm 0.026 \) \\
+        \bottomrule
+    \end{tabular}
+%    \caption{Lensing bandpowers in the baseline range, for our minimum-variance (MV) estimator. Values are given for \( 10^7 [L(L + 1)]^2 C_L^{\phi\phi} / 4 = 10^7 C_L^{\kappa\kappa} \) averaged over non-interlapping bins with bin edges given in the first column and band centers \( L_b \) in the second. Source is \cite{ACT_lps_measurement}}
+\end{subfigure}
+% \begin{subfigure}{0.45\textwidth}
+% 	\includegraphics[width=\textwidth]{figures/cov_mat_act.png}
+% \end{subfigure}
+\label{fig:act_lps_errors}
+\caption{Errors and covariances from ACT DR6 lensing power spectrum measurements \cite{ACT_lps_measurement}}
+\end{figure}
+
+In this case we can thus model the estimator of the lensing power spectrum as a random variable according to
+
+\begin{equation*}
+	\hat P^X_l = P^X_l(1+E_l), \quad E \sim \mathcal N(0, \sigma^2_l).
+\end{equation*}
+
+The denominators in the terms of the Fisher matrix thus now equal
+\begin{equation*}
+	\langle \hat P^X_{l_1} \hat P^X_{l_2} \hat P^X_{l_3} \rangle =P^X_{l_1}P^X_{l_1}P^X_{l_1} (1 + \langle E_{l_1}E_{l_2}\rangle + \langle E_{l_2}E_{l_3}\rangle + \langle E_{l_3}E_{l_1}\rangle),
+\end{equation*}
+the $\langle E_i E_j \rangle$ terms then equal the covariances seen in figure \ref{fig:act_lps_errors}. Our calculation of the Fisher bounds assume a measurement of each individual multipole. We make the assumption that the variances / covariances stay roughly the same for multipoles in the same bin. In this case
+\begin{equation*}
+	\langle E_{l_{A,i}}E_{l_{B,j}} \rangle = \frac{1}{P^\psi_{l_{A,i}}P^\psi_{l_{B,j}}}\Cov (\hat P^\psi_{l_{A,i}},\hat P^\psi_{l_{B,j}}) = N_AN_B \underbrace{ \frac{1}{P^\psi_AP^\psi_B}\Cov\br{ P^\psi_A , P_B^\psi }}_{\text{from figure \ref{fig:act_lps_errors}}},
+\end{equation*}
+where $l_{A,i}$ is a multipole from bin $A$, $N_A$ is the amount of multipoles in bin $A$, and
+$$
+P^\psi_A:=\sum_{l_{A,i}\in \text{bin} A}P^\psi_{l_{A,i}}
+$$
+Similarly for $B$.
+
+
+
+
+
+
+\subsection{Dark Energy Survey (DES)}
+\subsection{Simons Observatory}
+\subsection{Vera C. Rubin Observatory's Legacy Survey of Space and Time (LSST)}
+\subsection{Euclid Mission}
+\subsection{Nancy Grace Roman Space Telescope}
+\section{Results and Discussion}
+\subsection{Results without experimental errors}
+% \begin{figure}[h!]
+% 	\centering
+% 	\includegraphics[width=\textwidth]{figures/fisher_results_theoretical.png}
+% 	\label{fig:fisher_results_theoretical}
+% 	\caption{Lower bound on the relative error in determining cosmological parameters as a function of the maximum multipole moment, $l_{\text{max}}$, measured by an experiment, with a minimum multipole moment of $l_{\text{min}}=50$. The analysis considers the impact of measuring only convergence (blue), only shear (orange), or both convergence and shear combined (green). These results represent an idealized scenario, assuming perfect measurements without experimental errors.}
+% \end{figure}
+% \begin{figure}[h!]
+% 	\centering
+% 	\includegraphics[width=0.6\textwidth]{figures/SNR_results_theoretical.png}
+% 	\label{fig:SNR_results_theoretical}
+% 	\caption{Relative uncertainty in the measurement of the lensing bispectra amplitude (SNR) as a function of $l_{\text{max}}$. The setup and assumptions are identical to those described in the previous figure \ref{fig:fisher_results_theoretical}.}
+% \end{figure}
+
+
+
+\bibliographystyle{alpha} % Choose your citation style
+\bibliography{sources}
+
+\appendix
+\section{Shear equals twice spin raised lensing potential}
+
+Consider a point on $S^2$, $(r_0, \theta_0, \phi_0)$, at which we observe some cosmological object. We can then define a set of cartesian coordinates $(\tilde r, \tilde y, \tilde x)$ as shown in figure \ref{fig:tildecoords}.
+
+\begin{figure}[h!]
+    \centering
+    \input{figures/lensing_coords.tikz}
+    \caption{
+        $(\tilde r, \tilde y, \tilde x)$ coordinates defined for a point on the unit sphere. These act as ordinary cartesian coordinates but rotated such that, at the associated point on $S^2$, $\hat{\tilde r}$ points straight out of the unit sphere, $\hat{\tilde y}$ is parallel to the great arc with constant $\phi$ and $\hat{\tilde x}$ is parallel to the great arc with constant $\theta$. These coordinates are used to define the shear and convergence in terms of the lensing potential.
+        }
+    \label{fig:tildecoords}
+\end{figure}
+
+Note that there it isn't obvious whether to define these coordinates at the point where the lensed light hits $S^2$ or the unlensed light hits $S^2$. We will assume that lensing effects are sufficiently weak that either definition works. We can then express the tilde coordinates in terms of spherical coordinates either by applying a rotation matrix or by calculating the $r, \theta, \phi$ derivatives of $(x,y,z)$ coordinates at $(r_0, \theta_0, \phi_0)$ to find $\hat{\tilde{\mathbf r}}$, $\hat{\tilde{\boldsymbol{\theta}}}$, and $\hat{\tilde{\boldsymbol{\phi}}}$ and then take inner products. Regardless, we find
+\begin{align}
+    \tilde r &= r\sin\theta\cos\phi\sin\theta_0\cos\phi_0+r\sin\theta\sin\phi\sin\theta_0\sin\phi_0+r\cos\theta\cos\theta_0,\\
+    \tilde y &= r\sin\theta\cos\phi\cos\theta_0\cos\phi_0+r\sin\theta\sin\phi\cos\theta_0\sin\phi_0-r\cos\theta\sin\theta_0,\\
+    \tilde x &= -r\sin\theta\cos\phi\sin\phi_0+r\sin\theta\sin\phi\cos\phi_0.
+\end{align}
+This gives derivatives
+\begin{align*}
+    \frac{\partial}{\partial \theta} = & \left( r \cos \theta \cos \phi \sin \theta_0 \cos \phi_0 + r \cos \theta \sin \phi \sin \theta_0 \sin \phi_0 - r \sin \theta \cos \theta_0 \right) \frac{\partial}{\partial \tilde{r}} \\
+    & + \left( r \cos \theta \cos \phi \cos \theta_0 \cos \phi_0 + r \cos \theta \sin \phi \cos \theta_0 \sin \phi_0 + r \sin \theta \sin \theta_0 \right) \frac{\partial}{\partial \tilde{y}} \\
+    & + \left( -r \cos \theta \cos \phi \sin \phi_0 + r \cos \theta \sin \phi \cos \phi_0 \right) \frac{\partial}{\partial \tilde{x}}.\\
+    \frac{\partial}{\partial \phi} = & \left( -r \sin \theta \sin \phi \sin \theta_0 \cos \phi_0 + r \sin \theta \cos \phi \sin \theta_0 \sin \phi_0 \right) \frac{\partial}{\partial \tilde{r}} \\
+& + \left( -r \sin \theta \sin \phi \cos \theta_0 \cos \phi_0 + r \sin \theta \cos \phi \cos \theta_0 \sin \phi_0 \right) \frac{\partial}{\partial \tilde{y}} \\
+& + \left( r \sin \theta \sin \phi \sin \phi_0 + r \sin \theta \cos \phi \cos \phi_0 \right) \frac{\partial}{\partial \tilde{x}}.
+\end{align*}
+Evaluated at our point of interest we obtain $\partial_\theta=\partial_{\tilde y}$ and $\partial_\phi=\sin\theta_0\partial_{\tilde x}$. The second order derivatives can then be obtained using the first order derivatives. We can immediately evaluate them at the point to get
+\begin{align*}
+    \partial_\phi^2|_{(r_0,\theta_0,\phi_0)}&=-\sin^2\theta_0\partial_{\tilde r}-\sin\theta_0\cos\theta_0\partial_{\tilde y}+\sin^2\theta_0\partial^2_{\tilde x},\\
+    \partial_\theta\partial_\phi|_{(r_0,\theta_0,\phi_0)}&=\cos\theta_0\partial_{\tilde x}+\sin\theta_0\partial_{\tilde x}\partial_{\tilde y},\\
+    \partial_\theta^2|_{(r_0,\theta_0,\phi_0)}&=-\partial_{\tilde r}+\partial^2_{\tilde y}.
+\end{align*}
+Thus, at $(r_0, \theta_0, \phi_0)$,
+\begin{gather*}
+    \frac{1}{2}\eth_1(\eth_0\psi) = \frac{1}{2}\sin\theta(\partial_\theta+\frac{i}{\sin\theta}\partial_\phi)(\frac{1}{\sin\theta}(\partial_\theta+\frac{1}{\sin\theta}\partial_\phi))\\
+    =\frac{\partial^2 \psi}{\partial \theta^2} - \frac{\cos\theta}{\sin\theta} \frac{\partial \psi}{\partial \theta} + \frac{2 i}{\sin\theta} \frac{\partial^2 \psi}{\partial \theta \partial \phi} - \frac{1}{\sin^2\theta} \frac{\partial^2 \psi}{\partial \phi^2} - 2 i \frac{\cos\theta}{\sin^2\theta} \frac{\partial \psi}{\partial \phi}\\
+    =\frac{1}{2}(\partial_{\tilde y}^2 - \partial_{\tilde x}^2 + 2i\partial_{\tilde x}\partial_{\tilde y})\psi
+    =\gamma_1 + i\gamma_2 = \gamma,
+\end{gather*}
+as required.
+
+\end{document}
