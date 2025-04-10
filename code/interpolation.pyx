@@ -12,11 +12,7 @@ cpdef double linear_interp(double x, double xmin, double xmax, int n_points, dou
     cdef double dx = x - (xmin + i * (xmax - xmin) / (n_points - 1))
     cdef double dydx = (ys[i + 1] - ys[i]) / ((xmax - xmin) / (n_points - 1))
 
-    # if i >= ys.shape[0]:
-    #     printf("oh noooo :( (%d and %d)", i, ys.shape[0])
 
-    # printf("niggershape: %d\n", ys.shape[0])
-    # printf("i: %d\n", i)
     if isnan(ys[i] + dx * dydx) or isinf(ys[i] + dx * dydx):
         printf('nonono')
     return ys[i] + dx * dydx

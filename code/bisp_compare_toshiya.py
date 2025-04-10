@@ -1,12 +1,12 @@
 import cosm_setup as cs
 
-spectra = cs.lensing_spectra(
-    ombh2=0.0223,
-    omch2=0.119,
-    As=2.13e-9,
-    ns=0.965,
-    fiducial_k_nls=False
-    )
+spectra = cs.lensing_spectra()
+# spectra = cs.lensing_spectra(
+#     # ombh2=0.0223,
+#     # omch2=0.119,
+#     # As=2.13e-9,
+#     # ns=0.965,
+#     )
 
 import numpy as np
 import matplotlib.pyplot as plt

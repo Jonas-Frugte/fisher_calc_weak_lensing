@@ -9,16 +9,16 @@ from libc.math cimport fmax, fabs
 from libc.stdlib cimport getenv
 
 # declare interpolation parameters, NEEDS TO BE SAME AS INTERPOLATION 
-cdef double k_min = 1e-6
+cdef double k_min = 1e-4 # is now 1e-4
 cdef double k_max = 2000.0 # 1000 for rough option, 2000 for fine option
-cdef int k_num = 300 * 2 # for finer data option
+cdef int k_num = 300 # * 2 # for finer data option
 cdef int k_num_fine = k_num * 25
-cdef double chi_min = 1e-12
+cdef double chi_min = 1e-8 # is now 1e-8
 cdef double chi_max = 14000.0
-cdef int chi_num = 100 * 50 * 2 # for finer data option
+cdef int chi_num = 100 * 50 # * 2 # for finer data option
 cdef double z_min = 1e-12
 cdef double z_max = 1100.0
-cdef int z_num = 100 * 2 # for finer data option
+cdef int z_num = 100 # * 2 # for finer data option
 cdef int z_num_fine = z_num * 25
 
 cdef float window_func_c_scale_factor = 1.
@@ -42,7 +42,7 @@ cdef int conv_noise_type = 2
 # (units are in microKelvin arcmin and arcmin)
 
 # SO noise
-cdef str folder_file_path = '/scratch/p319950/data/'
+cdef str folder_file_path = '/scratch/p319950/data_rough/'
 cdef str filepath_convergence_noise_file_path = folder_file_path + 'conv_noise.dat'
 conv_noise_data_array = np.loadtxt(filepath_convergence_noise_file_path)
 cdef double[:, :] conv_noise_data = conv_noise_data_array
@@ -320,32 +320,45 @@ cdef extern from "math.h":
 cdef extern from "complex.h":
     double creal(double complex x) nogil
 
+# cdef double wigner_3j_approx_nocheck(int l1, int l2, int l3) noexcept nogil:
+#     cdef double complex L_half, factor, term1, term2, term3, term1_pow, term2_pow, term3_pow, denominator
+#     cdef int L = l1 + l2 + l3
+
+#     # does not check if L is even or triangle inequalities, does so in lbs_f and lbs_der directly instead to save on computing bispec if result should be zero anyway
+
+#     L_half = L / 2.0
+    
+#     # Common factors
+#     factor = (-1)**L_half * (2 * 3.141592653589793)**(-0.5) * exp(3.0 / 2) * (L + 2)**(-0.25)
+    
+#     # Power term for each fraction
+#     term1 = (L_half - l1 + 0.5) / (L_half - l1 + 1)
+#     term2 = (L_half - l2 + 0.5) / (L_half - l2 + 1)
+#     term3 = (L_half - l3 + 0.5) / (L_half - l3 + 1)
+
+#     # Raising to required powers
+#     term1_pow = term1 ** (L_half - l1 + 1.0 / 4.0)
+#     term2_pow = term2 ** (L_half - l2 + 1.0 / 4.0)
+#     term3_pow = term3 ** (L_half - l3 + 1.0 / 4.0)
+
+#     # The denominator terms
+#     denominator = ((L_half - l1 + 1)**0.25 * (L_half - l2 + 1)**0.25 * (L_half - l3 + 1)**0.25)
+    
+#     # The final result
+#     return creal(factor * term1_pow * term2_pow * term3_pow / denominator)
+
 cdef double wigner_3j_approx_nocheck(int l1, int l2, int l3) noexcept nogil:
-    cdef double complex L_half, factor, term1, term2, term3, term1_pow, term2_pow, term3_pow, denominator
-    cdef int L = l1 + l2 + l3
+    cdef double L = ( l1 + l2 + l3 ) / 2
 
-    # does not check if L is even or triangle inequalities, does so in lbs_f and lbs_der directly instead to save on computing bispec if result should be zero anyway
+    # does not check if 2L is even or triangle inequalities, does so in lbs_f and lbs_der directly instead to save on computing bispec if result should be zero anyway
 
-    L_half = L / 2.0
-    
-    # Common factors
-    factor = (-1)**L_half * (2 * 3.141592653589793)**(-0.5) * exp(3.0 / 2) * (L + 2)**(-0.25)
-    
-    # Power term for each fraction
-    term1 = (L_half - l1 + 0.5) / (L_half - l1 + 1)
-    term2 = (L_half - l2 + 0.5) / (L_half - l2 + 1)
-    term3 = (L_half - l3 + 0.5) / (L_half - l3 + 1)
+    cdef complex factor = (-1)**L * sqrt(2.718 / (2 * 3.1415)) * (L + 1)**(-0.25)
 
-    # Raising to required powers
-    term1_pow = term1 ** (L_half - l1 + 1.0 / 4.0)
-    term2_pow = term2 ** (L_half - l2 + 1.0 / 4.0)
-    term3_pow = term3 ** (L_half - l3 + 1.0 / 4.0)
+    cdef complex term1 = (L-l1+1)**(-0.25) * ( (L-l1+0.5) / (L-l1+1) )**(L-l1+0.25)
+    cdef complex term2 = (L-l2+1)**(-0.25) * ( (L-l2+0.5) / (L-l2+1) )**(L-l2+0.25)
+    cdef complex term3 = (L-l3+1)**(-0.25) * ( (L-l3+0.5) / (L-l3+1) )**(L-l3+0.25)
 
-    # The denominator terms
-    denominator = ((L_half - l1 + 1)**0.25 * (L_half - l2 + 1)**0.25 * (L_half - l3 + 1)**0.25)
-    
-    # The final result
-    return creal(factor * term1_pow * term2_pow * term3_pow / denominator)
+    return creal(factor * term1 * term2 * term3)
 
 
 # fiducial (!) full sky lensing bispectrum

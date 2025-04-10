@@ -19452,7 +19452,7 @@ static int __pyx_f_11Fisher_calc_Delta(int __pyx_v_l1, int __pyx_v_l2, int __pyx
  *     else:
  *         return 1             # <<<<<<<<<<<<<<
  * 
- * # cdef double Fisher_mat_single_term(int l1, int l2, int l3, char* type, char* par1, char* par2, int num_samples) noexcept nogil:
+ * cdef double Fisher_mat_single_term(int l1, int l2, int l3, char* type, char* par1, char* par2, int num_samples) noexcept nogil:
  */
   /*else*/ {
     __pyx_r = 1;
@@ -19472,33 +19472,33 @@ static int __pyx_f_11Fisher_calc_Delta(int __pyx_v_l1, int __pyx_v_l2, int __pyx
   return __pyx_r;
 }
 
-/* "Fisher_calc.pyx":64
- * #         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2) / Delta(l1, l2, l3)
+/* "Fisher_calc.pyx":60
+ *         return 1
  * 
  * cdef double Fisher_mat_single_term(int l1, int l2, int l3, char* type, char* par1, char* par2, int num_samples) noexcept nogil:             # <<<<<<<<<<<<<<
- *         return 1.
- * 
+ *         return lbs_der(l1, l2, l3, type, type, type, num_samples, par1) * lps_f_obs(l1, type, type)**(-1) \
+ *         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2) / Delta(l1, l2, l3)
  */
 
-static double __pyx_f_11Fisher_calc_Fisher_mat_single_term(CYTHON_UNUSED int __pyx_v_l1, CYTHON_UNUSED int __pyx_v_l2, CYTHON_UNUSED int __pyx_v_l3, CYTHON_UNUSED char *__pyx_v_type, CYTHON_UNUSED char *__pyx_v_par1, CYTHON_UNUSED char *__pyx_v_par2, CYTHON_UNUSED int __pyx_v_num_samples) {
+static double __pyx_f_11Fisher_calc_Fisher_mat_single_term(int __pyx_v_l1, int __pyx_v_l2, int __pyx_v_l3, char *__pyx_v_type, char *__pyx_v_par1, char *__pyx_v_par2, int __pyx_v_num_samples) {
   double __pyx_r;
 
-  /* "Fisher_calc.pyx":65
- * 
+  /* "Fisher_calc.pyx":62
  * cdef double Fisher_mat_single_term(int l1, int l2, int l3, char* type, char* par1, char* par2, int num_samples) noexcept nogil:
- *         return 1.             # <<<<<<<<<<<<<<
+ *         return lbs_der(l1, l2, l3, type, type, type, num_samples, par1) * lps_f_obs(l1, type, type)**(-1) \
+ *         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2) / Delta(l1, l2, l3)             # <<<<<<<<<<<<<<
  * 
  * cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):
  */
-  __pyx_r = 1.;
+  __pyx_r = (((((__pyx_f_13data_importer_lbs_der(__pyx_v_l1, __pyx_v_l2, __pyx_v_l3, __pyx_v_type, __pyx_v_type, __pyx_v_type, __pyx_v_num_samples, __pyx_v_par1) * pow(__pyx_f_13data_importer_lps_f_obs(__pyx_v_l1, __pyx_v_type, __pyx_v_type), -1.0)) * pow(__pyx_f_13data_importer_lps_f_obs(__pyx_v_l2, __pyx_v_type, __pyx_v_type), -1.0)) * pow(__pyx_f_13data_importer_lps_f_obs(__pyx_v_l3, __pyx_v_type, __pyx_v_type), -1.0)) * __pyx_f_13data_importer_lbs_der(__pyx_v_l1, __pyx_v_l2, __pyx_v_l3, __pyx_v_type, __pyx_v_type, __pyx_v_type, __pyx_v_num_samples, __pyx_v_par2)) / ((double)__pyx_f_11Fisher_calc_Delta(__pyx_v_l1, __pyx_v_l2, __pyx_v_l3)));
   goto __pyx_L0;
 
-  /* "Fisher_calc.pyx":64
- * #         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2) / Delta(l1, l2, l3)
+  /* "Fisher_calc.pyx":60
+ *         return 1
  * 
  * cdef double Fisher_mat_single_term(int l1, int l2, int l3, char* type, char* par1, char* par2, int num_samples) noexcept nogil:             # <<<<<<<<<<<<<<
- *         return 1.
- * 
+ *         return lbs_der(l1, l2, l3, type, type, type, num_samples, par1) * lps_f_obs(l1, type, type)**(-1) \
+ *         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2) / Delta(l1, l2, l3)
  */
 
   /* function exit code */
@@ -19506,8 +19506,8 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single_term(CYTHON_UNUSED int __p
   return __pyx_r;
 }
 
-/* "Fisher_calc.pyx":67
- *         return 1.
+/* "Fisher_calc.pyx":64
+ *         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2) / Delta(l1, l2, l3)
  * 
  * cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):             # <<<<<<<<<<<<<<
  *     if lmax > k_max:
@@ -19555,38 +19555,38 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("Fisher_mat_single", 1);
 
-  /* "Fisher_calc.pyx":68
+  /* "Fisher_calc.pyx":65
  * 
  * cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):
  *     if lmax > k_max:             # <<<<<<<<<<<<<<
  *         raise Exception('lmax should be less than upper bound for interpolation (k_max)')
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_lmax); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 68, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_lmax); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_k_max); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 68, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_k_max); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyObject_RichCompare(__pyx_t_1, __pyx_t_2, Py_GT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 68, __pyx_L1_error)
+  __pyx_t_3 = PyObject_RichCompare(__pyx_t_1, __pyx_t_2, Py_GT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 68, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (unlikely(__pyx_t_4)) {
 
-    /* "Fisher_calc.pyx":69
+    /* "Fisher_calc.pyx":66
  * cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):
  *     if lmax > k_max:
  *         raise Exception('lmax should be less than upper bound for interpolation (k_max)')             # <<<<<<<<<<<<<<
  * 
  *     cdef int[:, :] triangles
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 66, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 69, __pyx_L1_error)
+    __PYX_ERR(0, 66, __pyx_L1_error)
 
-    /* "Fisher_calc.pyx":68
+    /* "Fisher_calc.pyx":65
  * 
  * cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):
  *     if lmax > k_max:             # <<<<<<<<<<<<<<
@@ -19595,41 +19595,41 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
  */
   }
 
-  /* "Fisher_calc.pyx":73
+  /* "Fisher_calc.pyx":70
  *     cdef int[:, :] triangles
  *     cdef double prop_calc
  *     triangles, prop_calc = generate_triangles(lmin, lminbin, lmax, triangle_step_size, ordermatters = False)             # <<<<<<<<<<<<<<
  * 
  *     cdef int num_samples = int(len(triangles))
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_generate_triangles); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_generate_triangles); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_lmin); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_lmin); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_lminbin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_lminbin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_lmax); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_lmax); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_triangle_step_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_triangle_step_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyTuple_New(4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_7 = PyTuple_New(4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_2)) __PYX_ERR(0, 70, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_1);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_1)) __PYX_ERR(0, 73, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_5);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_t_5)) __PYX_ERR(0, 70, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_6);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 3, __pyx_t_6)) __PYX_ERR(0, 73, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 3, __pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error);
   __pyx_t_2 = 0;
   __pyx_t_1 = 0;
   __pyx_t_5 = 0;
   __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_ordermatters, Py_False) < 0) __PYX_ERR(0, 73, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_ordermatters, Py_False) < 0) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -19640,7 +19640,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 73, __pyx_L1_error)
+      __PYX_ERR(0, 70, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -19653,15 +19653,15 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
     __Pyx_INCREF(__pyx_t_6);
     __Pyx_INCREF(__pyx_t_7);
     #else
-    __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     #endif
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_3 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_t_3 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_3);
@@ -19669,7 +19669,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
     __Pyx_GOTREF(__pyx_t_6);
     index = 1; __pyx_t_7 = __pyx_t_8(__pyx_t_3); if (unlikely(!__pyx_t_7)) goto __pyx_L4_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_7);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_3), 2) < 0) __PYX_ERR(0, 73, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_3), 2) < 0) __PYX_ERR(0, 70, __pyx_L1_error)
     __pyx_t_8 = NULL;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     goto __pyx_L5_unpacking_done;
@@ -19677,19 +19677,19 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_8 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 73, __pyx_L1_error)
+    __PYX_ERR(0, 70, __pyx_L1_error)
     __pyx_L5_unpacking_done:;
   }
-  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_triangles = __pyx_t_9;
   __pyx_t_9.memview = NULL;
   __pyx_t_9.data = NULL;
   __pyx_v_prop_calc = __pyx_t_10;
 
-  /* "Fisher_calc.pyx":75
+  /* "Fisher_calc.pyx":72
  *     triangles, prop_calc = generate_triangles(lmin, lminbin, lmax, triangle_step_size, ordermatters = False)
  * 
  *     cdef int num_samples = int(len(triangles))             # <<<<<<<<<<<<<<
@@ -19699,46 +19699,46 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
   __pyx_t_11 = __Pyx_MemoryView_Len(__pyx_v_triangles); 
   __pyx_v_num_samples = ((int)__pyx_t_11);
 
-  /* "Fisher_calc.pyx":78
+  /* "Fisher_calc.pyx":75
  * 
  *     # Create a local result array for each thread
  *     cdef double[:] local_results = np.zeros(num_cores, dtype=np.float64)             # <<<<<<<<<<<<<<
  * 
  *     cdef int k1, k2, k3
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_zeros); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_zeros); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_num_cores); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_num_cores); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_5);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5)) __PYX_ERR(0, 75, __pyx_L1_error);
   __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_1) < 0) __PYX_ERR(0, 78, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_1) < 0) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_12 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_12.memview)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_12 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_12.memview)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_local_results = __pyx_t_12;
   __pyx_t_12.memview = NULL;
   __pyx_t_12.data = NULL;
 
-  /* "Fisher_calc.pyx":83
+  /* "Fisher_calc.pyx":80
  *     cdef int index
  * 
  *     for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):             # <<<<<<<<<<<<<<
@@ -19781,7 +19781,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
                             __pyx_v_k2 = ((int)0xbad0bad0);
                             __pyx_v_k3 = ((int)0xbad0bad0);
 
-                            /* "Fisher_calc.pyx":84
+                            /* "Fisher_calc.pyx":81
  * 
  *     for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):
  *         k1 = triangles[index, 0]             # <<<<<<<<<<<<<<
@@ -19792,7 +19792,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
                             __pyx_t_18 = 0;
                             __pyx_v_k1 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_17 * __pyx_v_triangles.strides[0]) ) + __pyx_t_18 * __pyx_v_triangles.strides[1]) )));
 
-                            /* "Fisher_calc.pyx":85
+                            /* "Fisher_calc.pyx":82
  *     for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):
  *         k1 = triangles[index, 0]
  *         k2 = triangles[index, 1]             # <<<<<<<<<<<<<<
@@ -19803,7 +19803,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
                             __pyx_t_17 = 1;
                             __pyx_v_k2 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_18 * __pyx_v_triangles.strides[0]) ) + __pyx_t_17 * __pyx_v_triangles.strides[1]) )));
 
-                            /* "Fisher_calc.pyx":86
+                            /* "Fisher_calc.pyx":83
  *         k1 = triangles[index, 0]
  *         k2 = triangles[index, 1]
  *         k3 = triangles[index, 2]             # <<<<<<<<<<<<<<
@@ -19814,7 +19814,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
                             __pyx_t_18 = 2;
                             __pyx_v_k3 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_17 * __pyx_v_triangles.strides[0]) ) + __pyx_t_18 * __pyx_v_triangles.strides[1]) )));
 
-                            /* "Fisher_calc.pyx":87
+                            /* "Fisher_calc.pyx":84
  *         k2 = triangles[index, 1]
  *         k3 = triangles[index, 2]
  *         local_results[index % num_cores] += Fisher_mat_single_term(k1, k2, k3, type, par1, par2, num_bispec_samples)             # <<<<<<<<<<<<<<
@@ -19836,7 +19836,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
         #endif
       }
 
-      /* "Fisher_calc.pyx":83
+      /* "Fisher_calc.pyx":80
  *     cdef int index
  * 
  *     for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):             # <<<<<<<<<<<<<<
@@ -19855,31 +19855,31 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
       }
   }
 
-  /* "Fisher_calc.pyx":89
+  /* "Fisher_calc.pyx":86
  *         local_results[index % num_cores] += Fisher_mat_single_term(k1, k2, k3, type, par1, par2, num_bispec_samples)
  * 
  *     return sum(local_results) * prop_calc             # <<<<<<<<<<<<<<
  * 
  * # CAUTION: function doesn't check for invalid type1, 2 input to optimize performance
  */
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_local_results, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_local_results, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_sum, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_sum, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_prop_calc); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_prop_calc); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Multiply(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_6); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_6); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_r = __pyx_t_10;
   goto __pyx_L0;
 
-  /* "Fisher_calc.pyx":67
- *         return 1.
+  /* "Fisher_calc.pyx":64
+ *         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2) / Delta(l1, l2, l3)
  * 
  * cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):             # <<<<<<<<<<<<<<
  *     if lmax > k_max:
@@ -19982,7 +19982,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -19990,9 +19990,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 1); __PYX_ERR(0, 67, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 1); __PYX_ERR(0, 64, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -20000,9 +20000,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 2); __PYX_ERR(0, 67, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 2); __PYX_ERR(0, 64, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -20010,9 +20010,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 3); __PYX_ERR(0, 67, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 3); __PYX_ERR(0, 64, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -20020,9 +20020,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 4); __PYX_ERR(0, 67, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 4); __PYX_ERR(0, 64, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -20030,9 +20030,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 5); __PYX_ERR(0, 67, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 5); __PYX_ERR(0, 64, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -20040,9 +20040,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 6); __PYX_ERR(0, 67, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 6); __PYX_ERR(0, 64, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -20050,9 +20050,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 7); __PYX_ERR(0, 67, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 7); __PYX_ERR(0, 64, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
@@ -20060,14 +20060,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[8]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 8); __PYX_ERR(0, 67, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, 8); __PYX_ERR(0, 64, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "Fisher_mat_single") < 0)) __PYX_ERR(0, 67, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "Fisher_mat_single") < 0)) __PYX_ERR(0, 64, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 9)) {
       goto __pyx_L5_argtuple_error;
@@ -20082,19 +20082,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[7] = __Pyx_Arg_FASTCALL(__pyx_args, 7);
       values[8] = __Pyx_Arg_FASTCALL(__pyx_args, 8);
     }
-    __pyx_v_lmin = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_lmin == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
-    __pyx_v_lminbin = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_lminbin == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
-    __pyx_v_lmax = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_lmax == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
-    __pyx_v_triangle_step_size = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_triangle_step_size == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
-    __pyx_v_num_bispec_samples = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_num_bispec_samples == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
-    __pyx_v_par1 = __Pyx_PyObject_AsWritableString(values[5]); if (unlikely((!__pyx_v_par1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
-    __pyx_v_par2 = __Pyx_PyObject_AsWritableString(values[6]); if (unlikely((!__pyx_v_par2) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
-    __pyx_v_num_cores = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_num_cores == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
-    __pyx_v_type = __Pyx_PyObject_AsWritableString(values[8]); if (unlikely((!__pyx_v_type) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L3_error)
+    __pyx_v_lmin = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_lmin == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+    __pyx_v_lminbin = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_lminbin == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+    __pyx_v_lmax = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_lmax == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+    __pyx_v_triangle_step_size = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_triangle_step_size == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+    __pyx_v_num_bispec_samples = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_num_bispec_samples == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+    __pyx_v_par1 = __Pyx_PyObject_AsWritableString(values[5]); if (unlikely((!__pyx_v_par1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+    __pyx_v_par2 = __Pyx_PyObject_AsWritableString(values[6]); if (unlikely((!__pyx_v_par2) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+    __pyx_v_num_cores = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_num_cores == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+    __pyx_v_type = __Pyx_PyObject_AsWritableString(values[8]); if (unlikely((!__pyx_v_type) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, __pyx_nargs); __PYX_ERR(0, 67, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("Fisher_mat_single", 1, 9, 9, __pyx_nargs); __PYX_ERR(0, 64, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -20131,8 +20131,8 @@ static PyObject *__pyx_pf_11Fisher_calc_2Fisher_mat_single(CYTHON_UNUSED PyObjec
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("Fisher_mat_single", 1);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_11Fisher_calc_Fisher_mat_single(__pyx_v_lmin, __pyx_v_lminbin, __pyx_v_lmax, __pyx_v_triangle_step_size, __pyx_v_num_bispec_samples, __pyx_v_par1, __pyx_v_par2, __pyx_v_num_cores, __pyx_v_type, 0); if (unlikely(__pyx_t_1 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L1_error)
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_11Fisher_calc_Fisher_mat_single(__pyx_v_lmin, __pyx_v_lminbin, __pyx_v_lmax, __pyx_v_triangle_step_size, __pyx_v_num_bispec_samples, __pyx_v_par1, __pyx_v_par2, __pyx_v_num_cores, __pyx_v_type, 0); if (unlikely(__pyx_t_1 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
@@ -20149,7 +20149,7 @@ static PyObject *__pyx_pf_11Fisher_calc_2Fisher_mat_single(CYTHON_UNUSED PyObjec
   return __pyx_r;
 }
 
-/* "Fisher_calc.pyx":92
+/* "Fisher_calc.pyx":89
  * 
  * # CAUTION: function doesn't check for invalid type1, 2 input to optimize performance
  * cdef double lensing_power_spectrum_inv(int l, char* type1, char* type2) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -20163,7 +20163,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
   int __pyx_t_1;
   int __pyx_t_2;
 
-  /* "Fisher_calc.pyx":93
+  /* "Fisher_calc.pyx":90
  * # CAUTION: function doesn't check for invalid type1, 2 input to optimize performance
  * cdef double lensing_power_spectrum_inv(int l, char* type1, char* type2) noexcept nogil:
  *         cdef double det = lps_f_obs(l, b'c', b'c') * lps_f_obs(l, b's', b's') - lps_f_obs(l, b'c', b's')**2             # <<<<<<<<<<<<<<
@@ -20172,7 +20172,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
  */
   __pyx_v_det = ((__pyx_f_13data_importer_lps_f_obs(__pyx_v_l, ((char *)"c"), ((char *)"c")) * __pyx_f_13data_importer_lps_f_obs(__pyx_v_l, ((char *)"s"), ((char *)"s"))) - pow(__pyx_f_13data_importer_lps_f_obs(__pyx_v_l, ((char *)"c"), ((char *)"s")), 2.0));
 
-  /* "Fisher_calc.pyx":94
+  /* "Fisher_calc.pyx":91
  * cdef double lensing_power_spectrum_inv(int l, char* type1, char* type2) noexcept nogil:
  *         cdef double det = lps_f_obs(l, b'c', b'c') * lps_f_obs(l, b's', b's') - lps_f_obs(l, b'c', b's')**2
  *         if type1[0] == b'c' and type2[0] == b'c':             # <<<<<<<<<<<<<<
@@ -20190,7 +20190,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "Fisher_calc.pyx":95
+    /* "Fisher_calc.pyx":92
  *         cdef double det = lps_f_obs(l, b'c', b'c') * lps_f_obs(l, b's', b's') - lps_f_obs(l, b'c', b's')**2
  *         if type1[0] == b'c' and type2[0] == b'c':
  *             return lps_f_obs(l, b's', b's') / det             # <<<<<<<<<<<<<<
@@ -20200,7 +20200,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
     __pyx_r = (__pyx_f_13data_importer_lps_f_obs(__pyx_v_l, ((char *)"s"), ((char *)"s")) / __pyx_v_det);
     goto __pyx_L0;
 
-    /* "Fisher_calc.pyx":94
+    /* "Fisher_calc.pyx":91
  * cdef double lensing_power_spectrum_inv(int l, char* type1, char* type2) noexcept nogil:
  *         cdef double det = lps_f_obs(l, b'c', b'c') * lps_f_obs(l, b's', b's') - lps_f_obs(l, b'c', b's')**2
  *         if type1[0] == b'c' and type2[0] == b'c':             # <<<<<<<<<<<<<<
@@ -20209,7 +20209,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
  */
   }
 
-  /* "Fisher_calc.pyx":96
+  /* "Fisher_calc.pyx":93
  *         if type1[0] == b'c' and type2[0] == b'c':
  *             return lps_f_obs(l, b's', b's') / det
  *         if type1[0] == b's' and type2[0] == b's':             # <<<<<<<<<<<<<<
@@ -20227,7 +20227,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
   __pyx_L7_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "Fisher_calc.pyx":97
+    /* "Fisher_calc.pyx":94
  *             return lps_f_obs(l, b's', b's') / det
  *         if type1[0] == b's' and type2[0] == b's':
  *             return lps_f_obs(l, b'c', b'c') / det             # <<<<<<<<<<<<<<
@@ -20237,7 +20237,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
     __pyx_r = (__pyx_f_13data_importer_lps_f_obs(__pyx_v_l, ((char *)"c"), ((char *)"c")) / __pyx_v_det);
     goto __pyx_L0;
 
-    /* "Fisher_calc.pyx":96
+    /* "Fisher_calc.pyx":93
  *         if type1[0] == b'c' and type2[0] == b'c':
  *             return lps_f_obs(l, b's', b's') / det
  *         if type1[0] == b's' and type2[0] == b's':             # <<<<<<<<<<<<<<
@@ -20246,7 +20246,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
  */
   }
 
-  /* "Fisher_calc.pyx":99
+  /* "Fisher_calc.pyx":96
  *             return lps_f_obs(l, b'c', b'c') / det
  *         else:
  *             return -1 * lps_f_obs(l, b'c', b's') / det             # <<<<<<<<<<<<<<
@@ -20258,7 +20258,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
     goto __pyx_L0;
   }
 
-  /* "Fisher_calc.pyx":92
+  /* "Fisher_calc.pyx":89
  * 
  * # CAUTION: function doesn't check for invalid type1, 2 input to optimize performance
  * cdef double lensing_power_spectrum_inv(int l, char* type1, char* type2) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -20271,7 +20271,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
   return __pyx_r;
 }
 
-/* "Fisher_calc.pyx":101
+/* "Fisher_calc.pyx":98
  *             return -1 * lps_f_obs(l, b'c', b's') / det
  * 
  * cdef double Fisher_mat_full_term(int l1, int l2, int l3, char* type11, char* type12, char* type13, char* type21, char* type22, char* type23, char* par1, char* par2, int num_samples) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -20282,7 +20282,7 @@ static double __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(int __pyx_v_l, ch
 static double __pyx_f_11Fisher_calc_Fisher_mat_full_term(int __pyx_v_l1, int __pyx_v_l2, int __pyx_v_l3, char *__pyx_v_type11, char *__pyx_v_type12, char *__pyx_v_type13, char *__pyx_v_type21, char *__pyx_v_type22, char *__pyx_v_type23, char *__pyx_v_par1, char *__pyx_v_par2, int __pyx_v_num_samples) {
   double __pyx_r;
 
-  /* "Fisher_calc.pyx":103
+  /* "Fisher_calc.pyx":100
  * cdef double Fisher_mat_full_term(int l1, int l2, int l3, char* type11, char* type12, char* type13, char* type21, char* type22, char* type23, char* par1, char* par2, int num_samples) noexcept nogil:
  *         return lbs_der(l1, l2, l3, type11, type12, type13, num_samples, par1) * lensing_power_spectrum_inv(l1, type11, type21) \
  *         * lensing_power_spectrum_inv(l2, type12, type22) * lensing_power_spectrum_inv(l3, type13, type23) * lbs_der(l1, l2, l3, type21, type22, type23, num_samples, par2) / Delta(l1, l2, l3)             # <<<<<<<<<<<<<<
@@ -20292,7 +20292,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full_term(int __pyx_v_l1, int __p
   __pyx_r = (((((__pyx_f_13data_importer_lbs_der(__pyx_v_l1, __pyx_v_l2, __pyx_v_l3, __pyx_v_type11, __pyx_v_type12, __pyx_v_type13, __pyx_v_num_samples, __pyx_v_par1) * __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(__pyx_v_l1, __pyx_v_type11, __pyx_v_type21)) * __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(__pyx_v_l2, __pyx_v_type12, __pyx_v_type22)) * __pyx_f_11Fisher_calc_lensing_power_spectrum_inv(__pyx_v_l3, __pyx_v_type13, __pyx_v_type23)) * __pyx_f_13data_importer_lbs_der(__pyx_v_l1, __pyx_v_l2, __pyx_v_l3, __pyx_v_type21, __pyx_v_type22, __pyx_v_type23, __pyx_v_num_samples, __pyx_v_par2)) / ((double)__pyx_f_11Fisher_calc_Delta(__pyx_v_l1, __pyx_v_l2, __pyx_v_l3)));
   goto __pyx_L0;
 
-  /* "Fisher_calc.pyx":101
+  /* "Fisher_calc.pyx":98
  *             return -1 * lps_f_obs(l, b'c', b's') / det
  * 
  * cdef double Fisher_mat_full_term(int l1, int l2, int l3, char* type11, char* type12, char* type13, char* type21, char* type22, char* type23, char* par1, char* par2, int num_samples) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -20305,7 +20305,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full_term(int __pyx_v_l1, int __p
   return __pyx_r;
 }
 
-/* "Fisher_calc.pyx":105
+/* "Fisher_calc.pyx":102
  *         * lensing_power_spectrum_inv(l2, type12, type22) * lensing_power_spectrum_inv(l3, type13, type23) * lbs_der(l1, l2, l3, type21, type22, type23, num_samples, par2) / Delta(l1, l2, l3)
  * 
  * cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores):             # <<<<<<<<<<<<<<
@@ -20370,38 +20370,38 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("Fisher_mat_full", 1);
 
-  /* "Fisher_calc.pyx":106
+  /* "Fisher_calc.pyx":103
  * 
  * cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores):
  *     if lmax > k_max:             # <<<<<<<<<<<<<<
  *         raise Exception('lmax should be less than upper bound for interpolation (k_max)')
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_lmax); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_lmax); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_k_max); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_k_max); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyObject_RichCompare(__pyx_t_1, __pyx_t_2, Py_GT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_3 = PyObject_RichCompare(__pyx_t_1, __pyx_t_2, Py_GT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely((__pyx_t_4 < 0))) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (unlikely(__pyx_t_4)) {
 
-    /* "Fisher_calc.pyx":107
+    /* "Fisher_calc.pyx":104
  * cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores):
  *     if lmax > k_max:
  *         raise Exception('lmax should be less than upper bound for interpolation (k_max)')             # <<<<<<<<<<<<<<
  * 
  *     cdef int[:, :] triangles
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 107, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 104, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 107, __pyx_L1_error)
+    __PYX_ERR(0, 104, __pyx_L1_error)
 
-    /* "Fisher_calc.pyx":106
+    /* "Fisher_calc.pyx":103
  * 
  * cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores):
  *     if lmax > k_max:             # <<<<<<<<<<<<<<
@@ -20410,41 +20410,41 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
  */
   }
 
-  /* "Fisher_calc.pyx":111
+  /* "Fisher_calc.pyx":108
  *     cdef int[:, :] triangles
  *     cdef double prop_calc
  *     triangles, prop_calc = generate_triangles(lmin, lminbin, lmax, triangle_step_size, ordermatters = False)             # <<<<<<<<<<<<<<
  * 
  *     cdef int num_samples = int(len(triangles))
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_generate_triangles); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_generate_triangles); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_lmin); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_lmin); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_lminbin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_lminbin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_lmax); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_lmax); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_triangle_step_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_triangle_step_size); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyTuple_New(4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_7 = PyTuple_New(4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_2)) __PYX_ERR(0, 111, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_2)) __PYX_ERR(0, 108, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_1);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_1)) __PYX_ERR(0, 111, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_5);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_t_5)) __PYX_ERR(0, 111, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_t_5)) __PYX_ERR(0, 108, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_6);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 3, __pyx_t_6)) __PYX_ERR(0, 111, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 3, __pyx_t_6)) __PYX_ERR(0, 108, __pyx_L1_error);
   __pyx_t_2 = 0;
   __pyx_t_1 = 0;
   __pyx_t_5 = 0;
   __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_ordermatters, Py_False) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 111, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_ordermatters, Py_False) < 0) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -20455,7 +20455,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 111, __pyx_L1_error)
+      __PYX_ERR(0, 108, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -20468,15 +20468,15 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
     __Pyx_INCREF(__pyx_t_6);
     __Pyx_INCREF(__pyx_t_7);
     #else
-    __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 111, __pyx_L1_error)
+    __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 108, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 111, __pyx_L1_error)
+    __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 108, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     #endif
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_3 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
+    __pyx_t_3 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 108, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_3);
@@ -20484,7 +20484,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
     __Pyx_GOTREF(__pyx_t_6);
     index = 1; __pyx_t_7 = __pyx_t_8(__pyx_t_3); if (unlikely(!__pyx_t_7)) goto __pyx_L4_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_7);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_3), 2) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_3), 2) < 0) __PYX_ERR(0, 108, __pyx_L1_error)
     __pyx_t_8 = NULL;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     goto __pyx_L5_unpacking_done;
@@ -20492,19 +20492,19 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_8 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 111, __pyx_L1_error)
+    __PYX_ERR(0, 108, __pyx_L1_error)
     __pyx_L5_unpacking_done:;
   }
-  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_dsds_int(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_triangles = __pyx_t_9;
   __pyx_t_9.memview = NULL;
   __pyx_t_9.data = NULL;
   __pyx_v_prop_calc = __pyx_t_10;
 
-  /* "Fisher_calc.pyx":113
+  /* "Fisher_calc.pyx":110
  *     triangles, prop_calc = generate_triangles(lmin, lminbin, lmax, triangle_step_size, ordermatters = False)
  * 
  *     cdef int num_samples = int(len(triangles))             # <<<<<<<<<<<<<<
@@ -20514,74 +20514,74 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
   __pyx_t_11 = __Pyx_MemoryView_Len(__pyx_v_triangles); 
   __pyx_v_num_samples = ((int)__pyx_t_11);
 
-  /* "Fisher_calc.pyx":116
+  /* "Fisher_calc.pyx":113
  * 
  *     # Create a local result array for each thread
  *     cdef double[:] local_results = np.zeros(num_cores, dtype=np.float64)             # <<<<<<<<<<<<<<
  * 
  *     cdef int k1, k2, k3
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_zeros); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_zeros); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_num_cores); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_num_cores); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_5);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5)) __PYX_ERR(0, 116, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5)) __PYX_ERR(0, 113, __pyx_L1_error);
   __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_1) < 0) __PYX_ERR(0, 116, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_1) < 0) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_12 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_12.memview)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_12 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_12.memview)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_local_results = __pyx_t_12;
   __pyx_t_12.memview = NULL;
   __pyx_t_12.data = NULL;
 
-  /* "Fisher_calc.pyx":127
+  /* "Fisher_calc.pyx":124
  *     cdef int index
  * 
  *     for i, j, k, p, q, r in itertools.product([b'c', b's'], repeat = 6):             # <<<<<<<<<<<<<<
  *         for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):
  *             k1 = triangles[index, 0]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_itertools); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_itertools); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_product); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_product); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_b_c);
   __Pyx_GIVEREF(__pyx_n_b_c);
-  if (__Pyx_PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_b_c)) __PYX_ERR(0, 127, __pyx_L1_error);
+  if (__Pyx_PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_b_c)) __PYX_ERR(0, 124, __pyx_L1_error);
   __Pyx_INCREF(__pyx_n_b_s);
   __Pyx_GIVEREF(__pyx_n_b_s);
-  if (__Pyx_PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_b_s)) __PYX_ERR(0, 127, __pyx_L1_error);
-  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 127, __pyx_L1_error)
+  if (__Pyx_PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_b_s)) __PYX_ERR(0, 124, __pyx_L1_error);
+  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_1);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_repeat, __pyx_int_6) < 0) __PYX_ERR(0, 127, __pyx_L1_error)
-  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 127, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_repeat, __pyx_int_6) < 0) __PYX_ERR(0, 124, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -20591,9 +20591,9 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
     __pyx_t_11 = 0;
     __pyx_t_13 = NULL;
   } else {
-    __pyx_t_11 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
+    __pyx_t_11 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_13 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 127, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 124, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   for (;;) {
@@ -20602,28 +20602,28 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
         {
           Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_1);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 127, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 124, __pyx_L1_error)
           #endif
           if (__pyx_t_11 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_7 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_11); __Pyx_INCREF(__pyx_t_7); __pyx_t_11++; if (unlikely((0 < 0))) __PYX_ERR(0, 127, __pyx_L1_error)
+        __pyx_t_7 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_11); __Pyx_INCREF(__pyx_t_7); __pyx_t_11++; if (unlikely((0 < 0))) __PYX_ERR(0, 124, __pyx_L1_error)
         #else
-        __pyx_t_7 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 127, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 124, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         #endif
       } else {
         {
           Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_1);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 127, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 124, __pyx_L1_error)
           #endif
           if (__pyx_t_11 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_11); __Pyx_INCREF(__pyx_t_7); __pyx_t_11++; if (unlikely((0 < 0))) __PYX_ERR(0, 127, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_11); __Pyx_INCREF(__pyx_t_7); __pyx_t_11++; if (unlikely((0 < 0))) __PYX_ERR(0, 124, __pyx_L1_error)
         #else
-        __pyx_t_7 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 127, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 124, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         #endif
       }
@@ -20633,7 +20633,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 127, __pyx_L1_error)
+          else __PYX_ERR(0, 124, __pyx_L1_error)
         }
         break;
       }
@@ -20645,7 +20645,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
       if (unlikely(size != 6)) {
         if (size > 6) __Pyx_RaiseTooManyValuesError(6);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 127, __pyx_L1_error)
+        __PYX_ERR(0, 124, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -20674,7 +20674,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
         Py_ssize_t i;
         PyObject** temps[6] = {&__pyx_t_6,&__pyx_t_5,&__pyx_t_3,&__pyx_t_2,&__pyx_t_14,&__pyx_t_15};
         for (i=0; i < 6; i++) {
-          PyObject* item = PySequence_ITEM(sequence, i); if (unlikely(!item)) __PYX_ERR(0, 127, __pyx_L1_error)
+          PyObject* item = PySequence_ITEM(sequence, i); if (unlikely(!item)) __PYX_ERR(0, 124, __pyx_L1_error)
           __Pyx_GOTREF(item);
           *(temps[i]) = item;
         }
@@ -20684,7 +20684,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
     } else {
       Py_ssize_t index = -1;
       PyObject** temps[6] = {&__pyx_t_6,&__pyx_t_5,&__pyx_t_3,&__pyx_t_2,&__pyx_t_14,&__pyx_t_15};
-      __pyx_t_16 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 127, __pyx_L1_error)
+      __pyx_t_16 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 124, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_16);
@@ -20693,7 +20693,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
         __Pyx_GOTREF(item);
         *(temps[index]) = item;
       }
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_16), 6) < 0) __PYX_ERR(0, 127, __pyx_L1_error)
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_16), 6) < 0) __PYX_ERR(0, 124, __pyx_L1_error)
       __pyx_t_8 = NULL;
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       goto __pyx_L9_unpacking_done;
@@ -20701,15 +20701,15 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       __pyx_t_8 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 127, __pyx_L1_error)
+      __PYX_ERR(0, 124, __pyx_L1_error)
       __pyx_L9_unpacking_done:;
     }
-    __pyx_t_17 = __Pyx_PyObject_AsWritableString(__pyx_t_6); if (unlikely((!__pyx_t_17) && PyErr_Occurred())) __PYX_ERR(0, 127, __pyx_L1_error)
-    __pyx_t_18 = __Pyx_PyObject_AsWritableString(__pyx_t_5); if (unlikely((!__pyx_t_18) && PyErr_Occurred())) __PYX_ERR(0, 127, __pyx_L1_error)
-    __pyx_t_19 = __Pyx_PyObject_AsWritableString(__pyx_t_3); if (unlikely((!__pyx_t_19) && PyErr_Occurred())) __PYX_ERR(0, 127, __pyx_L1_error)
-    __pyx_t_20 = __Pyx_PyObject_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_20) && PyErr_Occurred())) __PYX_ERR(0, 127, __pyx_L1_error)
-    __pyx_t_21 = __Pyx_PyObject_AsWritableString(__pyx_t_14); if (unlikely((!__pyx_t_21) && PyErr_Occurred())) __PYX_ERR(0, 127, __pyx_L1_error)
-    __pyx_t_22 = __Pyx_PyObject_AsWritableString(__pyx_t_15); if (unlikely((!__pyx_t_22) && PyErr_Occurred())) __PYX_ERR(0, 127, __pyx_L1_error)
+    __pyx_t_17 = __Pyx_PyObject_AsWritableString(__pyx_t_6); if (unlikely((!__pyx_t_17) && PyErr_Occurred())) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_18 = __Pyx_PyObject_AsWritableString(__pyx_t_5); if (unlikely((!__pyx_t_18) && PyErr_Occurred())) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_19 = __Pyx_PyObject_AsWritableString(__pyx_t_3); if (unlikely((!__pyx_t_19) && PyErr_Occurred())) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_20 = __Pyx_PyObject_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_20) && PyErr_Occurred())) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_21 = __Pyx_PyObject_AsWritableString(__pyx_t_14); if (unlikely((!__pyx_t_21) && PyErr_Occurred())) __PYX_ERR(0, 124, __pyx_L1_error)
+    __pyx_t_22 = __Pyx_PyObject_AsWritableString(__pyx_t_15); if (unlikely((!__pyx_t_22) && PyErr_Occurred())) __PYX_ERR(0, 124, __pyx_L1_error)
     __pyx_v_i = __pyx_t_17;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_v_j = __pyx_t_18;
@@ -20723,7 +20723,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
     __pyx_v_r = __pyx_t_22;
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
 
-    /* "Fisher_calc.pyx":128
+    /* "Fisher_calc.pyx":125
  * 
  *     for i, j, k, p, q, r in itertools.product([b'c', b's'], repeat = 6):
  *         for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):             # <<<<<<<<<<<<<<
@@ -20766,7 +20766,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
                               __pyx_v_k2 = ((int)0xbad0bad0);
                               __pyx_v_k3 = ((int)0xbad0bad0);
 
-                              /* "Fisher_calc.pyx":129
+                              /* "Fisher_calc.pyx":126
  *     for i, j, k, p, q, r in itertools.product([b'c', b's'], repeat = 6):
  *         for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):
  *             k1 = triangles[index, 0]             # <<<<<<<<<<<<<<
@@ -20777,7 +20777,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
                               __pyx_t_28 = 0;
                               __pyx_v_k1 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_27 * __pyx_v_triangles.strides[0]) ) + __pyx_t_28 * __pyx_v_triangles.strides[1]) )));
 
-                              /* "Fisher_calc.pyx":130
+                              /* "Fisher_calc.pyx":127
  *         for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):
  *             k1 = triangles[index, 0]
  *             k2 = triangles[index, 1]             # <<<<<<<<<<<<<<
@@ -20788,7 +20788,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
                               __pyx_t_27 = 1;
                               __pyx_v_k2 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_28 * __pyx_v_triangles.strides[0]) ) + __pyx_t_27 * __pyx_v_triangles.strides[1]) )));
 
-                              /* "Fisher_calc.pyx":131
+                              /* "Fisher_calc.pyx":128
  *             k1 = triangles[index, 0]
  *             k2 = triangles[index, 1]
  *             k3 = triangles[index, 2]             # <<<<<<<<<<<<<<
@@ -20799,7 +20799,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
                               __pyx_t_28 = 2;
                               __pyx_v_k3 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_27 * __pyx_v_triangles.strides[0]) ) + __pyx_t_28 * __pyx_v_triangles.strides[1]) )));
 
-                              /* "Fisher_calc.pyx":132
+                              /* "Fisher_calc.pyx":129
  *             k2 = triangles[index, 1]
  *             k3 = triangles[index, 2]
  *             local_results[index % num_cores] += Fisher_mat_full_term(k1, k2, k3, i, j, k, p, q, r, par1, par2, num_bispec_samples)             # <<<<<<<<<<<<<<
@@ -20821,7 +20821,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
           #endif
         }
 
-        /* "Fisher_calc.pyx":128
+        /* "Fisher_calc.pyx":125
  * 
  *     for i, j, k, p, q, r in itertools.product([b'c', b's'], repeat = 6):
  *         for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):             # <<<<<<<<<<<<<<
@@ -20840,7 +20840,7 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
         }
     }
 
-    /* "Fisher_calc.pyx":127
+    /* "Fisher_calc.pyx":124
  *     cdef int index
  * 
  *     for i, j, k, p, q, r in itertools.product([b'c', b's'], repeat = 6):             # <<<<<<<<<<<<<<
@@ -20850,30 +20850,30 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "Fisher_calc.pyx":134
+  /* "Fisher_calc.pyx":131
  *             local_results[index % num_cores] += Fisher_mat_full_term(k1, k2, k3, i, j, k, p, q, r, par1, par2, num_bispec_samples)
  * 
  *     return sum(local_results) * prop_calc             # <<<<<<<<<<<<<<
  * 
  * ########################################
  */
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_local_results, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_local_results, 1, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_builtin_sum, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 134, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_builtin_sum, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_prop_calc); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_prop_calc); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_15 = PyNumber_Multiply(__pyx_t_7, __pyx_t_1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 134, __pyx_L1_error)
+  __pyx_t_15 = PyNumber_Multiply(__pyx_t_7, __pyx_t_1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_15); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 134, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_15); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
   __pyx_r = __pyx_t_10;
   goto __pyx_L0;
 
-  /* "Fisher_calc.pyx":105
+  /* "Fisher_calc.pyx":102
  *         * lensing_power_spectrum_inv(l2, type12, type22) * lensing_power_spectrum_inv(l3, type13, type23) * lbs_der(l1, l2, l3, type21, type22, type23, num_samples, par2) / Delta(l1, l2, l3)
  * 
  * cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores):             # <<<<<<<<<<<<<<
@@ -20977,7 +20977,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -20985,9 +20985,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 1); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 1); __PYX_ERR(0, 102, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -20995,9 +20995,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 2); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 2); __PYX_ERR(0, 102, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -21005,9 +21005,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 3); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 3); __PYX_ERR(0, 102, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -21015,9 +21015,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 4); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 4); __PYX_ERR(0, 102, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -21025,9 +21025,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 5); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 5); __PYX_ERR(0, 102, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -21035,9 +21035,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 6); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 6); __PYX_ERR(0, 102, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -21045,14 +21045,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 7); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, 7); __PYX_ERR(0, 102, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "Fisher_mat_full") < 0)) __PYX_ERR(0, 105, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "Fisher_mat_full") < 0)) __PYX_ERR(0, 102, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 8)) {
       goto __pyx_L5_argtuple_error;
@@ -21066,18 +21066,18 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[6] = __Pyx_Arg_FASTCALL(__pyx_args, 6);
       values[7] = __Pyx_Arg_FASTCALL(__pyx_args, 7);
     }
-    __pyx_v_lmin = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_lmin == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
-    __pyx_v_lminbin = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_lminbin == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
-    __pyx_v_lmax = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_lmax == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
-    __pyx_v_triangle_step_size = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_triangle_step_size == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
-    __pyx_v_num_bispec_samples = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_num_bispec_samples == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
-    __pyx_v_par1 = __Pyx_PyObject_AsWritableString(values[5]); if (unlikely((!__pyx_v_par1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
-    __pyx_v_par2 = __Pyx_PyObject_AsWritableString(values[6]); if (unlikely((!__pyx_v_par2) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
-    __pyx_v_num_cores = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_num_cores == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L3_error)
+    __pyx_v_lmin = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_lmin == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+    __pyx_v_lminbin = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_lminbin == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+    __pyx_v_lmax = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_lmax == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+    __pyx_v_triangle_step_size = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_triangle_step_size == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+    __pyx_v_num_bispec_samples = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_num_bispec_samples == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+    __pyx_v_par1 = __Pyx_PyObject_AsWritableString(values[5]); if (unlikely((!__pyx_v_par1) && PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+    __pyx_v_par2 = __Pyx_PyObject_AsWritableString(values[6]); if (unlikely((!__pyx_v_par2) && PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
+    __pyx_v_num_cores = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_num_cores == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, __pyx_nargs); __PYX_ERR(0, 105, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("Fisher_mat_full", 1, 8, 8, __pyx_nargs); __PYX_ERR(0, 102, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -21114,8 +21114,8 @@ static PyObject *__pyx_pf_11Fisher_calc_4Fisher_mat_full(CYTHON_UNUSED PyObject 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("Fisher_mat_full", 1);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_11Fisher_calc_Fisher_mat_full(__pyx_v_lmin, __pyx_v_lminbin, __pyx_v_lmax, __pyx_v_triangle_step_size, __pyx_v_num_bispec_samples, __pyx_v_par1, __pyx_v_par2, __pyx_v_num_cores, 0); if (unlikely(__pyx_t_1 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L1_error)
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_11Fisher_calc_Fisher_mat_full(__pyx_v_lmin, __pyx_v_lminbin, __pyx_v_lmax, __pyx_v_triangle_step_size, __pyx_v_num_bispec_samples, __pyx_v_par1, __pyx_v_par2, __pyx_v_num_cores, 0); if (unlikely(__pyx_t_1 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
@@ -21132,7 +21132,7 @@ static PyObject *__pyx_pf_11Fisher_calc_4Fisher_mat_full(CYTHON_UNUSED PyObject 
   return __pyx_r;
 }
 
-/* "Fisher_calc.pyx":140
+/* "Fisher_calc.pyx":137
  * ########################################
  * 
  * def B2P3_dist(lmin, lmax, stepsize, tracer = b's', num_samples = 100, printsamples= False):             # <<<<<<<<<<<<<<
@@ -21211,7 +21211,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 137, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -21219,9 +21219,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 137, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("B2P3_dist", 0, 3, 6, 1); __PYX_ERR(0, 140, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("B2P3_dist", 0, 3, 6, 1); __PYX_ERR(0, 137, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -21229,35 +21229,35 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 137, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("B2P3_dist", 0, 3, 6, 2); __PYX_ERR(0, 140, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("B2P3_dist", 0, 3, 6, 2); __PYX_ERR(0, 137, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_tracer);
           if (value) { values[3] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 137, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_num_samples);
           if (value) { values[4] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 137, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_printsamples);
           if (value) { values[5] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 137, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "B2P3_dist") < 0)) __PYX_ERR(0, 140, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "B2P3_dist") < 0)) __PYX_ERR(0, 137, __pyx_L3_error)
       }
     } else {
       switch (__pyx_nargs) {
@@ -21283,7 +21283,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("B2P3_dist", 0, 3, 6, __pyx_nargs); __PYX_ERR(0, 140, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("B2P3_dist", 0, 3, 6, __pyx_nargs); __PYX_ERR(0, 137, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -21337,33 +21337,33 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("B2P3_dist", 1);
 
-  /* "Fisher_calc.pyx":141
+  /* "Fisher_calc.pyx":138
  * 
  * def B2P3_dist(lmin, lmax, stepsize, tracer = b's', num_samples = 100, printsamples= False):
  *     triangles, prop_calc = generate_triangles(lmin, 0, lmax, stepsize, ordermatters = False)             # <<<<<<<<<<<<<<
  * 
  *     samples = []
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_generate_triangles); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_generate_triangles); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 141, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_lmin);
   __Pyx_GIVEREF(__pyx_v_lmin);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lmin)) __PYX_ERR(0, 141, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_lmin)) __PYX_ERR(0, 138, __pyx_L1_error);
   __Pyx_INCREF(__pyx_int_0);
   __Pyx_GIVEREF(__pyx_int_0);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_0)) __PYX_ERR(0, 141, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_int_0)) __PYX_ERR(0, 138, __pyx_L1_error);
   __Pyx_INCREF(__pyx_v_lmax);
   __Pyx_GIVEREF(__pyx_v_lmax);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 2, __pyx_v_lmax)) __PYX_ERR(0, 141, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 2, __pyx_v_lmax)) __PYX_ERR(0, 138, __pyx_L1_error);
   __Pyx_INCREF(__pyx_v_stepsize);
   __Pyx_GIVEREF(__pyx_v_stepsize);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 3, __pyx_v_stepsize)) __PYX_ERR(0, 141, __pyx_L1_error);
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 141, __pyx_L1_error)
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 3, __pyx_v_stepsize)) __PYX_ERR(0, 138, __pyx_L1_error);
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_ordermatters, Py_False) < 0) __PYX_ERR(0, 141, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 141, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_ordermatters, Py_False) < 0) __PYX_ERR(0, 138, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 138, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -21374,7 +21374,7 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 141, __pyx_L1_error)
+      __PYX_ERR(0, 138, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -21387,15 +21387,15 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
     __Pyx_INCREF(__pyx_t_3);
     __Pyx_INCREF(__pyx_t_2);
     #else
-    __pyx_t_3 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 141, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 141, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     #endif
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_1 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
+    __pyx_t_1 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_1);
@@ -21403,7 +21403,7 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
     __Pyx_GOTREF(__pyx_t_3);
     index = 1; __pyx_t_2 = __pyx_t_5(__pyx_t_1); if (unlikely(!__pyx_t_2)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_2);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_1), 2) < 0) __PYX_ERR(0, 141, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_1), 2) < 0) __PYX_ERR(0, 138, __pyx_L1_error)
     __pyx_t_5 = NULL;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     goto __pyx_L4_unpacking_done;
@@ -21411,7 +21411,7 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 141, __pyx_L1_error)
+    __PYX_ERR(0, 138, __pyx_L1_error)
     __pyx_L4_unpacking_done:;
   }
   __pyx_v_triangles = __pyx_t_3;
@@ -21419,19 +21419,19 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
   __pyx_v_prop_calc = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "Fisher_calc.pyx":143
+  /* "Fisher_calc.pyx":140
  *     triangles, prop_calc = generate_triangles(lmin, 0, lmax, stepsize, ordermatters = False)
  * 
  *     samples = []             # <<<<<<<<<<<<<<
  *     for triangle in triangles:
  *         samples.append(Fisher_mat_single_term(triangle[0], triangle[1], triangle[2], tracer, b'snr', b'snr', num_samples))
  */
-  __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 140, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_v_samples = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "Fisher_calc.pyx":144
+  /* "Fisher_calc.pyx":141
  * 
  *     samples = []
  *     for triangle in triangles:             # <<<<<<<<<<<<<<
@@ -21443,9 +21443,9 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
     __pyx_t_6 = 0;
     __pyx_t_7 = NULL;
   } else {
-    __pyx_t_6 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_v_triangles); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 144, __pyx_L1_error)
+    __pyx_t_6 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_v_triangles); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 141, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 144, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 141, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_7)) {
@@ -21453,28 +21453,28 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
         {
           Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_4);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 144, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 141, __pyx_L1_error)
           #endif
           if (__pyx_t_6 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_2 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_2); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_2 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_2); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 141, __pyx_L1_error)
         #else
-        __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 141, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         #endif
       } else {
         {
           Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_4);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 144, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 141, __pyx_L1_error)
           #endif
           if (__pyx_t_6 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_2); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_6); __Pyx_INCREF(__pyx_t_2); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 141, __pyx_L1_error)
         #else
-        __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_4, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 141, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         #endif
       }
@@ -21484,7 +21484,7 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 144, __pyx_L1_error)
+          else __PYX_ERR(0, 141, __pyx_L1_error)
         }
         break;
       }
@@ -21493,33 +21493,33 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
     __Pyx_XDECREF_SET(__pyx_v_triangle, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "Fisher_calc.pyx":145
+    /* "Fisher_calc.pyx":142
  *     samples = []
  *     for triangle in triangles:
  *         samples.append(Fisher_mat_single_term(triangle[0], triangle[1], triangle[2], tracer, b'snr', b'snr', num_samples))             # <<<<<<<<<<<<<<
  *     if printsamples:
  *         print(samples)
  */
-    __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_triangle, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_triangle, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 145, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_triangle, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_triangle, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 145, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_triangle, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_triangle, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 145, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_11 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_11) && PyErr_Occurred())) __PYX_ERR(0, 145, __pyx_L1_error)
-    __pyx_t_12 = __Pyx_PyInt_As_int(__pyx_v_num_samples); if (unlikely((__pyx_t_12 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 145, __pyx_L1_error)
-    __pyx_t_2 = PyFloat_FromDouble(__pyx_f_11Fisher_calc_Fisher_mat_single_term(__pyx_t_8, __pyx_t_9, __pyx_t_10, __pyx_t_11, ((char *)"snr"), ((char *)"snr"), __pyx_t_12)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_11) && PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyInt_As_int(__pyx_v_num_samples); if (unlikely((__pyx_t_12 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_f_11Fisher_calc_Fisher_mat_single_term(__pyx_t_8, __pyx_t_9, __pyx_t_10, __pyx_t_11, ((char *)"snr"), ((char *)"snr"), __pyx_t_12)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_samples, __pyx_t_2); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 145, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_samples, __pyx_t_2); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "Fisher_calc.pyx":144
+    /* "Fisher_calc.pyx":141
  * 
  *     samples = []
  *     for triangle in triangles:             # <<<<<<<<<<<<<<
@@ -21529,28 +21529,28 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
   }
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "Fisher_calc.pyx":146
+  /* "Fisher_calc.pyx":143
  *     for triangle in triangles:
  *         samples.append(Fisher_mat_single_term(triangle[0], triangle[1], triangle[2], tracer, b'snr', b'snr', num_samples))
  *     if printsamples:             # <<<<<<<<<<<<<<
  *         print(samples)
  *     return np.mean(samples), np.std(samples)
  */
-  __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_v_printsamples); if (unlikely((__pyx_t_14 < 0))) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_v_printsamples); if (unlikely((__pyx_t_14 < 0))) __PYX_ERR(0, 143, __pyx_L1_error)
   if (__pyx_t_14) {
 
-    /* "Fisher_calc.pyx":147
+    /* "Fisher_calc.pyx":144
  *         samples.append(Fisher_mat_single_term(triangle[0], triangle[1], triangle[2], tracer, b'snr', b'snr', num_samples))
  *     if printsamples:
  *         print(samples)             # <<<<<<<<<<<<<<
  *     return np.mean(samples), np.std(samples)
  * 
  */
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_v_samples); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 147, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_v_samples); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 144, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "Fisher_calc.pyx":146
+    /* "Fisher_calc.pyx":143
  *     for triangle in triangles:
  *         samples.append(Fisher_mat_single_term(triangle[0], triangle[1], triangle[2], tracer, b'snr', b'snr', num_samples))
  *     if printsamples:             # <<<<<<<<<<<<<<
@@ -21559,7 +21559,7 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
  */
   }
 
-  /* "Fisher_calc.pyx":148
+  /* "Fisher_calc.pyx":145
  *     if printsamples:
  *         print(samples)
  *     return np.mean(samples), np.std(samples)             # <<<<<<<<<<<<<<
@@ -21567,9 +21567,9 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
  * def P2P2_dist(lmin, lmax, stepsize, tracer = b's', printsamples= False):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 148, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_mean); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 148, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_mean); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -21590,13 +21590,13 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
     PyObject *__pyx_callargs[2] = {__pyx_t_2, __pyx_v_samples};
     __pyx_t_4 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+1-__pyx_t_15, 1+__pyx_t_15);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 148, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 145, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 148, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_std); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 148, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_std); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -21617,23 +21617,23 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
     PyObject *__pyx_callargs[2] = {__pyx_t_2, __pyx_v_samples};
     __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_1, __pyx_callargs+1-__pyx_t_15, 1+__pyx_t_15);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 148, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 148, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_4);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4)) __PYX_ERR(0, 148, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4)) __PYX_ERR(0, 145, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_3);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_3)) __PYX_ERR(0, 148, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_3)) __PYX_ERR(0, 145, __pyx_L1_error);
   __pyx_t_4 = 0;
   __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "Fisher_calc.pyx":140
+  /* "Fisher_calc.pyx":137
  * ########################################
  * 
  * def B2P3_dist(lmin, lmax, stepsize, tracer = b's', num_samples = 100, printsamples= False):             # <<<<<<<<<<<<<<
@@ -21659,7 +21659,7 @@ static PyObject *__pyx_pf_11Fisher_calc_6B2P3_dist(CYTHON_UNUSED PyObject *__pyx
   return __pyx_r;
 }
 
-/* "Fisher_calc.pyx":150
+/* "Fisher_calc.pyx":147
  *     return np.mean(samples), np.std(samples)
  * 
  * def P2P2_dist(lmin, lmax, stepsize, tracer = b's', printsamples= False):             # <<<<<<<<<<<<<<
@@ -21734,7 +21734,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 150, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -21742,9 +21742,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 150, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("P2P2_dist", 0, 3, 5, 1); __PYX_ERR(0, 150, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("P2P2_dist", 0, 3, 5, 1); __PYX_ERR(0, 147, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -21752,28 +21752,28 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 150, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("P2P2_dist", 0, 3, 5, 2); __PYX_ERR(0, 150, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("P2P2_dist", 0, 3, 5, 2); __PYX_ERR(0, 147, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_tracer);
           if (value) { values[3] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 150, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (kw_args > 0) {
           PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_printsamples);
           if (value) { values[4] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 150, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "P2P2_dist") < 0)) __PYX_ERR(0, 150, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "P2P2_dist") < 0)) __PYX_ERR(0, 147, __pyx_L3_error)
       }
     } else {
       switch (__pyx_nargs) {
@@ -21796,7 +21796,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("P2P2_dist", 0, 3, 5, __pyx_nargs); __PYX_ERR(0, 150, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("P2P2_dist", 0, 3, 5, __pyx_nargs); __PYX_ERR(0, 147, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -21849,19 +21849,19 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("P2P2_dist", 1);
 
-  /* "Fisher_calc.pyx":151
+  /* "Fisher_calc.pyx":148
  * 
  * def P2P2_dist(lmin, lmax, stepsize, tracer = b's', printsamples= False):
  *     ls = np.arange(lmin, lmax + 1, stepsize)             # <<<<<<<<<<<<<<
  * 
  *     samples = []
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 148, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_arange); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_arange); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 148, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_lmax, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_lmax, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 148, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
   __pyx_t_5 = 0;
@@ -21882,26 +21882,26 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+1-__pyx_t_5, 3+__pyx_t_5);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 151, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 148, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
   __pyx_v_ls = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "Fisher_calc.pyx":153
+  /* "Fisher_calc.pyx":150
  *     ls = np.arange(lmin, lmax + 1, stepsize)
  * 
  *     samples = []             # <<<<<<<<<<<<<<
  *     for l in ls:
  *         samples.append(
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_samples = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "Fisher_calc.pyx":154
+  /* "Fisher_calc.pyx":151
  * 
  *     samples = []
  *     for l in ls:             # <<<<<<<<<<<<<<
@@ -21913,9 +21913,9 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
     __pyx_t_6 = 0;
     __pyx_t_7 = NULL;
   } else {
-    __pyx_t_6 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_ls); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_6 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_ls); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 151, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 151, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_7)) {
@@ -21923,28 +21923,28 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
         {
           Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_1);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 154, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 151, __pyx_L1_error)
           #endif
           if (__pyx_t_6 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 154, __pyx_L1_error)
+        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 151, __pyx_L1_error)
         #else
-        __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 154, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
       } else {
         {
           Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_1);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 154, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 151, __pyx_L1_error)
           #endif
           if (__pyx_t_6 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 154, __pyx_L1_error)
+        __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_6); __Pyx_INCREF(__pyx_t_3); __pyx_t_6++; if (unlikely((0 < 0))) __PYX_ERR(0, 151, __pyx_L1_error)
         #else
-        __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 154, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
       }
@@ -21954,7 +21954,7 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 154, __pyx_L1_error)
+          else __PYX_ERR(0, 151, __pyx_L1_error)
         }
         break;
       }
@@ -21963,33 +21963,33 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
     __Pyx_XDECREF_SET(__pyx_v_l, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "Fisher_calc.pyx":156
+    /* "Fisher_calc.pyx":153
  *     for l in ls:
  *         samples.append(
  *             0.5 * lps_f(l, tracer, tracer)**2 / lps_f_obs(l, tracer, tracer)**2             # <<<<<<<<<<<<<<
  *         )
  *     if printsamples:
  */
-    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_l); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
-    __pyx_t_9 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_9) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
-    __pyx_t_10 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_10) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
-    __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_v_l); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
-    __pyx_t_12 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_12) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
-    __pyx_t_13 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_13) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
-    __pyx_t_3 = PyFloat_FromDouble(((0.5 * pow(__pyx_f_13data_importer_lps_f(__pyx_t_8, __pyx_t_9, __pyx_t_10), 2.0)) / pow(__pyx_f_13data_importer_lps_f_obs(__pyx_t_11, __pyx_t_12, __pyx_t_13), 2.0))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 156, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_l); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_9) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_10) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_v_l); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_12) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_AsWritableString(__pyx_v_tracer); if (unlikely((!__pyx_t_13) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble(((0.5 * pow(__pyx_f_13data_importer_lps_f(__pyx_t_8, __pyx_t_9, __pyx_t_10), 2.0)) / pow(__pyx_f_13data_importer_lps_f_obs(__pyx_t_11, __pyx_t_12, __pyx_t_13), 2.0))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
 
-    /* "Fisher_calc.pyx":155
+    /* "Fisher_calc.pyx":152
  *     samples = []
  *     for l in ls:
  *         samples.append(             # <<<<<<<<<<<<<<
  *             0.5 * lps_f(l, tracer, tracer)**2 / lps_f_obs(l, tracer, tracer)**2
  *         )
  */
-    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_samples, __pyx_t_3); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 155, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_samples, __pyx_t_3); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 152, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "Fisher_calc.pyx":154
+    /* "Fisher_calc.pyx":151
  * 
  *     samples = []
  *     for l in ls:             # <<<<<<<<<<<<<<
@@ -21999,28 +21999,28 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "Fisher_calc.pyx":158
+  /* "Fisher_calc.pyx":155
  *             0.5 * lps_f(l, tracer, tracer)**2 / lps_f_obs(l, tracer, tracer)**2
  *         )
  *     if printsamples:             # <<<<<<<<<<<<<<
  *         print(samples)
  *     return np.mean(samples), np.std(samples)
  */
-  __pyx_t_15 = __Pyx_PyObject_IsTrue(__pyx_v_printsamples); if (unlikely((__pyx_t_15 < 0))) __PYX_ERR(0, 158, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_IsTrue(__pyx_v_printsamples); if (unlikely((__pyx_t_15 < 0))) __PYX_ERR(0, 155, __pyx_L1_error)
   if (__pyx_t_15) {
 
-    /* "Fisher_calc.pyx":159
+    /* "Fisher_calc.pyx":156
  *         )
  *     if printsamples:
  *         print(samples)             # <<<<<<<<<<<<<<
  *     return np.mean(samples), np.std(samples)
  * 
  */
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_v_samples); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_v_samples); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 156, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "Fisher_calc.pyx":158
+    /* "Fisher_calc.pyx":155
  *             0.5 * lps_f(l, tracer, tracer)**2 / lps_f_obs(l, tracer, tracer)**2
  *         )
  *     if printsamples:             # <<<<<<<<<<<<<<
@@ -22029,16 +22029,16 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
  */
   }
 
-  /* "Fisher_calc.pyx":160
+  /* "Fisher_calc.pyx":157
  *     if printsamples:
  *         print(samples)
  *     return np.mean(samples), np.std(samples)             # <<<<<<<<<<<<<<
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 160, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_mean); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 160, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_mean); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 157, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -22059,13 +22059,13 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
     PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_v_samples};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 160, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 157, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 160, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_std); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 160, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_std); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 157, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -22086,23 +22086,23 @@ static PyObject *__pyx_pf_11Fisher_calc_8P2P2_dist(CYTHON_UNUSED PyObject *__pyx
     PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_v_samples};
     __pyx_t_2 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 160, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 157, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 160, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 157, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_1);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1)) __PYX_ERR(0, 160, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1)) __PYX_ERR(0, 157, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_2)) __PYX_ERR(0, 160, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_2)) __PYX_ERR(0, 157, __pyx_L1_error);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "Fisher_calc.pyx":150
+  /* "Fisher_calc.pyx":147
  *     return np.mean(samples), np.std(samples)
  * 
  * def P2P2_dist(lmin, lmax, stepsize, tracer = b's', printsamples= False):             # <<<<<<<<<<<<<<
@@ -23482,8 +23482,8 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 21, __pyx_L1_error)
-  __pyx_builtin_sum = __Pyx_GetBuiltinName(__pyx_n_s_sum); if (!__pyx_builtin_sum) __PYX_ERR(0, 89, __pyx_L1_error)
-  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_builtin_sum = __Pyx_GetBuiltinName(__pyx_n_s_sum); if (!__pyx_builtin_sum) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 144, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_n_s_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 100, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 141, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 156, __pyx_L1_error)
@@ -23539,14 +23539,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "Fisher_calc.pyx":69
+  /* "Fisher_calc.pyx":66
  * cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):
  *     if lmax > k_max:
  *         raise Exception('lmax should be less than upper bound for interpolation (k_max)')             # <<<<<<<<<<<<<<
  * 
  *     cdef int[:, :] triangles
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_lmax_should_be_less_than_upper_b); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_lmax_should_be_less_than_upper_b); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 66, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
@@ -23666,57 +23666,57 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__23);
   __Pyx_GIVEREF(__pyx_tuple__23);
 
-  /* "Fisher_calc.pyx":67
- *         return 1.
+  /* "Fisher_calc.pyx":64
+ *         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2) / Delta(l1, l2, l3)
  * 
  * cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):             # <<<<<<<<<<<<<<
  *     if lmax > k_max:
  *         raise Exception('lmax should be less than upper bound for interpolation (k_max)')
  */
-  __pyx_tuple__24 = PyTuple_Pack(9, __pyx_n_s_lmin, __pyx_n_s_lminbin, __pyx_n_s_lmax, __pyx_n_s_triangle_step_size, __pyx_n_s_num_bispec_samples, __pyx_n_s_par1, __pyx_n_s_par2, __pyx_n_s_num_cores, __pyx_n_s_type); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 67, __pyx_L1_error)
+  __pyx_tuple__24 = PyTuple_Pack(9, __pyx_n_s_lmin, __pyx_n_s_lminbin, __pyx_n_s_lmax, __pyx_n_s_triangle_step_size, __pyx_n_s_num_bispec_samples, __pyx_n_s_par1, __pyx_n_s_par2, __pyx_n_s_num_cores, __pyx_n_s_type); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__24);
   __Pyx_GIVEREF(__pyx_tuple__24);
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Fisher_calc_pyx, __pyx_n_s_Fisher_mat_single, 67, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 67, __pyx_L1_error)
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Fisher_calc_pyx, __pyx_n_s_Fisher_mat_single, 64, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 64, __pyx_L1_error)
 
-  /* "Fisher_calc.pyx":105
+  /* "Fisher_calc.pyx":102
  *         * lensing_power_spectrum_inv(l2, type12, type22) * lensing_power_spectrum_inv(l3, type13, type23) * lbs_der(l1, l2, l3, type21, type22, type23, num_samples, par2) / Delta(l1, l2, l3)
  * 
  * cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores):             # <<<<<<<<<<<<<<
  *     if lmax > k_max:
  *         raise Exception('lmax should be less than upper bound for interpolation (k_max)')
  */
-  __pyx_tuple__26 = PyTuple_Pack(8, __pyx_n_s_lmin, __pyx_n_s_lminbin, __pyx_n_s_lmax, __pyx_n_s_triangle_step_size, __pyx_n_s_num_bispec_samples, __pyx_n_s_par1, __pyx_n_s_par2, __pyx_n_s_num_cores); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_tuple__26 = PyTuple_Pack(8, __pyx_n_s_lmin, __pyx_n_s_lminbin, __pyx_n_s_lmax, __pyx_n_s_triangle_step_size, __pyx_n_s_num_bispec_samples, __pyx_n_s_par1, __pyx_n_s_par2, __pyx_n_s_num_cores); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__26);
   __Pyx_GIVEREF(__pyx_tuple__26);
-  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(8, 0, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Fisher_calc_pyx, __pyx_n_s_Fisher_mat_full, 105, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(8, 0, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Fisher_calc_pyx, __pyx_n_s_Fisher_mat_full, 102, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 102, __pyx_L1_error)
 
-  /* "Fisher_calc.pyx":140
+  /* "Fisher_calc.pyx":137
  * ########################################
  * 
  * def B2P3_dist(lmin, lmax, stepsize, tracer = b's', num_samples = 100, printsamples= False):             # <<<<<<<<<<<<<<
  *     triangles, prop_calc = generate_triangles(lmin, 0, lmax, stepsize, ordermatters = False)
  * 
  */
-  __pyx_tuple__28 = PyTuple_Pack(10, __pyx_n_s_lmin, __pyx_n_s_lmax, __pyx_n_s_stepsize, __pyx_n_s_tracer, __pyx_n_s_num_samples, __pyx_n_s_printsamples, __pyx_n_s_triangles, __pyx_n_s_prop_calc, __pyx_n_s_samples, __pyx_n_s_triangle); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __pyx_tuple__28 = PyTuple_Pack(10, __pyx_n_s_lmin, __pyx_n_s_lmax, __pyx_n_s_stepsize, __pyx_n_s_tracer, __pyx_n_s_num_samples, __pyx_n_s_printsamples, __pyx_n_s_triangles, __pyx_n_s_prop_calc, __pyx_n_s_samples, __pyx_n_s_triangle); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 137, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__28);
   __Pyx_GIVEREF(__pyx_tuple__28);
-  __pyx_codeobj__29 = (PyObject*)__Pyx_PyCode_New(6, 0, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Fisher_calc_pyx, __pyx_n_s_B2P3_dist, 140, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(0, 140, __pyx_L1_error)
-  __pyx_tuple__30 = PyTuple_Pack(3, ((PyObject*)__pyx_n_b_s), ((PyObject *)__pyx_int_100), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __pyx_codeobj__29 = (PyObject*)__Pyx_PyCode_New(6, 0, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Fisher_calc_pyx, __pyx_n_s_B2P3_dist, 137, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(0, 137, __pyx_L1_error)
+  __pyx_tuple__30 = PyTuple_Pack(3, ((PyObject*)__pyx_n_b_s), ((PyObject *)__pyx_int_100), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(0, 137, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__30);
   __Pyx_GIVEREF(__pyx_tuple__30);
 
-  /* "Fisher_calc.pyx":150
+  /* "Fisher_calc.pyx":147
  *     return np.mean(samples), np.std(samples)
  * 
  * def P2P2_dist(lmin, lmax, stepsize, tracer = b's', printsamples= False):             # <<<<<<<<<<<<<<
  *     ls = np.arange(lmin, lmax + 1, stepsize)
  * 
  */
-  __pyx_tuple__31 = PyTuple_Pack(8, __pyx_n_s_lmin, __pyx_n_s_lmax, __pyx_n_s_stepsize, __pyx_n_s_tracer, __pyx_n_s_printsamples, __pyx_n_s_ls, __pyx_n_s_samples, __pyx_n_s_l); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 150, __pyx_L1_error)
+  __pyx_tuple__31 = PyTuple_Pack(8, __pyx_n_s_lmin, __pyx_n_s_lmax, __pyx_n_s_stepsize, __pyx_n_s_tracer, __pyx_n_s_printsamples, __pyx_n_s_ls, __pyx_n_s_samples, __pyx_n_s_l); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__31);
   __Pyx_GIVEREF(__pyx_tuple__31);
-  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(5, 0, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Fisher_calc_pyx, __pyx_n_s_P2P2_dist, 150, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 150, __pyx_L1_error)
-  __pyx_tuple__33 = PyTuple_Pack(2, ((PyObject*)__pyx_n_b_s), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(0, 150, __pyx_L1_error)
+  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(5, 0, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Fisher_calc_pyx, __pyx_n_s_P2P2_dist, 147, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_tuple__33 = PyTuple_Pack(2, ((PyObject*)__pyx_n_b_s), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__33);
   __Pyx_GIVEREF(__pyx_tuple__33);
   __Pyx_RefNannyFinishContext();
@@ -24882,54 +24882,54 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_generate_triangles, __pyx_t_4) < 0) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "Fisher_calc.pyx":67
- *         return 1.
+  /* "Fisher_calc.pyx":64
+ *         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2) / Delta(l1, l2, l3)
  * 
  * cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):             # <<<<<<<<<<<<<<
  *     if lmax > k_max:
  *         raise Exception('lmax should be less than upper bound for interpolation (k_max)')
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_11Fisher_calc_3Fisher_mat_single, 0, __pyx_n_s_Fisher_mat_single, NULL, __pyx_n_s_Fisher_calc, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_11Fisher_calc_3Fisher_mat_single, 0, __pyx_n_s_Fisher_mat_single, NULL, __pyx_n_s_Fisher_calc, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Fisher_mat_single, __pyx_t_4) < 0) __PYX_ERR(0, 67, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Fisher_mat_single, __pyx_t_4) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "Fisher_calc.pyx":105
+  /* "Fisher_calc.pyx":102
  *         * lensing_power_spectrum_inv(l2, type12, type22) * lensing_power_spectrum_inv(l3, type13, type23) * lbs_der(l1, l2, l3, type21, type22, type23, num_samples, par2) / Delta(l1, l2, l3)
  * 
  * cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores):             # <<<<<<<<<<<<<<
  *     if lmax > k_max:
  *         raise Exception('lmax should be less than upper bound for interpolation (k_max)')
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_11Fisher_calc_5Fisher_mat_full, 0, __pyx_n_s_Fisher_mat_full, NULL, __pyx_n_s_Fisher_calc, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_11Fisher_calc_5Fisher_mat_full, 0, __pyx_n_s_Fisher_mat_full, NULL, __pyx_n_s_Fisher_calc, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Fisher_mat_full, __pyx_t_4) < 0) __PYX_ERR(0, 105, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Fisher_mat_full, __pyx_t_4) < 0) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "Fisher_calc.pyx":140
+  /* "Fisher_calc.pyx":137
  * ########################################
  * 
  * def B2P3_dist(lmin, lmax, stepsize, tracer = b's', num_samples = 100, printsamples= False):             # <<<<<<<<<<<<<<
  *     triangles, prop_calc = generate_triangles(lmin, 0, lmax, stepsize, ordermatters = False)
  * 
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_11Fisher_calc_7B2P3_dist, 0, __pyx_n_s_B2P3_dist, NULL, __pyx_n_s_Fisher_calc, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_11Fisher_calc_7B2P3_dist, 0, __pyx_n_s_B2P3_dist, NULL, __pyx_n_s_Fisher_calc, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 137, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_4, __pyx_tuple__30);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_B2P3_dist, __pyx_t_4) < 0) __PYX_ERR(0, 140, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_B2P3_dist, __pyx_t_4) < 0) __PYX_ERR(0, 137, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "Fisher_calc.pyx":150
+  /* "Fisher_calc.pyx":147
  *     return np.mean(samples), np.std(samples)
  * 
  * def P2P2_dist(lmin, lmax, stepsize, tracer = b's', printsamples= False):             # <<<<<<<<<<<<<<
  *     ls = np.arange(lmin, lmax + 1, stepsize)
  * 
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_11Fisher_calc_9P2P2_dist, 0, __pyx_n_s_P2P2_dist, NULL, __pyx_n_s_Fisher_calc, __pyx_d, ((PyObject *)__pyx_codeobj__32)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 150, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_11Fisher_calc_9P2P2_dist, 0, __pyx_n_s_P2P2_dist, NULL, __pyx_n_s_Fisher_calc, __pyx_d, ((PyObject *)__pyx_codeobj__32)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_4, __pyx_tuple__33);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_P2P2_dist, __pyx_t_4) < 0) __PYX_ERR(0, 150, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_P2P2_dist, __pyx_t_4) < 0) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
   /* "Fisher_calc.pyx":1

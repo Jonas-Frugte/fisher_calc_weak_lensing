@@ -5,14 +5,14 @@ import os
 
 print(f'Number cpus available: {os.cpu_count()}')
 
-# the smallest k value that the matter bispectrum will be evaluated at will be 1 / chi_last_scatter, this is of the order 10^4
+# the smallest k value that the matter bispectrum will be evaluated at will be 1 / chi_last_scatter, this is of the order 10^-4
 # if we thus take k_min = 1e-6 then we should have the entire interpolation range evaluated
 
 exp_par_fine = {
-    'k_min' : 1e-6,
+    'k_min' : 1e-4,
     'k_max' : 2000,
     'k_num' : 2 * 300,
-    'chi_min' : 1e-12,
+    'chi_min' : 1e-8,
     'chi_max' : 14000, # slightly more than chi_last_scatter
     'chi_num' : 2 * 100 * 50,
     'z_min' : 1e-12,
@@ -22,10 +22,10 @@ exp_par_fine = {
 
 # rougher option
 exp_par_rough = {
-    'k_min' : 1e-6,
+    'k_min' : 1e-4,
     'k_max' : 2000,
     'k_num' : 300,
-    'chi_min' : 1e-12,
+    'chi_min' : 1e-8,
     'chi_max' : 14000, # slightly more than chi_last_scatter
     'chi_num' : 100 * 50,
     'z_min' : 1e-12,
@@ -33,7 +33,7 @@ exp_par_rough = {
     'z_num' : 100
 }
 
-def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True, rough = False):
+def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True, rough = True):
     import cosm_setup
     cosm_data = cosm_setup.lensing_spectra(*cosm_par)
 
@@ -142,7 +142,6 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
             # a (2d: k, z)
             with open(filepath + '/a', 'w') as file:
                 data = [[cosm_data.a(k, z) for k in ks_log_fine] for z in zs_fine]
-                print(f'created a array for {folder_name}')
                 for row in data:
                     file.write(' '.join(map(str, row)) + '\n')
             print(f'a created to {folder_name}')
@@ -199,7 +198,9 @@ def dx_coeffs_to_str(coeff):
 
 # for 1 + 8 x 4 x 3 = 97 core config
 # which_to_create = [[True, False, False, False, True, True], [False, True, False, False, False, False], [False, False, True, True, False, False]]
-which_to_create = [[False, False, False, True, False, False]]
+# which_to_create = [[False, True, False, False, False, False], [False, False, True, False, False, False], [False, False, False, True, False, False]]
+which_to_create = [[True, False, False, False, True, True]]
+# which_to_create = [[False, False, False, True, False, False]]
 
 # for 1 + 8 x 4 x 1 = 33 core config
 # which_to_create = [[False, True, False, False, False, False]]

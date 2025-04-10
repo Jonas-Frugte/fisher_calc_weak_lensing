@@ -1,14 +1,8 @@
-print(f'now running setup.py as {__name__}')
+print(f'Now running setup.py as: {__name__}.')
 
 import camb
 import numpy as np
 import scipy
-import scipy.integrate
-import scipy.optimize
-import scipy.interpolate
-from scipy.interpolate import CubicSpline
-
-# np.seterr(all='warn')
 
 #======================================
 
@@ -18,7 +12,7 @@ class lensing_spectra:
   '''
   Calculates relevant features of a cosmology given input parameters and matter bispectrum fitting constants
   '''
-  def __init__(self, H0=67.4, ombh2=0.0223, omch2=0.119, ns=0.965, As=2.13e-9, mnu=0.06, w0=-1, wa=0, redshifts=np.linspace(1100, 0, 200), matter_bispec_fit_params = matter_bispec_fit_params, fiducial_k_nls = False):
+  def __init__(self, H0=67.4, ombh2=0.0223, omch2=0.119, ns=0.965, As=2.13e-9, mnu=0.06, w0=-1, redshifts=np.linspace(1100, 0, 200), matter_bispec_fit_params = matter_bispec_fit_params):
     '''
     Initialize instance of class, set results and some methods/attributes, default inputs are for fiducial cosmology
 
@@ -77,21 +71,8 @@ class lensing_spectra:
     self.z_galaxy_source = 5
     self.chi_galaxy_source = self.results.comoving_radial_distance(self.z_galaxy_source)
 
-    if fiducial_k_nls:
-      print('took fiducial k_nls')
-      k_nl_data = np.loadtxt('/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/fiducial_k_nls.txt') # needs to be updated
-      self.zs_for_k_nls_used = k_nl_data[:, 0]
-      self.k_nls = k_nl_data[:, 1]
-    
-    else:
-      print('now calculating k_nls')
-      self.zs_for_k_nls = np.linspace(0, 8, 101)
-      self.k_nls, self.k_nl_errors, self.zs_for_k_nls_used = self.k_nl_exact(self.zs_for_k_nls)
-      
-    self.zs_for_k_nls_used_max = self.zs_for_k_nls_used[-1]
-    print(f'Max z for extended F_2: {self.zs_for_k_nls_used_max}')
-  
-    self._k_nl = CubicSpline(self.zs_for_k_nls_used, self.k_nls, bc_type='not-a-knot')
+    self.k_nl = self.find_k_nl()
+    print(f"k_nl = {self.k_nl}.")
 
 
   def obtain_results(self):
@@ -169,106 +150,6 @@ class lensing_spectra:
 
     return ell, C_phi_phi
   
-  # def _k_nl(self, z):
-  #   # used quadratic interpolation for finer k_nl values but this sometimes gives negative k_nl values resulting in errors
-  #   return scipy.interpolate.interp1d(self.zs_for_k_nls_used, self.k_nls, kind = 'linear', bounds_error=False, fill_value = 'extrapolate')(z)
-
-  def _k_nl_toshiya_like(self, z, k_min=1e-4, k_max=1000.0, num_k_samples=5000):
-    """
-    Calculates the non-linear scale k_nl using a method similar to
-    cmblensplus: spline interpolation of log(P_lin) vs log(k) and
-    Brent's root finding method for the condition:
-    k_nl^3 * P_lin(k_nl, z) / (2 * pi^2) = 1
-
-    Parameters:
-    z : float
-        Redshift at which to calculate k_nl.
-    k_min : float
-        Minimum k value for spline interpolation range.
-    k_max : float
-        Maximum k value for spline interpolation range. Should bracket k_nl.
-    num_k_samples : int
-        Number of points for building the spline.
-
-    Returns:
-    float
-        The non-linear scale k_nl(z) in Mpc^-1.
-    """
-    # 1. Generate k points for spline (logarithmic spacing is good)
-    k_vals = np.logspace(np.log10(k_min), np.log10(k_max), num_k_samples)
-    logk_vals = np.log(k_vals)
-
-    # 2. Get linear power spectrum values
-    # Ensure P_lin is positive for log
-    P_lin_vals = np.maximum(self.linear_mps(k_vals, z), 1e-100) # Avoid log(0)
-    logP_lin_vals = np.log(P_lin_vals)
-
-    # 3. Create cubic spline: log(P_lin) vs log(k)
-    # Use extrapolate=False to avoid issues outside the k range
-    try:
-        logP_spline = scipy.interpolate.CubicSpline(logk_vals, logP_lin_vals, extrapolate=False)
-    except ValueError as e:
-        print(f"Error creating spline at z={z}: {e}")
-        print(f"k_vals range: {k_vals.min()} to {k_vals.max()}")
-        print(f"P_lin_vals range: {P_lin_vals.min()} to {P_lin_vals.max()}")
-        # Handle error appropriately, maybe return NaN or raise
-        return np.nan # Or raise an informative error
-
-
-    # 4. Define the target function whose root we need to find
-    # We want log(k^3 * P_lin(k) / (2*pi^2)) = 0
-    # which is 3*log(k) + log(P_lin(k)) - log(2*pi^2) = 0
-    log_two_pi_sq = np.log(2.0 * np.pi**2)
-    def target_func(logk):
-        # Check if logk is within the spline's domain
-        if not (logk_vals[0] <= logk <= logk_vals[-1]):
-            # This shouldn't happen if brentq's bracket is correct,
-            # but as a safeguard:
-             # Return a large value to push the root finder away
-            return 1e10 * np.sign(logk - np.mean(logk_vals))
-
-        logP_val = logP_spline(logk)
-        return 3.0 * logk + logP_val - log_two_pi_sq
-
-    # 5. Use Brent's method (brentq) to find the root
-    # brentq requires a bracket [a, b] where target_func(a) and target_func(b)
-    # have opposite signs. We use the logk range of our spline data.
-    logk_min_spline = logk_vals[0]
-    logk_max_spline = logk_vals[-1]
-
-    try:
-        # Check if the function actually changes sign in the interval
-        # Add small epsilon to avoid potential issues exactly at boundaries
-        epsilon = 1e-6 * (logk_max_spline - logk_min_spline)
-        val_min = target_func(logk_min_spline + epsilon)
-        val_max = target_func(logk_max_spline - epsilon)
-
-        if np.sign(val_min) == np.sign(val_max):
-             # Try extending the k range if possible, or report error.
-             # This usually means k_nl is outside [k_min, k_max].
-             print(f"Warning: target_func has same sign at endpoints for z={z}.")
-             print(f"  logk_min={logk_min_spline:.2f}, val={val_min:.2e}")
-             print(f"  logk_max={logk_max_spline:.2f}, val={val_max:.2e}")
-             # Attempt to find the root anyway, brentq might handle edge cases
-             # or raise its own error if sign condition isn't met internally.
-             # As a fallback, you could return the boundary where the value is closer to 0
-             # or try a wider k range. For now, let brentq try.
-
-        logk_nl = scipy.optimize.brentq(target_func, logk_min_spline, logk_max_spline, xtol=1e-7, rtol=1e-7)
-        k_nl = np.exp(logk_nl)
-        return k_nl
-
-    except ValueError as e:
-        # This typically means sign(f(a)) == sign(f(b)) for brentq
-        print(f"Root finding failed for z={z}: {e}")
-        print(f"  Function values at boundary: f({logk_min_spline:.2f})={val_min:.2e}, f({logk_max_spline:.2f})={val_max:.2e}")
-        print(f"  Consider adjusting k_min/k_max for the spline.")
-        # Return NaN or raise a more specific error
-        return np.nan
-    except Exception as e:
-        print(f"An unexpected error occurred during root finding at z={z}: {e}")
-        return np.nan
-  
   def ns_eff(self, k, z):
     '''
     Parameters:
@@ -281,13 +162,16 @@ class lensing_spectra:
     ns_eff : float
       effective spectral index defined as d ln P^lin_m(k) / d ln k
     '''
-    return scipy.misc.derivative(
+    result = scipy.misc.derivative(
       lambda ln_k : np.log(self.linear_mps(np.exp(ln_k), z)),
       np.log(k),
       dx = 1e-4
     )
+    # if result > 2:
+    #   print('ns_eff > 2:', result, k, z)
+    return result
 
-  def _sigma_8(self, z):
+  def sigma_8(self, z):
     '''
     Parameters:
     z : float
@@ -295,43 +179,30 @@ class lensing_spectra:
     Returns:
     sigma_8 : float
     '''
-    # i think this is okay, but might be worth checking in the future
     # np.interp only accepts increase x values, hence why we need to invert the matrices, self.redshifts is in order of decreasing z values
     return np.interp(z, self.redshifts[::-1], self.results.get_sigma8()[::-1])
   
-  def k_nl_exact(self, zs):
-    errors = []
-    results = []
-    zs_used = []
-    for z in zs:
-      error_tol = 0.5
-      kmax = self.k_nl_max
-      num_samples = int(kmax / 0.001) # denominator is stepsize in ls, used to be 0.001 which didn't give any issues
+  def find_k_nl(self):
+    error_tol = 0.1
+    kmax = 1
+    num_samples = int(kmax / 0.00001)  # stepsize
 
-      ls = np.linspace(0, kmax, num_samples)
-      # removed 1 / (2pi^2) and put 4pi factor instead to be in line with toshiya
-      vals = np.array([np.abs(1 - 4 * np.pi * l**3 * self.linear_mps(l, z)) for l in ls])
-      vals_min_index = np.argmin(vals)
-      error = vals[vals_min_index]
-      result = ls[vals_min_index]
+    ls = np.linspace(1e-2, kmax, num_samples)
+    # toshiya uses factor of 4 pi here in paper but 1/(2 pi^2) agrees with his results
+    vals = np.array([np.abs(1 - (2 * np.pi**2)**(-1) * l**3 * self.linear_mps(l, 0.)) for l in ls])
+    
+    vals_min_index = np.argmin(vals)
+    error = vals[vals_min_index]
+    result = ls[vals_min_index]
 
-      if vals_min_index == num_samples - 1:
-        print("Max z reached.")
-        return results, errors, zs_used
+    if vals_min_index == len(ls) - 1:
+        raise ValueError("Minimum found at maximum index; consider increasing kmax or reducing stepsize.")
+    if error > error_tol:
+        raise ValueError(f"Error tolerance not reached: error = {error} > {error_tol}")
+
+    return result
       
-      zs_used.append(z)
-
-      if error > error_tol:
-        raise Exception(f'did not reach error tolerance, error is {error}, z = {z}, best val is {result}')
-      
-      errors.append(error)
-      results.append(result)
-
-      print(z, result)
-        
-    return results, errors, zs_used
-      
-  def _q(self, k, z):
+  def q(self, k):
     '''
     used in matter bispec fitting func
 
@@ -344,9 +215,9 @@ class lensing_spectra:
     Returns:
     float
     '''
-    return k / self._k_nl(z)
+    return k / self.k_nl
 
-  def _Q_3(self, n):
+  def Q_3(self, n):
     '''
     used in matter bispec fitting func
 
@@ -356,7 +227,10 @@ class lensing_spectra:
     Returns:
     float
     '''
-    return (4 - 2**n) / (1 + 2**(n + 1))
+    result = (4 - 2**n) / (1 + 2**(n + 1))
+    # if result < 0:
+    #   print(result, n)
+    return max(0., result)
   
   def scale_factor(self, chi):
      '''
@@ -402,10 +276,9 @@ class lensing_spectra:
     a_1 = self.matter_bispec_fit_params[0]
     a_2 = self.matter_bispec_fit_params[1]
     a_6 = self.matter_bispec_fit_params[5]
-    if self._Q_3(self.ns_eff(k, z)) < 0:
-      print(self._Q_3(self.ns_eff(k, z)), k, z)
-    numerator = 1 + self._sigma_8(z)**a_6 * np.sqrt(0.7 * self._Q_3(self.ns_eff(k, z))) * (self._q(k, z) * a_1)**(self.ns_eff(k, z) + a_2)
-    denominator = 1 + (self._q(k, z) * a_1)**(self.ns_eff(k, z) + a_2)
+
+    numerator = 1 + self.sigma_8(z)**a_6 * np.sqrt(0.7 * self.Q_3(self.ns_eff(k, z))) * (self.q(k) * a_1)**(self.ns_eff(k, z) + a_2)
+    denominator = 1 + (self.q(k) * a_1)**(self.ns_eff(k, z) + a_2)
   
     return numerator / denominator
   
@@ -426,8 +299,8 @@ class lensing_spectra:
     a_7 = self.matter_bispec_fit_params[6]
     a_8 = self.matter_bispec_fit_params[7]
 
-    numerator = 1 + 0.2 * a_3 * (self.ns_eff(k, z) + 3) * (self._q(k, z) * a_7) ** (self.ns_eff(k, z) + 3 + a_8)
-    denominator = 1 + (self._q(k, z) * a_7) ** (self.ns_eff(k, z) + 3.5 + a_8)
+    numerator = 1 + 0.2 * a_3 * (self.ns_eff(k, z) + 3) * (self.q(k) * a_7) ** (self.ns_eff(k, z) + 3 + a_8)
+    denominator = 1 + (self.q(k) * a_7) ** (self.ns_eff(k, z) + 3.5 + a_8)
 
     return numerator / denominator
   
@@ -448,8 +321,8 @@ class lensing_spectra:
     a_5 = self.matter_bispec_fit_params[4]
     a_9 = self.matter_bispec_fit_params[8]
     
-    numerator = 1 + (4.5 * a_4 / (1.5 + (self.ns_eff(k, z) + 3)**4)) * (self._q(k, z) * a_5)**(self.ns_eff(k, z) + 3 + a_9)
-    denominator = 1 + (self._q(k, z) * a_5)**(self.ns_eff(k, z) + 3.5 + a_9)
+    numerator = 1 + (4.5 * a_4 / (1.5 + (self.ns_eff(k, z) + 3)**4)) * (self.q(k) * a_5)**(self.ns_eff(k, z) + 3 + a_9)
+    denominator = 1 + (self.q(k) * a_5)**(self.ns_eff(k, z) + 3.5 + a_9)
 
     return numerator / denominator
   
@@ -489,15 +362,10 @@ class lensing_spectra:
     Returns:
     float
     '''
-    # if z > self.zs_for_k_nls_used_max:
-    #   return self.F_2_tree(k1, k2, k3, z)
-    # else:
     term_1 = (5. / 7.) * self.a(k1, z) * self.a(k2, z)
     term_2 = 0.5 * self.law_cosines(k1, k2, k3) * (k1 / k2 + k2 / k1) * self.b(k1, z) * self.b(k2, z)
     term_3 = (2. / 7.) * self.law_cosines(k1, k2, k3)**2 * self.c(k1, z) * self.c(k2, z)
-    return term_1 + term_2 + term_3
-
-  
+    return term_1 + term_2 + term_3  
   
   def mbs(self, k_1, k_2, k_3, z, model = 'nonlinear'):
     '''

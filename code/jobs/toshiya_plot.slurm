@@ -4,8 +4,8 @@
 #SBATCH --error=/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/outputs/toshiya_plot_error.log
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=8:00:00
-#SBATCH --mem=5GB
+#SBATCH --time=1:00:00
+#SBATCH --mem=1GB
 
 echo "Starting"
 source /home3/p319950/venvs/mainenv/bin/activate
