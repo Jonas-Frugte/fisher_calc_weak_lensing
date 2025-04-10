@@ -21,6 +21,9 @@
 \usepackage{empheq}
 \usepackage{booktabs}
 \usepackage{authblk}
+\usepackage{multirow} % needed for merging cells vertically
+\usepackage{booktabs}
+
 
 \usepackage{listings}
 \usepackage{xcolor} % For color customization (optional)
@@ -129,6 +132,7 @@ All code written for this project is uploaded on github at \url{https://github.c
 \end{figure}
 
 \section{Theory}
+\subsection{Weak lensing spectra}
 Radiation from cosmological objects is distorted due to gravitational lensing. In the vast majority of cases this lensing is a relatively weak effect and is thus referred to as weak lensing. Weak lensing is quantified through the deflection field $\mathbf d(\hat {\mathbf n})$ which equals the difference between the observed angle of a point on the sky and the true (unlensed) angle. This field is the gradient of the lensing potential $\psi(\hat {\mathbf n})$ given as a weighted integral over the mass distribution along the line of sight between earth and the observed point.
 
 In the case of CMB surveys, lensing alters the statistical properties of the temperature and polarization fields and can thus be calculated by comparing to the expected unlensed signal, see e.g. \cite{cmblensingestimator}. In galaxy surveys, lensing alters the ellipiticities of observed galaxies. If a large enough number of galaxies are observed, this effect can be seperated from the intrinsic ellipiticities of the galaxies and thus the lensing potential can be estimated.
@@ -152,37 +156,18 @@ the Wigner 3-j symbol. The only factor that differs between CMB and galaxy lensi
 \end{equation*}
 with $p_X$ the radius distribution of the radiation source. For the CMB we take $p(\chi) = \delta(\chi - \chi_*)$. Notice that we can also look at cross correlation between CMB and galaxy lensing.
 
-
-
 For a derivation of the lensing potential and its power- and bispectra, see appendices \ref{sec:weaklensing} and \ref{sec:weaklensstats}.
 
-
-\section{Calculation Details}\label{sec:calcdetails}
-\subsection{Numerical Considerations}
-% I used CAMB, how I took derivative, interpolation, fisher matrix sampling, matter bispectrum in terms of power spectrum
-
-Running cosmological simulations to obtain the matter power spectra and other functions was done with the CAMB package (REF). 
-
-The derivatives of the lensing spectra were done numerically using a four point central difference formula, given by
-\begin{equation*}
-    f'(x) = \frac{-f(x + 2h) + 8f(x+h) - 8 f(x - h) + f(x - 2h)}{12h} + \mathcal O (h^4).
-\end{equation*}
-$h$ was chosen to be $2.5\%$ of the $x$ value. Testing showed this to generally be the best choise to avoid both the inacuracies from numerical errors (relevant for small $h$) and inacuracies due to the $\mathcal O(h^4)$ error inherent in the four point finite difference formula. The derivative w.r.t. $\sigma_8$ was an exception as it could not be taken by varying it directly and so was calculated implicitly using the chain rule.
-
-To speed up the calculation of the lensing powerspectra and especially the bispectra, an interpolation approach was used. Due to being 3 dimensional, it was not feasible to interpolate the lensing bispectrum directly. We instead chose to interpolate all 1 and 2 dimensional functions that the bispectra are based on and then calculate the bispectra with the interpolated functions instead. This significantly sped up the computation at the cost of small errors in the values in the bispectrum ($\sim 1\%$) when compared with the uninterpolated values.
-
-The time complexity of the Fisher matrix scales with the maximum multipole considered, $l_{max}$, as $\mathcal O (l_{max}^3)$, leading to time issues for realistic values of $l_{max}$. We thus calculated the $l_1 < l_2 < l_3$ part of each Fisher matrix element (see the appendix) by sampling every step of 10 %(CHECK IF THIS IS STILL CORRECT BEFORE PUBLISHING) 
-in $l_1$ and $l_2$. Due to the discontinuos nature of the bispectrum (e.g. it vanishes immediately if $l_1 + l_2 + l_3$ is and odd number) we didn't sample $l_3$ values. This was done similarly in (REF).
-
-The matter bispectrum was calculated from the matter powerspectrum using a fitting formula based on perturbation theory \cite{bispfit}. The bispectrum is given by
+\subsection{Nonlinear matter powerspectrum}
+Determining the nonlinear matter powerspectrum can be done using numerical codes such as CAMB. The nonlinear matter bispectrum was calculated from the powerspectrum using a fitting formula based on perturbation theory in \cite{bispfit}. It is given by
 \begin{equation}
     B_m(k_1, k_2, k_3, \chi) = 2 F_2(k_1, k_2, z) P_m(k_1, z) P_m(k_2, z) + \text{2 perm.}
 \end{equation}
-where \( P_m \) is the matter power spectrum, and the kernel \( F_2 \) is given by:
+where \( P_m \) is the nonlinear matter power spectrum\footnote{Compare to the tree level bispectrum where we instead use the linear powerspectrum.}, and the kernel \( F_2 \) is modified from the tree level result with factors \( a(k, z) \), \( b(k, z) \), and \( c(k, z) \):
 \begin{equation}
     F_2(k_1, k_2, z) = \frac{5}{7} a(k_1, z) a(k_2, z) + \frac{k_1^2 + k_2^2}{2 k_1 k_2} b(k_1, z) b(k_2, z) \cos \theta + \frac{2}{7} c(k_1, z) c(k_2, z) \cos^2 \theta.
 \end{equation}
-The functions \( a(k, z) \), \( b(k, z) \), and \( c(k, z) \) are defined as:
+They are defined as:
 \begin{equation}
     a(k, z) = \frac{1 + \sigma_8^{a_6}(z) \sqrt{0.7} Q(n_{\text{eff}}) (q^{a_1})^{n_{\text{eff}} + a_2}}{1 + (q^{a_1})^{n_{\text{eff}} + a_2}},
 \end{equation}
@@ -206,7 +191,7 @@ Additionally, \( q \) is given by:
 \end{equation}
 where \( k_{\text{NL}} \) is the scale at which nonlinearities become significant, satisfying:
 \begin{equation}
-    4 \pi k_{\text{NL}}^3 P_m^{\text{lin}}(k_{\text{NL}}) = 1.
+    4 \pi k_{\text{NL}}^3 P_m^{\text{lin}}(k_{\text{NL}}, 0) = 1.
 \end{equation}
 The coefficients \( a_i \) are:
 \begin{align*}
@@ -214,8 +199,58 @@ The coefficients \( a_i \) are:
     a_5 &= 1.013, \quad a_6 = -0.575, \quad a_7 = 0.128, \quad a_8 = -0.722, \quad a_9 = -0.926.
 \end{align*}
 
+\subsection{Fisher matrix analysis}
+SNR and parameter constraints are obtained through a Fisher matrix analysis as is standard. A full derivation of below statements can be found in appendix \ref{sec:fisher}. The auto and cross power spectrum Fisher matrix is given as
+\begin{equation*}
+    F_{\alpha\beta} = \sum_{l} \sum_{XY}\sum_{X'Y'}(2l+1)\partial_\alpha C_l^{XY} (C^{-1})_l^{XX'}(C^{-1})_l^{YY'} \partial_\beta C^{X'Y'}_l
+\end{equation*}
+where
+\begin{equation*}
+    C_{l} := \begin{pmatrix}
+        C^{\psi_\kappa\psi_\kappa}_l & C^{\psi_\kappa\psi_\gamma}_l \\
+        C^{\psi_\kappa\psi_\gamma}_l & C^{\psi_\gamma\psi_\gamma}_l
+    \end{pmatrix}.
+\end{equation*}
+For the bispectra we instead get 
+\begin{equation*}
+    F_{\alpha\beta} = \sum_{l_1 \leq l_2 \leq l_3} \frac{\mathcal P _{l_1l_2l_3}}{6}
+    \sum_{XYZ}\sum_{X'Y'Z'} 
+    \partial_\alpha B^{X Y Z}_{l_1 l_2 l_3} 
+    (C^{-1})^{X X'}_{l_1}
+    (C^{-1})^{Y Y'}_{l_2}
+    (C^{-1})^{Z Z'}_{l_3}
+    \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3},
+\end{equation*}
+with $\mathcal P_{l_1l_2l_3}$ defined as the number of distinct permutations that can be made with $l_1l_2l_3$
+
+When only considering autospectra the formulas simplify to
+\begin{equation*}
+    F_{\alpha\beta} = \sum_{l} \sum_{XY}\sum_{X'Y'}(2l+1)\frac{\partial_{\alpha}C_l^{XX} \partial_\beta C^{XX}_l}{(C_l^{XX})^2},
+\end{equation*}
+and, for bispectra,
+\begin{equation*}
+    F_{\alpha\beta} = \sum_{l_1 \leq l_2 \leq l_3} \frac{\mathcal P _{l_1l_2l_3}}{6}
+    \frac{\partial_\alpha B^{X X X}_{l_1 l_2 l_3} 
+    \partial_\beta B^{XXX}_{l_1 l_2 l_3}}{C^{XX}_{l_1}C^{XX}_{l_2}C^{XX}_{l_3}}.
+\end{equation*}
+
+
+
+\section{Calculation Details}\label{sec:calcdetails}
+\subsection{Numerical Considerations}
+% I used CAMB, how I took derivative, interpolation, fisher matrix sampling, matter bispectrum in terms of power spectrum
+
+Running cosmological simulations to obtain the matter power spectra and other functions was done with the CAMB package (REF). 
+
+To speed up the calculation of the lensing powerspectra and especially the bispectra, an interpolation approach was used. Due to being 3 dimensional, it was not feasible to interpolate the lensing bispectrum directly. We instead chose to interpolate all 1 and 2 dimensional functions that the bispectra are based on and then calculate the bispectra with the interpolated functions instead. This significantly sped up the computation at the cost of small errors in the values in the bispectrum ($\sim 1\%$) when compared with the uninterpolated values.
+
+The time complexity of the Fisher matrix scales with the maximum multipole considered, $l_{max}$, as $\mathcal O (l_{max}^3)$, leading to time issues for realistic values of $l_{max}$. We thus calculated the $l_1 < l_2 < l_3$ part of each Fisher matrix element (see the appendix) by sampling every step of 10 %(CHECK IF THIS IS STILL CORRECT BEFORE PUBLISHING) 
+in $l_1$ and $l_2$. Due to the discontinuos nature of the bispectrum (e.g. it vanishes immediately if $l_1 + l_2 + l_3$ is and odd number) we didn't sample $l_3$ values. This was done similarly in (REF).
+
 
 \subsection{Choosing Experimental Parameters}
+
+
 % lmin, lmax, galaxy redshift distribution, fiducial values (!), noise levels, 
 % for SO, CMB - S4, Euclid, LSST
 We chose our fiducial cosmology in line with the results from the Planck mission \cite{planckresults}.
@@ -229,11 +264,38 @@ We chose our fiducial cosmology in line with the results from the Planck mission
     w_0 &= -1. && \text{(Dark energy equation of state parameter)}
 \end{align*}
 
-For the parameter constraints we took the multipole range to be from 2 ($l_{min}$) to 2000 ($l_{max}$).
+% For the parameter constraints we took the multipole range to be from 2 ($l_{min}$) to 2000 ($l_{max}$).
 
-% We will consider multiple possibilities for the other calculation parameters (noise levels and redshift distribution of observed galaxies). This is done to allow us to more accurately model constraints from measurements by the Simons Observatory (SO), CMB-S4, Euclid, and Large Synoptic Survey Telescope (LSST) surveys. The first two measure CMB lensing while the latter two measure lensing shear of galaxies.
 
-For noise in CMB lensing we consider lensing estimated by an experiment measuring polarization with white noise $\Delta_P$ and beam spread $\sigma$. We then use the quadratic estimator from \cite{Hu_2002} to estimate the resulting noise in the lensing power spectrum.
+
+This paper considers noise levels for stage 3 and stage 4 weak lensing surveys. Values can be found in table \ref{tab:noiselevels}. A comparison of noise power spectrum to lensing power spectrum can be found in figure \ref{fig:lpsplusnoise}. 
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{source} & \textbf{survey stage} & \textbf{noise vals} & \textbf{comparable experiments} \\
+    \hline 
+    \multirow{2}{*}{CMB} 
+        & stage 3 & $\sigma = 1'$, $\Delta_P = 6' \; \mu \text{K}$ & Advanced ACTPol, SPT-3G \\
+    \cline{2-4}
+        & stage 4 & $\sigma = 3'$, $\Delta_P = 1' \; \mu \text{K}$ & CMB-S4, LiteBIRD \\
+    \hline
+    \multirow{2}{*}{galaxies} 
+        & stage 3 & $\sigma_{\text{rms}} = 0.3$, $n_g = 5 \text{arcmin}^{-2}$ & DES, KiDS \\
+    \cline{2-4}
+        & stage 4 & $\sigma_{\text{rms}} = 0.3$, $n_g = 30 \text{arcmin}^{-2}$ & LSST, Euclid \\
+    \hline
+    \end{tabular}
+    \caption{Noise levels considered for weak lensing of galaxies and the CMB. $\sigma$ (beam width) and $\Delta_P$ (polarization white noise) describe CMB survey specifications, while $\sigma_{\text{rms}}$ (intrinsic galaxy ellipticity) and $n_g$ (observed galaxy density) refer to galaxy shear surveys.}
+    \label{tab:noiselevels}
+\end{table}
+
+CMB noise is estimated through the quadratic estimator developed in \cite{cmblensingestimator}. We do not take temperature measurements into account, as these are subleading for stage 4 experiments (REF). This is similarly done in \cite{Namikawa_2016}. The parameters characterizing the noise levels are thus beam width, $\sigma$ and polarization white noise, $\Delta_P$. Galaxy lensing is determined by measuring lensing shear (see appendices \ref{sec:weaklensing} and \ref{sec:shear}). The noise in this measurement is dominated by scale independent shot noise and has associated noise power spectrum $N_l^{\text{shear}} = \sigma_{\text{rms}}^2 / n_g$. $n_g$ is the amount of galaxies observed per unit angle. The noise power spectrum for the lensing potential then equals
+\begin{equation*}
+    N_l^{\text{lens. potential}} = \frac{(l-1)l(l+1)(l+2)}{4}N_l^{\text{shear}}.
+\end{equation*}
+For parameter constraints we use stage 4 noise levels.
 
 \begin{figure}[t]
     \centering
@@ -243,16 +305,21 @@ For noise in CMB lensing we consider lensing estimated by an experiment measurin
 \end{figure}
 
 
-For shear measurements, the noise is simpler to model as the primary source is shot noise due to the discrete number of galaxies in each patch of the survey. The mean ellipiticity of the galaxies in a patch is calculated and a deviation from the mean is interpreted as lensing shear. The greater the number of galaxies the more accurately can the mean ellipticity be determined. Choosing the size of the patch is a balancing between signal to noise and resolution. Smaller patches give more uncertain shear measurements while providing better overal resolution for the shear map and thus allowing measurements of shear bi- and powerspectra to higher multipole numbers. The opposite is true for larger patch sizes. The power spectrum of the shear noise is given by
-\begin{equation*}
-    N^{\gamma\gamma}_{l} = \frac{\sigma^2_{rms}}{\bar n_g}
-\end{equation*}
-where $\bar n_g$ is the mean number of galaxies observed per sterradian accross the whole survey \cite{weaklensingnotes2020}.
-and $\sigma^2_\gamma$ is the intrinsic ellipticity dispersion. 
-Experiments such as Euclid and the LSST both have $\sigma_{rms} \approx 0.3$ \cite{euclid1overview} \cite{lsstsciencebook} and 
-$ n_g\approx 30 \text{ arcmin}^{-2}$.
+% For noise in CMB lensing we consider lensing estimated by an experiment measuring polarization with white noise $\Delta_P$ and beam spread $\sigma$. We then use the quadratic estimator from \cite{Hu_2002} to estimate the resulting noise in the lensing power spectrum.
 
-The noise values are calculated for stage 3 (current) surveys and stage 4 (near future) surveys. We will use the stage 4 noise values for parameter constraints. A comparison of stage 3 noise, stage 4 noise, and lensing signal can be seen in figure \ref{fig:lpsplusnoise}.
+
+
+
+% For shear measurements, the noise is simpler to model as the primary source is shot noise due to the discrete number of galaxies in each patch of the survey. The mean ellipiticity of the galaxies in a patch is calculated and a deviation from the mean is interpreted as lensing shear. The greater the number of galaxies the more accurately can the mean ellipticity be determined. Choosing the size of the patch is a balancing between signal to noise and resolution. Smaller patches give more uncertain shear measurements while providing better overal resolution for the shear map and thus allowing measurements of shear bi- and powerspectra to higher multipole numbers. The opposite is true for larger patch sizes. The power spectrum of the shear noise is given by
+% \begin{equation*}
+%     N^{\gamma\gamma}_{l} = \frac{\sigma^2_{rms}}{\bar n_g}
+% \end{equation*}
+% where $\bar n_g$ is the mean number of galaxies observed per sterradian accross the whole survey \cite{weaklensingnotes2020}.
+% and $\sigma^2_\gamma$ is the intrinsic ellipticity dispersion. 
+% Experiments such as Euclid and the LSST both have $\sigma_{rms} \approx 0.3$ \cite{euclid1overview} \cite{lsstsciencebook} and 
+% $ n_g\approx 30 \text{ arcmin}^{-2}$.
+
+% The noise values are calculated for stage 3 (current) surveys and stage 4 (near future) surveys. We will use the stage 4 noise values for parameter constraints. A comparison of stage 3 noise, stage 4 noise, and lensing signal can be seen in figure \ref{fig:lpsplusnoise}.
 
 The redshift distribution of the observed galaxies is commonly parameterized as \cite{bartelmann2001weak}
 \begin{equation*}
