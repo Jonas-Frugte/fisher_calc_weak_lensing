@@ -158,7 +158,7 @@ with $p_X$ the radius distribution of the radiation source. For the CMB we take 
 
 For a derivation of the lensing potential and its power- and bispectra, see appendices \ref{sec:weaklensing} and \ref{sec:weaklensstats}.
 
-\subsection{Nonlinear matter powerspectrum}
+\subsection{Nonlinear matter bispectrum}
 Determining the nonlinear matter powerspectrum can be done using numerical codes such as CAMB. The nonlinear matter bispectrum was calculated from the powerspectrum using a fitting formula based on perturbation theory in \cite{bispfit}. It is given by
 \begin{equation}
     B_m(k_1, k_2, k_3, \chi) = 2 F_2(k_1, k_2, z) P_m(k_1, z) P_m(k_2, z) + \text{2 perm.}
@@ -221,13 +221,11 @@ For the bispectra we instead get
     (C^{-1})^{Z Z'}_{l_3}
     \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3},
 \end{equation*}
-with $\mathcal P_{l_1l_2l_3}$ defined as the number of distinct permutations that can be made with $l_1l_2l_3$
-
-When only considering autospectra the formulas simplify to
+with $\mathcal P_{l_1l_2l_3}$ defined as the number of distinct permutations that can be made with $l_1l_2l_3$. When only considering autospectra the formulas simplify to
 \begin{equation*}
     F_{\alpha\beta} = \sum_{l} \sum_{XY}\sum_{X'Y'}\frac{2l+1}{2}\frac{\partial_{\alpha}C_l^{XX} \partial_\beta C^{XX}_l}{(C_l^{XX})^2},
 \end{equation*}
-and, for bispectra,
+and (for bispectra)
 \begin{equation*}
     F_{\alpha\beta} = \sum_{l_1 \leq l_2 \leq l_3} \frac{\mathcal P _{l_1l_2l_3}}{6}
     \frac{\partial_\alpha B^{X X X}_{l_1 l_2 l_3} 
@@ -372,67 +370,84 @@ and is commonly found to be a particularly well constrained parameter in weak le
 \appendix
 
 \section{Weak Lensing}\label{sec:weaklensing}
-\subsection{Approximations Made / Regime}
 \subsection{Perturbed Photon Paths}
-Work in \textbf{conformal newtonian gauge}. In this section we'll work in units where $c=1$. Denoting conformal time and conformal radial distance by $\eta$ and $\chi$, respectively, the perturbed line element is given by
+We work in the conformal newtonian gauge and with natural units. Denoting conformal time and conformal radial distance by $\eta$ and $\chi$, respectively, the perturbed line element in FLRW spacetime is given by
 \begin{equation}
-    \d s^2 = a^2(\eta)((1 + 2\Psi_N) \d \eta^2 - (1 + 2\Phi_N) \gamma_{ij}\d x^i \d x^j) 
+    \d s^2 = a^2(\eta)((1 + 2\Psi_N) \d \eta^2 - (1 + 2\Phi_N) \gamma_{ij}\d x^i \d x^j),
 \end{equation}
-
 where $\gamma_{ij}$ is the unperturbed line element
 \begin{equation}
-    \gamma_{ij} = \d x^i \d x^j = \d \chi^2 + f^2_K(\chi)(\d \theta^2 + \sin ^2 \theta \d \phi ^2).
+    \gamma_{ij} = \d x^i \d x^j = \d \chi^2 + f^2_K(\chi)(\d \theta^2 + \sin ^2 \theta \d \phi ^2),
 \end{equation}
-From here of on work in first order in the scalar potentials $\Phi_N$ and $\Psi_N$. For lensing we consider null-geodesics so $\d s^2 = 0$ and we can rewrite the perturbed line element as
+and $f_K(\chi)$ is the comoving angular diameter distance. We will hereafter only consider a flat universe, so that $f_K(\chi) = \chi$. Weak lensing of a point source can be quantified by looking at the deflection field $\mathbf d (\hat{\mathbf n}) = \mathbf \theta_{\text{obs}} - \mathbf \theta_{\text{true}}$, i.e. the (small) difference between the angle at which we see the object and the angle at which we would see the object had no lensing occured. To first order in $\Psi_N$ and $\Phi_N$, the deflection is given as \cite{dodelson2020modern}
 \begin{equation}
-    \d \hat s^2 = (1 + 4\Psi)\d\eta^2 - \gamma_{ij} \d x^i \d x^j
+    \mathbf d(\hat{\mathbf n}) = -2 \int_0^{\chi_*}\d \chi \frac{\chi_* - \chi}{\chi_*\chi}\nabla_{\hat{\mathbf n}}\Psi(\chi\hat{\mathbf n};\eta_0 - \chi),
 \end{equation}
-with $\Psi$ the \textbf{Weyl Potential} given by $\Psi := (\Psi_N - \Phi_N)/2$. A null geodesic $x^\mu(\hat\lambda)$ in terms of its affine parameter ($\hat \lambda$) satisfies the geodesic equation
+where $\Psi$ is the Weyl Potential, $\Psi := (\Psi_N - \Phi_N)/2$, and $\chi_*$ is the conformal distance to the source. $\nabla_{\hat{\mathbf n}}$ is the derivative along the axes orthogonal to the line of sight. The above equation can be written in terms of the lensing potential, $\psi$, as $\mathbf d (\hat{\mathbf n}) = \nabla_{\hat{\mathbf n}}$, with
 \begin{equation}
-    \frac{\d^2 x^\mu}{\d \hat\lambda^2} + \Gamma^\mu_{\nu\rho} \frac{\d x^\nu}{\d \hat\lambda}\frac{\d x^\rho}{\d\hat\lambda} = 0,
+    \psi(\hat {\mathbf n}) := -2 \int_0^{\chi_*}\d \chi \frac{\chi_* - \chi}{\chi_*\chi}\Psi(\chi\hat{\mathbf n};\eta_0 - \chi).
 \end{equation}
-with $\hat g_{\mu\nu}(\d x^\mu/\d \hat\lambda)(\d x^\nu / \d \hat \lambda) = 0$. 
 
-In the unperturbed there are incoming radial solutions of the form $\chi = \eta_0 - \eta$. We can express $\hat\lambda$ in terms of $\eta$ using The 0-component of the geodesic equation,
+If the source is instead distributed radial distances according to some distribution function $p(\chi)$, with $p(\chi)$ normalized to integrate to 1, the $(\chi_* - \chi)/(\chi_*\chi)$ factor is changed as
+\begin{equation*}
+    \frac{\chi_*-\chi}{\chi_*\chi} \rightarrow W(\chi) := \int_\chi^{\infty}\d\chi' p(\chi')\frac{\chi'-\chi}{\chi'\chi}.
+\end{equation*}
+$W(\chi)$ is then called the window function. In the most general case, the lensing potential is thus given by
 \begin{equation}
-    \frac{\d^2\eta}{\d\hat\lambda^2} + 2(\frac{\d\eta}{\d\hat\lambda})^2\frac{\d\Psi}{\d\eta}+2\frac{\d\eta}{\d\hat\lambda}\frac{\d x^i}{\d\hat\lambda}\frac{\partial\Psi}{\partial x^i} = 0,
+    \psi(\hat {\mathbf n}) := -2 \int_0^{\infty}\d \chi W(\chi)\Psi(\chi\hat{\mathbf n};\eta_0 - \chi).
 \end{equation}
-where the derivative $\d\Psi/\d\eta = \partial_\eta\Psi+(\d x^i/\d\eta)\partial_i\Psi$ is along the perturbed ray. This allows us to rewrite the other (spatial) geodesic equations as
-\begin{equation}
-    \frac{\d^2x^i}{\d\eta^2} - 2\frac{\d x^i}{\d\eta}(\frac{\d\Psi}{\d\eta} + \frac{\d x^j}{\d\eta}\frac{\partial\Psi}{\partial x^j})+2\gamma^{ij}\frac{\partial\Psi}{\partial x^j}+\bar\Gamma^i_{jk}\frac{\d x^j}{\d\eta}\frac{\d x^k}{\d \eta} = 0,
-\end{equation}
-where $\bar\Gamma^i_{jk}$ are the connection coefficients of the unperturbed three geometry $\gamma_{ij}$. Without loss of generality we consider an observer located at the origin of the spatial coordinates, meaning we are interested in rays that end at $x^i = 0$. In that case $\d \chi/\d \eta = -1 + O(\Psi)$, $\d \theta/\d\eta = O(\Psi)$ and $\d \phi/\d\eta = O(\Psi)$ (with $\theta$ and $\phi$ angular spatial coordinates). For the case of such rays we can evaluate the connection coefficients and rewrite the spatial geodesic equations as
-\begin{gather}
-    \frac{\partial^2\chi}{\d\eta^2}+2\frac{\d\Psi}{\d\eta}=0,\\
-    \frac{\d^2\theta}{\d\eta^2}-2\frac{\d\ln f_K(\chi)}{\d\chi}\frac{\d\theta}{\d\eta}+\frac{2}{f^2_K(\chi)}\frac{\partial\Psi}{\partial\theta}=0,\\
-    \frac{\d^2\phi}{\d\eta^2} - 2\frac{\d \ln f_K(\chi)}{\d\chi}\frac{\d\phi}{\d\eta}+\frac{2}{f^2_K(\chi)}\frac{1}{\sin^2(\theta)}\frac{\partial\Psi}{\partial\phi}=0.
-\end{gather}
-Integrating twice and using the null condition we can rewrite the the first equation as
-\begin{equation}
-    \chi = \eta_0 - \eta - 2\int_{\eta_0}^\eta\Psi\d\eta',
-\end{equation}
-where the integral is along the ray. Since we are working at first order in $\Psi$ we can evaluate the integral along the unperturbed path, this is known as the \textbf{Born approximation}.\textit{Next follows a short discussion of why perturbations in observation time can be ignored, include?} Doing the same for the other two equations gives
-% TODO: make n a proper vector (bold)
-\begin{gather}
-    \theta(\eta_0 - \chi_*)=\theta_0 - \int_0^{\chi_*}\d\chi\frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}2\frac{\partial}{\partial \theta}\Psi(\chi\hat n, \eta_0 - \chi),\\
-    \phi(\eta_0 - \chi_*)=\theta_0 - \int_0^{\chi_*}\d\chi\frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}\frac{2}{\sin^2\theta}\frac{\partial}{\partial \phi}\Psi(\chi\hat n, \eta_0 - \chi),
-\end{gather}
-where $\theta_0$ and $\phi_0$ label the line of sight $\hat n$. The displacement vector $\mathbf{\alpha}$ indicates the infinitesimal displacement of the lensed rays from their unpetrubed observed angles and is related to $\theta$ and $\phi$ through
-$$
-\alpha_\theta = \theta - \theta_0, \quad \alpha_\phi = \sin^2\theta(\phi - \phi_0).
-$$
-This allows us to summarize the above results as
-\begin{equation}
-    \mathbf \alpha = -2 \int_0^{\chi_*}\d \chi \frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}\nabla_{\hat{\mathbf n}}\Psi(\chi\hat{\mathbf n};\eta_0 - \chi).
-\end{equation}
-When working in the weak field limit (i.e. small spacetime curvature) the $00$ component of Einsteins equations give us a poisson equation \cite{dodelson2020modern},
-\begin{equation}
-    -\nabla^2\Psi(\textbf{x}, \eta) =  4\pi G a(\eta)^2\delta\rho(\mathbf x, \eta)
-\end{equation}
-where $K$ is $0$, $1$, or $-1$ depending on the curvature of the universe, $\Delta = \partial_x^2 + \partial_y^2 + \partial_z^2$ is the 3 dimensional laplace operator, $\delta\bar\rho$ is the comoving total energy perturbation (evaluated in the rest-frame of the total energy). %TODO: proper definition for anisotropic stress and explain why we can ignore it
+The integration limit is sometimes also taken to be the surface of last scattering, as any window function vanishes after that distance. In the case of CMB lensing we can take $p(\chi')=\delta(\chi'-\chi_*)$, in which case the window function reduces to $H(\chi_* - \chi)(\chi_*-\chi)/(\chi_*\chi)$, with $H(\chi)$ the Heaviside step function.
 
-\subsection{Convergence, shear}
-Quantities we are interested in measuring depend on how the lensing vector changes with the observation angle. \textbf{Magnification matrix} is defined by
+% From here of on work in first order in the scalar potentials $\Phi_N$ and $\Psi_N$. For lensing we consider null-geodesics so $\d s^2 = 0$ and we can rewrite the perturbed line element as
+% \begin{equation}
+%     \d \hat s^2 = (1 + 4\Psi)\d\eta^2 - \gamma_{ij} \d x^i \d x^j
+% \end{equation}
+% with $\Psi$ the \textbf{Weyl Potential} given by $\Psi := (\Psi_N - \Phi_N)/2$. A null geodesic $x^\mu(\hat\lambda)$ in terms of its affine parameter ($\hat \lambda$) satisfies the geodesic equation
+% \begin{equation}
+%     \frac{\d^2 x^\mu}{\d \hat\lambda^2} + \Gamma^\mu_{\nu\rho} \frac{\d x^\nu}{\d \hat\lambda}\frac{\d x^\rho}{\d\hat\lambda} = 0,
+% \end{equation}
+% with $\hat g_{\mu\nu}(\d x^\mu/\d \hat\lambda)(\d x^\nu / \d \hat \lambda) = 0$. 
+
+% In the unperturbed there are incoming radial solutions of the form $\chi = \eta_0 - \eta$. We can express $\hat\lambda$ in terms of $\eta$ using The 0-component of the geodesic equation,
+% \begin{equation}
+%     \frac{\d^2\eta}{\d\hat\lambda^2} + 2(\frac{\d\eta}{\d\hat\lambda})^2\frac{\d\Psi}{\d\eta}+2\frac{\d\eta}{\d\hat\lambda}\frac{\d x^i}{\d\hat\lambda}\frac{\partial\Psi}{\partial x^i} = 0,
+% \end{equation}
+% where the derivative $\d\Psi/\d\eta = \partial_\eta\Psi+(\d x^i/\d\eta)\partial_i\Psi$ is along the perturbed ray. This allows us to rewrite the other (spatial) geodesic equations as
+% \begin{equation}
+%     \frac{\d^2x^i}{\d\eta^2} - 2\frac{\d x^i}{\d\eta}(\frac{\d\Psi}{\d\eta} + \frac{\d x^j}{\d\eta}\frac{\partial\Psi}{\partial x^j})+2\gamma^{ij}\frac{\partial\Psi}{\partial x^j}+\bar\Gamma^i_{jk}\frac{\d x^j}{\d\eta}\frac{\d x^k}{\d \eta} = 0,
+% \end{equation}
+% where $\bar\Gamma^i_{jk}$ are the connection coefficients of the unperturbed three geometry $\gamma_{ij}$. Without loss of generality we consider an observer located at the origin of the spatial coordinates, meaning we are interested in rays that end at $x^i = 0$. In that case $\d \chi/\d \eta = -1 + O(\Psi)$, $\d \theta/\d\eta = O(\Psi)$ and $\d \phi/\d\eta = O(\Psi)$ (with $\theta$ and $\phi$ angular spatial coordinates). For the case of such rays we can evaluate the connection coefficients and rewrite the spatial geodesic equations as
+% \begin{gather}
+%     \frac{\partial^2\chi}{\d\eta^2}+2\frac{\d\Psi}{\d\eta}=0,\\
+%     \frac{\d^2\theta}{\d\eta^2}-2\frac{\d\ln f_K(\chi)}{\d\chi}\frac{\d\theta}{\d\eta}+\frac{2}{f^2_K(\chi)}\frac{\partial\Psi}{\partial\theta}=0,\\
+%     \frac{\d^2\phi}{\d\eta^2} - 2\frac{\d \ln f_K(\chi)}{\d\chi}\frac{\d\phi}{\d\eta}+\frac{2}{f^2_K(\chi)}\frac{1}{\sin^2(\theta)}\frac{\partial\Psi}{\partial\phi}=0.
+% \end{gather}
+% Integrating twice and using the null condition we can rewrite the the first equation as
+% \begin{equation}
+%     \chi = \eta_0 - \eta - 2\int_{\eta_0}^\eta\Psi\d\eta',
+% \end{equation}
+% where the integral is along the ray. Since we are working at first order in $\Psi$ we can evaluate the integral along the unperturbed path, this is known as the \textbf{Born approximation}.\textit{Next follows a short discussion of why perturbations in observation time can be ignored, include?} Doing the same for the other two equations gives
+% % TODO: make n a proper vector (bold)
+% \begin{gather}
+%     \theta(\eta_0 - \chi_*)=\theta_0 - \int_0^{\chi_*}\d\chi\frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}2\frac{\partial}{\partial \theta}\Psi(\chi\hat n, \eta_0 - \chi),\\
+%     \phi(\eta_0 - \chi_*)=\theta_0 - \int_0^{\chi_*}\d\chi\frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}\frac{2}{\sin^2\theta}\frac{\partial}{\partial \phi}\Psi(\chi\hat n, \eta_0 - \chi),
+% \end{gather}
+% where $\theta_0$ and $\phi_0$ label the line of sight $\hat n$. The displacement vector $\mathbf{\alpha}$ indicates the infinitesimal displacement of the lensed rays from their unpetrubed observed angles and is related to $\theta$ and $\phi$ through
+% $$
+% \alpha_\theta = \theta - \theta_0, \quad \alpha_\phi = \sin^2\theta(\phi - \phi_0).
+% $$
+% An object 
+% \begin{equation}
+%     \mathbf \alpha = -2 \int_0^{\chi_*}\d \chi \frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}\nabla_{\hat{\mathbf n}}\Psi(\chi\hat{\mathbf n};\eta_0 - \chi).
+% \end{equation}
+% When working in the weak field limit (i.e. small spacetime curvature) the $00$ component of Einsteins equations give us a poisson equation \cite{dodelson2020modern},
+% \begin{equation}
+%     -\nabla^2\Psi(\textbf{x}, \eta) =  4\pi G a(\eta)^2\delta\rho(\mathbf x, \eta)
+% \end{equation}
+% where $K$ is $0$, $1$, or $-1$ depending on the curvature of the universe, $\Delta = \partial_x^2 + \partial_y^2 + \partial_z^2$ is the 3 dimensional laplace operator, $\delta\bar\rho$ is the comoving total energy perturbation (evaluated in the rest-frame of the total energy). %TODO: proper definition for anisotropic stress and explain why we can ignore it
+
+\subsection{Convergence and Shear}
+Quantities we are interested in measuring depend on how the lensing vector changes with the observation angle. The magnification matrix is defined as
 \begin{equation}
     A_{ij} := \delta_{ij} + \frac{\partial}{\partial\theta_i}\alpha_i(\hat{\mathbf n}).
 \end{equation}
@@ -450,24 +465,11 @@ At 1st order $A$ is a symetric matrix by definition and so $\omega$ has to be 0,
 \end{equation}
 given that $|A_{ij}| = (1 - \kappa)^2 + \omega^2 - |\gamma|^2 = 1 - 2\kappa + O(\kappa^2, \gamma^2, \omega^2)$, we can interpret $\kappa$ as telling us about the overal magnification of the source. The $\gamma_i$ represent the area preserving distortion, i.e. stretching and squeezing in a specific direction.
 
-\subsection{lensing potential}
-Taking the derivative out of the integral in equation REF leads us to defining the \textbf{lensing potential}, $\psi$,
-\begin{equation}
-    \mathbf \alpha = \nabla_{\hat{\mathbf n}}\psi, \quad \psi(\hat{\mathbf n}) = -2 \int_0^{\chi_*} \d \chi \frac{f_K(\chi_* - \chi)}{f_K(\chi_*)f_K(\chi)}\Psi(\chi\hat{\mathbf n}; \eta_0 - \chi).
-\end{equation}
-
 We can relate $\kappa$ and $\gamma$ directly to the lensing potential as
 % TODO: should these subscripts be theta and phi?
 \begin{equation}
     \kappa = \frac{1}{2}\nabla^2\psi, \quad \gamma_1 = \frac{1}{2}(\partial_\theta^2 - \partial_\phi^2)\psi, \quad \gamma_2 = \partial_\theta\partial_\phi \psi.
 \end{equation}
-
-\subsection{Regarding window functions}
-The window function for light emitted from a source at fixed radius $\chi_*$ is $(\chi-\chi^*)/(\chi_*\chi)$, if the source is instead distributed over the radius as $p(\chi)$, with $p(\chi)$ normalized to integrate to 1, we generalize the window function as
-\begin{equation*}
-    W(\chi) = \int_\chi^{\infty}\d\chi' p(\chi')\frac{\chi'-\chi}{\chi'\chi}.
-\end{equation*}
-The integration limit is up to surface of last scattering because further than that no source can contribute to the observed image. In the case of an image of the CMB we can take $p(\chi')=\delta(\chi'-\chi_*)$, in which case the window function reduces back to $(\chi_*-\chi)/(\chi_*\chi)$. In the case of different sources, we will differentiate between their respective window functions with a subscript. In this case the factor that changes is the distribution function. The sources considered in this paper are only the CMB and selections of galaxies from galaxy surveys. 
 
 \section{Weak Lensing Statistics}\label{sec:weaklensstats}
 \subsection{Lensing Potential Powerspectrum}
