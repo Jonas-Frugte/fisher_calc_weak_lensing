@@ -39,7 +39,7 @@ extensions = [
     #     extra_compile_args=["-fopenmp"],
     #     extra_link_args=["-fopenmp"],
     #     include_dirs=[np.get_include()],
-    ),
+    # ),
     Extension(
     name="Fisher_calc_python_imp",
         sources=["Fisher_calc_python_imp.pyx"],
