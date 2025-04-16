@@ -18,7 +18,7 @@ plot_datas = np.zeros((4, len(ls)))
 datas = (snrb_c_s3, snrb_s_s3, snrb_c_s4, snrb_s_s4)
 for i in range(4):
     data = datas[i]
-    interp_func = interp1d([0] + ell_max, np.sqrt([0] + data), type='cubic')
+    interp_func = interp1d([0] + ell_max, np.sqrt([0] + data), kind='cubic')
     plot_datas[i, :] = [interp_func(l) for l in ls]
 
 
@@ -26,10 +26,10 @@ for i in range(4):
 plt.figure(figsize=(7,5))
 
 # Plot each array
-plt.plot(ls, plot_datas[0], marker='x', label='CMB, stage 3', linestyle = '--', color='red')
-plt.plot(ls, plot_datas[1], marker='x', label='galaxy, stage 3', linestyle = '--', color='blue')
-plt.plot(ls, plot_datas[2], marker='x', label='CMB, stage 4', color='red')
-plt.plot(ls, plot_datas[3], marker='x', label='galaxy, stage 4', color='blue')
+plt.plot(ls, plot_datas[0], label='CMB, stage 3', linestyle = '--', color='red')
+plt.plot(ls, plot_datas[1], label='galaxy, stage 3', linestyle = '--', color='blue')
+plt.plot(ls, plot_datas[2], label='CMB, stage 4', color='red')
+plt.plot(ls, plot_datas[3], label='galaxy, stage 4', color='blue')
 
 plt.minorticks_on()
 plt.xlabel(r'$l_{\max}$', fontsize=12)
@@ -50,5 +50,5 @@ plt.legend(fontsize=10, loc='upper left')
 plt.tight_layout()
 
 # Save the figure
-plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/paper/figures/snrplots.pdf', dpi=300)
+plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/snrplots.pdf', dpi=300)
 # plt.show()
