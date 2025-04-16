@@ -24,10 +24,18 @@ for i in range(4):
 fig, axs = plt.subplots(1, 2, figsize = (8.3, 3))
 
 # Plot each array
-axs[1].plot(ls, plot_datas[0], label='CMB, stage 3', linestyle = '--', color='red')
-axs[0].plot(ls, plot_datas[1], label='galaxy, stage 3', linestyle = '--', color='blue')
-axs[1].plot(ls, plot_datas[2], label='CMB, stage 4', color='red')
-axs[0].plot(ls, plot_datas[3], label='galaxy, stage 4', color='blue')
+axs[1].plot(ls, plot_datas[0], label='CMB, stage 3', linestyle='--', color='black')
+axs[1].plot([ls[-1]], [plot_datas[0][-1]], marker='o', color='black', label='_nolegend_')
+
+axs[0].plot(ls, plot_datas[1], label='galaxy, stage 3', linestyle='--', color='black')
+axs[0].plot([ls[-1]], [plot_datas[1][-1]], marker='o', color='black', label='_nolegend_')
+
+axs[1].plot(ls, plot_datas[2], label='CMB, stage 4', linestyle='-', color='black')
+axs[1].plot([ls[-1]], [plot_datas[2][-1]], marker='o', color='black', label='_nolegend_')
+
+axs[0].plot(ls, plot_datas[3], label='galaxy, stage 4', linestyle='-', color='black')
+axs[0].plot([ls[-1]], [plot_datas[3][-1]], marker='o', color='black', label='_nolegend_')
+
 
 axs[0].minorticks_on()
 axs[1].minorticks_on()
@@ -38,6 +46,9 @@ axs[1].set_xlabel(r'$l_{\max}$', fontsize=12)
 # axs[1].set_ylabel(r'$S/N$', fontsize=12)
 
 # Increase the x-axis limit to add extra space on the right
+axs[0].set_ylim(0, np.sqrt(snrb_s_s4[-1]) * 1.125)
+axs[1].set_ylim(0, np.sqrt(snrb_c_s4[-1]) * 1.125)
+
 x_max = ell_max[-1]
 axs[0].set_xlim(2, x_max + 250)
 axs[1].set_xlim(2, x_max + 250)
