@@ -3784,8 +3784,6 @@ static const char __pyx_k_data_mnu1m[] = "data_mnu1m";
 static const char __pyx_k_data_mnu1p[] = "data_mnu1p";
 static const char __pyx_k_data_mnu2m[] = "data_mnu2m";
 static const char __pyx_k_data_mnu2p[] = "data_mnu2p";
-static const char __pyx_k_lbs_der_py[] = "lbs_der_py";
-static const char __pyx_k_lps_der_py[] = "lps_der_py";
 static const char __pyx_k_nan_to_val[] = "nan_to_val";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
@@ -3823,6 +3821,8 @@ static const char __pyx_k_data_omch22m[] = "data_omch22m";
 static const char __pyx_k_data_omch22p[] = "data_omch22p";
 static const char __pyx_k_initializing[] = "_initializing";
 static const char __pyx_k_is_coroutine[] = "_is_coroutine";
+static const char __pyx_k_lbs_der_test[] = "lbs_der_test";
+static const char __pyx_k_lps_der_test[] = "lps_der_test";
 static const char __pyx_k_pyx_checksum[] = "__pyx_checksum";
 static const char __pyx_k_scale_factor[] = "/scale_factor";
 static const char __pyx_k_stringsource[] = "<stringsource>";
@@ -4015,8 +4015,8 @@ static PyObject *__pyx_pf_13data_importer_146scale_factor_test(CYTHON_UNUSED PyO
 static PyObject *__pyx_pf_13data_importer_148z_at_chi_test(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_chi); /* proto */
 static PyObject *__pyx_pf_13data_importer_150lbs_integrand_test(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_chi, PyObject *__pyx_v_l1, PyObject *__pyx_v_l2, PyObject *__pyx_v_l3, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2, PyObject *__pyx_v_type3); /* proto */
 static PyObject *__pyx_pf_13data_importer_152lps_f_obs_test(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_l, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2); /* proto */
-static PyObject *__pyx_pf_13data_importer_154lps_der_py(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_k, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2, PyObject *__pyx_v_par); /* proto */
-static PyObject *__pyx_pf_13data_importer_156lbs_der_py(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_k1, PyObject *__pyx_v_k2, PyObject *__pyx_v_k3, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2, PyObject *__pyx_v_type3, PyObject *__pyx_v_num_samples, PyObject *__pyx_v_par); /* proto */
+static PyObject *__pyx_pf_13data_importer_154lps_der_test(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_k, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2, PyObject *__pyx_v_par); /* proto */
+static PyObject *__pyx_pf_13data_importer_156lbs_der_test(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_k1, PyObject *__pyx_v_k2, PyObject *__pyx_v_k3, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2, PyObject *__pyx_v_type3, PyObject *__pyx_v_num_samples, PyObject *__pyx_v_par); /* proto */
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_memoryview(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -4226,7 +4226,7 @@ typedef struct {
   PyObject *__pyx_n_s_lbs_H1p;
   PyObject *__pyx_n_s_lbs_H2m;
   PyObject *__pyx_n_s_lbs_H2p;
-  PyObject *__pyx_n_s_lbs_der_py;
+  PyObject *__pyx_n_s_lbs_der_test;
   PyObject *__pyx_n_s_lbs_integrand_test;
   PyObject *__pyx_n_s_lbs_mnu1m;
   PyObject *__pyx_n_s_lbs_mnu1p;
@@ -4265,7 +4265,7 @@ typedef struct {
   PyObject *__pyx_n_s_lps_H2p;
   PyObject *__pyx_n_s_lps_cc_data;
   PyObject *__pyx_n_s_lps_cs_data;
-  PyObject *__pyx_n_s_lps_der_py;
+  PyObject *__pyx_n_s_lps_der_test;
   PyObject *__pyx_n_s_lps_f_obs_test;
   PyObject *__pyx_n_s_lps_mnu1m;
   PyObject *__pyx_n_s_lps_mnu1p;
@@ -4742,7 +4742,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_lbs_H1p);
   Py_CLEAR(clear_module_state->__pyx_n_s_lbs_H2m);
   Py_CLEAR(clear_module_state->__pyx_n_s_lbs_H2p);
-  Py_CLEAR(clear_module_state->__pyx_n_s_lbs_der_py);
+  Py_CLEAR(clear_module_state->__pyx_n_s_lbs_der_test);
   Py_CLEAR(clear_module_state->__pyx_n_s_lbs_integrand_test);
   Py_CLEAR(clear_module_state->__pyx_n_s_lbs_mnu1m);
   Py_CLEAR(clear_module_state->__pyx_n_s_lbs_mnu1p);
@@ -4781,7 +4781,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_lps_H2p);
   Py_CLEAR(clear_module_state->__pyx_n_s_lps_cc_data);
   Py_CLEAR(clear_module_state->__pyx_n_s_lps_cs_data);
-  Py_CLEAR(clear_module_state->__pyx_n_s_lps_der_py);
+  Py_CLEAR(clear_module_state->__pyx_n_s_lps_der_test);
   Py_CLEAR(clear_module_state->__pyx_n_s_lps_f_obs_test);
   Py_CLEAR(clear_module_state->__pyx_n_s_lps_mnu1m);
   Py_CLEAR(clear_module_state->__pyx_n_s_lps_mnu1p);
@@ -5236,7 +5236,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_lbs_H1p);
   Py_VISIT(traverse_module_state->__pyx_n_s_lbs_H2m);
   Py_VISIT(traverse_module_state->__pyx_n_s_lbs_H2p);
-  Py_VISIT(traverse_module_state->__pyx_n_s_lbs_der_py);
+  Py_VISIT(traverse_module_state->__pyx_n_s_lbs_der_test);
   Py_VISIT(traverse_module_state->__pyx_n_s_lbs_integrand_test);
   Py_VISIT(traverse_module_state->__pyx_n_s_lbs_mnu1m);
   Py_VISIT(traverse_module_state->__pyx_n_s_lbs_mnu1p);
@@ -5275,7 +5275,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_lps_H2p);
   Py_VISIT(traverse_module_state->__pyx_n_s_lps_cc_data);
   Py_VISIT(traverse_module_state->__pyx_n_s_lps_cs_data);
-  Py_VISIT(traverse_module_state->__pyx_n_s_lps_der_py);
+  Py_VISIT(traverse_module_state->__pyx_n_s_lps_der_test);
   Py_VISIT(traverse_module_state->__pyx_n_s_lps_f_obs_test);
   Py_VISIT(traverse_module_state->__pyx_n_s_lps_mnu1m);
   Py_VISIT(traverse_module_state->__pyx_n_s_lps_mnu1p);
@@ -5750,7 +5750,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_lbs_H1p __pyx_mstate_global->__pyx_n_s_lbs_H1p
 #define __pyx_n_s_lbs_H2m __pyx_mstate_global->__pyx_n_s_lbs_H2m
 #define __pyx_n_s_lbs_H2p __pyx_mstate_global->__pyx_n_s_lbs_H2p
-#define __pyx_n_s_lbs_der_py __pyx_mstate_global->__pyx_n_s_lbs_der_py
+#define __pyx_n_s_lbs_der_test __pyx_mstate_global->__pyx_n_s_lbs_der_test
 #define __pyx_n_s_lbs_integrand_test __pyx_mstate_global->__pyx_n_s_lbs_integrand_test
 #define __pyx_n_s_lbs_mnu1m __pyx_mstate_global->__pyx_n_s_lbs_mnu1m
 #define __pyx_n_s_lbs_mnu1p __pyx_mstate_global->__pyx_n_s_lbs_mnu1p
@@ -5789,7 +5789,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_lps_H2p __pyx_mstate_global->__pyx_n_s_lps_H2p
 #define __pyx_n_s_lps_cc_data __pyx_mstate_global->__pyx_n_s_lps_cc_data
 #define __pyx_n_s_lps_cs_data __pyx_mstate_global->__pyx_n_s_lps_cs_data
-#define __pyx_n_s_lps_der_py __pyx_mstate_global->__pyx_n_s_lps_der_py
+#define __pyx_n_s_lps_der_test __pyx_mstate_global->__pyx_n_s_lps_der_test
 #define __pyx_n_s_lps_f_obs_test __pyx_mstate_global->__pyx_n_s_lps_f_obs_test
 #define __pyx_n_s_lps_mnu1m __pyx_mstate_global->__pyx_n_s_lps_mnu1m
 #define __pyx_n_s_lps_mnu1p __pyx_mstate_global->__pyx_n_s_lps_mnu1p
@@ -26586,14 +26586,14 @@ static double __pyx_f_13data_importer_wigner_3j_approx_nocheck(int __pyx_v_l1, i
   /* "data_importer.pyx":355
  *     # does not check if 2L is even or triangle inequalities, does so in lbs_f and lbs_der directly instead to save on computing bispec if result should be zero anyway
  * 
- *     cdef complex factor = (-1)**L * sqrt(2.718 / (2 * 3.1415)) * (L + 1)**(-0.25)             # <<<<<<<<<<<<<<
+ *     cdef complex factor = (-1)**L * sqrt(2.718**3 / (2 * 3.1415)) * (L + 1)**(-0.25)             # <<<<<<<<<<<<<<
  * 
  *     cdef complex term1 = (L-l1+1)**(-0.25) * ( (L-l1+0.5) / (L-l1+1) )**(L-l1+0.25)
  */
-  __pyx_v_factor = __Pyx_c_prod_double(__Pyx_c_prod_double(__Pyx_c_pow_double(__pyx_t_double_complex_from_parts(-1L, 0), __pyx_t_double_complex_from_parts(__pyx_v_L, 0)), __pyx_t_double_complex_from_parts(sqrt((2.718 / (2.0 * 3.1415))), 0)), __Pyx_c_pow_double(__pyx_t_double_complex_from_parts((__pyx_v_L + 1.0), 0), __pyx_t_double_complex_from_parts(-0.25, 0)));
+  __pyx_v_factor = __Pyx_c_prod_double(__Pyx_c_prod_double(__Pyx_c_pow_double(__pyx_t_double_complex_from_parts(-1L, 0), __pyx_t_double_complex_from_parts(__pyx_v_L, 0)), __pyx_t_double_complex_from_parts(sqrt((pow(2.718, 3.0) / (2.0 * 3.1415))), 0)), __Pyx_c_pow_double(__pyx_t_double_complex_from_parts((__pyx_v_L + 1.0), 0), __pyx_t_double_complex_from_parts(-0.25, 0)));
 
   /* "data_importer.pyx":357
- *     cdef complex factor = (-1)**L * sqrt(2.718 / (2 * 3.1415)) * (L + 1)**(-0.25)
+ *     cdef complex factor = (-1)**L * sqrt(2.718**3 / (2 * 3.1415)) * (L + 1)**(-0.25)
  * 
  *     cdef complex term1 = (L-l1+1)**(-0.25) * ( (L-l1+0.5) / (L-l1+1) )**(L-l1+0.25)             # <<<<<<<<<<<<<<
  *     cdef complex term2 = (L-l2+1)**(-0.25) * ( (L-l2+0.5) / (L-l2+1) )**(L-l2+0.25)
@@ -42357,7 +42357,7 @@ static PyObject *__pyx_pf_13data_importer_152lps_f_obs_test(CYTHON_UNUSED PyObje
  * def lps_f_obs_test(l, type1, type2):
  *     return lps_f_obs(l, type1, type2)             # <<<<<<<<<<<<<<
  * 
- * def lps_der_py(k, type1, type2, par):
+ * def lps_der_test(k, type1, type2, par):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_l); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1440, __pyx_L1_error)
@@ -42391,21 +42391,21 @@ static PyObject *__pyx_pf_13data_importer_152lps_f_obs_test(CYTHON_UNUSED PyObje
 /* "data_importer.pyx":1442
  *     return lps_f_obs(l, type1, type2)
  * 
- * def lps_der_py(k, type1, type2, par):             # <<<<<<<<<<<<<<
+ * def lps_der_test(k, type1, type2, par):             # <<<<<<<<<<<<<<
  *     return lps_der(k, type1, type2, par)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13data_importer_155lps_der_py(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_13data_importer_155lps_der_test(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_13data_importer_155lps_der_py = {"lps_der_py", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_13data_importer_155lps_der_py, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_13data_importer_155lps_der_py(PyObject *__pyx_self, 
+static PyMethodDef __pyx_mdef_13data_importer_155lps_der_test = {"lps_der_test", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_13data_importer_155lps_der_test, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_13data_importer_155lps_der_test(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -42426,7 +42426,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("lps_der_py (wrapper)", 0);
+  __Pyx_RefNannySetupContext("lps_der_test (wrapper)", 0);
   #if !CYTHON_METH_FASTCALL
   #if CYTHON_ASSUME_SAFE_MACROS
   __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
@@ -42468,7 +42468,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1442, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lps_der_py", 1, 4, 4, 1); __PYX_ERR(0, 1442, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lps_der_test", 1, 4, 4, 1); __PYX_ERR(0, 1442, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -42478,7 +42478,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1442, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lps_der_py", 1, 4, 4, 2); __PYX_ERR(0, 1442, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lps_der_test", 1, 4, 4, 2); __PYX_ERR(0, 1442, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -42488,12 +42488,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1442, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lps_der_py", 1, 4, 4, 3); __PYX_ERR(0, 1442, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lps_der_test", 1, 4, 4, 3); __PYX_ERR(0, 1442, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "lps_der_py") < 0)) __PYX_ERR(0, 1442, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "lps_der_test") < 0)) __PYX_ERR(0, 1442, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 4)) {
       goto __pyx_L5_argtuple_error;
@@ -42510,7 +42510,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("lps_der_py", 1, 4, 4, __pyx_nargs); __PYX_ERR(0, 1442, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("lps_der_test", 1, 4, 4, __pyx_nargs); __PYX_ERR(0, 1442, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -42520,11 +42520,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("data_importer.lps_der_py", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("data_importer.lps_der_test", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_13data_importer_154lps_der_py(__pyx_self, __pyx_v_k, __pyx_v_type1, __pyx_v_type2, __pyx_v_par);
+  __pyx_r = __pyx_pf_13data_importer_154lps_der_test(__pyx_self, __pyx_v_k, __pyx_v_type1, __pyx_v_type2, __pyx_v_par);
 
   /* function exit code */
   {
@@ -42537,7 +42537,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13data_importer_154lps_der_py(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_k, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2, PyObject *__pyx_v_par) {
+static PyObject *__pyx_pf_13data_importer_154lps_der_test(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_k, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2, PyObject *__pyx_v_par) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -42548,14 +42548,14 @@ static PyObject *__pyx_pf_13data_importer_154lps_der_py(CYTHON_UNUSED PyObject *
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("lps_der_py", 1);
+  __Pyx_RefNannySetupContext("lps_der_test", 1);
 
   /* "data_importer.pyx":1443
  * 
- * def lps_der_py(k, type1, type2, par):
+ * def lps_der_test(k, type1, type2, par):
  *     return lps_der(k, type1, type2, par)             # <<<<<<<<<<<<<<
  * 
- * def lbs_der_py(k1, k2, k3, type1, type2, type3, num_samples,  par):
+ * def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples,  par):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_k); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1443, __pyx_L1_error)
@@ -42571,7 +42571,7 @@ static PyObject *__pyx_pf_13data_importer_154lps_der_py(CYTHON_UNUSED PyObject *
   /* "data_importer.pyx":1442
  *     return lps_f_obs(l, type1, type2)
  * 
- * def lps_der_py(k, type1, type2, par):             # <<<<<<<<<<<<<<
+ * def lps_der_test(k, type1, type2, par):             # <<<<<<<<<<<<<<
  *     return lps_der(k, type1, type2, par)
  * 
  */
@@ -42579,7 +42579,7 @@ static PyObject *__pyx_pf_13data_importer_154lps_der_py(CYTHON_UNUSED PyObject *
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("data_importer.lps_der_py", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("data_importer.lps_der_test", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -42590,21 +42590,21 @@ static PyObject *__pyx_pf_13data_importer_154lps_der_py(CYTHON_UNUSED PyObject *
 /* "data_importer.pyx":1445
  *     return lps_der(k, type1, type2, par)
  * 
- * def lbs_der_py(k1, k2, k3, type1, type2, type3, num_samples,  par):             # <<<<<<<<<<<<<<
+ * def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples,  par):             # <<<<<<<<<<<<<<
  *     return lbs_der(k1, k2, k3, type1, type2, type3, num_samples,  par)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13data_importer_157lbs_der_py(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_13data_importer_157lbs_der_test(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_13data_importer_157lbs_der_py = {"lbs_der_py", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_13data_importer_157lbs_der_py, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_13data_importer_157lbs_der_py(PyObject *__pyx_self, 
+static PyMethodDef __pyx_mdef_13data_importer_157lbs_der_test = {"lbs_der_test", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_13data_importer_157lbs_der_test, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_13data_importer_157lbs_der_test(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -42629,7 +42629,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("lbs_der_py (wrapper)", 0);
+  __Pyx_RefNannySetupContext("lbs_der_test (wrapper)", 0);
   #if !CYTHON_METH_FASTCALL
   #if CYTHON_ASSUME_SAFE_MACROS
   __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
@@ -42679,7 +42679,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1445, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lbs_der_py", 1, 8, 8, 1); __PYX_ERR(0, 1445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lbs_der_test", 1, 8, 8, 1); __PYX_ERR(0, 1445, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -42689,7 +42689,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1445, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lbs_der_py", 1, 8, 8, 2); __PYX_ERR(0, 1445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lbs_der_test", 1, 8, 8, 2); __PYX_ERR(0, 1445, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -42699,7 +42699,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1445, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lbs_der_py", 1, 8, 8, 3); __PYX_ERR(0, 1445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lbs_der_test", 1, 8, 8, 3); __PYX_ERR(0, 1445, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -42709,7 +42709,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1445, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lbs_der_py", 1, 8, 8, 4); __PYX_ERR(0, 1445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lbs_der_test", 1, 8, 8, 4); __PYX_ERR(0, 1445, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -42719,7 +42719,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1445, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lbs_der_py", 1, 8, 8, 5); __PYX_ERR(0, 1445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lbs_der_test", 1, 8, 8, 5); __PYX_ERR(0, 1445, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -42729,7 +42729,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1445, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lbs_der_py", 1, 8, 8, 6); __PYX_ERR(0, 1445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lbs_der_test", 1, 8, 8, 6); __PYX_ERR(0, 1445, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -42739,12 +42739,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1445, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("lbs_der_py", 1, 8, 8, 7); __PYX_ERR(0, 1445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("lbs_der_test", 1, 8, 8, 7); __PYX_ERR(0, 1445, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "lbs_der_py") < 0)) __PYX_ERR(0, 1445, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "lbs_der_test") < 0)) __PYX_ERR(0, 1445, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 8)) {
       goto __pyx_L5_argtuple_error;
@@ -42769,7 +42769,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("lbs_der_py", 1, 8, 8, __pyx_nargs); __PYX_ERR(0, 1445, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("lbs_der_test", 1, 8, 8, __pyx_nargs); __PYX_ERR(0, 1445, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -42779,11 +42779,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("data_importer.lbs_der_py", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("data_importer.lbs_der_test", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_13data_importer_156lbs_der_py(__pyx_self, __pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_par);
+  __pyx_r = __pyx_pf_13data_importer_156lbs_der_test(__pyx_self, __pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_par);
 
   /* function exit code */
   {
@@ -42796,7 +42796,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13data_importer_156lbs_der_py(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_k1, PyObject *__pyx_v_k2, PyObject *__pyx_v_k3, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2, PyObject *__pyx_v_type3, PyObject *__pyx_v_num_samples, PyObject *__pyx_v_par) {
+static PyObject *__pyx_pf_13data_importer_156lbs_der_test(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_k1, PyObject *__pyx_v_k2, PyObject *__pyx_v_k3, PyObject *__pyx_v_type1, PyObject *__pyx_v_type2, PyObject *__pyx_v_type3, PyObject *__pyx_v_num_samples, PyObject *__pyx_v_par) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -42811,11 +42811,11 @@ static PyObject *__pyx_pf_13data_importer_156lbs_der_py(CYTHON_UNUSED PyObject *
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("lbs_der_py", 1);
+  __Pyx_RefNannySetupContext("lbs_der_test", 1);
 
   /* "data_importer.pyx":1446
  * 
- * def lbs_der_py(k1, k2, k3, type1, type2, type3, num_samples,  par):
+ * def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples,  par):
  *     return lbs_der(k1, k2, k3, type1, type2, type3, num_samples,  par)             # <<<<<<<<<<<<<<
  * 
  * 
@@ -42838,7 +42838,7 @@ static PyObject *__pyx_pf_13data_importer_156lbs_der_py(CYTHON_UNUSED PyObject *
   /* "data_importer.pyx":1445
  *     return lps_der(k, type1, type2, par)
  * 
- * def lbs_der_py(k1, k2, k3, type1, type2, type3, num_samples,  par):             # <<<<<<<<<<<<<<
+ * def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples,  par):             # <<<<<<<<<<<<<<
  *     return lbs_der(k1, k2, k3, type1, type2, type3, num_samples,  par)
  * 
  */
@@ -42846,7 +42846,7 @@ static PyObject *__pyx_pf_13data_importer_156lbs_der_py(CYTHON_UNUSED PyObject *
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_9);
-  __Pyx_AddTraceback("data_importer.lbs_der_py", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("data_importer.lbs_der_test", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -43986,7 +43986,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_lbs_H1p, __pyx_k_lbs_H1p, sizeof(__pyx_k_lbs_H1p), 0, 0, 1, 1},
     {&__pyx_n_s_lbs_H2m, __pyx_k_lbs_H2m, sizeof(__pyx_k_lbs_H2m), 0, 0, 1, 1},
     {&__pyx_n_s_lbs_H2p, __pyx_k_lbs_H2p, sizeof(__pyx_k_lbs_H2p), 0, 0, 1, 1},
-    {&__pyx_n_s_lbs_der_py, __pyx_k_lbs_der_py, sizeof(__pyx_k_lbs_der_py), 0, 0, 1, 1},
+    {&__pyx_n_s_lbs_der_test, __pyx_k_lbs_der_test, sizeof(__pyx_k_lbs_der_test), 0, 0, 1, 1},
     {&__pyx_n_s_lbs_integrand_test, __pyx_k_lbs_integrand_test, sizeof(__pyx_k_lbs_integrand_test), 0, 0, 1, 1},
     {&__pyx_n_s_lbs_mnu1m, __pyx_k_lbs_mnu1m, sizeof(__pyx_k_lbs_mnu1m), 0, 0, 1, 1},
     {&__pyx_n_s_lbs_mnu1p, __pyx_k_lbs_mnu1p, sizeof(__pyx_k_lbs_mnu1p), 0, 0, 1, 1},
@@ -44025,7 +44025,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_lps_H2p, __pyx_k_lps_H2p, sizeof(__pyx_k_lps_H2p), 0, 0, 1, 1},
     {&__pyx_n_s_lps_cc_data, __pyx_k_lps_cc_data, sizeof(__pyx_k_lps_cc_data), 0, 0, 1, 1},
     {&__pyx_n_s_lps_cs_data, __pyx_k_lps_cs_data, sizeof(__pyx_k_lps_cs_data), 0, 0, 1, 1},
-    {&__pyx_n_s_lps_der_py, __pyx_k_lps_der_py, sizeof(__pyx_k_lps_der_py), 0, 0, 1, 1},
+    {&__pyx_n_s_lps_der_test, __pyx_k_lps_der_test, sizeof(__pyx_k_lps_der_test), 0, 0, 1, 1},
     {&__pyx_n_s_lps_f_obs_test, __pyx_k_lps_f_obs_test, sizeof(__pyx_k_lps_f_obs_test), 0, 0, 1, 1},
     {&__pyx_n_s_lps_mnu1m, __pyx_k_lps_mnu1m, sizeof(__pyx_k_lps_mnu1m), 0, 0, 1, 1},
     {&__pyx_n_s_lps_mnu1p, __pyx_k_lps_mnu1p, sizeof(__pyx_k_lps_mnu1p), 0, 0, 1, 1},
@@ -45420,26 +45420,26 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "data_importer.pyx":1442
  *     return lps_f_obs(l, type1, type2)
  * 
- * def lps_der_py(k, type1, type2, par):             # <<<<<<<<<<<<<<
+ * def lps_der_test(k, type1, type2, par):             # <<<<<<<<<<<<<<
  *     return lps_der(k, type1, type2, par)
  * 
  */
   __pyx_tuple__149 = PyTuple_Pack(4, __pyx_n_s_k, __pyx_n_s_type1, __pyx_n_s_type2, __pyx_n_s_par); if (unlikely(!__pyx_tuple__149)) __PYX_ERR(0, 1442, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__149);
   __Pyx_GIVEREF(__pyx_tuple__149);
-  __pyx_codeobj__150 = (PyObject*)__Pyx_PyCode_New(4, 0, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__149, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_data_importer_pyx, __pyx_n_s_lps_der_py, 1442, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__150)) __PYX_ERR(0, 1442, __pyx_L1_error)
+  __pyx_codeobj__150 = (PyObject*)__Pyx_PyCode_New(4, 0, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__149, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_data_importer_pyx, __pyx_n_s_lps_der_test, 1442, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__150)) __PYX_ERR(0, 1442, __pyx_L1_error)
 
   /* "data_importer.pyx":1445
  *     return lps_der(k, type1, type2, par)
  * 
- * def lbs_der_py(k1, k2, k3, type1, type2, type3, num_samples,  par):             # <<<<<<<<<<<<<<
+ * def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples,  par):             # <<<<<<<<<<<<<<
  *     return lbs_der(k1, k2, k3, type1, type2, type3, num_samples,  par)
  * 
  */
   __pyx_tuple__151 = PyTuple_Pack(8, __pyx_n_s_k1, __pyx_n_s_k2, __pyx_n_s_k3, __pyx_n_s_type1, __pyx_n_s_type2, __pyx_n_s_type3, __pyx_n_s_num_samples, __pyx_n_s_par); if (unlikely(!__pyx_tuple__151)) __PYX_ERR(0, 1445, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__151);
   __Pyx_GIVEREF(__pyx_tuple__151);
-  __pyx_codeobj__152 = (PyObject*)__Pyx_PyCode_New(8, 0, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__151, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_data_importer_pyx, __pyx_n_s_lbs_der_py, 1445, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__152)) __PYX_ERR(0, 1445, __pyx_L1_error)
+  __pyx_codeobj__152 = (PyObject*)__Pyx_PyCode_New(8, 0, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__151, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_data_importer_pyx, __pyx_n_s_lbs_der_test, 1445, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__152)) __PYX_ERR(0, 1445, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -66880,25 +66880,25 @@ if (!__Pyx_RefNanny) {
   /* "data_importer.pyx":1442
  *     return lps_f_obs(l, type1, type2)
  * 
- * def lps_der_py(k, type1, type2, par):             # <<<<<<<<<<<<<<
+ * def lps_der_test(k, type1, type2, par):             # <<<<<<<<<<<<<<
  *     return lps_der(k, type1, type2, par)
  * 
  */
-  __pyx_t_22 = __Pyx_CyFunction_New(&__pyx_mdef_13data_importer_155lps_der_py, 0, __pyx_n_s_lps_der_py, NULL, __pyx_n_s_data_importer, __pyx_d, ((PyObject *)__pyx_codeobj__150)); if (unlikely(!__pyx_t_22)) __PYX_ERR(0, 1442, __pyx_L1_error)
+  __pyx_t_22 = __Pyx_CyFunction_New(&__pyx_mdef_13data_importer_155lps_der_test, 0, __pyx_n_s_lps_der_test, NULL, __pyx_n_s_data_importer, __pyx_d, ((PyObject *)__pyx_codeobj__150)); if (unlikely(!__pyx_t_22)) __PYX_ERR(0, 1442, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_22);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_lps_der_py, __pyx_t_22) < 0) __PYX_ERR(0, 1442, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_lps_der_test, __pyx_t_22) < 0) __PYX_ERR(0, 1442, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_22); __pyx_t_22 = 0;
 
   /* "data_importer.pyx":1445
  *     return lps_der(k, type1, type2, par)
  * 
- * def lbs_der_py(k1, k2, k3, type1, type2, type3, num_samples,  par):             # <<<<<<<<<<<<<<
+ * def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples,  par):             # <<<<<<<<<<<<<<
  *     return lbs_der(k1, k2, k3, type1, type2, type3, num_samples,  par)
  * 
  */
-  __pyx_t_22 = __Pyx_CyFunction_New(&__pyx_mdef_13data_importer_157lbs_der_py, 0, __pyx_n_s_lbs_der_py, NULL, __pyx_n_s_data_importer, __pyx_d, ((PyObject *)__pyx_codeobj__152)); if (unlikely(!__pyx_t_22)) __PYX_ERR(0, 1445, __pyx_L1_error)
+  __pyx_t_22 = __Pyx_CyFunction_New(&__pyx_mdef_13data_importer_157lbs_der_test, 0, __pyx_n_s_lbs_der_test, NULL, __pyx_n_s_data_importer, __pyx_d, ((PyObject *)__pyx_codeobj__152)); if (unlikely(!__pyx_t_22)) __PYX_ERR(0, 1445, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_22);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_lbs_der_py, __pyx_t_22) < 0) __PYX_ERR(0, 1445, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_lbs_der_test, __pyx_t_22) < 0) __PYX_ERR(0, 1445, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_22); __pyx_t_22 = 0;
 
   /* "data_importer.pyx":1

@@ -352,7 +352,7 @@ cdef double wigner_3j_approx_nocheck(int l1, int l2, int l3) noexcept nogil:
 
     # does not check if 2L is even or triangle inequalities, does so in lbs_f and lbs_der directly instead to save on computing bispec if result should be zero anyway
 
-    cdef complex factor = (-1)**L * sqrt(2.718 / (2 * 3.1415)) * (L + 1)**(-0.25)
+    cdef complex factor = (-1)**L * sqrt(2.718**3 / (2 * 3.1415)) * (L + 1)**(-0.25)
 
     cdef complex term1 = (L-l1+1)**(-0.25) * ( (L-l1+0.5) / (L-l1+1) )**(L-l1+0.25)
     cdef complex term2 = (L-l2+1)**(-0.25) * ( (L-l2+0.5) / (L-l2+1) )**(L-l2+0.25)
@@ -1439,10 +1439,10 @@ def lbs_integrand_test(chi, l1, l2, l3, type1, type2, type3):
 def lps_f_obs_test(l, type1, type2):
     return lps_f_obs(l, type1, type2)
 
-def lps_der_py(k, type1, type2, par):
+def lps_der_test(k, type1, type2, par):
     return lps_der(k, type1, type2, par)
 
-def lbs_der_py(k1, k2, k3, type1, type2, type3, num_samples,  par):
+def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples,  par):
     return lbs_der(k1, k2, k3, type1, type2, type3, num_samples,  par)
 
 

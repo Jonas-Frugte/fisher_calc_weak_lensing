@@ -72,18 +72,19 @@ cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_ste
     cdef int num_samples = int(len(triangles))
 
     # Create a local result array for each thread
-    cdef double[:] local_results = np.zeros(num_cores, dtype=np.float64)
+    #cdef double[:] local_results = np.zeros(num_cores, dtype=np.float64)
+    cdef double result = 0
 
     cdef int k1, k2, k3
     cdef int index
 
-    for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):
+    for index in prange(0, num_samples, schedule='static', num_threads=num_cores, nogil=True):
         k1 = triangles[index, 0]
         k2 = triangles[index, 1]
         k3 = triangles[index, 2]
-        local_results[index % num_cores] += Fisher_mat_single_term(k1, k2, k3, type, par1, par2, num_bispec_samples)
+        result += Fisher_mat_single_term(k1, k2, k3, type, par1, par2, num_bispec_samples)
 
-    return sum(local_results) * prop_calc
+    return result * prop_calc
 
 # CAUTION: function doesn't check for invalid type1, 2 input to optimize performance
 cdef double lensing_power_spectrum_inv(int l, char* type1, char* type2) noexcept nogil:
@@ -110,7 +111,8 @@ cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_
     cdef int num_samples = int(len(triangles))
 
     # Create a local result array for each thread
-    cdef double[:] local_results = np.zeros(num_cores, dtype=np.float64)
+    # cdef double[:] local_results = np.zeros(num_cores, dtype=np.float64)
+    cdef double result = 0
 
     cdef int k1, k2, k3
     cdef char* i
@@ -122,13 +124,13 @@ cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_
     cdef int index
 
     for i, j, k, p, q, r in itertools.product([b'c', b's'], repeat = 6):
-        for index in prange(0, num_samples, num_cores, schedule='static', num_threads=num_cores, nogil=True):
+        for index in prange(0, num_samples, schedule='static', num_threads=num_cores, nogil=True):
             k1 = triangles[index, 0]
             k2 = triangles[index, 1]
             k3 = triangles[index, 2]
-            local_results[index % num_cores] += Fisher_mat_full_term(k1, k2, k3, i, j, k, p, q, r, par1, par2, num_bispec_samples)
+            result += Fisher_mat_full_term(k1, k2, k3, i, j, k, p, q, r, par1, par2, num_bispec_samples)
 
-    return sum(local_results) * prop_calc
+    return result * prop_calc
 
 ########################################
 # BELOW WE COMPARE B^2/C^3 and C^2/C^2 #

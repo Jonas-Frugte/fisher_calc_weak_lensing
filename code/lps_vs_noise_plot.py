@@ -2,11 +2,11 @@ import cosm_setup as cs
 import matplotlib.pyplot as plt
 import numpy as np
 
-fig, axs = plt.subplots(1, 2, figsize = (14, 6))
+fig, axs = plt.subplots(1, 2, figsize = (10, 5))
 
 # LENSING SPECTRA
 l_values = np.logspace(np.log10(2), np.log10(3000), 100)
-spectra = cs.lensing_spectra(fiducial_k_nls=True) # don't need matter bispectrum
+spectra = cs.lensing_spectra() # don't need matter bispectrum
 gal_lps = np.array([spectra.lps(l, ('s', 's')) for l in l_values])  # Shear-shear power spectrum
 cmb_lps = np.array([spectra.lps(l, ('c', 'c')) for l in l_values])
 
@@ -71,7 +71,7 @@ axs[0].grid(True, which='both', linestyle='--', linewidth=0.5)
 axs[1].loglog(l_values, l_values**4 * cmb_lps, label='CMB lensing potential powerspectrum', color='black')
 # CHECK CONVERSION FACTOR HERE
 # axs[1].loglog(l_values, SO_noise_values, label='SO Noise, baseline', linestyle='dashed', color='blue')
-# axs[1].loglog(l_values, SO_noise_goal_values, label='SO Noise, goal', linestyle='dashed', color='blue')
+axs[1].loglog(l_values, SO_noise_goal_values, label='SO Noise, goal', linestyle='dashed', color='green')
 
 # STUFF TO COMPARE WITH QUAD EST PAPER
 #axs[1].loglog(ls_cmbn, ls_cmbn**2 * (ls_cmbn + 1)**2 * cmbn_41sqrt2, label=r'quad est. noise, $\sigma = 4$, $\Delta_T = 1$, $\Delta_P = \sqrt{2}$', linestyle='dashed', color='red')
@@ -92,4 +92,5 @@ fig.tight_layout()
 
 # Save the figure as a vector-based format for inclusion in papers
 #plt.savefig("spectraplusnoise.pdf", format="pdf", dpi=300)
-plt.savefig("/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/plots_and_figures/spectraplusnoise.pdf", format="pdf", dpi=300)
+plt.savefig("/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/plots/spectraplusnoise.png", format="png", dpi=300)
+plt.savefig("/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/plots/spectraplusnoise.pdf", format="pdf", dpi=300)

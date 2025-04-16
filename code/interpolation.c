@@ -17520,15 +17520,15 @@ static double __pyx_f_13interpolation_linear_interp(double __pyx_v_x, double __p
  *     cdef double dx = x - (xmin + i * (xmax - xmin) / (n_points - 1))
  *     cdef double dydx = (ys[i + 1] - ys[i]) / ((xmax - xmin) / (n_points - 1))             # <<<<<<<<<<<<<<
  * 
- *     # if i >= ys.shape[0]:
+ * 
  */
   __pyx_t_3 = (__pyx_v_i + 1);
   __pyx_t_4 = __pyx_v_i;
   __pyx_v_dydx = (((*((double *) ( /* dim=0 */ (__pyx_v_ys.data + __pyx_t_3 * __pyx_v_ys.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_ys.data + __pyx_t_4 * __pyx_v_ys.strides[0]) )))) / ((__pyx_v_xmax - __pyx_v_xmin) / ((double)(__pyx_v_n_points - 1))));
 
-  /* "interpolation.pyx":20
- *     # printf("niggershape: %d\n", ys.shape[0])
- *     # printf("i: %d\n", i)
+  /* "interpolation.pyx":16
+ * 
+ * 
  *     if isnan(ys[i] + dx * dydx) or isinf(ys[i] + dx * dydx):             # <<<<<<<<<<<<<<
  *         printf('nonono')
  *     return ys[i] + dx * dydx
@@ -17546,8 +17546,8 @@ static double __pyx_f_13interpolation_linear_interp(double __pyx_v_x, double __p
   __pyx_L7_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "interpolation.pyx":21
- *     # printf("i: %d\n", i)
+    /* "interpolation.pyx":17
+ * 
  *     if isnan(ys[i] + dx * dydx) or isinf(ys[i] + dx * dydx):
  *         printf('nonono')             # <<<<<<<<<<<<<<
  *     return ys[i] + dx * dydx
@@ -17555,16 +17555,16 @@ static double __pyx_f_13interpolation_linear_interp(double __pyx_v_x, double __p
  */
     (void)(printf(((char const *)"nonono")));
 
-    /* "interpolation.pyx":20
- *     # printf("niggershape: %d\n", ys.shape[0])
- *     # printf("i: %d\n", i)
+    /* "interpolation.pyx":16
+ * 
+ * 
  *     if isnan(ys[i] + dx * dydx) or isinf(ys[i] + dx * dydx):             # <<<<<<<<<<<<<<
  *         printf('nonono')
  *     return ys[i] + dx * dydx
  */
   }
 
-  /* "interpolation.pyx":22
+  /* "interpolation.pyx":18
  *     if isnan(ys[i] + dx * dydx) or isinf(ys[i] + dx * dydx):
  *         printf('nonono')
  *     return ys[i] + dx * dydx             # <<<<<<<<<<<<<<
@@ -17772,7 +17772,7 @@ static PyObject *__pyx_pf_13interpolation_linear_interp(CYTHON_UNUSED PyObject *
   return __pyx_r;
 }
 
-/* "interpolation.pyx":24
+/* "interpolation.pyx":20
  *     return ys[i] + dx * dydx
  * 
  * cpdef double logspace_linear_interp(double x, double xmin, double xmax, int n_points, double[:] ys) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -17800,7 +17800,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
   Py_ssize_t __pyx_t_3;
   Py_ssize_t __pyx_t_4;
 
-  /* "interpolation.pyx":27
+  /* "interpolation.pyx":23
  *     # xs should be of the form np.logspace(np.log10(xmin), np.log10(xmax), n_points)
  *     # xs[i] = 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))
  *     if x > xmax or x < xmin:             # <<<<<<<<<<<<<<
@@ -17818,7 +17818,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "interpolation.pyx":28
+    /* "interpolation.pyx":24
  *     # xs[i] = 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))
  *     if x > xmax or x < xmin:
  *         return 0 # fill value outside of interp range             # <<<<<<<<<<<<<<
@@ -17828,7 +17828,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
     __pyx_r = 0.0;
     goto __pyx_L0;
 
-    /* "interpolation.pyx":27
+    /* "interpolation.pyx":23
  *     # xs should be of the form np.logspace(np.log10(xmin), np.log10(xmax), n_points)
  *     # xs[i] = 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))
  *     if x > xmax or x < xmin:             # <<<<<<<<<<<<<<
@@ -17837,7 +17837,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
  */
   }
 
-  /* "interpolation.pyx":30
+  /* "interpolation.pyx":26
  *         return 0 # fill value outside of interp range
  * 
  *     cdef double xmin_log = log10(xmin)             # <<<<<<<<<<<<<<
@@ -17846,7 +17846,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
  */
   __pyx_v_xmin_log = log10(__pyx_v_xmin);
 
-  /* "interpolation.pyx":31
+  /* "interpolation.pyx":27
  * 
  *     cdef double xmin_log = log10(xmin)
  *     cdef double xmax_log = log10(xmax)             # <<<<<<<<<<<<<<
@@ -17855,7 +17855,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
  */
   __pyx_v_xmax_log = log10(__pyx_v_xmax);
 
-  /* "interpolation.pyx":33
+  /* "interpolation.pyx":29
  *     cdef double xmax_log = log10(xmax)
  * 
  *     cdef double i_f = (log10(x) - xmin_log) * (n_points - 1) / (xmax_log - xmin_log)             # <<<<<<<<<<<<<<
@@ -17864,7 +17864,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
  */
   __pyx_v_i_f = (((log10(__pyx_v_x) - __pyx_v_xmin_log) * (__pyx_v_n_points - 1)) / (__pyx_v_xmax_log - __pyx_v_xmin_log));
 
-  /* "interpolation.pyx":34
+  /* "interpolation.pyx":30
  * 
  *     cdef double i_f = (log10(x) - xmin_log) * (n_points - 1) / (xmax_log - xmin_log)
  *     cdef int i = int(i_f)             # <<<<<<<<<<<<<<
@@ -17873,7 +17873,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
  */
   __pyx_v_i = ((int)__pyx_v_i_f);
 
-  /* "interpolation.pyx":35
+  /* "interpolation.pyx":31
  *     cdef double i_f = (log10(x) - xmin_log) * (n_points - 1) / (xmax_log - xmin_log)
  *     cdef int i = int(i_f)
  *     cdef double dx = x - 10 ** (xmin_log + i * (xmax_log - xmin_log) / (n_points - 1))             # <<<<<<<<<<<<<<
@@ -17882,7 +17882,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
  */
   __pyx_v_dx = (__pyx_v_x - pow(10.0, (__pyx_v_xmin_log + ((__pyx_v_i * (__pyx_v_xmax_log - __pyx_v_xmin_log)) / ((double)(__pyx_v_n_points - 1))))));
 
-  /* "interpolation.pyx":36
+  /* "interpolation.pyx":32
  *     cdef int i = int(i_f)
  *     cdef double dx = x - 10 ** (xmin_log + i * (xmax_log - xmin_log) / (n_points - 1))
  *     cdef double dydx = (ys[i + 1] - ys[i]) / (10 ** (xmin_log + (i + 1) * (xmax_log - xmin_log) / (n_points - 1)) - 10 ** (xmin_log + i * (xmax_log - xmin_log) / (n_points - 1)))             # <<<<<<<<<<<<<<
@@ -17893,7 +17893,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
   __pyx_t_4 = __pyx_v_i;
   __pyx_v_dydx = (((*((double *) ( /* dim=0 */ (__pyx_v_ys.data + __pyx_t_3 * __pyx_v_ys.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_ys.data + __pyx_t_4 * __pyx_v_ys.strides[0]) )))) / (pow(10.0, (__pyx_v_xmin_log + (((__pyx_v_i + 1) * (__pyx_v_xmax_log - __pyx_v_xmin_log)) / ((double)(__pyx_v_n_points - 1))))) - pow(10.0, (__pyx_v_xmin_log + ((__pyx_v_i * (__pyx_v_xmax_log - __pyx_v_xmin_log)) / ((double)(__pyx_v_n_points - 1)))))));
 
-  /* "interpolation.pyx":41
+  /* "interpolation.pyx":37
  *     #     printf("oh noooo (%d and %d)", i, ys.shape[0])
  * 
  *     if isnan(ys[i] + dx * dydx) or isinf(ys[i] + dx * dydx):             # <<<<<<<<<<<<<<
@@ -17913,7 +17913,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
   __pyx_L7_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "interpolation.pyx":42
+    /* "interpolation.pyx":38
  * 
  *     if isnan(ys[i] + dx * dydx) or isinf(ys[i] + dx * dydx):
  *         printf('NaN value in logspace_linear_interp')             # <<<<<<<<<<<<<<
@@ -17922,7 +17922,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
  */
     (void)(printf(((char const *)"NaN value in logspace_linear_interp")));
 
-    /* "interpolation.pyx":41
+    /* "interpolation.pyx":37
  *     #     printf("oh noooo (%d and %d)", i, ys.shape[0])
  * 
  *     if isnan(ys[i] + dx * dydx) or isinf(ys[i] + dx * dydx):             # <<<<<<<<<<<<<<
@@ -17931,7 +17931,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
  */
   }
 
-  /* "interpolation.pyx":44
+  /* "interpolation.pyx":40
  *         printf('NaN value in logspace_linear_interp')
  * 
  *     return ys[i] + dx * dydx             # <<<<<<<<<<<<<<
@@ -17942,7 +17942,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp(double __pyx_v_x, d
   __pyx_r = ((*((double *) ( /* dim=0 */ (__pyx_v_ys.data + __pyx_t_4 * __pyx_v_ys.strides[0]) ))) + (__pyx_v_dx * __pyx_v_dydx));
   goto __pyx_L0;
 
-  /* "interpolation.pyx":24
+  /* "interpolation.pyx":20
  *     return ys[i] + dx * dydx
  * 
  * cpdef double logspace_linear_interp(double x, double xmin, double xmax, int n_points, double[:] ys) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18020,7 +18020,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 24, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 20, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -18028,9 +18028,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 24, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 20, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, 1); __PYX_ERR(1, 24, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, 1); __PYX_ERR(1, 20, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -18038,9 +18038,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 24, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 20, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, 2); __PYX_ERR(1, 24, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, 2); __PYX_ERR(1, 20, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -18048,9 +18048,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 24, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 20, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, 3); __PYX_ERR(1, 24, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, 3); __PYX_ERR(1, 20, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -18058,14 +18058,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 24, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 20, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, 4); __PYX_ERR(1, 24, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, 4); __PYX_ERR(1, 20, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "logspace_linear_interp") < 0)) __PYX_ERR(1, 24, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "logspace_linear_interp") < 0)) __PYX_ERR(1, 20, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 5)) {
       goto __pyx_L5_argtuple_error;
@@ -18076,15 +18076,15 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[3] = __Pyx_Arg_FASTCALL(__pyx_args, 3);
       values[4] = __Pyx_Arg_FASTCALL(__pyx_args, 4);
     }
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 24, __pyx_L3_error)
-    __pyx_v_xmin = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_xmin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 24, __pyx_L3_error)
-    __pyx_v_xmax = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_xmax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 24, __pyx_L3_error)
-    __pyx_v_n_points = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_n_points == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 24, __pyx_L3_error)
-    __pyx_v_ys = __Pyx_PyObject_to_MemoryviewSlice_ds_double(values[4], PyBUF_WRITABLE); if (unlikely(!__pyx_v_ys.memview)) __PYX_ERR(1, 24, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 20, __pyx_L3_error)
+    __pyx_v_xmin = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_xmin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 20, __pyx_L3_error)
+    __pyx_v_xmax = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_xmax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 20, __pyx_L3_error)
+    __pyx_v_n_points = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_n_points == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 20, __pyx_L3_error)
+    __pyx_v_ys = __Pyx_PyObject_to_MemoryviewSlice_ds_double(values[4], PyBUF_WRITABLE); if (unlikely(!__pyx_v_ys.memview)) __PYX_ERR(1, 20, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, __pyx_nargs); __PYX_ERR(1, 24, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("logspace_linear_interp", 1, 5, 5, __pyx_nargs); __PYX_ERR(1, 20, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18122,7 +18122,7 @@ static PyObject *__pyx_pf_13interpolation_2logspace_linear_interp(CYTHON_UNUSED 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("logspace_linear_interp", 1);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_13interpolation_logspace_linear_interp(__pyx_v_x, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points, __pyx_v_ys, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 24, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_13interpolation_logspace_linear_interp(__pyx_v_x, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points, __pyx_v_ys, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 20, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -18139,7 +18139,7 @@ static PyObject *__pyx_pf_13interpolation_2logspace_linear_interp(CYTHON_UNUSED 
   return __pyx_r;
 }
 
-/* "interpolation.pyx":46
+/* "interpolation.pyx":42
  *     return ys[i] + dx * dydx
  * 
  * cdef double two_pt_interp(double x, double xmin, double xmax, double ymin, double ymax) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18152,7 +18152,7 @@ static double __pyx_f_13interpolation_two_pt_interp(double __pyx_v_x, double __p
   double __pyx_v_dydx;
   double __pyx_r;
 
-  /* "interpolation.pyx":47
+  /* "interpolation.pyx":43
  * 
  * cdef double two_pt_interp(double x, double xmin, double xmax, double ymin, double ymax) noexcept nogil:
  *     cdef double dx = x - xmin             # <<<<<<<<<<<<<<
@@ -18161,7 +18161,7 @@ static double __pyx_f_13interpolation_two_pt_interp(double __pyx_v_x, double __p
  */
   __pyx_v_dx = (__pyx_v_x - __pyx_v_xmin);
 
-  /* "interpolation.pyx":48
+  /* "interpolation.pyx":44
  * cdef double two_pt_interp(double x, double xmin, double xmax, double ymin, double ymax) noexcept nogil:
  *     cdef double dx = x - xmin
  *     cdef double dydx = (ymax - ymin) / (xmax - xmin)             # <<<<<<<<<<<<<<
@@ -18170,7 +18170,7 @@ static double __pyx_f_13interpolation_two_pt_interp(double __pyx_v_x, double __p
  */
   __pyx_v_dydx = ((__pyx_v_ymax - __pyx_v_ymin) / (__pyx_v_xmax - __pyx_v_xmin));
 
-  /* "interpolation.pyx":49
+  /* "interpolation.pyx":45
  *     cdef double dx = x - xmin
  *     cdef double dydx = (ymax - ymin) / (xmax - xmin)
  *     return ymin + dx * dydx             # <<<<<<<<<<<<<<
@@ -18180,7 +18180,7 @@ static double __pyx_f_13interpolation_two_pt_interp(double __pyx_v_x, double __p
   __pyx_r = (__pyx_v_ymin + (__pyx_v_dx * __pyx_v_dydx));
   goto __pyx_L0;
 
-  /* "interpolation.pyx":46
+  /* "interpolation.pyx":42
  *     return ys[i] + dx * dydx
  * 
  * cdef double two_pt_interp(double x, double xmin, double xmax, double ymin, double ymax) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18193,7 +18193,7 @@ static double __pyx_f_13interpolation_two_pt_interp(double __pyx_v_x, double __p
   return __pyx_r;
 }
 
-/* "interpolation.pyx":51
+/* "interpolation.pyx":47
  *     return ymin + dx * dydx
  * 
  * cdef inline int linear_index(double x, double xmin, double xmax, int n_points) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18205,7 +18205,7 @@ static CYTHON_INLINE int __pyx_f_13interpolation_linear_index(double __pyx_v_x, 
   double __pyx_v_i_f;
   int __pyx_r;
 
-  /* "interpolation.pyx":52
+  /* "interpolation.pyx":48
  * 
  * cdef inline int linear_index(double x, double xmin, double xmax, int n_points) noexcept nogil:
  *     i_f = (x - xmin) * (n_points - 1) / (xmax - xmin)             # <<<<<<<<<<<<<<
@@ -18214,7 +18214,7 @@ static CYTHON_INLINE int __pyx_f_13interpolation_linear_index(double __pyx_v_x, 
  */
   __pyx_v_i_f = (((__pyx_v_x - __pyx_v_xmin) * (__pyx_v_n_points - 1)) / (__pyx_v_xmax - __pyx_v_xmin));
 
-  /* "interpolation.pyx":53
+  /* "interpolation.pyx":49
  * cdef inline int linear_index(double x, double xmin, double xmax, int n_points) noexcept nogil:
  *     i_f = (x - xmin) * (n_points - 1) / (xmax - xmin)
  *     return int(i_f)             # <<<<<<<<<<<<<<
@@ -18224,7 +18224,7 @@ static CYTHON_INLINE int __pyx_f_13interpolation_linear_index(double __pyx_v_x, 
   __pyx_r = ((int)__pyx_v_i_f);
   goto __pyx_L0;
 
-  /* "interpolation.pyx":51
+  /* "interpolation.pyx":47
  *     return ymin + dx * dydx
  * 
  * cdef inline int linear_index(double x, double xmin, double xmax, int n_points) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18237,7 +18237,7 @@ static CYTHON_INLINE int __pyx_f_13interpolation_linear_index(double __pyx_v_x, 
   return __pyx_r;
 }
 
-/* "interpolation.pyx":55
+/* "interpolation.pyx":51
  *     return int(i_f)
  * 
  * cdef inline int logspace_index(double x, double xmin, double xmax, int n_points) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18249,7 +18249,7 @@ static CYTHON_INLINE int __pyx_f_13interpolation_logspace_index(double __pyx_v_x
   double __pyx_v_i_f;
   int __pyx_r;
 
-  /* "interpolation.pyx":56
+  /* "interpolation.pyx":52
  * 
  * cdef inline int logspace_index(double x, double xmin, double xmax, int n_points) noexcept nogil:
  *     i_f = (log10(x) - log10(xmin)) * (n_points - 1) / (log10(xmax) - log10(xmin))             # <<<<<<<<<<<<<<
@@ -18258,7 +18258,7 @@ static CYTHON_INLINE int __pyx_f_13interpolation_logspace_index(double __pyx_v_x
  */
   __pyx_v_i_f = (((log10(__pyx_v_x) - log10(__pyx_v_xmin)) * (__pyx_v_n_points - 1)) / (log10(__pyx_v_xmax) - log10(__pyx_v_xmin)));
 
-  /* "interpolation.pyx":57
+  /* "interpolation.pyx":53
  * cdef inline int logspace_index(double x, double xmin, double xmax, int n_points) noexcept nogil:
  *     i_f = (log10(x) - log10(xmin)) * (n_points - 1) / (log10(xmax) - log10(xmin))
  *     return int(i_f)             # <<<<<<<<<<<<<<
@@ -18268,7 +18268,7 @@ static CYTHON_INLINE int __pyx_f_13interpolation_logspace_index(double __pyx_v_x
   __pyx_r = ((int)__pyx_v_i_f);
   goto __pyx_L0;
 
-  /* "interpolation.pyx":55
+  /* "interpolation.pyx":51
  *     return int(i_f)
  * 
  * cdef inline int logspace_index(double x, double xmin, double xmax, int n_points) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18281,7 +18281,7 @@ static CYTHON_INLINE int __pyx_f_13interpolation_logspace_index(double __pyx_v_x
   return __pyx_r;
 }
 
-/* "interpolation.pyx":59
+/* "interpolation.pyx":55
  *     return int(i_f)
  * 
  * cdef inline double linear_i_to_x(int i, double xmin, double xmax, int n_points) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18292,7 +18292,7 @@ static CYTHON_INLINE int __pyx_f_13interpolation_logspace_index(double __pyx_v_x
 static CYTHON_INLINE double __pyx_f_13interpolation_linear_i_to_x(int __pyx_v_i, double __pyx_v_xmin, double __pyx_v_xmax, int __pyx_v_n_points) {
   double __pyx_r;
 
-  /* "interpolation.pyx":60
+  /* "interpolation.pyx":56
  * 
  * cdef inline double linear_i_to_x(int i, double xmin, double xmax, int n_points) noexcept nogil:
  *     return xmin + i * (xmax - xmin) / (n_points - 1)             # <<<<<<<<<<<<<<
@@ -18302,7 +18302,7 @@ static CYTHON_INLINE double __pyx_f_13interpolation_linear_i_to_x(int __pyx_v_i,
   __pyx_r = (__pyx_v_xmin + ((__pyx_v_i * (__pyx_v_xmax - __pyx_v_xmin)) / ((double)(__pyx_v_n_points - 1))));
   goto __pyx_L0;
 
-  /* "interpolation.pyx":59
+  /* "interpolation.pyx":55
  *     return int(i_f)
  * 
  * cdef inline double linear_i_to_x(int i, double xmin, double xmax, int n_points) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18315,7 +18315,7 @@ static CYTHON_INLINE double __pyx_f_13interpolation_linear_i_to_x(int __pyx_v_i,
   return __pyx_r;
 }
 
-/* "interpolation.pyx":62
+/* "interpolation.pyx":58
  *     return xmin + i * (xmax - xmin) / (n_points - 1)
  * 
  * cdef inline double logspace_i_to_x(int i, double xmin, double xmax, int n_points) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18326,7 +18326,7 @@ static CYTHON_INLINE double __pyx_f_13interpolation_linear_i_to_x(int __pyx_v_i,
 static CYTHON_INLINE double __pyx_f_13interpolation_logspace_i_to_x(int __pyx_v_i, double __pyx_v_xmin, double __pyx_v_xmax, int __pyx_v_n_points) {
   double __pyx_r;
 
-  /* "interpolation.pyx":63
+  /* "interpolation.pyx":59
  * 
  * cdef inline double logspace_i_to_x(int i, double xmin, double xmax, int n_points) noexcept nogil:
  *     return 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))             # <<<<<<<<<<<<<<
@@ -18336,7 +18336,7 @@ static CYTHON_INLINE double __pyx_f_13interpolation_logspace_i_to_x(int __pyx_v_
   __pyx_r = pow(10.0, (log10(__pyx_v_xmin) + ((__pyx_v_i * (log10(__pyx_v_xmax) - log10(__pyx_v_xmin))) / ((double)(__pyx_v_n_points - 1)))));
   goto __pyx_L0;
 
-  /* "interpolation.pyx":62
+  /* "interpolation.pyx":58
  *     return xmin + i * (xmax - xmin) / (n_points - 1)
  * 
  * cdef inline double logspace_i_to_x(int i, double xmin, double xmax, int n_points) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18349,7 +18349,7 @@ static CYTHON_INLINE double __pyx_f_13interpolation_logspace_i_to_x(int __pyx_v_
   return __pyx_r;
 }
 
-/* "interpolation.pyx":65
+/* "interpolation.pyx":61
  *     return 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))
  * 
  * cpdef double linear_interp2d(double x, double y, double xmin, double xmax, int n_points_x, double ymin, double ymax, int n_points_y, double[:, :] zs) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18379,7 +18379,7 @@ static double __pyx_f_13interpolation_linear_interp2d(double __pyx_v_x, double _
   Py_ssize_t __pyx_t_9;
   Py_ssize_t __pyx_t_10;
 
-  /* "interpolation.pyx":68
+  /* "interpolation.pyx":64
  *     # associates x[i], y[j] to z[i, j]
  *     # x, y are of the form np.linspace(xmin, xmax, n_points_x), ...
  *     if x < xmin or x > xmax or y < ymin or y > ymax:             # <<<<<<<<<<<<<<
@@ -18409,7 +18409,7 @@ static double __pyx_f_13interpolation_linear_interp2d(double __pyx_v_x, double _
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "interpolation.pyx":69
+    /* "interpolation.pyx":65
  *     # x, y are of the form np.linspace(xmin, xmax, n_points_x), ...
  *     if x < xmin or x > xmax or y < ymin or y > ymax:
  *         return 0             # <<<<<<<<<<<<<<
@@ -18419,7 +18419,7 @@ static double __pyx_f_13interpolation_linear_interp2d(double __pyx_v_x, double _
     __pyx_r = 0.0;
     goto __pyx_L0;
 
-    /* "interpolation.pyx":68
+    /* "interpolation.pyx":64
  *     # associates x[i], y[j] to z[i, j]
  *     # x, y are of the form np.linspace(xmin, xmax, n_points_x), ...
  *     if x < xmin or x > xmax or y < ymin or y > ymax:             # <<<<<<<<<<<<<<
@@ -18428,7 +18428,7 @@ static double __pyx_f_13interpolation_linear_interp2d(double __pyx_v_x, double _
  */
   }
 
-  /* "interpolation.pyx":70
+  /* "interpolation.pyx":66
  *     if x < xmin or x > xmax or y < ymin or y > ymax:
  *         return 0
  *     cdef int i_x = linear_index(x, xmin, xmax, n_points_x)             # <<<<<<<<<<<<<<
@@ -18437,7 +18437,7 @@ static double __pyx_f_13interpolation_linear_interp2d(double __pyx_v_x, double _
  */
   __pyx_v_i_x = __pyx_f_13interpolation_linear_index(__pyx_v_x, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x);
 
-  /* "interpolation.pyx":71
+  /* "interpolation.pyx":67
  *         return 0
  *     cdef int i_x = linear_index(x, xmin, xmax, n_points_x)
  *     cdef int i_y = linear_index(y, ymin, ymax, n_points_y)             # <<<<<<<<<<<<<<
@@ -18446,7 +18446,7 @@ static double __pyx_f_13interpolation_linear_interp2d(double __pyx_v_x, double _
  */
   __pyx_v_i_y = __pyx_f_13interpolation_linear_index(__pyx_v_y, __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y);
 
-  /* "interpolation.pyx":76
+  /* "interpolation.pyx":72
  *         linear_i_to_x(i_y, ymin, ymax, n_points_y),
  *         linear_i_to_x(i_y + 1, ymin, ymax, n_points_y),
  *         two_pt_interp(x, linear_i_to_x(i_x, xmin, xmax, n_points_x), linear_i_to_x(i_x + 1, xmin, xmax, n_points_x), zs[i_x, i_y], zs[i_x + 1, i_y]),             # <<<<<<<<<<<<<<
@@ -18458,7 +18458,7 @@ static double __pyx_f_13interpolation_linear_interp2d(double __pyx_v_x, double _
   __pyx_t_5 = (__pyx_v_i_x + 1);
   __pyx_t_6 = __pyx_v_i_y;
 
-  /* "interpolation.pyx":77
+  /* "interpolation.pyx":73
  *         linear_i_to_x(i_y + 1, ymin, ymax, n_points_y),
  *         two_pt_interp(x, linear_i_to_x(i_x, xmin, xmax, n_points_x), linear_i_to_x(i_x + 1, xmin, xmax, n_points_x), zs[i_x, i_y], zs[i_x + 1, i_y]),
  *         two_pt_interp(x, linear_i_to_x(i_x, xmin, xmax, n_points_x), linear_i_to_x(i_x + 1, xmin, xmax, n_points_x), zs[i_x, i_y + 1], zs[i_x + 1, i_y + 1])             # <<<<<<<<<<<<<<
@@ -18470,7 +18470,7 @@ static double __pyx_f_13interpolation_linear_interp2d(double __pyx_v_x, double _
   __pyx_t_9 = (__pyx_v_i_x + 1);
   __pyx_t_10 = (__pyx_v_i_y + 1);
 
-  /* "interpolation.pyx":72
+  /* "interpolation.pyx":68
  *     cdef int i_x = linear_index(x, xmin, xmax, n_points_x)
  *     cdef int i_y = linear_index(y, ymin, ymax, n_points_y)
  *     return two_pt_interp(             # <<<<<<<<<<<<<<
@@ -18480,7 +18480,7 @@ static double __pyx_f_13interpolation_linear_interp2d(double __pyx_v_x, double _
   __pyx_r = __pyx_f_13interpolation_two_pt_interp(__pyx_v_y, __pyx_f_13interpolation_linear_i_to_x(__pyx_v_i_y, __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y), __pyx_f_13interpolation_linear_i_to_x((__pyx_v_i_y + 1), __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y), __pyx_f_13interpolation_two_pt_interp(__pyx_v_x, __pyx_f_13interpolation_linear_i_to_x(__pyx_v_i_x, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x), __pyx_f_13interpolation_linear_i_to_x((__pyx_v_i_x + 1), __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x), (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_zs.data + __pyx_t_3 * __pyx_v_zs.strides[0]) ) + __pyx_t_4 * __pyx_v_zs.strides[1]) ))), (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_zs.data + __pyx_t_5 * __pyx_v_zs.strides[0]) ) + __pyx_t_6 * __pyx_v_zs.strides[1]) )))), __pyx_f_13interpolation_two_pt_interp(__pyx_v_x, __pyx_f_13interpolation_linear_i_to_x(__pyx_v_i_x, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x), __pyx_f_13interpolation_linear_i_to_x((__pyx_v_i_x + 1), __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x), (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_zs.data + __pyx_t_7 * __pyx_v_zs.strides[0]) ) + __pyx_t_8 * __pyx_v_zs.strides[1]) ))), (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_zs.data + __pyx_t_9 * __pyx_v_zs.strides[0]) ) + __pyx_t_10 * __pyx_v_zs.strides[1]) )))));
   goto __pyx_L0;
 
-  /* "interpolation.pyx":65
+  /* "interpolation.pyx":61
  *     return 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))
  * 
  * cpdef double linear_interp2d(double x, double y, double xmin, double xmax, int n_points_x, double ymin, double ymax, int n_points_y, double[:, :] zs) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18570,7 +18570,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -18578,9 +18578,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 1); __PYX_ERR(1, 65, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 1); __PYX_ERR(1, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -18588,9 +18588,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 2); __PYX_ERR(1, 65, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 2); __PYX_ERR(1, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -18598,9 +18598,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 3); __PYX_ERR(1, 65, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 3); __PYX_ERR(1, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -18608,9 +18608,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 4); __PYX_ERR(1, 65, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 4); __PYX_ERR(1, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -18618,9 +18618,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 5); __PYX_ERR(1, 65, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 5); __PYX_ERR(1, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -18628,9 +18628,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 6); __PYX_ERR(1, 65, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 6); __PYX_ERR(1, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -18638,9 +18638,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 7); __PYX_ERR(1, 65, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 7); __PYX_ERR(1, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
@@ -18648,14 +18648,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[8]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 8); __PYX_ERR(1, 65, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, 8); __PYX_ERR(1, 61, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "linear_interp2d") < 0)) __PYX_ERR(1, 65, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "linear_interp2d") < 0)) __PYX_ERR(1, 61, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 9)) {
       goto __pyx_L5_argtuple_error;
@@ -18670,19 +18670,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[7] = __Pyx_Arg_FASTCALL(__pyx_args, 7);
       values[8] = __Pyx_Arg_FASTCALL(__pyx_args, 8);
     }
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
-    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
-    __pyx_v_xmin = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_xmin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
-    __pyx_v_xmax = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_xmax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
-    __pyx_v_n_points_x = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_n_points_x == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
-    __pyx_v_ymin = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_ymin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
-    __pyx_v_ymax = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_ymax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
-    __pyx_v_n_points_y = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_n_points_y == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L3_error)
-    __pyx_v_zs = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(values[8], PyBUF_WRITABLE); if (unlikely(!__pyx_v_zs.memview)) __PYX_ERR(1, 65, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
+    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
+    __pyx_v_xmin = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_xmin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
+    __pyx_v_xmax = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_xmax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
+    __pyx_v_n_points_x = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_n_points_x == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
+    __pyx_v_ymin = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_ymin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
+    __pyx_v_ymax = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_ymax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
+    __pyx_v_n_points_y = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_n_points_y == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 61, __pyx_L3_error)
+    __pyx_v_zs = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(values[8], PyBUF_WRITABLE); if (unlikely(!__pyx_v_zs.memview)) __PYX_ERR(1, 61, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, __pyx_nargs); __PYX_ERR(1, 65, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("linear_interp2d", 1, 9, 9, __pyx_nargs); __PYX_ERR(1, 61, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18720,7 +18720,7 @@ static PyObject *__pyx_pf_13interpolation_4linear_interp2d(CYTHON_UNUSED PyObjec
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("linear_interp2d", 1);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_13interpolation_linear_interp2d(__pyx_v_x, __pyx_v_y, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x, __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y, __pyx_v_zs, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 65, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_13interpolation_linear_interp2d(__pyx_v_x, __pyx_v_y, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x, __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y, __pyx_v_zs, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -18737,7 +18737,7 @@ static PyObject *__pyx_pf_13interpolation_4linear_interp2d(CYTHON_UNUSED PyObjec
   return __pyx_r;
 }
 
-/* "interpolation.pyx":80
+/* "interpolation.pyx":76
  *     )
  * 
  * cpdef double logspace_linear_interp2d(double x, double y, double xmin, double xmax, int n_points_x, double ymin, double ymax, int n_points_y, double[:, :] zs) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18768,7 +18768,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
   Py_ssize_t __pyx_t_9;
   Py_ssize_t __pyx_t_10;
 
-  /* "interpolation.pyx":85
+  /* "interpolation.pyx":81
  * 
  * 
  *     if x < xmin or x > xmax or y < ymin or y > ymax:             # <<<<<<<<<<<<<<
@@ -18798,7 +18798,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "interpolation.pyx":86
+    /* "interpolation.pyx":82
  * 
  *     if x < xmin or x > xmax or y < ymin or y > ymax:
  *         return 0             # <<<<<<<<<<<<<<
@@ -18808,7 +18808,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
     __pyx_r = 0.0;
     goto __pyx_L0;
 
-    /* "interpolation.pyx":85
+    /* "interpolation.pyx":81
  * 
  * 
  *     if x < xmin or x > xmax or y < ymin or y > ymax:             # <<<<<<<<<<<<<<
@@ -18817,7 +18817,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
  */
   }
 
-  /* "interpolation.pyx":87
+  /* "interpolation.pyx":83
  *     if x < xmin or x > xmax or y < ymin or y > ymax:
  *         return 0
  *     cdef int i_x = logspace_index(x, xmin, xmax, n_points_x)             # <<<<<<<<<<<<<<
@@ -18826,7 +18826,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
  */
   __pyx_v_i_x = __pyx_f_13interpolation_logspace_index(__pyx_v_x, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x);
 
-  /* "interpolation.pyx":88
+  /* "interpolation.pyx":84
  *         return 0
  *     cdef int i_x = logspace_index(x, xmin, xmax, n_points_x)
  *     cdef int i_y = linear_index(y, ymin, ymax, n_points_y)             # <<<<<<<<<<<<<<
@@ -18835,7 +18835,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
  */
   __pyx_v_i_y = __pyx_f_13interpolation_linear_index(__pyx_v_y, __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y);
 
-  /* "interpolation.pyx":99
+  /* "interpolation.pyx":95
  *         linear_i_to_x(i_y, ymin, ymax, n_points_y),
  *         linear_i_to_x(i_y + 1, ymin, ymax, n_points_y),
  *         two_pt_interp(x, logspace_i_to_x(i_x, xmin, xmax, n_points_x), logspace_i_to_x(i_x + 1, xmin, xmax, n_points_x), zs[i_x, i_y], zs[i_x + 1, i_y]),             # <<<<<<<<<<<<<<
@@ -18847,7 +18847,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
   __pyx_t_5 = (__pyx_v_i_x + 1);
   __pyx_t_6 = __pyx_v_i_y;
 
-  /* "interpolation.pyx":100
+  /* "interpolation.pyx":96
  *         linear_i_to_x(i_y + 1, ymin, ymax, n_points_y),
  *         two_pt_interp(x, logspace_i_to_x(i_x, xmin, xmax, n_points_x), logspace_i_to_x(i_x + 1, xmin, xmax, n_points_x), zs[i_x, i_y], zs[i_x + 1, i_y]),
  *         two_pt_interp(x, logspace_i_to_x(i_x, xmin, xmax, n_points_x), logspace_i_to_x(i_x + 1, xmin, xmax, n_points_x), zs[i_x, i_y + 1], zs[i_x + 1, i_y + 1])             # <<<<<<<<<<<<<<
@@ -18859,7 +18859,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
   __pyx_t_9 = (__pyx_v_i_x + 1);
   __pyx_t_10 = (__pyx_v_i_y + 1);
 
-  /* "interpolation.pyx":95
+  /* "interpolation.pyx":91
  *     #     printf("indexes: %d and %d", i_x + 1, i_y + 1)
  * 
  *     cdef float result = two_pt_interp(             # <<<<<<<<<<<<<<
@@ -18868,7 +18868,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
  */
   __pyx_v_result = __pyx_f_13interpolation_two_pt_interp(__pyx_v_y, __pyx_f_13interpolation_linear_i_to_x(__pyx_v_i_y, __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y), __pyx_f_13interpolation_linear_i_to_x((__pyx_v_i_y + 1), __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y), __pyx_f_13interpolation_two_pt_interp(__pyx_v_x, __pyx_f_13interpolation_logspace_i_to_x(__pyx_v_i_x, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x), __pyx_f_13interpolation_logspace_i_to_x((__pyx_v_i_x + 1), __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x), (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_zs.data + __pyx_t_3 * __pyx_v_zs.strides[0]) ) + __pyx_t_4 * __pyx_v_zs.strides[1]) ))), (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_zs.data + __pyx_t_5 * __pyx_v_zs.strides[0]) ) + __pyx_t_6 * __pyx_v_zs.strides[1]) )))), __pyx_f_13interpolation_two_pt_interp(__pyx_v_x, __pyx_f_13interpolation_logspace_i_to_x(__pyx_v_i_x, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x), __pyx_f_13interpolation_logspace_i_to_x((__pyx_v_i_x + 1), __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x), (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_zs.data + __pyx_t_7 * __pyx_v_zs.strides[0]) ) + __pyx_t_8 * __pyx_v_zs.strides[1]) ))), (*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_zs.data + __pyx_t_9 * __pyx_v_zs.strides[0]) ) + __pyx_t_10 * __pyx_v_zs.strides[1]) )))));
 
-  /* "interpolation.pyx":103
+  /* "interpolation.pyx":99
  *     )
  * 
  *     if isnan(result) or isinf(result):             # <<<<<<<<<<<<<<
@@ -18886,7 +18886,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
   __pyx_L9_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "interpolation.pyx":104
+    /* "interpolation.pyx":100
  * 
  *     if isnan(result) or isinf(result):
  *         printf('just shat myself')             # <<<<<<<<<<<<<<
@@ -18895,7 +18895,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
  */
     (void)(printf(((char const *)"just shat myself")));
 
-    /* "interpolation.pyx":103
+    /* "interpolation.pyx":99
  *     )
  * 
  *     if isnan(result) or isinf(result):             # <<<<<<<<<<<<<<
@@ -18905,7 +18905,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
     goto __pyx_L8;
   }
 
-  /* "interpolation.pyx":106
+  /* "interpolation.pyx":102
  *         printf('just shat myself')
  *     else:
  *         return result             # <<<<<<<<<<<<<<
@@ -18916,7 +18916,7 @@ static double __pyx_f_13interpolation_logspace_linear_interp2d(double __pyx_v_x,
   }
   __pyx_L8:;
 
-  /* "interpolation.pyx":80
+  /* "interpolation.pyx":76
  *     )
  * 
  * cpdef double logspace_linear_interp2d(double x, double y, double xmin, double xmax, int n_points_x, double ymin, double ymax, int n_points_y, double[:, :] zs) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19007,7 +19007,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -19015,9 +19015,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 1); __PYX_ERR(1, 80, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 1); __PYX_ERR(1, 76, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -19025,9 +19025,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 2); __PYX_ERR(1, 80, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 2); __PYX_ERR(1, 76, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -19035,9 +19035,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 3); __PYX_ERR(1, 80, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 3); __PYX_ERR(1, 76, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -19045,9 +19045,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 4); __PYX_ERR(1, 80, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 4); __PYX_ERR(1, 76, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -19055,9 +19055,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 5); __PYX_ERR(1, 80, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 5); __PYX_ERR(1, 76, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -19065,9 +19065,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 6); __PYX_ERR(1, 80, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 6); __PYX_ERR(1, 76, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -19075,9 +19075,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 7); __PYX_ERR(1, 80, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 7); __PYX_ERR(1, 76, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
@@ -19085,14 +19085,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[8]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 8); __PYX_ERR(1, 80, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, 8); __PYX_ERR(1, 76, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "logspace_linear_interp2d") < 0)) __PYX_ERR(1, 80, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "logspace_linear_interp2d") < 0)) __PYX_ERR(1, 76, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 9)) {
       goto __pyx_L5_argtuple_error;
@@ -19107,19 +19107,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[7] = __Pyx_Arg_FASTCALL(__pyx_args, 7);
       values[8] = __Pyx_Arg_FASTCALL(__pyx_args, 8);
     }
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_xmin = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_xmin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_xmax = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_xmax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_n_points_x = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_n_points_x == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_ymin = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_ymin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_ymax = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_ymax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_n_points_y = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_n_points_y == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L3_error)
-    __pyx_v_zs = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(values[8], PyBUF_WRITABLE); if (unlikely(!__pyx_v_zs.memview)) __PYX_ERR(1, 80, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
+    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
+    __pyx_v_xmin = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_xmin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
+    __pyx_v_xmax = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_xmax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
+    __pyx_v_n_points_x = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_n_points_x == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
+    __pyx_v_ymin = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_ymin == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
+    __pyx_v_ymax = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_ymax == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
+    __pyx_v_n_points_y = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_n_points_y == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 76, __pyx_L3_error)
+    __pyx_v_zs = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(values[8], PyBUF_WRITABLE); if (unlikely(!__pyx_v_zs.memview)) __PYX_ERR(1, 76, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, __pyx_nargs); __PYX_ERR(1, 80, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("logspace_linear_interp2d", 1, 9, 9, __pyx_nargs); __PYX_ERR(1, 76, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19157,7 +19157,7 @@ static PyObject *__pyx_pf_13interpolation_6logspace_linear_interp2d(CYTHON_UNUSE
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("logspace_linear_interp2d", 1);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_13interpolation_logspace_linear_interp2d(__pyx_v_x, __pyx_v_y, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x, __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y, __pyx_v_zs, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 80, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_13interpolation_logspace_linear_interp2d(__pyx_v_x, __pyx_v_y, __pyx_v_xmin, __pyx_v_xmax, __pyx_v_n_points_x, __pyx_v_ymin, __pyx_v_ymax, __pyx_v_n_points_y, __pyx_v_zs, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 76, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -20457,35 +20457,35 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__20);
   __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(5, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_interpolation_pyx, __pyx_n_s_linear_interp, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(1, 4, __pyx_L1_error)
 
-  /* "interpolation.pyx":24
+  /* "interpolation.pyx":20
  *     return ys[i] + dx * dydx
  * 
  * cpdef double logspace_linear_interp(double x, double xmin, double xmax, int n_points, double[:] ys) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # xs should be of the form np.logspace(np.log10(xmin), np.log10(xmax), n_points)
  *     # xs[i] = 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))
  */
-  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(5, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_interpolation_pyx, __pyx_n_s_logspace_linear_interp, 24, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(1, 24, __pyx_L1_error)
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(5, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_interpolation_pyx, __pyx_n_s_logspace_linear_interp, 20, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(1, 20, __pyx_L1_error)
 
-  /* "interpolation.pyx":65
+  /* "interpolation.pyx":61
  *     return 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))
  * 
  * cpdef double linear_interp2d(double x, double y, double xmin, double xmax, int n_points_x, double ymin, double ymax, int n_points_y, double[:, :] zs) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # associates x[i], y[j] to z[i, j]
  *     # x, y are of the form np.linspace(xmin, xmax, n_points_x), ...
  */
-  __pyx_tuple__23 = PyTuple_Pack(9, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_xmin, __pyx_n_s_xmax, __pyx_n_s_n_points_x, __pyx_n_s_ymin, __pyx_n_s_ymax, __pyx_n_s_n_points_y, __pyx_n_s_zs); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(1, 65, __pyx_L1_error)
+  __pyx_tuple__23 = PyTuple_Pack(9, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_xmin, __pyx_n_s_xmax, __pyx_n_s_n_points_x, __pyx_n_s_ymin, __pyx_n_s_ymax, __pyx_n_s_n_points_y, __pyx_n_s_zs); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(1, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__23);
   __Pyx_GIVEREF(__pyx_tuple__23);
-  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_interpolation_pyx, __pyx_n_s_linear_interp2d, 65, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(1, 65, __pyx_L1_error)
+  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_interpolation_pyx, __pyx_n_s_linear_interp2d, 61, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(1, 61, __pyx_L1_error)
 
-  /* "interpolation.pyx":80
+  /* "interpolation.pyx":76
  *     )
  * 
  * cpdef double logspace_linear_interp2d(double x, double y, double xmin, double xmax, int n_points_x, double ymin, double ymax, int n_points_y, double[:, :] zs) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # associates x[i], y[j] to z[i, j]
  *     # x of the form np.logspace(log10(xmin), log10(xmax), n_points_x), np.linspace(ymax, ymin, n_points_y)
  */
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_interpolation_pyx, __pyx_n_s_logspace_linear_interp2d, 80, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(1, 80, __pyx_L1_error)
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_interpolation_pyx, __pyx_n_s_logspace_linear_interp2d, 76, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(1, 76, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -21558,40 +21558,40 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_linear_interp, __pyx_t_7) < 0) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "interpolation.pyx":24
+  /* "interpolation.pyx":20
  *     return ys[i] + dx * dydx
  * 
  * cpdef double logspace_linear_interp(double x, double xmin, double xmax, int n_points, double[:] ys) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # xs should be of the form np.logspace(np.log10(xmin), np.log10(xmax), n_points)
  *     # xs[i] = 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_13interpolation_3logspace_linear_interp, 0, __pyx_n_s_logspace_linear_interp, NULL, __pyx_n_s_interpolation, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 24, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_13interpolation_3logspace_linear_interp, 0, __pyx_n_s_logspace_linear_interp, NULL, __pyx_n_s_interpolation, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 20, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_logspace_linear_interp, __pyx_t_7) < 0) __PYX_ERR(1, 24, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_logspace_linear_interp, __pyx_t_7) < 0) __PYX_ERR(1, 20, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "interpolation.pyx":65
+  /* "interpolation.pyx":61
  *     return 10 ** (log10(xmin) + i * (log10(xmax) - log10(xmin)) / (n_points - 1))
  * 
  * cpdef double linear_interp2d(double x, double y, double xmin, double xmax, int n_points_x, double ymin, double ymax, int n_points_y, double[:, :] zs) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # associates x[i], y[j] to z[i, j]
  *     # x, y are of the form np.linspace(xmin, xmax, n_points_x), ...
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_13interpolation_5linear_interp2d, 0, __pyx_n_s_linear_interp2d, NULL, __pyx_n_s_interpolation, __pyx_d, ((PyObject *)__pyx_codeobj__24)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 65, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_13interpolation_5linear_interp2d, 0, __pyx_n_s_linear_interp2d, NULL, __pyx_n_s_interpolation, __pyx_d, ((PyObject *)__pyx_codeobj__24)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_linear_interp2d, __pyx_t_7) < 0) __PYX_ERR(1, 65, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_linear_interp2d, __pyx_t_7) < 0) __PYX_ERR(1, 61, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "interpolation.pyx":80
+  /* "interpolation.pyx":76
  *     )
  * 
  * cpdef double logspace_linear_interp2d(double x, double y, double xmin, double xmax, int n_points_x, double ymin, double ymax, int n_points_y, double[:, :] zs) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # associates x[i], y[j] to z[i, j]
  *     # x of the form np.logspace(log10(xmin), log10(xmax), n_points_x), np.linspace(ymax, ymin, n_points_y)
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_13interpolation_7logspace_linear_interp2d, 0, __pyx_n_s_logspace_linear_interp2d, NULL, __pyx_n_s_interpolation, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 80, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_13interpolation_7logspace_linear_interp2d, 0, __pyx_n_s_logspace_linear_interp2d, NULL, __pyx_n_s_interpolation, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 76, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_logspace_linear_interp2d, __pyx_t_7) < 0) __PYX_ERR(1, 80, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_logspace_linear_interp2d, __pyx_t_7) < 0) __PYX_ERR(1, 76, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "interpolation.pyx":1

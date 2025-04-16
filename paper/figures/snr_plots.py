@@ -1,35 +1,35 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.interpolate import interp1d
 
 # Define data
 ell_max = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
-
-# snrp_c = [28177.879112088674, 96206.55433780684, 175853.35058235622, 243509.61866955983, 289830.6864329934, 317440.70691750693, 332633.4570946259, 340837.0890864015]
-
-# snrp_s = [23441.8759542758, 67396.65825513331, 113536.84597591546, 156335.21499038063, 194043.68425517925, 226409.47923775774, 253826.42455016664, 276933.44511557865]
-
-# new
-# Convergence bispectrum SNR^2:
-# [0.4606180302137393, 2.428277643136825, 4.556412710716516, 5.924272288700067, 6.620955446735307, 6.958473094521213, 7.12003774130501, 7.201717334076159]
-# Shear bispectrum SNR^2:
-# [14.937583099693954, 44.263581102561155, 70.4841150784228, 91.60588005582235, 108.3741775299598, 121.44133496518877, 131.79346525781503, 139.98497349255402]
 
 snrb_c_s3 = [0.4606180302137393, 2.428277643136825, 4.556412710716516, 5.924272288700067, 6.620955446735307, 6.958473094521213, 7.12003774130501, 7.201717334076159]
 
 snrb_s_s3 = [14.937583099693954, 44.263581102561155, 70.4841150784228, 91.60588005582235, 108.3741775299598, 121.44133496518877, 131.79346525781503, 139.98497349255402]
 
-snrb_c_s4 = [0.7032144111436794, 6.542889778749563, 20.500697932075894, 39.87427410664932, 59.254915437097765, 74.95646527206883, 86.07133128729137, 93.3095234367019]
+snrb_c_s4 = [23.083226199124194, 160.95563855174456, 453.86854903039114, 846.2154979047796, 1236.5912661335751, 1556.0849450590474, 1785.694771513511, 1939.702697620804]
 
-snrb_s_s4 = [50.95719570421603, 307.30117549383294, 748.571492858229, 1289.9230963915802, 1863.479395132727, 2419.0805380400534, 2928.1361348954356, 3387.6648308426447]
+snrb_s_s4 = [1841.1019217665996, 13139.433138837652, 35830.00873208229, 66306.94638041034, 100272.43117960829, 134537.47452003675, 167174.8737905056, 197196.08660044952]
+
+ls = np.linspace(2, 2000, 201)
+plot_datas = np.zeros((4, len(ls)))
+datas = (snrb_c_s3, snrb_s_s3, snrb_c_s4, snrb_s_s4)
+for i in range(4):
+    data = datas[i]
+    interp_func = interp1d([0] + ell_max, np.sqrt([0] + data), type='cubic')
+    plot_datas[i, :] = [interp_func(l) for l in ls]
+
 
 # Set figure size
 plt.figure(figsize=(7,5))
 
 # Plot each array
-plt.plot(ell_max, np.sqrt(snrb_c_s3), marker='x', label='CMB, stage 3', linestyle = '--', color='red')
-plt.plot(ell_max, np.sqrt(snrb_s_s3), marker='x', label='galaxy, stage 3', linestyle = '--', color='blue')
-plt.plot(ell_max, np.sqrt(snrb_c_s4), marker='x', label='CMB, stage 4', color='red')
-plt.plot(ell_max, np.sqrt(snrb_s_s4), marker='x', label='galaxy, stage 4', color='blue')
+plt.plot(ls, plot_datas[0], marker='x', label='CMB, stage 3', linestyle = '--', color='red')
+plt.plot(ls, plot_datas[1], marker='x', label='galaxy, stage 3', linestyle = '--', color='blue')
+plt.plot(ls, plot_datas[2], marker='x', label='CMB, stage 4', color='red')
+plt.plot(ls, plot_datas[3], marker='x', label='galaxy, stage 4', color='blue')
 
 plt.minorticks_on()
 plt.xlabel(r'$l_{\max}$', fontsize=12)

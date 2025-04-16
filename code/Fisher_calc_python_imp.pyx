@@ -216,6 +216,26 @@ def Fisher_bisp(lmin, lmax, num_bispec_samples, stepsize, par1 = b'snr', par2 = 
 
     return sum([result1, result2, result3])
 
+cdef int Delta(int l1, int l2, int l3) noexcept nogil:
+    if l1 == l2 == l3:
+        return 6
+    elif l1 == l2 or l1 == l3 or l2 == l3:
+        return 2
+    else:
+        return 1
+
+def Fisher_bisp_single(lmin, lmax, num_bispec_samples, stepsize, par1 = b'snr', par2 = b'snr', source = b'c'):
+
+    result = 0
+
+    for l1 in range(lmin, lmax + 1, stepsize):
+        for l2 in range(l1, lmax + 1, stepsize):
+            for l3 in range(l2, lmax + 1):
+                result += Delta(l1, l2, l3)**(-1) * lbs_der(l1, l2, l3, source, source, source, num_bispec_samples, par1) * lbs_der(l1, l2, l3, source, source, source, num_bispec_samples, par2) / ( lps_f_obs(l1, source, source) * lps_f_obs(l2, source, source) * lps_f_obs(l3, source, source) )
+    
+    return result * stepsize**2
+
+
 def Fisher_powersp(lmin, lmax, par1 = b'snr', par2 = b'snr'):
 
     result1 = 0

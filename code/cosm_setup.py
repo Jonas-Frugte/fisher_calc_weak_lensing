@@ -397,7 +397,7 @@ class lensing_spectra:
 
     # does not check if 2L is even or triangle inequalities, does so in lbs_f and lbs_der directly instead to save on computing bispec if result should be zero anyway
 
-    factor = (-1)**L * np.sqrt(np.e / (2 * np.pi)) * (L + 1)**(-0.25)
+    factor = (-1)**L * np.sqrt(np.e**3 / (2 * np.pi)) * (L + 1)**(-0.25)
     term = lambda li : (L-li+1)**(-0.25) * ( (L-li+0.5) / (L-li+1) )**(L-li+0.25)
     return factor * term(l1) * term(l2) * term(l3)
 

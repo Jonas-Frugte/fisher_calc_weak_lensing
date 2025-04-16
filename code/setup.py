@@ -26,6 +26,20 @@ extensions = [
         extra_link_args=["-fopenmp"],
         include_dirs=[np.get_include()],
     ),
+    # Extension(
+    #     name="Fisher_calc2",
+    #     sources=["Fisher_calc2.pyx"],
+    #     extra_compile_args=["-fopenmp"],
+    #     extra_link_args=["-fopenmp"],
+    #     include_dirs=[np.get_include()],
+    # ),
+    # Extension(
+    #     name="Fisher_calc3",
+    #     sources=["Fisher_calc3.pyx"],
+    #     extra_compile_args=["-fopenmp"],
+    #     extra_link_args=["-fopenmp"],
+    #     include_dirs=[np.get_include()],
+    ),
     Extension(
     name="Fisher_calc_python_imp",
         sources=["Fisher_calc_python_imp.pyx"],

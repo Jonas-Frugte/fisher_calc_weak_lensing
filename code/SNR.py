@@ -3,8 +3,8 @@ from Fisher_calc_python_imp import Fisher_powersp_single, Fisher_powersp
 
 import numpy as np
 
-num_cores = 64
-stepsize = 1
+num_cores = 128
+stepsize = 5
 
 # ls = [0] + ls
 ls = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000]
