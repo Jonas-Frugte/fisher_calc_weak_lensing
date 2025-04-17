@@ -343,24 +343,36 @@ For the parameter constraints, even when combining all signals, most of the para
     S_8 = \sigma_8 \sqrt{\frac{\Omega_c + \Omega_b}{0.3}}
 \end{equation*}
 and is commonly found to be a particularly well constrained parameter in weak lensing surveys. The results are essentially the same so we will stick with $\sigma_8$. The constraints and covariances are shown in figures \ref{fig:side_by_side} (a) and (b). In particular, you can see in  the off diagonal plot that combining the CMB and galaxy lensing removes approximate degeneracies in $H_0$, $\sigma_8$ space to create a much smaller $1\sigma$ confidence ellipse. When comparing powerspectra to bispectra constraints in figure \ref{fig:S8const} we see a more mild improvement in constraints when combining the different sources of information.
-\begin{figure}[htbp]
+% \begin{figure}[htbp]
+%     \centering
+%     \begin{subfigure}[t]{0.48\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{paramconstraints_sigma8.pdf}
+%         
+%         \label{fig:sigma8const}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.48\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{paramconstraints_sigma8_diffspectra.pdf}
+%         \caption{Same as Fig.~\ref{fig:sigma8const}, except comparing constraints from only using power spectra, only bispectra, or both. $S_8$ instead of $\sigma_8$. In all three cases we use CMB $and$ galaxy lensing.}
+%         \label{fig:S8const}
+%     \end{subfigure}
+%     \caption{Side-by-side comparison of parameter constraints.}
+%     \label{fig:side_by_side}
+% \end{figure}
+
+\begin{figure}
     \centering
-    \begin{subfigure}[t]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{paramconstraints_sigma8.pdf}
-        \caption{Constraints for $H_0$ and $\sigma_8$ for CMB lensing, galaxy lensing, and CMB + galaxy lensing combined. We use the information from both power and bispectra together with $l_{\max}=2000$ in all three cases.
-        The confidence ellipses are for $1\sigma$ ($\sim70\%$) certainty.}
-        \label{fig:sigma8const}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{paramconstraints_sigma8_diffspectra.pdf}
-        \caption{Same as Fig.~\ref{fig:sigma8const}, except comparing constraints from only using power spectra, only bispectra, or both. $S_8$ instead of $\sigma_8$. In all three cases we use CMB $and$ galaxy lensing.}
-        \label{fig:S8const}
-    \end{subfigure}
-    \caption{Side-by-side comparison of parameter constraints.}
-    \label{fig:side_by_side}
+    \includegraphics[width=\textwidth]{figures/paramconstraints_difftracers.pdf}
+    \caption{Constraints for $H_0$ and $\sigma_8$ for CMB lensing, galaxy lensing, and CMB + galaxy lensing combined. We use the information from both power and bispectra together with $l_{\max}=2000$ in all three cases. The confidence ellipses are for $1\sigma$ certainty.}
+    \label{fig:difftracer}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/paramconstraints_diffspectra.pdf}
+    \caption{Same as Fig. \ref{fig:difftracer}, except comparing constraints from only using power spectra, only bispectra, or both. In all three cases we use CMB $and$ galaxy lensing.}
+    \label{fig:diffspectra}
 \end{figure}
 
 \section{Discussion and conclusion}\label{sec:discussion}

@@ -20,7 +20,7 @@ visb_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_c.txt')
 
 visb_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_s.txt')
 
-visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_both.txt')
+visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_both.txt')
 
 ########################
 # Powerspectra Matrices
@@ -141,8 +141,8 @@ def print_sorted_eigens(matrix_name, mat):
         print(vecs[:, i])
 
 # Indices to remove: 6,1,4,5 (0-based). This means we keep [0,2,3].
-keep_indices = [0, 7, 9]  # We'll keep H_0 and sigma_8
-keep_indices = [3, 6]  # We'll keep H_0 and sigma_8
+keep_indices = [0, 7, 9]
+# keep_indices = [3, 6]
 
 # Reduced copies for bispectra
 visb_c_reduced = visb_c[np.ix_(keep_indices, keep_indices)]
@@ -310,10 +310,10 @@ def plot_corner(
             # Default: ±5σ around param_values
             sigma_i = np.sqrt(cov_matrices[0][i, i])
             sigma_j = np.sqrt(cov_matrices[0][j, j])
-            x_min = param_values[i] - 1*sigma_i
-            x_max = param_values[i] + 1*sigma_i
-            y_min = param_values[j] - 1*sigma_j
-            y_max = param_values[j] + 1*sigma_j
+            x_min = param_values[i] - 1.5*sigma_i
+            x_max = param_values[i] + 1.5*sigma_i
+            y_min = param_values[j] - 1.5*sigma_j
+            y_max = param_values[j] + 1.5*sigma_j
 
             ax_low.set_xlim(x_min, x_max)
             ax_low.set_ylim(y_min, y_max)
@@ -377,13 +377,13 @@ if __name__ == "__main__":
 
     labels = ["CMB", "Galaxy", "CMB + Galaxy"]
 
-    cov_matrices = [
-        inv(visp_f_reduced),
-        inv(visb_f_reduced),
-        inv(visb_f_reduced + visp_f_reduced)
-    ]
+    # cov_matrices = [
+    #     inv(visp_f_reduced),
+    #     inv(visb_f_reduced),
+    #     inv(visb_f_reduced + visp_f_reduced)
+    # ]
 
-    labels = ['powerspectra', 'bispectra', 'power- $+$ bispectra']
+    # labels = ['powerspectra', 'bispectra', 'power- $+$ bispectra']
 
     fig, axes = plot_corner(
         cov_matrices=cov_matrices,
@@ -393,9 +393,9 @@ if __name__ == "__main__":
         colors=["tab:blue", "tab:orange", 'black'],
         nstd=1.0,
         figsize=(8,8),
-        dpi=100
+        dpi=300
     )
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
-    plt.show()
-    # plt.savefig('paramconstraints_sigma8.pdf', dpi = 300)
+    # plt.show()
+    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/paramconstraints_difftracers.pdf', dpi = 300)
