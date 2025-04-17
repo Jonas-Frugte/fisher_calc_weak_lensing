@@ -33,7 +33,7 @@ def get_k_max():
     return k_max
 
 # specifies the noise that will be used for cmb lensing
-cdef int conv_noise_type = 1
+cdef int conv_noise_type = 2
 # type values correspond to:
 # 0: S0 noise curves (old, remove)
 # 1: sigma = 1, Delta_P = 6 (stage 3 toshiya)

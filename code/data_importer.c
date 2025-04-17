@@ -46760,11 +46760,11 @@ if (!__Pyx_RefNanny) {
   /* "data_importer.pyx":36
  * 
  * # specifies the noise that will be used for cmb lensing
- * cdef int conv_noise_type = 1             # <<<<<<<<<<<<<<
+ * cdef int conv_noise_type = 2             # <<<<<<<<<<<<<<
  * # type values correspond to:
  * # 0: S0 noise curves (old, remove)
  */
-  __pyx_v_13data_importer_conv_noise_type = 1;
+  __pyx_v_13data_importer_conv_noise_type = 2;
 
   /* "data_importer.pyx":45
  * 

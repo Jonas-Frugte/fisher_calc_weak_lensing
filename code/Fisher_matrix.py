@@ -5,9 +5,9 @@ from itertools import *
 
 lmin = 2
 lmax = 2000
-stepsizes = [1, 5, 10]
-num_bispec_samples = 100
-num_cores = 64
+stepsizes = [1 * 4, 5 * 4, 10 * 4]
+num_bispec_samples = 200
+num_cores = 128
 
 pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'As', b'w0']
 
@@ -23,17 +23,22 @@ def fisher_calc_wrapper(args, tracers):
     if tracers == 'both':
         return vis.Fisher_mat_full(lmin, 0, 200, stepsizes[0], num_bispec_samples, pars[i], pars[j], num_cores) + vis.Fisher_mat_full(lmin, 200, 1000, stepsizes[1], num_bispec_samples, pars[i], pars[j], num_cores) + vis.Fisher_mat_full(lmin, 1000, lmax, stepsizes[2], num_bispec_samples, pars[i], pars[j], num_cores)
 
-
+num_pars = len(pars)
 
 for tracer in ['c', 's', 'both']:
-    mat = np.zeros((len(pars), len(pars)))
-    for i, j in product(range(len(pars)), repeat = 2):
-        result = fisher_calc_wrapper((i, j), tracer)
-        mat[i, j] = result
-        mat[j, i] = result  # Symmetric assignment
-    
-    np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}.txt', mat)
-    print(mat)
+    if tracer == 'both': # !!!
+        mat = np.zeros((num_pars, num_pars))
+        counter = 1
+        for i in range(num_pars):
+            for j in range(i, num_pars):
+                result = fisher_calc_wrapper((i, j), tracer)
+                mat[i, j] = result
+                mat[j, i] = result  # Symmetric assignment
+                print(f'{tracer}:', counter, '/', num_pars * (num_pars + 1) / 2)
+                counter += 1
+        
+        np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}.txt', mat)
+        print(mat)
 
 
 # for python implementation
