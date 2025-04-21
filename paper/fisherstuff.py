@@ -20,7 +20,7 @@ visb_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_c.txt')
 
 visb_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_s.txt')
 
-visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_both.txt')
+visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_both.txt')
 
 ########################
 # Powerspectra Matrices
@@ -30,6 +30,12 @@ visp_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_c.txt')
 visp_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_s.txt')
 
 visp_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both.txt')
+
+######################
+# Prior Matrices #
+######################
+
+prior = np.diag((0.6, 0.00015, 0.0014, 0.0044, 0.01, 0.034*1e-9, 0.1))
 
 ########### NORMALIZATION ###########
 
@@ -141,8 +147,9 @@ def print_sorted_eigens(matrix_name, mat):
         print(vecs[:, i])
 
 # Indices to remove: 6,1,4,5 (0-based). This means we keep [0,2,3].
-keep_indices = [0, 7, 9]
-# keep_indices = [3, 6]
+#keep_indices = [0, 7, 9]
+keep_indices = [0, 1, 2, 3, 4, 5, 6]
+#keep_indices = [4, 6]
 
 # Reduced copies for bispectra
 visb_c_reduced = visb_c[np.ix_(keep_indices, keep_indices)]
@@ -153,6 +160,8 @@ visb_f_reduced = visb_f[np.ix_(keep_indices, keep_indices)]
 visp_c_reduced = visp_c[np.ix_(keep_indices, keep_indices)]
 visp_s_reduced = visp_s[np.ix_(keep_indices, keep_indices)]
 visp_f_reduced = visp_f[np.ix_(keep_indices, keep_indices)]
+
+prior_reduced = prior[np.ix_(keep_indices, keep_indices)]
 
 ######### PLOTS #########
 
@@ -377,13 +386,22 @@ if __name__ == "__main__":
 
     labels = ["CMB", "Galaxy", "CMB + Galaxy"]
 
-    # cov_matrices = [
-    #     inv(visp_f_reduced),
-    #     inv(visb_f_reduced),
-    #     inv(visb_f_reduced + visp_f_reduced)
-    # ]
+    cov_matrices = [
+        prior_reduced,
+        inv(inv(prior_reduced) + visp_f_reduced),
+        #prior_reduced + inv(visb_f_reduced),
+        inv(inv(prior_reduced) + visb_f_reduced + visp_f_reduced)
+    ]
 
-    # labels = ['powerspectra', 'bispectra', 'power- $+$ bispectra']
+    labels = ['prior only', 'powerspectra', 'power- $+$ bispectra']
+
+    cov_matrices = [
+        inv(visp_f_reduced),
+        inv(visb_f_reduced),
+        inv(visb_f_reduced + visp_f_reduced)
+    ]
+
+    labels = ['powerspectra', 'bispectra', 'power- $+$ bispectra']
 
     fig, axes = plot_corner(
         cov_matrices=cov_matrices,
@@ -392,10 +410,10 @@ if __name__ == "__main__":
         labels=labels,
         colors=["tab:blue", "tab:orange", 'black'],
         nstd=1.0,
-        figsize=(8,8),
-        dpi=300
+        figsize=(16,16),
+        dpi=100
     )
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
     # plt.show()
-    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/paramconstraints_difftracers.pdf', dpi = 300)
+    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/test3.png', dpi = 300)
