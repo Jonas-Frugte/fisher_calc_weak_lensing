@@ -139,8 +139,8 @@ In the case of CMB surveys, lensing alters the statistical properties of the tem
 
 To constrain cosmological parameters we can then look at the lensing potential of the CMB, $\psi_\CMB$, and of galaxy surveys, $\psi_\gal$. These are directly related to the matter power and bispectra as
 \begin{empheq}[box=\fbox]{align*}
-    P^{\psi_X\psi_Y}_l
-    & = \frac{9}{l^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)P^\delta(l/\chi,\eta_0-\chi),\\
+    C^{\psi_X\psi_Y}_l
+    & = \frac{9}{l^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)C^\delta(l/\chi,\eta_0-\chi),\\
     B^{\psi_X\psi_Y\psi_Z}_{l_1l_2l_3} &= \sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{l_1^2l_2^2l_3^2}\Omega_m^3H_0^6\\
     & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{l_i/\chi\}, \eta_0-\chi),
 \end{empheq}
@@ -161,9 +161,9 @@ For a derivation of the lensing potential and its power- and bispectra, see appe
 \subsection{Nonlinear matter bispectrum}
 Determining the nonlinear matter powerspectrum can be done using numerical codes such as CAMB. The nonlinear matter bispectrum was calculated from the powerspectrum using a fitting formula based on perturbation theory in \cite{bispfit}. It is given by
 \begin{equation}
-    B_m(k_1, k_2, k_3, \chi) = 2 F_2(k_1, k_2, z) P_m(k_1, z) P_m(k_2, z) + \text{2 perm.}
+    B^\delta(k_1, k_2, k_3, \chi) = 2 F_2(k_1, k_2, z) C^\delta(k_1, z) C^\delta(k_2, z) + \text{2 perm.}
 \end{equation}
-where \( P_m \) is the nonlinear matter power spectrum\footnote{Compare to the tree level bispectrum where we instead use the linear powerspectrum.}, and the kernel \( F_2 \) is modified from the tree level result with factors \( a(k, z) \), \( b(k, z) \), and \( c(k, z) \):
+where \( C^\delta \) is the nonlinear matter power spectrum\footnote{Compare to the tree level bispectrum where we instead use the linear powerspectrum.}, and the kernel \( F_2 \) is modified from the tree level result with factors \( a(k, z) \), \( b(k, z) \), and \( c(k, z) \):
 \begin{equation}
     F_2(k_1, k_2, z) = \frac{5}{7} a(k_1, z) a(k_2, z) + \frac{k_1^2 + k_2^2}{2 k_1 k_2} b(k_1, z) b(k_2, z) \cos \theta + \frac{2}{7} c(k_1, z) c(k_2, z) \cos^2 \theta.
 \end{equation}
@@ -183,7 +183,7 @@ Here, \( Q(n_{\text{eff}}) \) is given by:
 \end{equation}
 The effective spectral index of the linear power spectrum is defined as:
 \begin{equation}
-    n_{\text{eff}} \equiv \frac{d \ln P_m^{\text{lin}}(k)}{d \ln k}.
+    n_{\text{eff}} \equiv \frac{d \ln C^\delta_{\text{lin}}(k)}{d \ln k}.
 \end{equation}
 Additionally, \( q \) is given by:
 \begin{equation}
@@ -191,7 +191,7 @@ Additionally, \( q \) is given by:
 \end{equation}
 where \( k_{\text{NL}} \) is the scale at which nonlinearities become significant, satisfying:
 \begin{equation}
-    4 \pi k_{\text{NL}}^3 P_m^{\text{lin}}(k_{\text{NL}}, 0) = 1.
+    4 \pi k_{\text{NL}}^3 C^\delta_{\text{lin}}(k_{\text{NL}}, 0) = 1.
 \end{equation}
 The coefficients \( a_i \) are:
 \begin{align*}
@@ -395,12 +395,12 @@ and $f_K(\chi)$ is the comoving angular diameter distance. We will hereafter onl
 \begin{equation}
     \mathbf d(\hat{\mathbf n}) = -2 \int_0^{\chi_*}\d \chi \frac{\chi_* - \chi}{\chi_*\chi}\nabla_{\hat{\mathbf n}}\Psi(\chi\hat{\mathbf n};\eta_0 - \chi),
 \end{equation}
-where $\Psi$ is the Weyl Potential, $\Psi := (\Psi_N - \Phi_N)/2$, and $\chi_*$ is the conformal distance to the source. $\nabla_{\hat{\mathbf n}}$ is the derivative along the axes orthogonal to the line of sight. The above equation can be written in terms of the lensing potential, $\psi$, as $\mathbf d (\hat{\mathbf n}) = \nabla_{\hat{\mathbf n}}$, with
+where $\Psi$ is the Weyl Potential, $\Psi := (\Psi_N - \Phi_N)/2$, and $\chi_*$ is the conformal distance to the source. $\nabla_{\hat{\mathbf n}}$ is the derivative along the axes orthogonal to the line of sight. The above equation can be written in terms of the lensing potential, $\psi$, as $\mathbf d (\hat{\mathbf n}) = \nabla_{\hat{\mathbf n}} \psi(\hat{\mathbf n})$, with
 \begin{equation}
     \psi(\hat {\mathbf n}) := -2 \int_0^{\chi_*}\d \chi \frac{\chi_* - \chi}{\chi_*\chi}\Psi(\chi\hat{\mathbf n};\eta_0 - \chi).
 \end{equation}
 
-If the source is instead distributed radial distances according to some distribution function $p(\chi)$, with $p(\chi)$ normalized to integrate to 1, the $(\chi_* - \chi)/(\chi_*\chi)$ factor is changed as
+If the source is instead distributed over radial distance according to some distribution function $p(\chi)$, with $p(\chi)$ normalized to integrate to 1, the $(\chi_* - \chi)/(\chi_*\chi)$ factor is changed as
 \begin{equation*}
     \frac{\chi_*-\chi}{\chi_*\chi} \rightarrow W(\chi) := \int_\chi^{\infty}\d\chi' p(\chi')\frac{\chi'-\chi}{\chi'\chi}.
 \end{equation*}
@@ -459,37 +459,36 @@ The integration limit is sometimes also taken to be the surface of last scatteri
 % where $K$ is $0$, $1$, or $-1$ depending on the curvature of the universe, $\Delta = \partial_x^2 + \partial_y^2 + \partial_z^2$ is the 3 dimensional laplace operator, $\delta\bar\rho$ is the comoving total energy perturbation (evaluated in the rest-frame of the total energy). %TODO: proper definition for anisotropic stress and explain why we can ignore it
 
 \subsection{Convergence and Shear}
-Quantities we are interested in measuring depend on how the lensing vector changes with the observation angle. The magnification matrix is defined as
+The magnification matrix is defined as
 \begin{equation}
-    A_{ij} := \delta_{ij} + \frac{\partial}{\partial\theta_i}\alpha_i(\hat{\mathbf n}).
+    A_{ij} := \delta_{ij} + \frac{\partial}{\partial n_j}d_i(\hat{\mathbf n}).
 \end{equation}
-This matrix can then be decomposed in the following form, which immediately gives us definitions for the \textbf{convergence}, $\kappa$, \textbf{shear}, $\gamma_1$ and $\gamma_2$, and \textbf{rotation}, $\omega$:
+This matrix can be decomposed in the following form, which immediately gives us definitions for the \textbf{convergence}, $\kappa$, \textbf{shear}, $\gamma_1$ and $\gamma_2$, and \textbf{rotation}, $\omega$:
 \begin{equation}
-    A_ij(\hat{\mathbf n}) = \begin{pmatrix}
+    A_{ij}(\hat{\mathbf n}) = \begin{pmatrix}
         1 - \kappa - \gamma_1 & -\gamma_2 + \omega \\
         -\gamma_2 - \omega & 1 - \kappa + \gamma_1
     \end{pmatrix}.
 \end{equation}
-At 1st order $A$ is a symetric matrix by definition and so $\omega$ has to be 0, we will ignore it from here on out. Intuitively, A tells you how a small patch in the sky transforms due to weak lensing, i.e. if you have surface brightness $I$ then
-% TODO: make delta thick
+At 1st order $A$ is a symetric matrix by definition and $\omega$ vanishes, we will ignore it from here on out. Intuitively, $A$ tells you how a small patch in the sky transforms due to lensing. If we change the unlensed direction of a light source by $\delta\hat{\mathbf n}$, then the corresponding change in direction in the lensed image can be calculated as
 \begin{equation}
-    I_{\text{emitted}}(\hat{\mathbf{n}} + \mathbf{\delta}) = I_{\text{observed}}((\hat{\mathbf{n}} + \mathbf{\delta}) + \mathbf\alpha(\hat{\mathbf{n}} + \mathbf{\delta})) \approx I_{\text{observed}}((\hat{\mathbf{n}} + \mathbf{\alpha} + A_{ij}\delta_{j}).
+\hat{\mathbf{n}} + \delta \hat{\mathbf{n}} \rightarrow \hat{\mathbf{n}} + \delta \hat{\mathbf{n}} + \mathbf d (\hat{\mathbf{n}} + \delta \hat{\mathbf{n}}) = \hat{\mathbf{n}} + \mathbf d (\hat{\mathbf n}) + \delta \hat{\mathbf n} + A_{ij}(\delta \hat{\mathbf{n}})_j.
 \end{equation}
-given that $|A_{ij}| = (1 - \kappa)^2 + \omega^2 - |\gamma|^2 = 1 - 2\kappa + O(\kappa^2, \gamma^2, \omega^2)$, we can interpret $\kappa$ as telling us about the overal magnification of the source. The $\gamma_i$ represent the area preserving distortion, i.e. stretching and squeezing in a specific direction.
+For an image on the sky, $A_{ij}$ thus introduces distortion. Note that $|A_{ij}| = (1 - \kappa)^2 + \omega^2 - |\gamma|^2 = 1 - 2\kappa + O(\kappa^2, \gamma^2, \omega^2)$. We can thus interpret $\kappa$ as telling us about the overal magnification of the source. The $\gamma_i$ represent the area preserving distortion, i.e. stretching and squeezing in a specific direction.
 
 We can relate $\kappa$ and $\gamma$ directly to the lensing potential as
 % TODO: should these subscripts be theta and phi?
 \begin{equation}
-    \kappa = \frac{1}{2}\nabla^2\psi, \quad \gamma_1 = \frac{1}{2}(\partial_\theta^2 - \partial_\phi^2)\psi, \quad \gamma_2 = \partial_\theta\partial_\phi \psi.
+    \kappa = \frac{1}{2}\nabla^2\psi, \quad \gamma_1 = \frac{1}{2}(\partial_{n_1}^2 - \partial_{n_2}^2)\psi, \quad \gamma_2 = \partial_{n_1}\partial_{n_2} \psi.
 \end{equation}
 
 \section{Weak Lensing Statistics}\label{sec:weaklensstats}
 \subsection{Lensing Potential Powerspectrum}
-Consider the lensing potential, $\psi$, then decomposing into spherical harmonics gives
+The lensing potential can be decomposed into spherical harmonics as
 \begin{equation}
     \psi(\hat{\mathbf n}) = \sum_{lm} \psi_{lm}Y_{lm}(\hat{\mathbf n}).
 \end{equation}
-On the other hand, consider the decomposition of $\Psi$ in fourier modes with the Fourier convention $\Psi(\mathbf x, \eta)=\int\frac{\d^3 \mathbf k}{(2\pi)^{3}}\Psi(\mathbf k, \eta)e^{i\mathbf k \cdot\mathbf x}$,
+On the other hand, consider the decomposition of $\Psi$ in Fourier modes with the Fourier convention $\Psi(\mathbf x, \eta)=\int\frac{\d^3 \mathbf k}{(2\pi)^{3}}\Psi(\mathbf k, \eta)e^{i\mathbf k \cdot\mathbf x}$,
 \begin{equation}
     \psi(\hat{\mathbf n}) = -2 \int_0^{\chi_*}\d \chi W(\chi) \int\frac{\d^3 \mathbf k}{(2\pi)^{3}}\Psi(\mathbf k, \eta_0 - \chi)e^{i\mathbf k \cdot\hat{\mathbf n}\chi}.
 \end{equation}
@@ -507,7 +506,7 @@ with $\eta$ denoting the conformal time. This gives
 \begin{equation}
     \langle \psi(\hat{\mathbf n})\psi(\hat{\mathbf n}') \rangle = 4\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int \frac{\d^3\mathbf k}{(2\pi)^6}\frac{2\pi^2}{k^3}P_\psi(k,\eta_0 - \chi, \eta_0-\chi')e^{i\mathbf k\cdot\hat {\mathbf n}\chi}e^{-i\mathbf k\cdot\hat {\mathbf n}'\chi'},
 \end{equation}
-where we used that $\eta = \eta_0 - \chi$ along the unperturbed photon path (Born approximation), with $\eta_0$ the time at which the light ray hits earth. 
+where we used that $\eta = \eta_0 - \chi$ along the unperturbed photon path (this is known as the Born approximation), with $\eta_0$ the time at which the light ray hits earth. 
 We can use the result
 \begin{equation}
     e^{i\mathbf k \cdot \hat {\mathbf n}\chi}=4\pi\sum_{lm}i^lj_l(k\chi )Y_l^m(\hat{\mathbf n})^*Y_l^m(\hat{\mathbf k}) = 4\pi\sum_{lm}i^lj_l(k\chi )Y_l^m(\hat{\mathbf n})Y_l^m(\hat{\mathbf k})^*, \label{eq:complexexp}
@@ -530,7 +529,7 @@ which can be simplified to
     C_l^\psi = \frac{2}{\pi^2}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int k^2\d kj_l(k\chi)j_{l}(k\chi')\frac{P_\psi(k,\eta_0 - \chi, \eta_0-\chi')}{k^3}.
 \end{gather}
 
-To further evaluate the integral we will make the standard \textbf{Limber approximation}. The Bessel functions peak sharply at $l=x$\footnote{Some sources use $x\approx l+1/2$ instead, which is slightly more accurate for larger scales (low $l$) and slightly less accurate for smaller scales.}, with the peak being increasingly sharp for higher $l$. Similarly to $\delta(x-x_0)f(x)=\delta(x-x_0)f(x_0)$, we thus take $j_l(k\chi)f(k)\approx j_l(k\chi)f(l/\chi)$. The Bessel functions satisfy an orthogonality condition,
+To further evaluate the integral we will make the Limber approximation. The Bessel functions peak sharply at $l=x$\footnote{Some sources use $x\approx l+1/2$ instead, which is slightly more accurate for larger scales (low $l$) and slightly less accurate for smaller scales.}, with the peak being increasingly sharp for higher $l$. Similarly to $\delta(x-x_0)f(x)=\delta(x-x_0)f(x_0)$, we thus take $j_l(k\chi)f(k)\approx j_l(k\chi)f(l/\chi)$. The Bessel functions satisfy an orthogonality condition,
 \begin{equation}
     \int k^2\d k j_l(k\chi)j_l(k\chi') = \frac{\pi}{2\chi^2}\delta(\chi-\chi').
 \end{equation}
@@ -617,8 +616,8 @@ The definition for the bispectrum of any set of randomly distributed spherical h
 \end{equation*}
 Note the independence on $m_i$, this necesarilly follows from statistical isotropy. % TODO: add a short explanation here
 If $m_1+m_2+m_3\neq 0$, the associated Wigner-3j symbol vanishes and the bispectrum is set to zero.
-Also note that in this definition we have immediately generalized to include cross correlation between different fields $X_1$, $X_2$, $X_3$. This will be relevant later when we look at cross correlations between shear and convergence fields.
-
+Also note that in this definition we have immediately generalized to include cross correlation between different fields $X_1$, $X_2$, $X_3$. This is relevant when we look at cross correlations between CMB and galaxy lensing.
+6758
 Using the above definition and the symmetry property
 \begin{equation*}
     \begin{pmatrix}
@@ -630,7 +629,7 @@ Using the above definition and the symmetry property
       \begin{pmatrix}
         l_1 & l_2 & l_3\\
         m_1 & m_2 & m_3
-      \end{pmatrix}
+      \end{pmatrix},
 \end{equation*}
 we find
 \begin{gather*}
@@ -674,7 +673,7 @@ In particular, it vanishes if $l_1+l_2+l_3$ is odd, meaning we can drop the $(-1
 % TODO: fix this
 \subsection{Gravitational potential spectra in terms of matter spectra}
 % TODO: fix references and citations 
-We can rewrite equations \ref{eq:lpsintermsofpsi} and \ref{eq:lbsintermsofpsi} in terms of the matter spectra instead of the graviational potential spectra using the poisson equation. This then allows us to numerically evaluate these objects using CAMB. The \textbf{density contrast} is defined as
+We can rewrite equations \ref{eq:lpsintermsofpsi} and \ref{eq:lbsintermsofpsi} in terms of the matter spectra instead of the $\psi$ spectra using the poisson equation. This allows us to numerically evaluate these lensing spectra using CAMB. The density contrast is defined as
 \begin{equation}
     \delta(\mathbf x) := \frac{\rho(\mathbf x)-\bar \rho}{\bar\rho},
 \end{equation}
@@ -683,26 +682,26 @@ and the matter spectra are defined in terms of the fourier transformed density c
     \langle \delta(\mathbf k, \eta) \delta(\mathbf k', \eta)^* \rangle = (2\pi)^3\delta(\mathbf k - \mathbf k')P^\delta(\mathbf k, \eta),\\
     \langle \delta(\mathbf k_1, \eta) \delta(\mathbf k_2, \eta) \delta(\mathbf k_3, \eta) \rangle = (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\delta(k_1, k_2, k_3, \eta).
 \end{gather*}
-The mean matter density of the universe, \( \bar{\rho} \), can be expressed in terms of the matter density parameter \( \Omega_m \) and the critical density \( \rho_c \) as 
+The mean matter density of the universe, \( \bar{\rho} \) is given as 
 $$
 \bar{\rho}(\eta) = \frac{3 \Omega_m H_0^2}{8 \pi G}\frac{1}{a(\eta)^3},
 $$
 where $a(\eta)$ is the only time dependent factor on the right hand side.
-In the case of a flat universe ($K=0$) we can thus rewrite the Poisson equation \cite{dodelson2020modern} as
+The poisson equation relates $\Psi$ to the density contrast as \cite{dodelson2020modern}
 % in modern cosm eq 6.41 they say - nabla^2 Phi = ..., however here we use Psi instead and Psi = - Phi in our regime so hence why we don't take the - sign
 \begin{equation}
-    \nabla^2\Psi = 4\pi G a^2\br{\frac{3\Omega_m H_0^2}{8\pi G}\frac{1}{a^3}}\delta = \frac{3\Omega_m H_0^2}{2} \frac{1}{a}\delta \implies \Psi(k, \eta) = -\frac{3\Omega_m H_0^2}{2}\frac{1}{a}\frac{\delta(k, \eta)}{k^2},
+    \nabla^2\Psi(\mathbf x) = 4\pi G a^2\br{\frac{3\Omega_m H_0^2}{8\pi G}\frac{1}{a^3}}\delta(\mathbf x) = \frac{3\Omega_m H_0^2}{2} \frac{1}{a}\delta(\mathbf x) \implies \Psi(k, \eta) = -\frac{3\Omega_m H_0^2}{2}\frac{1}{a}\frac{\delta(k, \eta)}{k^2},
 \end{equation}
 where $\Psi(k,\eta)$ and $\delta(k,\eta)$ are functions in Fourier space. For the power- and bispectra we find
 \begin{gather*}
-    \langle \Psi(\mathbf k, \eta)\Psi^*(\mathbf k',\eta)\rangle = \frac{2\pi^2}{k^3}P^\Psi(k, \eta)\delta(\mathbf k - \mathbf k') \implies P^\Psi(k,\eta) = \frac{1}{k}(9\Omega_m^2H_0^4\pi) \frac{1}{a^2}P^\delta(k,\eta),\\
+    \langle \Psi(\mathbf k, \eta)\Psi^*(\mathbf k',\eta)\rangle = \frac{2\pi^2}{k^3}C^\Psi(k, \eta)\delta(\mathbf k - \mathbf k') \implies C^\Psi(k,\eta) = \frac{1}{k}(9\Omega_m^2H_0^4\pi) \frac{1}{a^2}C^\delta(k,\eta),\\
     \langle \Psi(\mathbf k_1, \eta)\Psi(\mathbf k_2,\eta)\Psi(\mathbf k_3,\eta)\rangle = -(2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(k_1,k_2,k_3, \eta)\\ 
     \implies B^\Psi(k_1,k_2,k_3, \eta) = -\frac{1}{k_1^2k_2^2k_3^2}\br{\frac{3\Omega_m H_0^2}{2}}^3 \frac{1}{a^3}B^\delta(\{k_i\}, \eta).
 \end{gather*}
 Finally, we obtain:
 \begin{empheq}[box=\fbox]{align*}
-    P^{\psi_X\psi_Y}_l
-    & = \frac{9}{l^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)P^\delta(l/\chi,\eta_0-\chi),\\
+    C^{\psi_X\psi_Y}_l
+    & = \frac{9}{l^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)C^\delta(l/\chi,\eta_0-\chi),\\
     B^{\psi_X\psi_Y\psi_Z}_{l_1l_2l_3} &= \sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{l_1^2l_2^2l_3^2}\Omega_m^3H_0^6\\
     & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{l_i/\chi\}, \eta_0-\chi).
 \end{empheq}
