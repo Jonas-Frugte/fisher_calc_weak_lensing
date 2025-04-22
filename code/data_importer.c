@@ -3873,9 +3873,9 @@ static const char __pyx_k_lensing_power_spectrum_cc[] = "/lensing_power_spectrum
 static const char __pyx_k_lensing_power_spectrum_cs[] = "/lensing_power_spectrum_cs";
 static const char __pyx_k_lensing_power_spectrum_ss[] = "/lensing_power_spectrum_ss";
 static const char __pyx_k_Index_out_of_bounds_axis_d[] = "Index out of bounds (axis %d)";
-static const char __pyx_k_scratch_p319950_data_rough[] = "/scratch/p319950/data_rough/";
 static const char __pyx_k_Step_may_not_be_zero_axis_d[] = "Step may not be zero (axis %d)";
 static const char __pyx_k_itemsize_0_for_cython_array[] = "itemsize <= 0 for cython.array";
+static const char __pyx_k_scratch_p319950_data_rough_5p[] = "/scratch/p319950/data_rough_5p/";
 static const char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static const char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
 static const char __pyx_k_All_dimensions_preceding_dimensi[] = "All dimensions preceding dimension %d must be indexed and not sliced";
@@ -4333,7 +4333,7 @@ typedef struct {
   PyObject *__pyx_kp_u_scale_factor;
   PyObject *__pyx_n_s_scale_factor_data;
   PyObject *__pyx_n_s_scale_factor_test;
-  PyObject *__pyx_kp_u_scratch_p319950_data_rough;
+  PyObject *__pyx_kp_u_scratch_p319950_data_rough_5p;
   PyObject *__pyx_n_s_setstate;
   PyObject *__pyx_n_s_setstate_cython;
   PyObject *__pyx_n_s_shape;
@@ -4849,7 +4849,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_kp_u_scale_factor);
   Py_CLEAR(clear_module_state->__pyx_n_s_scale_factor_data);
   Py_CLEAR(clear_module_state->__pyx_n_s_scale_factor_test);
-  Py_CLEAR(clear_module_state->__pyx_kp_u_scratch_p319950_data_rough);
+  Py_CLEAR(clear_module_state->__pyx_kp_u_scratch_p319950_data_rough_5p);
   Py_CLEAR(clear_module_state->__pyx_n_s_setstate);
   Py_CLEAR(clear_module_state->__pyx_n_s_setstate_cython);
   Py_CLEAR(clear_module_state->__pyx_n_s_shape);
@@ -5343,7 +5343,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_kp_u_scale_factor);
   Py_VISIT(traverse_module_state->__pyx_n_s_scale_factor_data);
   Py_VISIT(traverse_module_state->__pyx_n_s_scale_factor_test);
-  Py_VISIT(traverse_module_state->__pyx_kp_u_scratch_p319950_data_rough);
+  Py_VISIT(traverse_module_state->__pyx_kp_u_scratch_p319950_data_rough_5p);
   Py_VISIT(traverse_module_state->__pyx_n_s_setstate);
   Py_VISIT(traverse_module_state->__pyx_n_s_setstate_cython);
   Py_VISIT(traverse_module_state->__pyx_n_s_shape);
@@ -5857,7 +5857,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_kp_u_scale_factor __pyx_mstate_global->__pyx_kp_u_scale_factor
 #define __pyx_n_s_scale_factor_data __pyx_mstate_global->__pyx_n_s_scale_factor_data
 #define __pyx_n_s_scale_factor_test __pyx_mstate_global->__pyx_n_s_scale_factor_test
-#define __pyx_kp_u_scratch_p319950_data_rough __pyx_mstate_global->__pyx_kp_u_scratch_p319950_data_rough
+#define __pyx_kp_u_scratch_p319950_data_rough_5p __pyx_mstate_global->__pyx_kp_u_scratch_p319950_data_rough_5p
 #define __pyx_n_s_setstate __pyx_mstate_global->__pyx_n_s_setstate
 #define __pyx_n_s_setstate_cython __pyx_mstate_global->__pyx_n_s_setstate_cython
 #define __pyx_n_s_shape __pyx_mstate_global->__pyx_n_s_shape
@@ -39983,7 +39983,7 @@ static double __pyx_f_13data_importer_der_2o(double __pyx_v_f2p, double __pyx_v_
  * cdef double der_2o(double f2p, double f1p, double f1m, double f2m, double dx) noexcept nogil:
  *     return (-1 * f2p + 8 * f1p - 8 * f1m + f2m) / (12 * dx)             # <<<<<<<<<<<<<<
  * 
- * cdef double dx_frac = 0.025
+ * cdef double dx_frac = 0.05
  */
   __pyx_r = (((((-1.0 * __pyx_v_f2p) + (8.0 * __pyx_v_f1p)) - (8.0 * __pyx_v_f1m)) + __pyx_v_f2m) / (12.0 * __pyx_v_dx));
   goto __pyx_L0;
@@ -44093,7 +44093,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_kp_u_scale_factor, __pyx_k_scale_factor, sizeof(__pyx_k_scale_factor), 0, 1, 0, 0},
     {&__pyx_n_s_scale_factor_data, __pyx_k_scale_factor_data, sizeof(__pyx_k_scale_factor_data), 0, 0, 1, 1},
     {&__pyx_n_s_scale_factor_test, __pyx_k_scale_factor_test, sizeof(__pyx_k_scale_factor_test), 0, 0, 1, 1},
-    {&__pyx_kp_u_scratch_p319950_data_rough, __pyx_k_scratch_p319950_data_rough, sizeof(__pyx_k_scratch_p319950_data_rough), 0, 1, 0, 0},
+    {&__pyx_kp_u_scratch_p319950_data_rough_5p, __pyx_k_scratch_p319950_data_rough_5p, sizeof(__pyx_k_scratch_p319950_data_rough_5p), 0, 1, 0, 0},
     {&__pyx_n_s_setstate, __pyx_k_setstate, sizeof(__pyx_k_setstate), 0, 0, 1, 1},
     {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
     {&__pyx_n_s_shape, __pyx_k_shape, sizeof(__pyx_k_shape), 0, 0, 1, 1},
@@ -46769,18 +46769,18 @@ if (!__Pyx_RefNanny) {
   /* "data_importer.pyx":45
  * 
  * # SO noise
- * cdef str folder_file_path = '/scratch/p319950/data_rough/'             # <<<<<<<<<<<<<<
+ * cdef str folder_file_path = '/scratch/p319950/data_rough_5p/'             # <<<<<<<<<<<<<<
  * cdef str filepath_convergence_noise_file_path = folder_file_path + 'conv_noise.dat'
  * conv_noise_data_array = np.loadtxt(filepath_convergence_noise_file_path)
  */
-  __Pyx_INCREF(__pyx_kp_u_scratch_p319950_data_rough);
+  __Pyx_INCREF(__pyx_kp_u_scratch_p319950_data_rough_5p);
   __Pyx_XGOTREF(__pyx_v_13data_importer_folder_file_path);
-  __Pyx_DECREF_SET(__pyx_v_13data_importer_folder_file_path, __pyx_kp_u_scratch_p319950_data_rough);
-  __Pyx_GIVEREF(__pyx_kp_u_scratch_p319950_data_rough);
+  __Pyx_DECREF_SET(__pyx_v_13data_importer_folder_file_path, __pyx_kp_u_scratch_p319950_data_rough_5p);
+  __Pyx_GIVEREF(__pyx_kp_u_scratch_p319950_data_rough_5p);
 
   /* "data_importer.pyx":46
  * # SO noise
- * cdef str folder_file_path = '/scratch/p319950/data_rough/'
+ * cdef str folder_file_path = '/scratch/p319950/data_rough_5p/'
  * cdef str filepath_convergence_noise_file_path = folder_file_path + 'conv_noise.dat'             # <<<<<<<<<<<<<<
  * conv_noise_data_array = np.loadtxt(filepath_convergence_noise_file_path)
  * cdef double[:, :] conv_noise_data = conv_noise_data_array
@@ -46793,7 +46793,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_7 = 0;
 
   /* "data_importer.pyx":47
- * cdef str folder_file_path = '/scratch/p319950/data_rough/'
+ * cdef str folder_file_path = '/scratch/p319950/data_rough_5p/'
  * cdef str filepath_convergence_noise_file_path = folder_file_path + 'conv_noise.dat'
  * conv_noise_data_array = np.loadtxt(filepath_convergence_noise_file_path)             # <<<<<<<<<<<<<<
  * cdef double[:, :] conv_noise_data = conv_noise_data_array
@@ -66708,15 +66708,15 @@ if (!__Pyx_RefNanny) {
   /* "data_importer.pyx":1220
  *     return (-1 * f2p + 8 * f1p - 8 * f1m + f2m) / (12 * dx)
  * 
- * cdef double dx_frac = 0.025             # <<<<<<<<<<<<<<
+ * cdef double dx_frac = 0.05             # <<<<<<<<<<<<<<
  * cdef double[:] fiducial_cosm_par = np.array([67.4, 0.0224, 0.120, 0.965, 2.1e-9, 0.06])
  * 
  */
-  __pyx_v_13data_importer_dx_frac = 0.025;
+  __pyx_v_13data_importer_dx_frac = 0.05;
 
   /* "data_importer.pyx":1221
  * 
- * cdef double dx_frac = 0.025
+ * cdef double dx_frac = 0.05
  * cdef double[:] fiducial_cosm_par = np.array([67.4, 0.0224, 0.120, 0.965, 2.1e-9, 0.06])             # <<<<<<<<<<<<<<
  * 
  * 

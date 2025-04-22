@@ -92,6 +92,8 @@ class lensing_spectra:
     pars.set_dark_energy(w=self.w0)
     self.pars = pars
 
+    kmax_interp = 2000
+
     # power spectrum in units of Mpc^3, k in units of Mpc^-1, with input (z, k) on RHS 
     print('Creating linear mps')
     linear_mps_swapped = camb.get_matter_power_interpolator(
@@ -101,7 +103,7 @@ class lensing_spectra:
       k_hunit=False,
       zmin = 0,
       zmax = 1100,
-      kmax = 10000,
+      kmax = kmax_interp,
       extrap_kmax=True).P
     
     print('Creating mps')
@@ -112,7 +114,7 @@ class lensing_spectra:
       k_hunit=False,
       zmin = 0,
       zmax = 1100,
-      kmax = 10000,
+      kmax = kmax_interp,
       extrap_kmax=True).P
     
     self.mps = lambda k, z : mps_swapped(z, k)

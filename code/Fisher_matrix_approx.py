@@ -26,19 +26,18 @@ def fisher_calc_wrapper(args, tracers):
 num_pars = len(pars)
 
 for tracer in ['c', 's', 'both']:
-    if tracer == 'both': # !!!
-        mat = np.zeros((num_pars, num_pars))
-        counter = 1
-        for i in range(num_pars):
-            for j in range(i, num_pars):
-                result = fisher_calc_wrapper((i, j), tracer)
-                mat[i, j] = result
-                mat[j, i] = result  # Symmetric assignment
-                print(f'{tracer}:', counter, '/', num_pars * (num_pars + 1) / 2)
-                counter += 1
-        
-        np.savetxt(f'fisher_matrices/fish_mat_bisp_approx_{tracer}.txt', mat)
-        print(mat)
+    mat = np.zeros((num_pars, num_pars))
+    counter = 1
+    for i in range(num_pars):
+        for j in range(i, num_pars):
+            result = fisher_calc_wrapper((i, j), tracer)
+            mat[i, j] = result
+            mat[j, i] = result  # Symmetric assignment
+            print(f'{tracer}:', counter, '/', num_pars * (num_pars + 1) / 2)
+            counter += 1
+    
+    np.savetxt(f'fisher_matrices/fish_mat_bisp_approx_{tracer}_5p.txt', mat)
+    print(mat)
 
 
 # for python implementation

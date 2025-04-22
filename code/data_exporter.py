@@ -40,7 +40,7 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
     # 'rough' version has an interpolation error of around 4 percent and is mainly for testing stuff
     if rough:
         exp_par = exp_par_rough
-        filepath = '/scratch/p319950/data_rough/' + folder_name
+        filepath = '/scratch/p319950/data_rough_5p/' + folder_name
 
     # 'fine' version has an error of around 1 percent and is for final calculations
     if not rough:
@@ -178,7 +178,7 @@ par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0')
 fiducial_cosm_par = (67.4, 0.0223, 0.119, 0.965, 2.13e-9, 0.06, -1)
 num_pars = len(par_names)
 
-dx = 0.025 # if you change this here it also needs to be changed at end of data_importer.pyx !!!
+dx = 0.05 # if you change this here it also needs to be changed at end of data_importer.pyx !!!
 
 dx_coeffs = [2, 1, -1, -2]
 
@@ -197,9 +197,9 @@ def dx_coeffs_to_str(coeff):
 # data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True, exp_par = exp_par)
 
 # for 1 + 8 x 4 x 3 = 97 core config
-# which_to_create = [[True, False, False, False, True, True], [False, True, False, False, False, False], [False, False, True, True, False, False]]
+which_to_create = [[True, False, False, False, True, True], [False, True, False, False, False, False], [False, False, True, True, False, False]]
 # which_to_create = [[False, True, False, False, False, False], [False, False, True, False, False, False], [False, False, False, True, False, False]]
-which_to_create = [[True, False, False, False, True, True]]
+#which_to_create = [[True, False, False, False, True, True]]
 # which_to_create = [[False, False, False, True, False, False]]
 
 # for 1 + 8 x 4 x 1 = 33 core config

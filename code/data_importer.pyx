@@ -37,12 +37,12 @@ cdef int conv_noise_type = 2
 # type values correspond to:
 # 0: S0 noise curves (old, remove)
 # 1: sigma = 1, Delta_P = 6 (stage 3 toshiya)
-# 2: sigma = 3, Delta_P = 1 (stage 4 toshiya)
+# 2: sigma = 3, Delta_P = 1 (stage 4 toshiya)§
 
 # (units are in microKelvin arcmin and arcmin)
 
 # SO noise
-cdef str folder_file_path = '/scratch/p319950/data_rough/'
+cdef str folder_file_path = '/scratch/p319950/data_rough_5p/'
 cdef str filepath_convergence_noise_file_path = folder_file_path + 'conv_noise.dat'
 conv_noise_data_array = np.loadtxt(filepath_convergence_noise_file_path)
 cdef double[:, :] conv_noise_data = conv_noise_data_array
@@ -1217,7 +1217,7 @@ cpdef double lps_w02m(int l, char* type1, char* type2) noexcept nogil:
 cdef double der_2o(double f2p, double f1p, double f1m, double f2m, double dx) noexcept nogil:
     return (-1 * f2p + 8 * f1p - 8 * f1m + f2m) / (12 * dx)
 
-cdef double dx_frac = 0.025
+cdef double dx_frac = 0.05
 cdef double[:] fiducial_cosm_par = np.array([67.4, 0.0224, 0.120, 0.965, 2.1e-9, 0.06])
 
 
