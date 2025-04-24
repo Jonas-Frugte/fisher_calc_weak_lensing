@@ -477,10 +477,33 @@ At 1st order $A$ is a symetric matrix by definition and $\omega$ vanishes, we wi
 For an image on the sky, $A_{ij}$ thus introduces distortion. Note that $|A_{ij}| = (1 - \kappa)^2 + \omega^2 - |\gamma|^2 = 1 - 2\kappa + O(\kappa^2, \gamma^2, \omega^2)$. We can thus interpret $\kappa$ as telling us about the overal magnification of the source. The $\gamma_i$ represent the area preserving distortion, i.e. stretching and squeezing in a specific direction.
 
 We can relate $\kappa$ and $\gamma$ directly to the lensing potential as
-% TODO: should these subscripts be theta and phi?
 \begin{equation}
     \kappa = \frac{1}{2}\nabla^2\psi, \quad \gamma_1 = \frac{1}{2}(\partial_{n_1}^2 - \partial_{n_2}^2)\psi, \quad \gamma_2 = \partial_{n_1}\partial_{n_2} \psi.
 \end{equation}
+
+It is shown in appendix \ref{sec:shear} that
+\begin{equation}
+    \gamma := \gamma_1 + i\gamma_2 = \frac{1}{2}\eth_1(\eth_0\psi)
+\end{equation}
+where the spin raising operator, $\eth_s$ acts on a spin $s$ function defined on $S^2$ to create a spin $s+1$ function.
+$\eth_s$ can be written in spherical coordinates $(\theta, \phi)$ as\footnote{We use the physics convention for the definition of $\theta$ and $\phi$ here.}
+\begin{equation}
+    \eth_s = -\sin^s\theta(\partial_\theta + \frac{i}{\sin\theta})\frac{1}{\sin^s\theta}.
+\end{equation}
+In this context a spin $s$ function referes to a function $_sf(\theta, \phi)$ that transforms under any rotation of coordinates by picking up a phase factor $e^{is\alpha}$, with $\alpha$ the angle of the rotation, i.e.
+\begin{equation}
+    f'(\theta', \phi') = e^{is\alpha}f(\theta, \phi).
+\end{equation}
+Shear is thus a spin 2 function, which can be checked by noting that rotating a galaxy image stretched and squeezed through weak lensing by $180$ degrees gives the same stretching and squeezing, i.e. the same shear.
+
+% The spin weighted spherical harmonics, $_sY_l^m$ are eigenfunctions of the raising/lowering operator, in particular
+% \begin{equation}
+%     \eth_sY_l^m = \sqrt{(l-s)(l+s+1)} _{s+1}Y_l^m.
+% \end{equation}
+The spherical harmonics are eigenfunctions of $\nabla^2$ and the spin raising and lowering operators. Using this property, the corresponding relations in spherical harmonic space can be shown to be 
+\begin{equation*}
+    \kappa_{lm} = \frac{l(l+1)}{2}\psi_{lm}, \quad \gamma_{lm} = \frac{\sqrt{(l-1)l(l+1)(l+2)}}{2} \psi_{lm}.
+\end{equation*}
 
 \section{Weak Lensing Statistics}\label{sec:weaklensstats}
 \subsection{Lensing Potential Powerspectrum}
@@ -705,55 +728,6 @@ Finally, we obtain:
     B^{\psi_X\psi_Y\psi_Z}_{l_1l_2l_3} &= \sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{l_1^2l_2^2l_3^2}\Omega_m^3H_0^6\\
     & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{l_i/\chi\}, \eta_0-\chi).
 \end{empheq}
-
-% \begin{gather*}
-%     \langle \psi_{l_1m_1} \psi_{l_2m_2} \psi_{l_3m_3} \rangle = A_{\mathbf{l}}^{\mathbf{m}} (-1)^{l_1 + l_2 + l_3} 8 (2\pi)^{9/2} \int_0^{\chi_*} W(\chi, \chi_*)^3 \frac{\chi^2}{l_1^2l_2^2l_3^2} \br{\frac{3\Omega_m H^2}{2}}^3|_{\eta=\eta_0-\chi}\\
-%     \quad \times B^\delta\br{ \frac{l_1}{\chi}, \frac{l_2}{\chi}, \frac{l_3}{\chi}; \eta_0-\chi } \mathrm{d}\chi, \\
-%     C_l^\psi = \frac{72\pi^3}{l^4}\int_0^{\chi_*}\d \chi \chi^2(\Omega_m^2H^4)|_{\eta=\eta_0-\chi} C^\delta_{l/\chi}(\eta_0-\chi) W(\chi)^2.
-% \end{gather*}
-
-\subsection{Convergence and shear multipole moments}
-\paragraph{Convergence}
-% TODO: make notation of nabla nicer/more consistent
-
-Taking the harmonic decomposition of the convergence,
-\begin{equation}
-    \kappa(\hat{\mathbf n}) = \kappa_{lm}Y_l^m(\hat{\mathbf n}),
-\end{equation}
-you can relate it to the multipole moments of the lensing potential through
-\begin{equation}
-    \kappa_{lm} = \frac{1}{2}(\nabla^2\psi)_{lm} = \frac{l(l+1)}{2}\psi_{lm}
-\end{equation}
-because the spherical harmonics are eigenfunctions of the Laplacian operator.
-
-\paragraph{Shear}
-On the other hand, the shear is given by
-\begin{equation}
-    \gamma = \gamma_1 + i\gamma_2 = \frac{1}{2}\eth_1(\eth_0\psi)
-\end{equation}
-where the spin raising operator, $\eth_s$ acts on a spin $s$ function defined on $S^2$ to create a spin $s+1$ function. The above equality is proven explicitely in appendix ... %TODO: write and cite appendix proving equivalence
-$\eth_s$ can be written in $(\theta, \phi)$ coordinates as
-\begin{equation}
-    \eth_s = -\sin^s\theta(\partial_\theta + \frac{i}{\sin\theta})\frac{1}{\sin^s\theta}.
-\end{equation}
-It is worth explaining that in this context a spin $s$ function referes to a function $_sf(\theta, \phi)$ that transforms under any rotation of coordinates by picking up a phase factor $e^{is\alpha}$, with $\alpha$ the angle of the rotation, i.e.
-\begin{equation}
-    f'(\theta', \phi') = e^{is\alpha}f(\theta, \phi).
-\end{equation}
-Shear is actually a spin 2 function, which can immediately be seen by observing that rotating a galaxy image stretched and squeezed through weak lensing by $180$ degrees gives the same stretching and squeezing, i.e. the same shear. It is thus expected that the shear is proportional to $\eth^2\psi$. 
-
-The spin weighted spherical harmonics, $_sY_l^m$ are eigenfunctions of the raising/lowering operator, in particular
-\begin{equation}
-    \eth_sY_l^m = \sqrt{(l-s)(l+s+1)} _{s+1}Y_l^m.
-\end{equation}
-Decomposing the shear as
-\begin{equation}
-    \gamma(\theta, \phi) = \gamma_{lm} {}_sY_l^m(\theta,\phi),
-\end{equation}
-we thus find
-\begin{equation}
-    \gamma_{lm} = \frac{1}{2}\sqrt{(l-1)(l)(l+1)(l+2)} \psi_{lm}
-\end{equation}
 
 \section{Fisher Matrix Analysis} \label{sec:fisher}
 \subsection{Determing uncertainty in experimental parameters}
