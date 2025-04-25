@@ -732,22 +732,21 @@ Finally, we obtain:
 \section{Fisher Matrix Analysis} \label{sec:fisher}
 \subsection{Determing uncertainty in experimental parameters}
 
-Fisher matrix formalism is used to find a lower bound on the constraints we can place on experimental parameters. It combines the Cramer-Rao Inequality \cite{casella2002statistical} with the assumption that we have unbiased estimators  following a gaussian distribution \cite{dodelson2020modern}. In particular, denoting the Fisher matrix by $F$ and the parameters as $\theta_i$, it can be shown that
+The Fisher matrix formalism is used to find a lower bound on the constraints we can place on experimental parameters. It combines the Cramer-Rao Inequality \cite{casella2002statistical} with the assumption that we have unbiased estimators  following a gaussian distribution \cite{dodelson2020modern}. In particular, denoting the Fisher matrix by $F_{\theta_i\theta_j}$, the parameters as $\theta_i$, and their estimators as $\hat\theta_i$, it can be shown that
 \begin{equation}
-    Var_{\theta_i}(\hat\theta_i) \geq \br{F^{-1}}_{\theta_i\theta_j}.
+    \text{Var}(\hat\theta_i) \geq \br{F^{-1}}_{\theta_i\theta_i}.
 \end{equation}
-In the case of $n$ potentially different random variables $x_i$, each with associated mean $\mu_{x_i}$ and error $\sigma_{x_i}$, the Fisher matrix is given as
+In the case of $n$ measurements whose outcomes are realizations of random variables $x_i$, each with associated mean $\mu_{x_i}$, the Fisher matrix is given as
 \begin{equation}
-    F_{\theta_i\theta_j} := \sum_{p, q=1}^n \frac{\partial\mu_{x_p}}{\partial\theta_i}(\tilde\theta_k)(\text{Cov}^{-1})_{x_px_q}\frac{\partial\mu_{x_q}}{\partial\theta_j}(\tilde\theta_k),
+    F_{\theta_i\theta_j} := \sum_{p, q=1}^n \frac{\partial\mu_{x_p}}{\partial\theta_i}(\tilde\theta_k)(\text{Cov}^{-1})_{x_px_q}(\tilde \theta_k)\frac{\partial\mu_{x_q}}{\partial\theta_j}(\tilde\theta_k),
 \end{equation}
-where Cov is the covariance matrix associated with the random vector $(x_1, ..., x_n)$, $\text{Cov}_{x_px_q}:=\text{Cov}(x_p,x_q)$.
-
+where Cov is the covariance matrix associated with the random vector $(x_1, ..., x_n)$, $\text{Cov}_{x_px_q}:=\text{Cov}(x_p,x_q)$. The derivative of the mean measurement outcomes and measurement covariances will in general depend on the true, unknown, values of the experimental parameters. We therefore evaluate these quantities with for our best guess of the experimental parameters given some outside information. These are known as the ``fiducial'' values.
 
 
 %%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Fisher matrices for power- bispectra with multiple tracers}
-When considering power spectra, the definition of the Fisher matrix immediately gives 
+\subsection{Fisher matrices for power- and bispectra with multiple tracers}
+For power spectra, the definition of the Fisher matrix gives 
 \begin{equation*}
     F_{\alpha\beta} = \sum_{l_{min}\leq l, l' \leq l_{max}}\sum_{[XY][X'Y']} \partial_\alpha C_{l}^{XY} \br{\Cov^{-1}}^{XY, X'Y'}_{l, l'} \partial_\beta C^{X'Y'}_{l'}.
 \end{equation*}
@@ -755,16 +754,25 @@ Here the covariance matrix is given as
 \begin{equation*}
     \Cov^{XY, X'Y'}_{l, l'} = \langle \hat C^{XY}_{l} \hat C^{X'Y'}_{l'} \rangle.
 \end{equation*}
-The estimator of a power or bispectrum is just the product of the estimators of the appropriate tracers, $\hat C^{XY}_{l} = \hat X(l) \hat Y(l)$. The sum over $[XY]$ and $[X'Y']$ denotes a sum over possible tracer combinations \textit{without} counting permutations of tracer configuration. This is because permutations are not distinct signals, i.e. $\hat X(l) \hat Y(l) = \hat Y(l) \hat X(l)$. In fact, if we were to count these permutations as distinct signals we will get identical columns and/or rows in our covariance matrix making inversion impossible:
+The estimator of a power or bispectrum is the product of the estimators of the appropriate tracers, e.g. $\hat C^{XY}_{l} = \hat X(l) \hat Y(l)$. The sum over $[XY]$ and $[X'Y']$ denotes a sum over possible tracer combinations \textit{without} counting permutations of tracer configuration. This is because permutations are not distinct signals, i.e. $\hat X(l) \hat Y(l) = \hat Y(l) \hat X(l)$. In fact, if we were to count these permutations as distinct signals we will get identical columns and/or rows in our covariance matrix making inversion impossible:
 \begin{equation*}
     \langle \hat X(l) \hat Y (l) \hat X'(l') \hat Y' (l') \rangle = \langle \hat Y (l) \hat X (l) \hat X'(l') \hat Y' (l') \rangle, \quad \forall X', Y', l'. 
 \end{equation*}
 
-To evaluate the covariance matrix we again assume that the estimators are gaussian distributed so that we can do apply a wick contraction, as is commonly done \cite{tegmark1997cosmic}. In this case we get
+To evaluate the covariance matrix we again assume that the estimators are gaussian distributed so that we can apply a wick contraction, as is commonly done \cite{tegmark1997cosmic}. In this case we get
 \begin{equation*}
-    \Cov^{XY, X'Y'}_{l, l'} = \delta_{ll'}\br{C^{XX'}_lC^{YY'}_l + C^{XY'}_lC^{YX'}_l}.
+    \Cov^{XY, X'Y'}_{l, l'} = \frac{1}{2l+1}\delta_{ll'}\br{\tilde C^{XX'}_l \tilde C^{YY'}_l + \tilde C^{XY'}_l \tilde C^{YX'}_l}.
 \end{equation*}
-Under the Gaussian approximation the gaussian matrix thus vanishes except for $3\times 3$ block matrices (in the case of 2 tracers) on the diagonal. The fisher matrix is then
+Two remarks are in order.
+\begin{enumerate}
+    \item By definition
+    \begin{equation*}
+        \langle X_{lm}X'_{l'm'} \rangle = (2\pi)^3 \delta_{ll'}\delta_{mm'}C_l^{XX'},
+    \end{equation*}
+    so you can average over the measurements done for different values of $m$, i.e. $X_{l(-l)}$, $X_{l(-l+1)}$, $\cdots$, $X_{l(l-1)}$, $X_{ll}$. This results in the $(2l+1)^{-1}$ factor in the power spectrum covariance. 
+    \item The tilde is used to denote the powerspectrum as calculated earlier plus the noise power spectrum, $N^{XX'}_l$, which is the power spectrum of the noise associated with the estimator of the field. This is where experimental noise is incorporated into the calculation. 
+\end{enumerate}
+Under the Gaussian approximation the covariance matrix vanishes except for $3\times 3$ block matrices (in the case of 2 tracers) on the diagonal. The fisher matrix is then
 \begin{equation*}
     F_{\alpha\beta} = \sum_{l}\sum_{[XY][X'Y']} \partial_\alpha C_{l}^{XY} \br{\Cov^{-1}_l}^{XY, X'Y'} \partial_\beta C^{X'Y'}_{l}.
 \end{equation*} 
@@ -775,7 +783,7 @@ Next, we consider the Fisher matrix for bispectra measurements.
 \begin{equation*}
     F_{\alpha\beta} = \sum_{\text{distinct signals}}\sum_{\text{distinct signals prime}} B^{XYZ}_{l_1l_2l_3}\br{\Cov^{-1}}^{XYZ,X'Z'Y'}_{l_1l_2l_3,l_1'l_2'l_3'}B^{X'Y'Z'}_{l_1'l_2'l_3'}.
 \end{equation*} 
-Counting only distinct signals requires more care compared to the power spectra. The rule is that $B^{XYZ}_{l_1l_2l_3}$ and $B^{X'Y'Z'}_{l_1'l_2'l_3'}$ are not distinct signals if there exists a permutation $\sigma$ that simultaniously maps $X'Y'Z'$ to $XYZ$ and $l_1'l_2'l_3'$ to $l_1l_2l_3$. It turns out that we can write a sum over distinct signals out as
+Counting only distinct signals requires more care compared to the power spectra. The rule is that $B^{XYZ}_{l_1l_2l_3}$ and $B^{X'Y'Z'}_{l_1'l_2'l_3'}$ are not distinct signals if there exists a permutation $\sigma$ that simultaniously maps $X'Y'Z'$ to $XYZ$ and $l_1'l_2'l_3'$ to $l_1l_2l_3$. It turns out that we can write a sum over distinct signals explicitly as
 \begin{gather*}
     \sum_{\text{distinct signals}} = \underbrace{\sum_{l_1=l_2=l_3}\sum_{[XYZ]}}_{\text{sum }1} + \underbrace{\sum_{l_1=l_2\neq l_3}\sum_{[XY]Z}}_{\text{sum }2} + \underbrace{\sum_{l_1<l_2<l_3}\sum_{XYZ}}_{\text{sum }3}.
 \end{gather*}
@@ -785,12 +793,11 @@ With the same definition again for the $[\cdot]$ notation. For example:
     \{[XY]Z|X,Y,Z\in\{\psi_\kappa, \psi_\gamma\}\} = \{\psi_\kappa\psi_\kappa\psi_\kappa, \psi_\kappa\psi_\gamma\psi_\kappa, \psi_\gamma\psi_\gamma\psi_\kappa,\psi_\kappa\psi_\kappa\psi_\gamma, \psi_\kappa\psi_\gamma\psi_\gamma, \psi_\gamma\psi_\gamma\psi_\gamma\}.
 \end{gather*}
 
-It follows to show that the sets that these sums sum over form a partition of the set of all distinct signals. Clearly all 3 sets are pairwise disjoint (no common elements) because of the criteria for the $l_i$'s. To show that their union covers the set of distinct signals, start by considering an arbitrary signal. Its $l$ configuration will trivially correspond to exactly one of the three sums. If it is sum 1, then we are free to permute the $XYZ$'s by virtue of the $l$'s being identical so we will be able to match the $XYZ$ configuration to one of the elements of $\{\{XYZ\}\}$. Similarly, if the $l$ configuration corresponds to sum 2, then we are free to permute the $XY$ configuration to match with one of the elements of $\{\{XY\}Z\}$. The $Z$ value does not matter because any $Z$ value is accounted for. For sum 3 we can argue that we can switch around the order of the $l$'s to satisfy $l_1 < l2 < l3$ and the corresponding $XYZ$ configuration will be accounted for in sum 3 because all $XYZ$ combinations are accounted. Finally, it is simple to verify that no distinct signal is counted more than once within each sum.
+It follows to show that the sets that these sums sum over form a partition of the set of all distinct signals. Clearly all 3 sets are pairwise disjoint (no common elements) because of the criteria for the $l_i$'s. To show that their union covers the set of distinct signals, start by considering an arbitrary signal. Its $l$ configuration will trivially correspond to exactly one of the three sums. If it is sum 1, then we are free to permute the $XYZ$'s by virtue of the $l$'s being identical so we will be able to match the $XYZ$ configuration to one of the elements of $\{\{XYZ\}\}$. Similarly, if the $l$ configuration corresponds to sum 2, then we are free to permute the $XY$ configuration to match with one of the elements of $\{\{XY\}Z\}$. The $Z$ value does not matter because any $Z$ value is accounted for. For sum 3 we can argue that we can switch around the order of the $l$'s to satisfy $l_1 < l2 < l3$ and the corresponding $XYZ$ configuration will be accounted for in sum 3 because all $XYZ$ combinations are counted. Finally, it is simple to verify that no distinct signal is counted more than once within each sum.
 
-\paragraph{Covariance matrix}
-Every element of the Fisher matrix can be seen as an inner product weighted by the inverse covariance matrix. We can choose how we order the vectors\footnote{The entries are the derivatives of the bispectra}. We organize the vectors according to the sum 1, 2, and 3 parts first. Then by $l$ configuration. Within each $l$ configuration we can choose any ordering for the $XYZ$ configurations. The covariance matrix now becomes a block matrix with each block corresponding to a $l_i$ and $l_i'$ configuration. When wick contracting using the gaussian approximation, every block matrix where $l_1l_2l_3$ is not a permutation of $l_1'l_2'l_3'$ vanishes. The entries of each block matrix are given as
+To calculate the elements of the covariance matrix consider the following. Every element of the Fisher matrix can be seen as an inner product weighted by the inverse covariance matrix. We can choose how we order the vectors\footnote{The entries are the derivatives of the bispectra}. We organize the vectors according to the sum 1, 2, and 3 parts first. Then by $l$ configuration. Within each $l$ configuration we can choose any ordering for the $XYZ$ configurations. The covariance matrix now becomes a block matrix with each block corresponding to an $l_i$ and $l_i'$ configuration. When wick contracting using the gaussian approximation, every block matrix where $(l_1,l_2,l_3)\neq (l_1',l_2',l_3')$ vanishes. It can then be shown that the entries of each block matrix are given as
 \begin{gather*}
-    \br{\Cov_{l_1l_2l_3}}^{XYZ,X'Y'Z'} = C^{XX'}_{l_1}C^{YY'}_{l_2}C^{ZZ'}_{l_3} + \delta_{l_1l_2}C^{XY'}_{l_1}C^{YX'}_{l_2}C^{ZZ'}_{l_3} +\delta_{l_2l_3}C^{XX'}_{l_1}C^{YZ'}_{l_2}C^{ZX'}_{l_3} \\ + \delta_{l_3l_1}C^{XZ'}_{l_1}C^{YY'}_{l_2}C^{ZX'}_{l_3} +\delta_{l_1l_2}\delta_{l_2l_3}\br{C^{XY'}_{l_1}C^{YZ'}_{l_2}C^{ZX'}_{l_3} +C^{XZ'}_{l_1}C^{YX'}_{l_2}C^{ZY'}_{l_3}}.
+    \br{\Cov_{l_1l_2l_3}}^{XYZ,X'Y'Z'} = \tilde C^{XX'}_{l_1}\tilde C^{YY'}_{l_2}\tilde C^{ZZ'}_{l_3} + \delta_{l_1l_2}\tilde C^{XY'}_{l_1}\tilde C^{YX'}_{l_2}\tilde C^{ZZ'}_{l_3} +\delta_{l_2l_3}\tilde C^{XX'}_{l_1}\tilde C^{YZ'}_{l_2}\tilde C^{ZX'}_{l_3} \\ + \delta_{l_3l_1}\tilde C^{XZ'}_{l_1}\tilde C^{YY'}_{l_2}\tilde C^{ZX'}_{l_3} +\delta_{l_1l_2}\delta_{l_2l_3}\br{\tilde C^{XY'}_{l_1}\tilde C^{YZ'}_{l_2}\tilde C^{ZX'}_{l_3} +\tilde C^{XZ'}_{l_1}\tilde C^{YX'}_{l_2}\tilde C^{ZY'}_{l_3}}.
 \end{gather*}
 With our ordering this means that the covariance matrix is again a diagonal block matrix, now with blocks of size $4 \times 4$ (sum 1), $6 \times 6$ (sum 2), and $8 \times 8$ (sum 3).
 
@@ -800,44 +807,44 @@ The Fisher matrix above can be significantly simplified and written as
 F_{\alpha\beta} = \sum_{l_1 \leq l_2 \leq l_3} \frac{\mathcal P _{l_1l_2l_3}}{6}
 \sum_{XYZ}\sum_{X'Y'Z'} 
 \partial_\alpha B^{X Y Z}_{l_1 l_2 l_3} 
-(C^{-1})^{X X'}_{l_1}
-(C^{-1})^{Y Y'}_{l_2}
-(C^{-1})^{Z Z'}_{l_3}
+(\tilde C^{-1})^{X X'}_{l_1}
+(\tilde C^{-1})^{Y Y'}_{l_2}
+(\tilde C^{-1})^{Z Z'}_{l_3}
 \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3}
 \end{equation*}
-where
+where, in the case of two tracers, 
 \begin{equation*}
     C_{l} := \begin{pmatrix}
-        C^{\psi_\kappa\psi_\kappa}_l & C^{\psi_\kappa\psi_\gamma}_l \\
-        C^{\psi_\kappa\psi_\gamma}_l & C^{\psi_\gamma\psi_\gamma}_l
+        \tilde C^{\psi_1\psi_1}_l & \tilde C^{\psi_1\psi_2}_l \\
+        \tilde C^{\psi_1\psi_2}_l & \tilde C^{\psi_2\psi_2}_l
     \end{pmatrix}
 \end{equation*}
 and $\mathcal P_{l_1l_2l_3}$ is defined as the number of distinct permutations that can be made with $l_1l_2l_3$. This form was, for example, used in \cite{Kalaja_2021}\footnote{Note that in \cite{Kalaja_2021} this is based on a previous equation summing over \textit{all} $l_i$ (so including permutations of each configuration) which is missing a factor of $1/6$.}.
 
 To show that the above is the same as the formula for the Fisher matrix given earlier, first parition the sum in the same way and collect all terms that fit in the different categories.
 \begin{align*}
-    F_{\alpha\beta} &= \sum_{l_1=l_2=l_3} \sum_{[XYZ]}\sum_{[X'Y'Z']} \partial_{\alpha} B^{XYZ}_{l_1 l_2 l_3}\br{\frac{\mathcal P _{l_1l_2l_3}}{6}\sum_{d. p. XYZ} \sum_{d. p. X'Y'Z'}(C^{-1})^{X X'}_{l_1}
-    (C^{-1})^{Y Y'}_{l_2}
-    (C^{-1})^{Z Z'}_{l_3}}
+    F_{\alpha\beta} &= \sum_{l_1=l_2=l_3} \sum_{[XYZ]}\sum_{[X'Y'Z']} \partial_{\alpha} B^{XYZ}_{l_1 l_2 l_3}\br{\frac{\mathcal P _{l_1l_2l_3}}{6}\sum_{d. p. XYZ} \sum_{d. p. X'Y'Z'}(\tilde C^{-1})^{X X'}_{l_1}
+    (\tilde C^{-1})^{Y Y'}_{l_2}
+    (\tilde C^{-1})^{Z Z'}_{l_3}}
     \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3} \\
-    &+ \sum_{l_1=l_2\neq l_3} \sum_{[XY]Z}\sum_{[X'Y']Z'} \partial_{\alpha} B^{XYZ}_{l_1 l_2 l_3}\br{\frac{\mathcal P _{l_1l_2l_3}}{6}\sum_{d. p. XY} \sum_{d. p. X'Y'}(C^{-1})^{X X'}_{l_1}
-    (C^{-1})^{Y Y'}_{l_2}
-    (C^{-1})^{Z Z'}_{l_3}}
+    &+ \sum_{l_1=l_2\neq l_3} \sum_{[XY]Z}\sum_{[X'Y']Z'} \partial_{\alpha} B^{XYZ}_{l_1 l_2 l_3}\br{\frac{\mathcal P _{l_1l_2l_3}}{6}\sum_{d. p. XY} \sum_{d. p. X'Y'}(\tilde C^{-1})^{X X'}_{l_1}
+    (\tilde C^{-1})^{Y Y'}_{l_2}
+    (\tilde C^{-1})^{Z Z'}_{l_3}}
     \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3} \\
-    &+ \sum_{l_1<l_2<l_3} \sum_{XYZ}\sum_{X'Y'Z'} \partial_{\alpha} B^{XYZ}_{l_1 l_2 l_3}(C^{-1})^{X X'}_{l_1}
-    (C^{-1})^{Y Y'}_{l_2}
-    (C^{-1})^{Z Z'}_{l_3}
+    &+ \sum_{l_1<l_2<l_3} \sum_{XYZ}\sum_{X'Y'Z'} \partial_{\alpha} B^{XYZ}_{l_1 l_2 l_3}(\tilde C^{-1})^{X X'}_{l_1}
+    (\tilde C^{-1})^{Y Y'}_{l_2}
+    (\tilde C^{-1})^{Z Z'}_{l_3}
     \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3},
 \end{align*}
 where ``$d. p.$'' stands for ``distinct permutations''.
 The entries above are then the entries of the inverses of the block matrices mentioned earlier. This can be checked. For example, for the $l_1 = l_2 = l_3$ sum the multiplication of block matrices corresponding to the same $l_i$ configuration can be written as:
 \begin{gather*}
-    \sum_{[X'Y'Z']} \br{\frac{\mathcal P _{l_1l_2l_3}}{6} \sum_{d. p. XYZ} \sum_{d. p. X'Y'Z'}(C^{-1})^{X X'}_{l}
-    (C^{-1})^{Y Y'}_{l}
-    (C^{-1})^{Z Z'}_{l}} \br{C^{X'X''}_l C^{Y'Y''}_l C^{Z'Z''}_l + \text{perms } X''Y''Z''} \\
-    = \frac{\mathcal P _{l_1l_2l_3}}{6}\sbr{\br{\sum_{d. p. XYZ} \sum_{X'Y'Z'}(C^{-1})^{X X'}_{l}
-    (C^{-1})^{Y Y'}_{l}
-    (C^{-1})^{Z Z'}_{l}} C^{X'X''}_l C^{Y'Y''}_l C^{Z'Z''}_l} + \text{perms } X''Y''Z'' \\
+    \sum_{[X'Y'Z']} \br{\frac{\mathcal P _{l_1l_2l_3}}{6} \sum_{d. p. XYZ} \sum_{d. p. X'Y'Z'}(\tilde C^{-1})^{X X'}_{l}
+    (\tilde C^{-1})^{Y Y'}_{l}
+    (\tilde C^{-1})^{Z Z'}_{l}} \br{\tilde C^{X'X''}_l \tilde C^{Y'Y''}_l \tilde C^{Z'Z''}_l + \text{perms } X''Y''Z''} \\
+    = \frac{\mathcal P _{l_1l_2l_3}}{6}\sbr{\br{\sum_{d. p. XYZ} \sum_{X'Y'Z'}(\tilde C^{-1})^{X X'}_{l}
+    (\tilde C^{-1})^{Y Y'}_{l}
+    (\tilde C^{-1})^{Z Z'}_{l}} \tilde C^{X'X''}_l \tilde C^{Y'Y''}_l \tilde C^{Z'Z''}_l} + \text{perms } X''Y''Z'' \\
     = \frac{\mathcal P _{l_1l_2l_3}}{6} \sum_{d. p. XYZ} \delta_{XX''}\delta_{YY''}\delta_{ZZ''} + \text{perms } X''Y''Z''
     = \frac{\mathcal P _{l_1l_2l_3}}{6} \delta_{[XYZ], [X''Y''Z'']} + \text{perms } X''Y''Z''\\
     = \delta_{[XYZ], [X''Y''Z'']} .
@@ -847,36 +854,36 @@ The sum over the different wick contractions will similarly cancel with the $\ma
 The same type of simplification can be made in the Fisher matrix for the power spectrum, though it doesn't offer any significant benefits compared to our current $3\times 3$ block matrix form.
 
 \subsection{Signal to Noise Ratio (SNR)}
-To measure the overal detectability of the lensing spectra, we introduce an overal amplitude of our signal, $A$, with fiducial value 1 as experimental parameter and compute $F_{AA}$. Obviously, $\partial_A\br{A B^{XYZ}_{l_1l_2l_3}}|_{A=1} = B^{XYZ}_{l_1l_2l_3}$, so we find
+To quantify the detectability of the lensing spectra, we introduce an overal amplitude of our signal, $A$, with fiducial value 1 as experimental parameter and compute $F_{AA}$. Obviously, $\partial_A\br{A B^{XYZ}_{l_1l_2l_3}}|_{A=1} = B^{XYZ}_{l_1l_2l_3}$, so we find
 \begin{equation*}
     \br{\frac{S}{N}}^2 := F_{AA} =
 \sum_{XYZ, X'Y'Z'} \sum_{l_1\leq l_2 \leq l_3} \frac{\mathcal P _{l_1l_2l_3}}{6}
 B^{X Y Z}_{l_1 l_2 l_3} 
-(C^{-1})^{X X'}_{l_1}
-(C^{-1})^{Y Y'}_{l_2}
-(C^{-1})^{Z Z'}_{l_3}
+(\tilde C^{-1})^{X X'}_{l_1}
+(\tilde C^{-1})^{Y Y'}_{l_2}
+(\tilde C^{-1})^{Z Z'}_{l_3}
 B^{X' Y' Z'}_{l_1 l_2 l_3}.
 \end{equation*}
 The equation for the SNR of the power spectra is identical in form.
 
-\subsection{Combined Fisher Matrix}
-To compute the Fisher matrix of an experiment measuring both lensing power- and bispectra we are required to compute and invert the full covariance matrix. Under the Gaussian matrix this simplifies trivially. The correlation between the a power- and bispectrum estimator contains an odd (5) amount of fields and thus always vanishes. We are thus allowed to simply add the Fisher matrices of the power- and bispectra to compute the combined Fisher matrix.  
+\subsection{Fisher matrix of power- + bispectra}
+To compute the Fisher matrix of an experiment measuring both lensing power- and bispectra we are required to compute and invert the full covariance matrix. If we keep assuming that the measurements are close enough to Gaussian to be able to use wick contractions to a good approximation, the full covariance matrix simplifies trivially. The correlation between a power- and bispectrum estimator contains an odd (5) amount of fields and thus always vanishes. We are thus allowed to simply add the Fisher matrices of the power- and bispectra to compute the combined Fisher matrix.  
 
 
-\subsection{Fisher Matrices and Eigenvalues}
-As explained earlier, inverting the Fisher matrix gives us a covariance matrix of the estimators, $\hat \theta_i$ of our experimental parameters. For any vector $\mathbf v$,
-\begin{equation*}
-    \mathbf{v}^T_j \Cov_{ij} \mathbf v_i = \langle (v_i \hat \theta_i)^2 \rangle.
-\end{equation*}
-In particular, if the covariance matrix thus has some large eigenvalue $\lambda_L$ (large compared to the overal accuracy of our experiment), with eigenvector $v_i$, then the corresponding estimator, $v_i\hat \theta_i$, has a large variance and thus represents an approximate degeneracy in our parameters. Clearly, when looking at the Fisher matrix we thus instead look for the smallest eigenvalue.
+% \subsection{Fisher Matrices and Eigenvalues}
+% As explained earlier, inverting the Fisher matrix gives us a covariance matrix of the estimators, $\hat \theta_i$ of our experimental parameters. For any vector $\mathbf v$,
+% \begin{equation*}
+%     \mathbf{v}^T_j \Cov_{ij} \mathbf v_i = \langle (v_i \hat \theta_i)^2 \rangle.
+% \end{equation*}
+% In particular, if the covariance matrix thus has some large eigenvalue $\lambda_L$ (large compared to the overal accuracy of our experiment), with eigenvector $v_i$, then the corresponding estimator, $v_i\hat \theta_i$, has a large variance and thus represents an approximate degeneracy in our parameters. Clearly, when looking at the Fisher matrix we thus instead look for the smallest eigenvalue.
 
-If we have such an abnormally small eigenvalue we are likely to run into problems with calculating and inverting the Fisher matrix due to numerical errors. These problems are that inversion becomes unstable and that the matrix as a whole might not be PSD because the small eigenvalue was (wrongly) calculated to be negative. These problems are likely because (1) the smallest eigenvalue is sensitive to numerical errors due to being small and (2) the errors on the eigenvalues is proportial to the condition number of the matrix \cite{horn2012matrix}, where the condition number is the ratio between the largest and smallest eigenvalue of the matrix \cite{trefethen1997numerical}. Specifically, for a matrix $A$ with some perturbation $\Delta A$, the corresponding  perturbation of eigenvalue $\lambda_i$ is bounded above as
-\begin{equation*}
-    |\Delta \lambda_i | \leq ||\Delta A || \kappa(A)|,
-\end{equation*}
-with $\kappa(A)$ the condition number. 
+% If we have such an abnormally small eigenvalue we are likely to run into problems with calculating and inverting the Fisher matrix due to numerical errors. These problems are that inversion becomes unstable and that the matrix as a whole might not be PSD because the small eigenvalue was (wrongly) calculated to be negative. These problems are likely because (1) the smallest eigenvalue is sensitive to numerical errors due to being small and (2) the errors on the eigenvalues is proportial to the condition number of the matrix \cite{horn2012matrix}, where the condition number is the ratio between the largest and smallest eigenvalue of the matrix \cite{trefethen1997numerical}. Specifically, for a matrix $A$ with some perturbation $\Delta A$, the corresponding  perturbation of eigenvalue $\lambda_i$ is bounded above as
+% \begin{equation*}
+%     |\Delta \lambda_i | \leq ||\Delta A || \kappa(A)|,
+% \end{equation*}
+% with $\kappa(A)$ the condition number. 
 
-Before inverting a Fisher matrix, it is thus recommended to remove rows and columns corresponding to parameters that are poorly constrained by the experiment, which can be determined by checking for small eigenvalues and their eigenvectors.
+% Before inverting a Fisher matrix, it is thus recommended to remove rows and columns corresponding to parameters that are poorly constrained by the experiment, which can be determined by checking for small eigenvalues and their eigenvectors.
 
 
 % Computing the inverse is then reduced to computing the inverse of the individual block matrices. The block matrices for sum 1 and 2 don't have a particularly nice form (cite paper about multiple tracer fisher matrices for bispectra) but for sum 3 the inverse of the block matrix corresponding to $l_1l_2l_3$ is
@@ -1098,9 +1105,8 @@ Thus, at $(r_0, \theta_0, \phi_0)$,
     \frac{1}{2}\eth_1(\eth_0\psi) = \frac{1}{2}\sin\theta(\partial_\theta+\frac{i}{\sin\theta}\partial_\phi)(\frac{1}{\sin\theta}(\partial_\theta+\frac{1}{\sin\theta}\partial_\phi))\\
     =\frac{\partial^2 \psi}{\partial \theta^2} - \frac{\cos\theta}{\sin\theta} \frac{\partial \psi}{\partial \theta} + \frac{2 i}{\sin\theta} \frac{\partial^2 \psi}{\partial \theta \partial \phi} - \frac{1}{\sin^2\theta} \frac{\partial^2 \psi}{\partial \phi^2} - 2 i \frac{\cos\theta}{\sin^2\theta} \frac{\partial \psi}{\partial \phi}\\
     =\frac{1}{2}(\partial_{\tilde y}^2 - \partial_{\tilde x}^2 + 2i\partial_{\tilde x}\partial_{\tilde y})\psi
-    =\gamma_1 + i\gamma_2 = \gamma,
+    =\gamma_1 + i\gamma_2 = \gamma.
 \end{gather*}
-as required.
 
 % \section{Fisher matrices raw data}
 
