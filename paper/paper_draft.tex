@@ -1108,81 +1108,42 @@ Thus, at $(r_0, \theta_0, \phi_0)$,
     =\gamma_1 + i\gamma_2 = \gamma.
 \end{gather*}
 
-% \section{Fisher matrices raw data}
+\section{Numerical derivative}
+The derivatives with respect to cosmological parameters were taken with a central difference formula, i.e.
+\begin{equation*}
+    f'(x) = \frac{f(x+h) - f(x-h)}{2h} + \mathcal O (h^2).
+\end{equation*}
+Each change of the cosmological parameters requires a recalculation of the entire cosmology, making it computationally expensive. For the approximation to be accurate a balance needs to be found between numerical errors for small $h$ and a larger $\mathcal O(h^2)$ error for larger $h$. The $h$ values chosen for each parameter are shown in table \ref{tab:cosmo-params-diff} and are similar to the values used in \cite{Namikawa_2016}\footnote{As confirmed during a conversation with the author.}.
 
-% Bispectra Fisher matrices:\\
-% \begin{gather*}
-% F^B_{\psi_c} =
-% \begin{pmatrix}
-% 4\times 10^{-3} & 6\times 10^{-4} & -6\times 10^{-3} & -9\times 10^{-3} & 1\times 10^{-4} & -4\times 10^{-3} & -1\times 10^{-3}\\
-% 6\times 10^{-4} & 1\times 10^{-4} & -1\times 10^{-3} & -2\times 10^{-3} & 2\times 10^{-5} & -6\times 10^{-4} & -2\times 10^{-4}\\
-% -6\times 10^{-3} & -1\times 10^{-3} & 1\times 10^{-2} & 1\times 10^{-2} & -2\times 10^{-4} & 6\times 10^{-3} & 2\times 10^{-3}\\
-% -9\times 10^{-3} & -2\times 10^{-3} & 1\times 10^{-2} & 2\times 10^{-2} & -2\times 10^{-4} & 8\times 10^{-3} & 3\times 10^{-3}\\
-% 1\times 10^{-4} & 2\times 10^{-5} & -2\times 10^{-4} & -2\times 10^{-4} & 3\times 10^{-6} & -1\times 10^{-4} & -3\times 10^{-5}\\
-% -4\times 10^{-3} & -6\times 10^{-4} & 6\times 10^{-3} & 8\times 10^{-3} & -1\times 10^{-4} & 4\times 10^{-3} & 1\times 10^{-3}\\
-% -1\times 10^{-3} & -2\times 10^{-4} & 2\times 10^{-3} & 3\times 10^{-3} & -3\times 10^{-5} & 1\times 10^{-3} & 4\times 10^{-4}
-% \end{pmatrix},
-% \\
-% F^B_{\psi_s} =
-% \begin{pmatrix}
-% 3\times 10^{-1} & 4\times 10^{-2} & -3\times 10^{-1} & -1\times 10^{-1} & 5\times 10^{-3} & -1\times 10^{-1} & -1\times 10^{-1}\\
-% 4\times 10^{-2} & 4\times 10^{-3} & -3\times 10^{-2} & -2\times 10^{-2} & 5\times 10^{-4} & -1\times 10^{-2} & -1\times 10^{-2}\\
-% -3\times 10^{-1} & -3\times 10^{-2} & 2\times 10^{-1} & 1\times 10^{-1} & -3\times 10^{-3} & 1\times 10^{-1} & 1\times 10^{-1}\\
-% -1\times 10^{-1} & -2\times 10^{-2} & 1\times 10^{-1} & 7\times 10^{-2} & -2\times 10^{-3} & 6\times 10^{-2} & 5\times 10^{-2}\\
-% 5\times 10^{-3} & 5\times 10^{-4} & -3\times 10^{-3} & -2\times 10^{-3} & 6\times 10^{-5} & -2\times 10^{-3} & -2\times 10^{-3}\\
-% -1\times 10^{-1} & -1\times 10^{-2} & 1\times 10^{-1} & 6\times 10^{-2} & -2\times 10^{-3} & 6\times 10^{-2} & 5\times 10^{-2}\\
-% -1\times 10^{-1} & -1\times 10^{-2} & 1\times 10^{-1} & 5\times 10^{-2} & -2\times 10^{-3} & 5\times 10^{-2} & 5\times 10^{-2}
-% \end{pmatrix},
-% \\
-% F^B_{\psi_{s + c}} =
-% \begin{pmatrix}
-% 4\times 10^{-1} & 4\times 10^{-2} & -3\times 10^{-1} & -2\times 10^{-1} & 5\times 10^{-3} & -2\times 10^{-1} & -1\times 10^{-1}\\
-% 4\times 10^{-2} & 4\times 10^{-3} & -3\times 10^{-2} & -2\times 10^{-2} & 6\times 10^{-4} & -2\times 10^{-2} & -1\times 10^{-2}\\
-% -3\times 10^{-1} & -3\times 10^{-2} & 2\times 10^{-1} & 2\times 10^{-1} & -4\times 10^{-3} & 1\times 10^{-1} & 1\times 10^{-1}\\
-% -2\times 10^{-1} & -2\times 10^{-2} & 2\times 10^{-1} & 1\times 10^{-1} & -3\times 10^{-3} & 8\times 10^{-2} & 7\times 10^{-2}\\
-% 5\times 10^{-3} & 6\times 10^{-4} & -4\times 10^{-3} & -3\times 10^{-3} & 7\times 10^{-5} & -2\times 10^{-3} & -2\times 10^{-3}\\
-% -2\times 10^{-1} & -2\times 10^{-2} & 1\times 10^{-1} & 8\times 10^{-2} & -2\times 10^{-3} & 7\times 10^{-2} & 6\times 10^{-2}\\
-% -1\times 10^{-1} & -1\times 10^{-2} & 1\times 10^{-1} & 7\times 10^{-2} & -2\times 10^{-3} & 6\times 10^{-2} & 5\times 10^{-2}
-% \end{pmatrix}.
-% \end{gather*}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lcc}
+    \toprule
+    Parameter & Fiducial value & Finite difference ($h$) \\
+    \midrule
+    $H$            & $67.4$               & fiducial\,$\times0.1$   \\
+    $\Omega_b h^2$ & $0.0223$             & fiducial\,$\times0.1$   \\
+    $\Omega_c h^2$ & $0.119$              & fiducial\,$\times0.005$ \\
+    $n_s$          & $0.965$              & fiducial\,$\times0.005$ \\
+    $A_s$          & $2.13\times10^{-9}$  & fiducial\,$\times0.1$   \\
+    $m_\nu$        & $0.06$               & fiducial\,$\times0.1$   \\
+    $w_0$          & $-1$                 & $0.03$                  \\
+    \bottomrule
+    \end{tabular}
+    \caption{Fiducial cosmological parameters and their finite-difference steps}
+    \label{tab:cosmo-params-diff}
+\end{table}
+    
+    
 
-% Powerspectra Fisher matrices:
-% \begin{gather*}
-% F^P_{\psi_c} =
-% \begin{pmatrix}
-% 2\times 10^{-2} & 4\times 10^{-3} & -4\times 10^{-2} & 8\times 10^{-3} & 9\times 10^{-4} & -3\times 10^{-2} & -1\times 10^{-2}\\
-% 4\times 10^{-3} & 1\times 10^{-3} & -9\times 10^{-3} & -6\times 10^{-4} & 2\times 10^{-4} & -5\times 10^{-3} & -2\times 10^{-3}\\
-% -4\times 10^{-2} & -9\times 10^{-3} & 8\times 10^{-2} & -9\times 10^{-3} & -2\times 10^{-3} & 6\times 10^{-2} & 2\times 10^{-2}\\
-% 8\times 10^{-3} & -6\times 10^{-4} & -9\times 10^{-3} & 2\times 10^{-2} & 3\times 10^{-4} & -1\times 10^{-2} & -4\times 10^{-3}\\
-% 9\times 10^{-4} & 2\times 10^{-4} & -2\times 10^{-3} & 3\times 10^{-4} & 3\times 10^{-5} & -1\times 10^{-3} & -4\times 10^{-4}\\
-% -3\times 10^{-2} & -5\times 10^{-3} & 6\times 10^{-2} & -1\times 10^{-2} & -1\times 10^{-3} & 4\times 10^{-2} & 2\times 10^{-2}\\
-% -1\times 10^{-2} & -2\times 10^{-3} & 2\times 10^{-2} & -4\times 10^{-3} & -4\times 10^{-4} & 2\times 10^{-2} & 6\times 10^{-3}
-% \end{pmatrix},
-% \\
-% F^P_{\psi_s} =
-% \begin{pmatrix}
-% 2\times 10^{-1} & 1\times 10^{-2} & -1\times 10^{-1} & -3\times 10^{-2} & 2\times 10^{-3} & -6\times 10^{-2} & -7\times 10^{-2}\\
-% 1\times 10^{-2} & 1\times 10^{-3} & -9\times 10^{-3} & -3\times 10^{-3} & 2\times 10^{-4} & -5\times 10^{-3} & -6\times 10^{-3}\\
-% -1\times 10^{-1} & -9\times 10^{-3} & 7\times 10^{-2} & 2\times 10^{-2} & -1\times 10^{-3} & 4\times 10^{-2} & 4\times 10^{-2}\\
-% -3\times 10^{-2} & -3\times 10^{-3} & 2\times 10^{-2} & 9\times 10^{-3} & -4\times 10^{-4} & 1\times 10^{-2} & 1\times 10^{-2}\\
-% 2\times 10^{-3} & 2\times 10^{-4} & -1\times 10^{-3} & -4\times 10^{-4} & 3\times 10^{-5} & -7\times 10^{-4} & -8\times 10^{-4}\\
-% -6\times 10^{-2} & -5\times 10^{-3} & 4\times 10^{-2} & 1\times 10^{-2} & -7\times 10^{-4} & 2\times 10^{-2} & 2\times 10^{-2}\\
-% -7\times 10^{-2} & -6\times 10^{-3} & 4\times 10^{-2} & 1\times 10^{-2} & -8\times 10^{-4} & 2\times 10^{-2} & 3\times 10^{-2}
-% \end{pmatrix},
-% \\
-% F^P_{\psi_{s+c}} =
-% \begin{pmatrix}
-% 9\times 10^{-2} & 9\times 10^{-3} & -7\times 10^{-2} & -1\times 10^{-2} & 1\times 10^{-3} & -4\times 10^{-2} & -4\times 10^{-2}\\
-% 9\times 10^{-3} & 1\times 10^{-3} & -9\times 10^{-3} & -2\times 10^{-3} & 2\times 10^{-4} & -5\times 10^{-3} & -4\times 10^{-3}\\
-% -7\times 10^{-2} & -9\times 10^{-3} & 7\times 10^{-2} & 8\times 10^{-3} & -1\times 10^{-3} & 5\times 10^{-2} & 3\times 10^{-2}\\
-% -1\times 10^{-2} & -2\times 10^{-3} & 8\times 10^{-3} & 2\times 10^{-2} & -7\times 10^{-5} & -3\times 10^{-4} & 5\times 10^{-3}\\
-% 1\times 10^{-3} & 2\times 10^{-4} & -1\times 10^{-3} & -7\times 10^{-5} & 3\times 10^{-5} & -9\times 10^{-4} & -6\times 10^{-4}\\
-% -4\times 10^{-2} & -5\times 10^{-3} & 5\times 10^{-2} & -3\times 10^{-4} & -9\times 10^{-4} & 3\times 10^{-2} & 2\times 10^{-2}\\
-% -4\times 10^{-2} & -4\times 10^{-3} & 3\times 10^{-2} & 5\times 10^{-3} & -6\times 10^{-4} & 2\times 10^{-2} & 2\times 10^{-2}
-% \end{pmatrix}.
-% \end{gather*}
+To test the accuracy, we vary $h$ by $\pm 5\%$ and $\pm 10\%$ and plot the relative change in the derivative of the equilateral bispectrum in figure \ref{fig:deraccuracy}. As long as numerical noise doesn't dominate, it can be shown that the relative error in our approximation is approximately 5 times the relative difference that taking $h \rightarrow h(1 \pm 0.1)$ leads to. We thus conclude that, based on this test, the derivatives are almost always computed with up to one percent of error.
 
-
+\begin{figure}[t]
+    \centering
+    \includegraphics[height=\textheight]{/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/code/plots/derivative_accuracy.png}
+    \caption{Central difference approximation of derivative of equilateral CMB weak lensing bispectrum for differences as specified in table \ref{tab:cosmo-params-diff} as well as for differences $5\%$ and $10\%$ larger and smaller.}
+    \label{fig:deraccuracy}
+\end{figure}
 
 
 \end{document}
