@@ -4,7 +4,7 @@
 #SBATCH --error=/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/outputs/fish_mat_approx_error.log
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=32
-#SBATCH --time=20:00:00
+#SBATCH --time=30:00:00
 #SBATCH --mem=100GB
 
 echo "Starting"

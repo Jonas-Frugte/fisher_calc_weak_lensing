@@ -5,7 +5,7 @@ from itertools import *
 
 lmin = 2
 lmax = 2000
-stepsizes = [1 * 8 * 2, 5 * 8 * 2, 10 * 8 * 2]
+stepsizes = [1 * 8, 5 * 8, 10 * 8]
 num_bispec_samples = 100
 num_cores = 32
 
