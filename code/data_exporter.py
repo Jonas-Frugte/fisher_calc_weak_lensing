@@ -141,7 +141,7 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
             print(f'creating a for {folder_name}')
             # a (2d: k, z)
             with open(filepath + '/a', 'w') as file:
-                data = [[cosm_data.a(k, z) for k in ks_log_fine] for z in zs_fine]
+                data = [[cosm_data.a(k, z) for z in zs_fine] for k in ks_log_fine]
                 for row in data:
                     file.write(' '.join(map(str, row)) + '\n')
             print(f'a created to {folder_name}')
@@ -150,7 +150,7 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
             print(f'creating b for {folder_name}')
             # b (2d: k, z)
             with open(filepath + '/b', 'w') as file:
-                data = [[cosm_data.b(k, z) for k in ks_log_fine] for z in zs_fine]
+                data = [[cosm_data.b(k, z) for z in zs_fine] for k in ks_log_fine]
                 for row in data:
                     file.write(' '.join(map(str, row)) + '\n')
             print(f'b created to {folder_name}')
@@ -159,7 +159,7 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
             print(f'creating c for {folder_name}')
             # c (2d: k, z)
             with open(filepath + '/c', 'w') as file:
-                data = [[cosm_data.c(k, z) for k in ks_log_fine] for z in zs_fine]
+                data = [[cosm_data.c(k, z) for z in zs_fine] for k in ks_log_fine]
                 for row in data:
                     file.write(' '.join(map(str, row)) + '\n')
             print(f'c created to {folder_name}')
@@ -228,8 +228,6 @@ for dx_coeff in dx_coeffs:
                 ['data_' + par_names[i] + dx_coeffs_to_str(dx_coeff), perturbed_params, *create_settings]
             )
 
-print(exports)
-
 # had to include this because otherwise there was some issue where somewhere the program was already running in parallel and thus the cores were overused when combined with multiprocessing which led to the program spending most of its time just waiting
 
 os.environ["OMP_NUM_THREADS"] = "1"  # OpenMP threads
@@ -238,6 +236,8 @@ os.environ["NUMEXPR_NUM_THREADS"] = "1"  # NumExpr threads
 os.environ["OPENBLAS_NUM_THREADS"] = "1"  # OpenBLAS threads
 
 if __name__ == '__main__':
+    print(exports)
+
     import multiprocessing
 
     # num_cores = 25

@@ -1,32 +1,21 @@
 import pathlib
 import numpy as np
-import json
 import os
 import cosm_setup
+import multiprocessing
 
 
-print(f'Number cpus available: {os.cpu_count()}')
+
 
 # the smallest k value that the matter bispectrum will be evaluated at will be 1 / chi_last_scatter, this is of the order 10^-4
 # if we thus take k_min = 1e-4 then we should have the entire interpolation range evaluated
 
-# rougher option
-exp_par = {
-    'k_min' : 1e-4,
-    'k_max' : 2000,
-    'k_num' : 300,
-    'chi_min' : 1e-8,
-    'chi_max' : 14000, # slightly more than chi_last_scatter
-    'chi_num' : 100 * 50,
-    'z_min' : 1e-12,
-    'z_max' : 1100, # slightly more than z_last_scatter
-    'z_num' : 100
-}
+import interp_settings
+exp_par = interp_settings.exp_par
 
 def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True):
     cosm_data = cosm_setup.lensing_spectra(*cosm_par)
 
-    exp_par = exp_par
     filepath = '/scratch/p319950/data/' + folder_name
     pathlib.Path(filepath).mkdir(exist_ok=True)
 
@@ -99,19 +88,19 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
     if a_create:
         print(f'creating a for {folder_name}')
         # a (2d: k, z)
-        np.save(filepath + '/a', [[cosm_data.a(k, z) for k in ks_log_fine] for z in zs_fine])
+        np.save(filepath + '/a', [[cosm_data.a(k, z) for z in zs_fine] for k in ks_log_fine])
         print(f'a created to {folder_name}')
 
     if b_create:
         print(f'creating b for {folder_name}')
         # b (2d: k, z)
-        np.save(filepath + '/b', [[cosm_data.b(k, z) for k in ks_log_fine] for z in zs_fine])
+        np.save(filepath + '/b', [[cosm_data.b(k, z) for z in zs_fine] for k in ks_log_fine])
         print(f'b created to {folder_name}')
 
     if c_create:
         print(f'creating c for {folder_name}')
         # c (2d: k, z)
-        np.save(filepath + '/c', [[cosm_data.c(k, z) for k in ks_log_fine] for z in zs_fine])
+        np.save(filepath + '/c', [[cosm_data.c(k, z) for z in zs_fine] for k in ks_log_fine])
         print(f'c created to {folder_name}')
 
     print(f'Done with exporting/updating data to {folder_name}.')
@@ -124,17 +113,17 @@ par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0')
 fiducial_cosm_par = np.array([67.4, 0.0223, 0.119, 0.965, 2.13e-9, 0.06, -1])
 # based on values that toshiya told me about
 cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
-                           0.1,
+                           fiducial_cosm_par[1] * 0.1,
                            fiducial_cosm_par[2] * 0.005,
                            fiducial_cosm_par[3] * 0.005,
-                           0.1,
                            fiducial_cosm_par[4] * 0.1,
+                           fiducial_cosm_par[5] * 0.1,
                            0.03])
 
 num_pars = len(par_names)
 
 # perturb the delta used to calculate derivative in order to test stability
-delta_delta_coeffs = [2, 1, 0, -1, -2]
+delta_delta_coeffs = [2, 1, -1, -2]
 
 def delta_delta_coeffs_to_str(coeff):
     if coeff == 2:
@@ -161,18 +150,17 @@ exports = [['data_fiducial', fiducial_cosm_par, *create_settings] for create_set
 for delta_delta_coeff in delta_delta_coeffs:
     for i in range(num_pars):
         for create_settings in which_to_create:
-
-            perturbed_params = [fiducial_cosm_par[k] + cosm_par_delta * (1 + delta_delta_coeff * delta_delta) * int(k == i) for k in range(num_pars)]
+            perturbed_params = [fiducial_cosm_par[k] + cosm_par_delta[k] * (1 + delta_delta_coeff * delta_delta) * int(k == i) for k in range(num_pars)]
             exports.append(
                 [f'data_{par_names[i]}_p_{delta_delta_coeffs_to_str(delta_delta_coeff)}', perturbed_params, *create_settings]
             )
+            print(perturbed_params)
 
-            perturbed_params = [fiducial_cosm_par[k] - cosm_par_delta * (1 + delta_delta_coeff * delta_delta) * int(k == i) for k in range(num_pars)]
+            perturbed_params = [fiducial_cosm_par[k] - cosm_par_delta[k] * (1 + delta_delta_coeff * delta_delta) * int(k == i) for k in range(num_pars)]
             exports.append(
                 [f'data_{par_names[i]}_m_{delta_delta_coeffs_to_str(delta_delta_coeff)}', perturbed_params, *create_settings]
             )
 
-print(exports)
 
 # had to include this because otherwise there was some issue where somewhere the program was already running in parallel and thus the cores were overused when combined with multiprocessing which led to the program spending most of its time just waiting
 
@@ -182,10 +170,12 @@ os.environ["NUMEXPR_NUM_THREADS"] = "1"  # NumExpr threads
 os.environ["OPENBLAS_NUM_THREADS"] = "1"  # OpenBLAS threads
 
 if __name__ == '__main__':
-    import multiprocessing
+    print(f'Number cpus available: {os.cpu_count()}')
+    print(exports)
 
-    # num_cores = 71
     num_cores = int(len(exports))
     print(f"Using {num_cores} cores.")
     pool = multiprocessing.Pool(num_cores)
     pool.starmap(data_export, exports)
+    # for export in exports:
+    #     data_export(*export)

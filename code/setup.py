@@ -19,6 +19,13 @@ extensions = [
         extra_link_args=["-fopenmp"],
         include_dirs=[np.get_include()],
     ),
+        Extension(
+        name="data_importer_new",
+        sources=["data_importer_new.pyx"],
+        extra_compile_args=["-fopenmp"],
+        extra_link_args=["-fopenmp"],
+        include_dirs=[np.get_include()],
+    ),
     Extension(
         name="Fisher_calc",
         sources=["Fisher_calc.pyx"],

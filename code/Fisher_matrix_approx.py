@@ -5,9 +5,9 @@ from itertools import *
 
 lmin = 2
 lmax = 2000
-stepsizes = [1 * 8, 5 * 8, 10 * 8]
+stepsizes = [1 * 8 * 2, 5 * 8 * 2, 10 * 8 * 2]
 num_bispec_samples = 100
-num_cores = 128
+num_cores = 32
 
 pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'As', b'w0']
 

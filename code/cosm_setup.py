@@ -44,7 +44,7 @@ class lensing_spectra:
     self.mnu = mnu        # Sum of neutrino masses
     self.w0 = w0
     self.matter_bispec_fit_params = matter_bispec_fit_params # params of matter bispectrum fitting function as (a_1, ..., a_9)
-    self.k_nl_max = 10000
+    self.k_nl_max = 2000
 
     self.obtain_results()
 
@@ -83,11 +83,11 @@ class lensing_spectra:
     print('Obtaining cosmological results.')
 
     pars = camb.CAMBparams()
-    lmax = 10000
+    lmax = 2000
     pars.set_cosmology(H0=self.H0, ombh2=self.ombh2, omch2=self.omch2, mnu=self.mnu, omk=0, tau=0.063, neutrino_hierarchy='normal')
     pars.InitPower.set_params(As=self.As, ns=self.ns, r=0)
     pars.InitPower.pivot_scalar = 0.05
-    pars.set_for_lmax(lmax, lens_potential_accuracy=1)
+    pars.set_for_lmax(lmax, lens_potential_accuracy=0)
     pars.set_matter_power(redshifts=self.redshifts, kmax=self.k_nl_max, nonlinear=True)
     pars.set_dark_energy(w=self.w0)
     self.pars = pars
@@ -128,29 +128,29 @@ class lensing_spectra:
     
     pass
 
-  def lps_cc_CAMB(self, lmax=10000):
-    """
-    Calculate the lensing potential power spectrum (C_phi_phi) using CAMB for the CMB (convergence) case.
+  # def lps_cc_CAMB(self, lmax=10000):
+  #   """
+  #   Calculate the lensing potential power spectrum (C_phi_phi) using CAMB for the CMB (convergence) case.
 
-    Parameters:
-    -----------
-    lmax : int
-        Maximum multipole for the calculation.
+  #   Parameters:
+  #   -----------
+  #   lmax : int
+  #       Maximum multipole for the calculation.
 
-    Returns:
-    --------
-    ell : ndarray
-        Array of multipole moments.
-    C_phi_phi : ndarray
-        Array of lensing potential power spectrum values.
-    """
-    # Get the lensing potential power spectrum
-    # if raw_cl = false then returns L^2(L+1)^2 / (2pi) times the result
-    lens_potential_cls = self.results.get_lens_potential_cls(lmax=lmax, raw_cl=True)
-    ell = np.arange(lmax + 1)
-    C_phi_phi = lens_potential_cls[:, 0]
+  #   Returns:
+  #   --------
+  #   ell : ndarray
+  #       Array of multipole moments.
+  #   C_phi_phi : ndarray
+  #       Array of lensing potential power spectrum values.
+  #   """
+  #   # Get the lensing potential power spectrum
+  #   # if raw_cl = false then returns L^2(L+1)^2 / (2pi) times the result
+  #   lens_potential_cls = self.results.get_lens_potential_cls(lmax=lmax, raw_cl=True)
+  #   ell = np.arange(lmax + 1)
+  #   C_phi_phi = lens_potential_cls[:, 0]
 
-    return ell, C_phi_phi
+  #   return ell, C_phi_phi
   
   def ns_eff(self, k, z):
     '''
