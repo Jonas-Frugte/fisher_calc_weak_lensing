@@ -338,45 +338,33 @@ The signal to noise ratios of the CMB and galaxy lensing bispectra v.s. the maxi
 \end{figure}
 
 \subsection{Parameter Constraints}
-For the parameter constraints, even when combining all signals, most of the parameters are poorly constrained (with minimum uncertainties much bigger than their fiducial values). The combination that is well constrained is $H_0$ and $\sigma_8$. Alternatively one can also look at $H_0$ and $S_8$, where $S_8$ is defined as 
-\begin{equation*}
-    S_8 = \sigma_8 \sqrt{\frac{\Omega_c + \Omega_b}{0.3}}
-\end{equation*}
-and is commonly found to be a particularly well constrained parameter in weak lensing surveys. The results are essentially the same so we will stick with $\sigma_8$. The constraints and covariances are shown in figures \ref{fig:side_by_side} (a) and (b). In particular, you can see in  the off diagonal plot that combining the CMB and galaxy lensing removes approximate degeneracies in $H_0$, $\sigma_8$ space to create a much smaller $1\sigma$ confidence ellipse. When comparing powerspectra to bispectra constraints in figure \ref{fig:S8const} we see a more mild improvement in constraints when combining the different sources of information.
-% \begin{figure}[htbp]
-%     \centering
-%     \begin{subfigure}[t]{0.48\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{paramconstraints_sigma8.pdf}
-%         
-%         \label{fig:sigma8const}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.48\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{paramconstraints_sigma8_diffspectra.pdf}
-%         \caption{Same as Fig.~\ref{fig:sigma8const}, except comparing constraints from only using power spectra, only bispectra, or both. $S_8$ instead of $\sigma_8$. In all three cases we use CMB $and$ galaxy lensing.}
-%         \label{fig:S8const}
-%     \end{subfigure}
-%     \caption{Side-by-side comparison of parameter constraints.}
-%     \label{fig:side_by_side}
-% \end{figure}
+Parameter constraints for the full set of $\Lambda$ CDM parameters are shown in figure \ref{fig:paramconstraintsall}. The combination $H_0$, $\sigma_8$, and $\Omega_m$ is particularly well constrained, constraints for these parameters alone (i.e. marginalized over all other parameters) are found in figure \ref{fig:paramconstraintstight}. 
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{figures/paramconstraints_difftracers.pdf}
-    \caption{Constraints for $H_0$ and $\sigma_8$ for CMB lensing, galaxy lensing, and CMB + galaxy lensing combined. We use the information from both power and bispectra together with $l_{\max}=2000$ in all three cases. The confidence ellipses are for $1\sigma$ certainty.}
-    \label{fig:difftracer}
+    \includegraphics[width=\textwidth]{figures/param_constraints_tight.pdf}
+    \caption{Constraints for $H_0$, $\sigma_8$, and $\Omega_m$ for different combinations of weak lensing spectra. Valid for ``stage 4'' experiments. We use $l_{\max}=2000$. The confidence ellipses are for $1\sigma$ certainty. The standard deviation of each Gaussian is given explicitly in the top left corners of the diagonal plots.}
+    \label{fig:paramconstraintstight}
 \end{figure}
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{figures/paramconstraints_diffspectra.pdf}
-    \caption{Same as Fig. \ref{fig:difftracer}, except comparing constraints from only using power spectra, only bispectra, or both. In all three cases we use CMB $and$ galaxy lensing.}
-    \label{fig:diffspectra}
+    \includegraphics[width=\textwidth]{figures/param_constraints_all.pdf}
+    \caption{Same as Fig. \ref{fig:paramconstraintstight}, except comparing constraints for all parameters of our $\Lambda$CDM cosmology.}
+    \label{fig:paramconstraintsall}
 \end{figure}
 
 \section{Discussion and conclusion}\label{sec:discussion}
-% \bibliographystyle{alpha} % Choose your citation style
+For stage 4 surveys weak lensing matter and power spectra can all be measured with high significance. Additionally, parameter constraints are significantly improved by including bispectrum information in nearly all cases. This falls in line with work by Toshiya Namikawa \cite{Namikawa_2016}, where a 33 percent and 35 percent improvement was found for $m_\nu$ and $w_0$ by measuring the CMB ,lensing bispectrum in addition to the powerspectrum. In particular, from the confidence ellipses it can be seen that these improvements do not just come from additional information, but also because the bispectrum has different (approximate) parameter degeneracies compared to the power spectrum and thus they synergize when combined together.
+
+There are a number of limitations in this work. The most obvious is that the fitting formula used for the nonlinear matter bispectrum is not very accurate, only up to about 10 percent. Additionally, certain parameters that affect nonlinear large scale structure, such as neutrino masses, likely change the fitting parameters of the bispectrum when varied. This is currently not taking into account, making the derivatives less accurate.
+Another limitation is taking into account full sky effects. We assumed throughout this paper that surveys would measure multipoles as low as $l=2$, however our analytical formulas to calculate lensing spectra use the Limber approximation, which is only really accurate after $l=50$. Not using this approximation would make the calculation more complicated due to requireing knowledge of the uneeven time matter power and bispectra and computationally much longer due to having to evaluate a double integral. With the current methods it would thus not be feasible to calculate Fisher matrices without employing the Limber approximation, even if we would be able to calculate the unequel time matter spectra. Perhaps methods used in \cite{Chen:2021vba} could be used to solve this problem.
+Additionally, to calculate the Fisher matrices within a managable timeframe, the derivative of the lensing spectra with respect to cosmological parameters was done using a central difference formula, introducing errors of at most a few percent (CHECK EXACT VALUE LATER) (see appendix \ref{sec:derivatives} for further discussion) and functions such as the matter power spectrum, fitting parameters of the matter bispectrum, etc. were approximated using pregenerated data and interpolation, also introducing at most a few percent of error. Currently these errors are not significant because this paper only aims to give a rough / qualitative understanding of how usefull CMB and galaxy weak lensing spectra are, however if a similar calculation is done aiming to give precise quantitative results, these factors will need to be looked at again and improved.
+Furthermore, the current models for calculating lensing noise are on the basic side. Analysing real life data requires a better understanding of underlying systematics. For instance, determining the redshift distribution of galaxies is well known to be a difficult process (CITE SOMETHING HERE) so these errors would have to be taken into account as well. A better estimator can also be used. For example, the iterative estimator developed in CITE leads to a significantly better signal to noise for the CMB lensing bispectrum, as shown in \cite{Namikawa_2016}. 
+Finally, for the covariance of the spectra estimators the Gaussian approximation was used, meaning we ignored any contributions not coming from standard Wick contractions, see appendix \ref{sec:fisher}. A next step could thus be to take these additional contributions into account, which could perhaps be done by running N body simulations and ray tracing simulations. Notably, this could potentially (depending on how accurate the simulations are) also allow us to calculate the lensing spectra much more accurately, i.e. without having to use a fitting formula for the matter bispectrum or Limber approximation.
+
+
+
+\pagebreak
 \printbibliography
 
 \appendix
@@ -1109,6 +1097,7 @@ Thus, at $(r_0, \theta_0, \phi_0)$,
 \end{gather*}
 
 \section{Numerical derivative}
+\label{sec:derivatives}
 The derivatives with respect to cosmological parameters were taken with a central difference formula, i.e.
 \begin{equation*}
     f'(x) = \frac{f(x+h) - f(x-h)}{2h} + \mathcal O (h^2).

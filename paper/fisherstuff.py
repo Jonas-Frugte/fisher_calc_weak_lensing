@@ -16,11 +16,11 @@ fisher_matrices_dir = '/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_w
 ######################
 # Bispectra Matrices #
 ######################
-visb_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_c.txt')
+visb_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_c.txt')
 
-visb_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_s.txt')
+visb_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_s.txt')
 
-visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_both.txt')
+visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_both.txt')
 
 ########################
 # Powerspectra Matrices
@@ -35,7 +35,7 @@ visp_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both.txt')
 # Prior Matrices #
 ######################
 
-prior = np.diag((0.6, 0.00015, 0.0014, 0.0044, 0.01, 0.034*1e-9, 0.1))
+#prior = np.diag((0.6, 0.00015, 0.0014, 0.0044, 0.01, 0.034*1e-9, 0.1))
 
 ########### NORMALIZATION ###########
 
@@ -147,8 +147,8 @@ def print_sorted_eigens(matrix_name, mat):
         print(vecs[:, i])
 
 # Indices to remove: 6,1,4,5 (0-based). This means we keep [0,2,3].
-#keep_indices = [0, 7, 9]
-keep_indices = [0, 1, 2, 3, 4, 5, 6]
+keep_indices = [0, 7, 9]
+#keep_indices = [0, 1, 2, 3, 4, 5, 6]
 #keep_indices = [4, 6]
 
 # Reduced copies for bispectra
@@ -161,7 +161,7 @@ visp_c_reduced = visp_c[np.ix_(keep_indices, keep_indices)]
 visp_s_reduced = visp_s[np.ix_(keep_indices, keep_indices)]
 visp_f_reduced = visp_f[np.ix_(keep_indices, keep_indices)]
 
-prior_reduced = prior[np.ix_(keep_indices, keep_indices)]
+#prior_reduced = prior[np.ix_(keep_indices, keep_indices)]
 
 ######### PLOTS #########
 
@@ -204,7 +204,12 @@ def confidence_ellipse(ax, mean, cov, color='blue', nstd=1.0, **kwargs):
 
     ellip = Ellipse(
         xy=mean, width=width, height=height,
-        angle=angle, edgecolor=color, facecolor='none', lw=2, **kwargs
+        angle=angle, edgecolor=color, facecolor=color, lw=1, alpha=0.2, **kwargs
+    )
+    ax.add_patch(ellip)
+    ellip = Ellipse(
+        xy=mean, width=width, height=height,
+        angle=angle, edgecolor=color, facecolor='none', lw=1, **kwargs
     )
     ax.add_patch(ellip)
 
@@ -275,26 +280,27 @@ def plot_corner(
 
         for k, (cov, color) in enumerate(zip(cov_matrices, colors)):
             sigma = np.sqrt(cov[i, i])
-            x_min = param_values[i] - 40*sigma
-            x_max = param_values[i] + 40*sigma
+            x_min = param_values[i] - 100*sigma
+            x_max = param_values[i] + 100*sigma
             x_plot = np.linspace(x_min, x_max, 1000)
             pdf = norm.pdf(x_plot, loc=param_values[i], scale=sigma)
 
-            ax.plot(x_plot, pdf, color=color, lw=2)
+            ax.fill_between(x_plot, pdf, color=color, lw=1, alpha = 0.2)
+            ax.plot(x_plot, pdf, color=color, lw=1, alpha = 1)
             
             # Print sigma^2 in matching color, offset each line a bit
             sigma_sq = sigma**2
             ax.text(
                 0.05,
                 0.90 - 0.08*k,
-                rf"$\sigma^2 = {sigma_sq:.2e}$",
+                rf"${sigma_sq:.1e}$",
                 color=color,
                 transform=ax.transAxes
             )
 
         # X-limits from the first matrix or whichever you want
         sigma_ref = np.sqrt(cov_matrices[0][i, i])
-        ax.set_xlim(param_values[i] - 2*sigma_ref, param_values[i] + 2*sigma_ref)
+        ax.set_xlim(param_values[i] - 1.5*sigma_ref, param_values[i] + 1.5*sigma_ref)
         
         # # If you have a custom range for this diagonal parameter, override it:
         # if param_names[i] in custom_ranges:
@@ -319,10 +325,10 @@ def plot_corner(
             # Default: ±5σ around param_values
             sigma_i = np.sqrt(cov_matrices[0][i, i])
             sigma_j = np.sqrt(cov_matrices[0][j, j])
-            x_min = param_values[i] - 1.5*sigma_i
-            x_max = param_values[i] + 1.5*sigma_i
-            y_min = param_values[j] - 1.5*sigma_j
-            y_max = param_values[j] + 1.5*sigma_j
+            x_min = param_values[i] - 1*sigma_i
+            x_max = param_values[i] + 1*sigma_i
+            y_min = param_values[j] - 1*sigma_j
+            y_max = param_values[j] + 1*sigma_j
 
             ax_low.set_xlim(x_min, x_max)
             ax_low.set_ylim(y_min, y_max)
@@ -386,29 +392,31 @@ if __name__ == "__main__":
 
     labels = ["CMB", "Galaxy", "CMB + Galaxy"]
 
-    cov_matrices = [
-        prior_reduced,
-        inv(inv(prior_reduced) + visp_f_reduced),
-        #prior_reduced + inv(visb_f_reduced),
-        inv(inv(prior_reduced) + visb_f_reduced + visp_f_reduced)
-    ]
+    # cov_matrices = [
+    #     prior_reduced,
+    #     inv(inv(prior_reduced) + visp_f_reduced),
+    #     #prior_reduced + inv(visb_f_reduced),
+    #     inv(inv(prior_reduced) + visb_f_reduced + visp_f_reduced)
+    # ]
 
-    labels = ['prior only', 'powerspectra', 'power- $+$ bispectra']
+    # labels = ['prior only', 'powerspectra', 'power- $+$ bispectra']
 
     cov_matrices = [
+        inv(visp_c_reduced + visb_c_reduced),
+        inv(visp_s_reduced + visb_s_reduced),
         inv(visp_f_reduced),
         inv(visb_f_reduced),
         inv(visb_f_reduced + visp_f_reduced)
     ]
 
-    labels = ['powerspectra', 'bispectra', 'power- $+$ bispectra']
+    labels = ['CMB + Galaxy Powerspec', 'CMB + Galaxy Bispectra', 'CMB Power- + Bispectra', 'Galaxy Power- + Bispectra', 'CMB + Galaxy Power- + Bispectra']
 
     fig, axes = plot_corner(
         cov_matrices=cov_matrices,
         param_names=param_names_latex_kept,
         param_values=param_values_kept,
         labels=labels,
-        colors=["tab:blue", "tab:orange", 'black'],
+        colors=["tab:blue", "tab:orange", 'tab:green', 'tab:red','black'],
         nstd=1.0,
         figsize=(16,16),
         dpi=100
@@ -416,4 +424,4 @@ if __name__ == "__main__":
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
     # plt.show()
-    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/test3.png', dpi = 300)
+    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_tight.pdf', dpi = 300)
