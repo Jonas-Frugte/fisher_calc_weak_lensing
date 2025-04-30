@@ -141,7 +141,7 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
             print(f'creating a for {folder_name}')
             # a (2d: k, z)
             with open(filepath + '/a', 'w') as file:
-                data = [[cosm_data.a(k, z) for z in zs_fine] for k in ks_log_fine]
+                data = [[cosm_data.a(k, z) for k in ks_log_fine] for z in zs_fine]
                 for row in data:
                     file.write(' '.join(map(str, row)) + '\n')
             print(f'a created to {folder_name}')
@@ -150,7 +150,7 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
             print(f'creating b for {folder_name}')
             # b (2d: k, z)
             with open(filepath + '/b', 'w') as file:
-                data = [[cosm_data.b(k, z) for z in zs_fine] for k in ks_log_fine]
+                data = [[cosm_data.b(k, z) for k in ks_log_fine] for z in zs_fine]
                 for row in data:
                     file.write(' '.join(map(str, row)) + '\n')
             print(f'b created to {folder_name}')
@@ -159,7 +159,7 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
             print(f'creating c for {folder_name}')
             # c (2d: k, z)
             with open(filepath + '/c', 'w') as file:
-                data = [[cosm_data.c(k, z) for z in zs_fine] for k in ks_log_fine]
+                data = [[cosm_data.c(k, z) for k in ks_log_fine] for z in zs_fine]
                 for row in data:
                     file.write(' '.join(map(str, row)) + '\n')
             print(f'c created to {folder_name}')

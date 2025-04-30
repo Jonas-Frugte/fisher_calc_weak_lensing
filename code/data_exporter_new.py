@@ -113,17 +113,17 @@ par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0')
 fiducial_cosm_par = np.array([67.4, 0.0223, 0.119, 0.965, 2.13e-9, 0.06, -1])
 # based on values that toshiya told me about
 cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
-                           fiducial_cosm_par[1] * 0.1,
-                           fiducial_cosm_par[2] * 0.005,
-                           fiducial_cosm_par[3] * 0.005,
+                           fiducial_cosm_par[1] * 0.15,
+                           fiducial_cosm_par[2] * 0.05,
+                           fiducial_cosm_par[3] * 0.01,
                            fiducial_cosm_par[4] * 0.1,
-                           fiducial_cosm_par[5] * 0.1, # mnu h should probably be smaller
-                           0.03])
+                           fiducial_cosm_par[5] * 0.05, # mnu h should probably be smaller
+                           0.06])
 
 num_pars = len(par_names)
 
 # perturb the delta used to calculate derivative in order to test stability
-delta_delta_coeffs = [2, 1, -1, -2]
+delta_delta_coeffs = [2, 1, 0, -1, -2]
 
 def delta_delta_coeffs_to_str(coeff):
     if coeff == 2:
