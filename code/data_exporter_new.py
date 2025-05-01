@@ -113,12 +113,20 @@ par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0')
 fiducial_cosm_par = np.array([67.4, 0.0223, 0.119, 0.965, 2.13e-9, 0.06, -1])
 # based on values that toshiya told me about
 cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
-                           fiducial_cosm_par[1] * 0.15,
-                           fiducial_cosm_par[2] * 0.05,
-                           fiducial_cosm_par[3] * 0.01,
-                           fiducial_cosm_par[4] * 0.1,
-                           fiducial_cosm_par[5] * 0.05, # mnu h should probably be smaller
+                           fiducial_cosm_par[1] * 0.2,
+                           fiducial_cosm_par[2] * 0.1,
+                           fiducial_cosm_par[3] * 0.02,
+                           fiducial_cosm_par[4] * 0.15,
+                           fiducial_cosm_par[5] * 0.15, # mnu h should probably be smaller
                            0.06])
+
+# cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
+#                            fiducial_cosm_par[1] * 0.15,
+#                            fiducial_cosm_par[2] * 0.05,
+#                            fiducial_cosm_par[3] * 0.01,
+#                            fiducial_cosm_par[4] * 0.1,
+#                            fiducial_cosm_par[5] * 0.15, # mnu h should probably be smaller
+#                            0.06])
 
 num_pars = len(par_names)
 
