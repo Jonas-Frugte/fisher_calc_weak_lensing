@@ -32,6 +32,6 @@ axs[1, 1].set_ylim(0.99, 1.01)
 
 
 handles, labels = axs[0,0].get_legend_handles_labels()
-fig.legend(handles, labels, loc = 'right')
+fig.legend(handles, [r'-10%', r'-5%', r'0%', r'5%', r'10%'], loc = 'right')
 
 fig.savefig('plots/derivative_accuracy.png')
