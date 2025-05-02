@@ -148,7 +148,7 @@ def print_sorted_eigens(matrix_name, mat):
 
 # Indices to remove: 6,1,4,5 (0-based). This means we keep [0,2,3].
 keep_indices = [0, 7, 9]
-#keep_indices = [0, 1, 2, 3, 4, 5, 6]
+# keep_indices = [0, 1, 2, 3, 4, 5, 6]
 #keep_indices = [4, 6]
 
 # Reduced copies for bispectra
@@ -350,6 +350,21 @@ def plot_corner(
     plt.tight_layout()
     return fig, axes
 
+from tabulate import tabulate
+
+def save_table(param_names, param_vals, which_pars, constraints, labels):
+    table = [[0 for i in range(len(constraints) + 1)] for j in range(len(which_pars))]
+    for i in range(len(which_pars)):
+        # param names and fiducial values
+        table[i][0] = param_names[i]
+        #table[i][1] = param_vals[i]
+        #constraints
+        for j in range(len(constraints)):
+            table[i][j+1] = np.abs(np.sqrt(constraints[j][i][i]) / param_vals[i]) * 100
+    labels = ['Par'] + labels
+    print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.10f'))
+        
+    
 
 if __name__ == "__main__":
     # Parameter info
@@ -409,7 +424,7 @@ if __name__ == "__main__":
         inv(visb_f_reduced + visp_f_reduced)
     ]
 
-    labels = ['CMB + Galaxy Powerspec', 'CMB + Galaxy Bispectra', 'CMB Power- + Bispectra', 'Galaxy Power- + Bispectra', 'CMB + Galaxy Power- + Bispectra']
+    labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
 
     fig, axes = plot_corner(
         cov_matrices=cov_matrices,
@@ -424,4 +439,6 @@ if __name__ == "__main__":
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
     # plt.show()
-    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_tight.pdf', dpi = 300)
+    # plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_tight.pdf', dpi = 300)
+
+    save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)

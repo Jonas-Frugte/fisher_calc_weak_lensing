@@ -340,17 +340,56 @@ The signal to noise ratios of the CMB and galaxy lensing bispectra v.s. the maxi
 \subsection{Parameter Constraints}
 Parameter constraints for the full set of $\Lambda$ CDM parameters are shown in figure \ref{fig:paramconstraintsall}. The combination $H_0$, $\sigma_8$, and $\Omega_m$ is particularly well constrained, constraints for these parameters alone (i.e. marginalized over all other parameters) are found in figure \ref{fig:paramconstraintstight}. 
 
+
+
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{figures/param_constraints_tight.pdf}
-    \caption{Constraints for $H_0$, $\sigma_8$, and $\Omega_m$ for different combinations of weak lensing spectra. Valid for ``stage 4'' experiments. We use $l_{\max}=2000$. The confidence ellipses are for $1\sigma$ certainty. The standard deviation of each Gaussian is given explicitly in the top left corners of the diagonal plots.}
-    \label{fig:paramconstraintstight}
+    \tiny
+    \begin{tabular}{lrrrrr}
+        \hline
+         Par            &   CMB + Gal Powersp &   CMB + Gal Bisp &   CMB Power- + Bisp &   Gal Power- + Bisp &   CMB + Gal Power- + Bisp \\
+        \hline
+         $H_0$          &                41.0 &              1.9 &                 7.4 &                 4.8 &                       0.7 \\
+         $\Omega_b h^2$ &               109.8 &             18.4 &                10.1 &                17.3 &                       7.1 \\
+         $\Omega_c h^2$ &                58.3 &              2.4 &                 2.2 &                 2.7 &                       1.1 \\
+         $n_s$          &                11.4 &              1.9 &                 1.8 &                 3.2 &                       1.0 \\
+         $m_\nu$        &               603.3 &            373.9 &               216.3 &               260.1 &                     102.3 \\
+         $A_s$          &                39.1 &              7.0 &                 3.4 &                 7.8 &                       2.4 \\
+         $w_0$          &                46.1 &              3.1 &                18.3 &                12.7 &                       1.6 \\
+        \hline
+    \end{tabular}
+\caption{Parameter constraints in percentage of the fiducial values for different combinations of weak lensing information.}
+\label{tab:paramconstraintsall}
 \end{figure}
+
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/param_constraints_all.pdf}
     \caption{Same as Fig. \ref{fig:paramconstraintstight}, except comparing constraints for all parameters of our $\Lambda$CDM cosmology.}
     \label{fig:paramconstraintsall}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \tiny
+    \begin{tabular}{lrrrrr}
+        \hline
+         Par        &   CMB + Gal Powersp &   CMB + Gal Bisp &   CMB Power- + Bisp &   Gal Power- + Bisp &   CMB + Gal Power- + Bisp \\
+        \hline
+         $H_0$      &        3.3022621043 &     0.9658765234 &        0.1360204496 &        0.6433515918 &              0.1173950908 \\
+         $\sigma_8$ &        0.0000000178 &     0.0000000148 &        0.0000000023 &        0.0000000122 &              0.0000000020 \\
+         $\Omega_m$ &        0.4126866976 &     0.2388283763 &        0.1579156300 &        0.1996632391 &              0.1122269336 \\
+        \hline
+    \end{tabular}
+\caption{Same as table \ref{tab:paramconstraintsall}, except for a smaller selection of parameters well constrained by lensing.}
+\label{tab:paramconstraintstight}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/param_constraints_tight.pdf}
+    \caption{Constraints for $H_0$, $\sigma_8$, and $\Omega_m$ for different combinations of weak lensing spectra. Valid for ``stage 4'' experiments. We use $l_{\max}=2000$. The confidence ellipses are for $1\sigma$ certainty. The standard deviation of each Gaussian is given explicitly in the top left corners of the diagonal plots.}
+    \label{fig:paramconstraintstight}
 \end{figure}
 
 \section{Discussion and conclusion}\label{sec:discussion}
@@ -1125,12 +1164,12 @@ Each change of the cosmological parameters requires a recalculation of the entir
     
     
 
-To test the accuracy, we vary $h$ by $\pm 5\%$ and $\pm 10\%$ and plot the relative change in the derivative of the equilateral bispectrum in figure \ref{fig:deraccuracy}. As long as numerical noise doesn't dominate, it can be shown that the relative error in our approximation is approximately 5 times the relative difference that taking $h \rightarrow h(1 \pm 0.1)$ leads to. We thus conclude that, based on this test, the derivatives are almost always computed with up to one percent of error.
+To test the accuracy, we vary $h$ by $\pm 5\%$ and $\pm 10\%$ and plot the relative change in the derivative of the equilateral bispectrum in figure \ref{fig:deraccuracy}. As long as numerical noise doesn't dominate, it can be shown that the relative error in our approximation is approximately 5 times the relative difference that taking $h \rightarrow h(1 \pm 0.1)$ leads to. We thus conclude that, based on this test, the derivatives are almost always computed with up to one percent of error. The exception is the derivative with respect to neutrino masses, which introduces a larger error. 
 
 \begin{figure}[t]
     \centering
     \includegraphics[height=\textheight]{/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/code/plots/derivative_accuracy.png}
-    \caption{Central difference approximation of derivative of equilateral CMB weak lensing bispectrum for differences as specified in table \ref{tab:cosmo-params-diff} as well as for differences $5\%$ and $10\%$ larger and smaller.}
+    \caption{Central difference approximation of derivative of equilateral CMB weak lensing bispectrum (left) and powerspectrum (right) for differences as specified in table \ref{tab:cosmo-params-diff} as well as for differences $5\%$ and $10\%$ larger and smaller.}
     \label{fig:deraccuracy}
 \end{figure}
 
