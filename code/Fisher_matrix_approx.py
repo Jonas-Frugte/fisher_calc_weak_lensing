@@ -5,7 +5,7 @@ from itertools import *
 
 lmin = 2
 lmax = 2000
-stepsizes = [1 * 8, 5 * 8, 10 * 8]
+stepsizes = [1 * 8 * 2, 5 * 8 * 2, 10 * 8 * 2]
 num_bispec_samples = 100
 num_cores = 32
 
@@ -36,27 +36,5 @@ for tracer in ['c', 's', 'both']:
             print(f'{tracer}:', counter, '/', num_pars * (num_pars + 1) / 2)
             counter += 1
     
-    np.savetxt(f'fisher_matrices/fish_mat_bisp_approx_{tracer}_5p.txt', mat)
+    np.savetxt(f'fisher_matrices/fish_mat_bisp_approx_{tracer}.txt', mat)
     print(mat)
-
-
-# for python implementation
-# if __name__ == "__main__":
-#     num_cores = multiprocessing.cpu_count()
-    
-#     mat = np.zeros((len(pars), len(pars)))
-    
-#     # Generate index pairs for the lower triangular part of the matrix (excluding diagonal)
-#     index_pairs = [(i, j) for i in range(len(pars)) for j in range(i + 1)]
-    
-#     with multiprocessing.Pool(processes=num_cores) as pool:
-#         results = pool.map(fisher_calc_wrapper, index_pairs)
-    
-#     # Fill the matrix with computed values
-#     for i, j, result in results:
-#         mat[i, j] = result
-#         mat[j, i] = result  # Symmetric assignment
-
-#     print(mat)
-    
-#     print("Fisher matrix computed successfully!")
