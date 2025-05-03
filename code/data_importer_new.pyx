@@ -97,11 +97,11 @@ cpdef double lps(double l, char* type1, char* type2, double[:] lps_cc_data, doub
     # for optimization purposes
     if type1 == type2:
         if type1[0] == b'c':
-            return interp.logspace_linear_interp(l, k_min, k_max, k_num, lps_cc_data)
+            return interp.logspace_linear_interp(l, k_min, k_max, k_num_fine, lps_cc_data)
         elif type1[0] == b's':
-            return interp.logspace_linear_interp(l, k_min, k_max, k_num, lps_ss_data)
+            return interp.logspace_linear_interp(l, k_min, k_max, k_num_fine, lps_ss_data)
     else:
-        return interp.logspace_linear_interp(l, k_min, k_max, k_num, lps_cs_data)
+        return interp.logspace_linear_interp(l, k_min, k_max, k_num_fine, lps_cs_data)
 
 cdef double scale_factor(double chi, double[:] scale_factor_data) noexcept nogil:    
     return interp.linear_interp(chi, chi_min, chi_max, chi_num, scale_factor_data)

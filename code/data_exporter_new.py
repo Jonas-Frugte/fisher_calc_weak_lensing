@@ -69,15 +69,15 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
 
     if lps:
         # lensing power spectrum (convergence, convergence) (1d: k)
-        np.save(filepath + '/lensing_power_spectrum_cc', [cosm_data.lps(k, ('convergence', 'convergence')) for k in ks])
+        np.save(filepath + '/lensing_power_spectrum_cc', [cosm_data.lps(k, ('convergence', 'convergence')) for k in ks_log_fine])
         print(f'lensing power spectrum cc created to {folder_name}')
         
         # lensing power spectrum (convergence, shear) (1d: k)
-        np.save(filepath + '/lensing_power_spectrum_cs', [cosm_data.lps(k, ('convergence', 'shear')) for k in ks])
+        np.save(filepath + '/lensing_power_spectrum_cs', [cosm_data.lps(k, ('convergence', 'shear')) for k in ks_log_fine])
         print(f'lensing power spectrum cs created to {folder_name}')
         
         # lensing power spectrum (shear, shear) (1d: k)
-        np.save(filepath + '/lensing_power_spectrum_ss', [cosm_data.lps(k, ('shear', 'shear')) for k in ks])
+        np.save(filepath + '/lensing_power_spectrum_ss', [cosm_data.lps(k, ('shear', 'shear')) for k in ks_log_fine])
         print(f'lensing power spectrum ss created to {folder_name}')
 
     if mps:
@@ -114,10 +114,10 @@ fiducial_cosm_par = np.array([67.4, 0.0223, 0.119, 0.965, 2.13e-9, 0.06, -1])
 # based on values that toshiya told me about
 cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
                            fiducial_cosm_par[1] * 0.2,
-                           fiducial_cosm_par[2] * 0.1,
+                           fiducial_cosm_par[2] * 0.005,
                            fiducial_cosm_par[3] * 0.02,
                            fiducial_cosm_par[4] * 0.15,
-                           fiducial_cosm_par[5] * 0.15, # mnu h should probably be smaller
+                           fiducial_cosm_par[5] * 0.15,
                            0.06])
 
 # cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
