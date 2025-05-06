@@ -36,7 +36,9 @@ visp_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both.txt')
 # Prior Matrices #
 ######################
 
-#prior = np.diag((0.6, 0.00015, 0.0014, 0.0044, 0.01, 0.034*1e-9, 0.1))
+planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_c_planck.txt')
+
+planck_prior = np.diag([0.0033, 1/(0.0005)**2, 0, 1/(0.02)**2, 0, 0, 0])
 
 ########### NORMALIZATION ###########
 
@@ -97,8 +99,8 @@ def append_row_column(mats, vec):
 s8_ders = np.array([2.76945054e-03, -6.50570238e+00,  4.30234556e+00,  3.06272435e-01,
                     1.93167857e+08, -2.15681667e-01, -2.01175433e-01])
 
-visb_c, visb_s, visb_f, visp_c, visp_s, visp_f = append_row_column(
-    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f],
+visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior = append_row_column(
+    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior],
     s8_ders
 )
 
@@ -112,8 +114,8 @@ S8_ders = [0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01,
            0,
            y**(1/2)]
 
-visb_c, visb_s, visb_f, visp_c, visp_s, visp_f = append_row_column(
-    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f],
+visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior = append_row_column(
+    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior],
     S8_ders
 )
 
@@ -127,9 +129,28 @@ omm_ders = [0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01,
            0,
            0]
 
-visb_c, visb_s, visb_f, visp_c, visp_s, visp_f = append_row_column(
-    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f],
+visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior = append_row_column(
+    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior],
     omm_ders
+)
+
+omm = (0.0224 + 0.120) / (0.674**2)
+sigma8 = 0.81
+
+sigmaomm_ders = [0, 
+           0,
+           0,
+           0,
+           0,
+           0,
+           0,
+           omm**0.25,
+           0,
+           0.25 * sigma8 * omm**(-0.75)]
+
+visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior = append_row_column(
+    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior],
+    sigmaomm_ders
 )
 ######### PRINT EIGENVALUES ############
 
@@ -148,8 +169,9 @@ def print_sorted_eigens(matrix_name, mat):
         print(vecs[:, i])
 
 # Indices to remove: 6,1,4,5 (0-based). This means we keep [0,2,3].
-# keep_indices = [0, 7, 9]
-keep_indices = [0, 1, 2, 3, 4, 5, 6]
+#keep_indices = [0, 7, 9]
+keep_indices=[10]
+# keep_indices = [0, 1, 2, 3, 4, 5, 6]
 #keep_indices = [4, 6]
 
 # Reduced copies for bispectra
@@ -162,7 +184,8 @@ visp_c_reduced = visp_c[np.ix_(keep_indices, keep_indices)]
 visp_s_reduced = visp_s[np.ix_(keep_indices, keep_indices)]
 visp_f_reduced = visp_f[np.ix_(keep_indices, keep_indices)]
 
-#prior_reduced = prior[np.ix_(keep_indices, keep_indices)]
+planck_reduced = planck[np.ix_(keep_indices, keep_indices)]
+planck_prior_reduced = planck_prior[np.ix_(keep_indices, keep_indices)]
 
 ######### PLOTS #########
 
@@ -345,7 +368,7 @@ def plot_corner(
                 ax_low.set_ylabel(param_names[j])
 
     # Make a legend in the top-right corner
-    lines = [mlines.Line2D([], [], color = colors[i], label = labels[i]) for i in range(len(colors))]
+    lines = [mlines.Line2D([], [], color = colors[i], label = labels[i]) for i in range(min(len(colors), len(labels)))]
     fig.legend(handles=lines, loc='upper right', bbox_to_anchor=(0.98, 0.98))
 
     plt.tight_layout()
@@ -379,7 +402,8 @@ if __name__ == "__main__":
         r"$w_0$",         
         r"$\sigma_8$",
         r"$S_8$",
-        r"$\Omega_m$"
+        r"$\Omega_m$",
+        r"$\sigma_8\Omega_m^{0.25}$"
     ]
 
     param_values = [
@@ -392,7 +416,8 @@ if __name__ == "__main__":
         -1.0,        # w_0
         0.811,       # sigma8
         0.811 * y**(1/2), # S8
-        (0.120 + 0.0224) / 0.674**2 # Omega_m
+        (0.120 + 0.0224) / 0.674**2, # Omega_m
+        0.811 * ((0.120 + 0.0224) / 0.674**2)**0.25
     ]
 
     # Keep only the chosen indices for the final covariance
@@ -415,15 +440,22 @@ if __name__ == "__main__":
 
     # labels = ['cmb powerp', 'cmb bisp', 'cmb power + bisp']
 
+    # cov_matrices = [
+    #     inv(visp_c_reduced + visb_c_reduced),
+    #     inv(visp_s_reduced + visb_s_reduced),
+    #     inv(visp_f_reduced),
+    #     inv(visb_f_reduced),
+    #     inv(visb_f_reduced + visp_f_reduced)
+    # ]
+
+    # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
+
     cov_matrices = [
-        inv(visp_c_reduced + visb_c_reduced),
-        inv(visp_s_reduced + visb_s_reduced),
-        inv(visp_f_reduced),
-        inv(visb_f_reduced),
-        inv(visb_f_reduced + visp_f_reduced)
+        inv(planck_reduced),
+        inv(planck_prior_reduced + planck_reduced)
     ]
 
-    labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
+    labels = ['Planck, no priors', 'Planck']
 
     fig, axes = plot_corner(
         cov_matrices=cov_matrices,
@@ -438,6 +470,6 @@ if __name__ == "__main__":
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
     #plt.show()
-    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_all.pdf', dpi = 300)
+    #plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_all.pdf', dpi = 300)
 
     save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
