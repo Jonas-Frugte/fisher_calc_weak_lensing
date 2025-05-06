@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 from scipy.stats import norm
 from numpy.linalg import inv
+import matplotlib.lines as mlines
 
 np.set_printoptions(
     precision=1,
@@ -147,8 +148,8 @@ def print_sorted_eigens(matrix_name, mat):
         print(vecs[:, i])
 
 # Indices to remove: 6,1,4,5 (0-based). This means we keep [0,2,3].
-keep_indices = [0, 7, 9]
-# keep_indices = [0, 1, 2, 3, 4, 5, 6]
+# keep_indices = [0, 7, 9]
+keep_indices = [0, 1, 2, 3, 4, 5, 6]
 #keep_indices = [4, 6]
 
 # Reduced copies for bispectra
@@ -282,18 +283,17 @@ def plot_corner(
             sigma = np.sqrt(cov[i, i])
             x_min = param_values[i] - 100*sigma
             x_max = param_values[i] + 100*sigma
-            x_plot = np.linspace(x_min, x_max, 1000)
+            x_plot = np.linspace(x_min, x_max, 5000)
             pdf = norm.pdf(x_plot, loc=param_values[i], scale=sigma)
 
             ax.fill_between(x_plot, pdf, color=color, lw=1, alpha = 0.2)
             ax.plot(x_plot, pdf, color=color, lw=1, alpha = 1)
             
             # Print sigma^2 in matching color, offset each line a bit
-            sigma_sq = sigma**2
             ax.text(
                 0.05,
                 0.90 - 0.08*k,
-                rf"${sigma_sq:.1e}$",
+                rf"${sigma:.1e}$",
                 color=color,
                 transform=ax.transAxes
             )
@@ -345,7 +345,8 @@ def plot_corner(
                 ax_low.set_ylabel(param_names[j])
 
     # Make a legend in the top-right corner
-    fig.legend(labels, loc='upper right', bbox_to_anchor=(0.98, 0.98))
+    lines = [mlines.Line2D([], [], color = colors[i], label = labels[i]) for i in range(len(colors))]
+    fig.legend(handles=lines, loc='upper right', bbox_to_anchor=(0.98, 0.98))
 
     plt.tight_layout()
     return fig, axes
@@ -398,23 +399,21 @@ if __name__ == "__main__":
     param_names_latex_kept = [param_names_latex[i] for i in keep_indices]
     param_values_kept      = [param_values[i] for i in keep_indices]
 
-    # Inverted sums of the reduced covariances
-    cov_matrices = [
-        inv(visb_c_reduced + visp_c_reduced),
-        inv(visb_s_reduced + visp_s_reduced),
-        inv(visb_f_reduced + visp_f_reduced)
-    ]
-
-    labels = ["CMB", "Galaxy", "CMB + Galaxy"]
-
     # cov_matrices = [
-    #     prior_reduced,
-    #     inv(inv(prior_reduced) + visp_f_reduced),
-    #     #prior_reduced + inv(visb_f_reduced),
-    #     inv(inv(prior_reduced) + visb_f_reduced + visp_f_reduced)
+    #     inv(visb_c_reduced + visp_c_reduced),
+    #     inv(visb_s_reduced + visp_s_reduced),
+    #     inv(visb_f_reduced + visp_f_reduced)
     # ]
 
-    # labels = ['prior only', 'powerspectra', 'power- $+$ bispectra']
+    # labels = ["CMB", "Galaxy", "CMB + Galaxy"]
+
+    # cov_matrices = [
+    #     inv(visp_c_reduced),
+    #     inv(visb_c_reduced),
+    #     inv(visb_c_reduced + visp_c_reduced)
+    # ]
+
+    # labels = ['cmb powerp', 'cmb bisp', 'cmb power + bisp']
 
     cov_matrices = [
         inv(visp_c_reduced + visb_c_reduced),
@@ -438,7 +437,7 @@ if __name__ == "__main__":
     )
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
-    # plt.show()
-    # plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_tight.pdf', dpi = 300)
+    #plt.show()
+    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_all.pdf', dpi = 300)
 
     save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
