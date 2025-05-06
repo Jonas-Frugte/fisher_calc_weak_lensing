@@ -27,11 +27,12 @@ def get_k_max():
     return k_max
 
 # specifies the noise that will be used for cmb lensing
-cdef int conv_noise_type = 2
+cdef int conv_noise_type = 3
 # type values correspond to:
 # 0: S0 noise curves (old, remove)
 # 1: sigma = 1, Delta_P = 6 (stage 3 toshiya)
-# 2: sigma = 3, Delta_P = 1 (stage 4 toshiya)§
+# 2: sigma = 3, Delta_P = 1 (stage 4 toshiya)
+# 3: sigma = 5, Delta_T = 30, Delta_P = 52 (planck (double check))
 
 # (units are in microKelvin arcmin and arcmin)
 
@@ -50,6 +51,7 @@ cdef double lmax_cmbn = ls_cmbn[lnum_cmbn - 1]
 
 cdef double[:] cmbn_301 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma3_DeltaT0_DeltaP1.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 cdef double[:] cmbn_106 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma1_DeltaT0_DeltaP6.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
+cdef double[:] planck_noise = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma_planck.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 
 # perhaps we can export data as c arrays instead of as memory views in the future so that we can specify return types like below and can avoid having to 
 # declare types of all data before every data import
@@ -315,12 +317,16 @@ cdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
         elif conv_noise_type == 2:
             # stage 4 toshiya
             noise = interp.logspace_linear_interp(l, lmin_cmbn, lmax_cmbn, lnum_cmbn, cmbn_301)
+        elif conv_noise_type == 3:
+            noise = interp.logspace_linear_interp(l, lmin_cmbn, lmax_cmbn, lnum_cmbn, planck_noise)
 
     if type1[0] == b's' and type2[0] == b's':
         if conv_noise_type == 1:
             noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 5
         if conv_noise_type == 2:
             noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30 # 8 * 10.0 ** (-10) # this should actually be in sterradain, but that gives wrong results so for now we have it like this
+        if conv_noise_type == 3:
+            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30
     return noise
 
 cdef double lps_f_obs(int l, char* type1, char* type2) noexcept nogil:

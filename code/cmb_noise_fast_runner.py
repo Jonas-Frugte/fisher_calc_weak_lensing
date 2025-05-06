@@ -7,9 +7,10 @@ import numpy as np
 import os
 
 #############################################################################################
-# configs = ((1, 1), (1, 2), (1, 3), (2, 2), (2, 3))#, (3, 3))
+configs = ((1, 1), (1, 2), (1, 3), (2, 2), (2, 3))#, (3, 3))
 # configs = ((2, 2), (2, 3))
-configs = [[2, 3]]
+# configs = [[2, 3]]
+# configs = [[1, 1]]
 #############################################################################################
 
 num_configs = len(configs)
@@ -66,7 +67,7 @@ if __name__ == '__main__':
         import matplotlib.pyplot as plt
         plt.loglog(Ls, np.array(noise_vals) * Ls * (Ls + 1) / 2 / np.pi)
         plt.xlim(1, 2000)
-        plt.savefig('test3.png')
+        plt.savefig('test.png')
     
     # Noise configurations: (sigma, Delta_T, Delta_P)
     # noise_configs = [
@@ -77,7 +78,7 @@ if __name__ == '__main__':
     # ]
 
     noise_configs = [
-        (4, 1, 1.41),
+        (5, 30, 52),
     ]
 
     # noise_configs = [
