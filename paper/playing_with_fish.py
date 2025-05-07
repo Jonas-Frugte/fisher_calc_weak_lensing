@@ -38,7 +38,9 @@ visp_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both.txt')
 
 planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_c_planck.txt')
 
-planck_prior = np.diag([0.0, 1/(0.0005)**2, 0, 1/(0.02)**2, 0, 0, 0])
+planck_prior = np.diag([12 / 0.6**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 1e6, 1e19, 1e6])
+
+planck_p_prior = planck + planck_prior
 
 # pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'As', b'w0']
 
@@ -54,9 +56,6 @@ param_values_normalization = np.array([
     2.1e-9,       # A_s
     -1.0          # w_0
 ])
-
-normalization_matrix = np.outer(param_values_normalization, param_values_normalization)
-# If needed, multiply each matrix by this normalization_matrix.
 
 ########### SIGMA8 ################
 
@@ -100,40 +99,28 @@ def append_row_column(mats, vec):
     return matsnew
 
 s8_ders = np.array([
-    1 / 2.76945054e-03, # H_0
-    1 / -6.50570238e+00, # Omega_b h^2 
-    1 / 4.30234556e+00,  # Omega_c h^2
-    1 / 3.06272435e-01,# n_s
-    1 / -2.15681667e-01, # m_\nu
-    1 / 1.93167857e+08, # A_s
-    1 / -2.01175433e-01  # w_0
+    2.76945054e-03, # H_0
+    -6.50570238e+00, # Omega_b h^2 
+    4.30234556e+00,  # Omega_c h^2
+    3.06272435e-01,# n_s
+    -2.15681667e-01, # m_\nu
+    1.93167857e+08, # A_s
+    -2.01175433e-01  # w_0
     ])
 
-# pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'As', b'w0']
-
-visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior = append_row_column(
-    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior],
-    s8_ders
-)
-
 y = (0.0224 + 0.120) / (0.3 * 0.674**2) # used to calculate S8
-S8_ders = [1 / (0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01), 
-           1 / (0.811 * y**(-1/2) * (0.3 * 0.674**2)**(-1) * 0.5),
-           1 / (0.811 * y**(-1/2) * (0.3 * 0.674**2)**(-1) * 0.5),
+S8_ders = [(0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01), 
+           (0.811 * y**(-1/2) * (0.3 * 0.674**2)**(-1) * 0.5),
+           (0.811 * y**(-1/2) * (0.3 * 0.674**2)**(-1) * 0.5),
            0,
            0,
            0,
            0,
-           1 / y**(1/2)]
+           y**(1/2)]
 
-visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior = append_row_column(
-    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior],
-    S8_ders
-)
-
-omm_ders = [1 / (0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01), 
-           0.674**2,
-           0.674**2,
+omm_ders = [(0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01), 
+           1 / 0.674**2,
+           1 / 0.674**2,
            0,
            0,
            0,
@@ -141,13 +128,8 @@ omm_ders = [1 / (0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01),
            0,
            0]
 
-visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior = append_row_column(
-    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior],
-    omm_ders
-)
-
 omm = (0.0224 + 0.120) / (0.674**2)
-sigma8 = 0.81
+sigma8 = 0.811
 
 sigmaomm_ders = [0, 
            0,
@@ -156,75 +138,38 @@ sigmaomm_ders = [0,
            0,
            0,
            0,
-           1 / (omm**0.25),
+           (omm**0.25),
            0,
-           1 / (0.25 * sigma8 * omm**(-0.75))]
+           (0.25 * sigma8 * omm**(-0.75))]
 
-visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior = append_row_column(
-    [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_prior],
-    sigmaomm_ders
-)
-######### PRINT EIGENVALUES ############
 
-def print_sorted_eigens(matrix_name, mat):
-    """Compute eigen-decomposition of a matrix, sort by descending eigenvalues, and print."""
-    vals, vecs = np.linalg.eig(mat)
-    idx = np.argsort(vals)[::-1]
-    vals = vals[idx]
-    vecs = vecs[:, idx]
-
-    print(f"Eigenvalues ({matrix_name}), sorted:")
-    print(vals)
-    print(f"Eigenvectors ({matrix_name}) in columns, matching eigenvalues above:")
-    for i, val in enumerate(vals):
-        print(f"Eigenvector for eigenvalue {val:.6e}:")
-        print(vecs[:, i])
-
-# Indices to remove: 6,1,4,5 (0-based). This means we keep [0,2,3].
-# keep_indices = [0, 7, 9]
+keep_indices = [0, 7, 9]
 # keep_indices=[10]
-keep_indices = [0, 1, 2, 3, 4, 5, 6]
+# keep_indices = [0, 1, 2, 3, 4, 5, 6]
 #keep_indices = [4, 6]
 
-# Reduced copies for bispectra
-visb_c_reduced = visb_c[np.ix_(keep_indices, keep_indices)]
-visb_s_reduced = visb_s[np.ix_(keep_indices, keep_indices)]
-visb_f_reduced = visb_f[np.ix_(keep_indices, keep_indices)]
+def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
+    fishes_inv = [inv(fish) for fish in fishes]
 
-# Reduced copies for powerspectra
-visp_c_reduced = visp_c[np.ix_(keep_indices, keep_indices)]
-visp_s_reduced = visp_s[np.ix_(keep_indices, keep_indices)]
-visp_f_reduced = visp_f[np.ix_(keep_indices, keep_indices)]
+    # extend to include derived params
+    for derived_param_derivs in derived_param_derivss:
+        fishes_inv = append_row_column(fishes_inv, derived_param_derivs)
+    
+    # marginalize over unwanted params
+    for i in range(len(fishes)):
+        fishes_inv[i] = fishes_inv[i][np.ix_(keep_indices, keep_indices)]
+    
+    return fishes_inv
 
-planck_reduced = planck[np.ix_(keep_indices, keep_indices)]
-planck_prior_reduced = planck_prior[np.ix_(keep_indices, keep_indices)]
-
-# print((0.67)**(-0.5) * np.sqrt(inv(planck_prior + planck)[10][10]))
+# print(process_fishes(
+#     [planck_prior, planck, planck_p_prior],
+#     [10],   
+#     derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]
+#     ))
 
 ######### PLOTS #########
 
-# def confidence_ellipse(ax, mean, cov, color='blue', nstd=1.0, **kwargs):
-#     """
-#     Plot the 2D confidence ellipse of a Gaussian distribution given by mean & covariance
-#     onto the Matplotlib axes 'ax'.
-#     - mean: (2,) array of the parameter means
-#     - cov: (2x2) covariance matrix
-#     - color: color for the ellipse
-#     - nstd: number of standard deviations (1 => ~68% region, 2 => ~95%, etc.)
-#     """
-#     vals, vecs = np.linalg.eigh(cov)
-#     # Angle to rotate the ellipse
-#     angle = np.degrees(np.arctan2(*vecs[:, 1][::-1]))
-#     # Major/minor axes
-#     width, height = 2 * nstd * np.sqrt(vals)
-
-#     ellip = Ellipse(
-#         xy=mean, width=width, height=height,
-#         angle=angle, edgecolor=color, facecolor='none', lw=2, **kwargs
-#     )
-#     ax.add_patch(ellip)
-
-plt_scale = 0.75
+plt_scale = 0.5
 
 # new version that returns flipped version which I think is correct
 def confidence_ellipse(ax, mean, cov, color='blue', nstd=1.0, **kwargs):
@@ -402,7 +347,7 @@ def save_table(param_names, param_vals, which_pars, constraints, labels):
         for j in range(len(constraints)):
             table[i][j+1] = np.abs(np.sqrt(constraints[j][i][i]) / param_vals[i]) * 100
     labels = ['Par'] + labels
-    print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.10f'))
+    print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.2f'))
         
     
 
@@ -457,16 +402,15 @@ if __name__ == "__main__":
     # labels = ['cmb powerp', 'cmb bisp', 'cmb power + bisp']
 
 
-    cov_matrices = [
-        inv(visp_c_reduced + visb_c_reduced),
-        inv(visp_s_reduced + visb_s_reduced),
-        inv(visp_f_reduced),
-        inv(visb_f_reduced),
-        inv(visb_f_reduced + visp_f_reduced)
+    fish_matrices = [
+        visp_c + visb_c,
+        visp_s + visb_s,
+        visp_f,
+        visb_f,
+        visb_f + visp_f
     ]
 
     labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
-
 
     # cov_matrices = [
     #     inv(planck_reduced),
@@ -475,6 +419,8 @@ if __name__ == "__main__":
     # ]
 
     # labels = ['Planck, no priors', 'only prior', 'Planck']
+
+    cov_matrices = process_fishes(fish_matrices, keep_indices)
 
     fig, axes = plot_corner(
         cov_matrices=cov_matrices,
@@ -489,6 +435,6 @@ if __name__ == "__main__":
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
     #plt.show()
-    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_all.pdf', dpi = 300)
+    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_tight.pdf', dpi = 300)
 
-    #save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
+    save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
