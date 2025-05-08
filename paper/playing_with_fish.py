@@ -35,8 +35,7 @@ visp_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both.txt')
 ######################
 # Prior Matrices #
 ######################
-
-planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_c_planck.txt')
+planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_powerspec_c_planck_temp.txt')
 
 planck_prior = np.diag([12 / 0.6**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 1e6, 1e19, 1e6])
 
@@ -146,9 +145,9 @@ sigmaomm_ders = [0,
 
 
 # keep_indices = [0, 7, 9]
-# keep_indices=[10]
+keep_indices=[10]
 # keep_indices = [0, 1, 2, 3, 4, 5, 6]
-keep_indices = [4, 6]
+#keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
     fishes_inv = [inv(fish) for fish in fishes]
@@ -163,11 +162,11 @@ def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_de
     
     return fishes_inv
 
-# print(process_fishes(
-#     [planck_prior, planck, planck_p_prior],
-#     [10],   
-#     derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]
-#     ))
+print(np.sqrt(process_fishes(
+    [planck_prior, planck, planck_p_prior],
+    [10],   
+    derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]
+    )))
 
 ######### PLOTS #########
 
@@ -414,13 +413,13 @@ if __name__ == "__main__":
 
     # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
 
-    # cov_matrices = [
-    #     inv(planck_reduced),
-    #     inv(planck_prior_reduced),
-    #     inv(planck_prior_reduced + planck_reduced)
-    # ]
+    fish_matrices = [
+        planck,
+        planck_prior,
+        planck_prior + planck
+    ]
 
-    # labels = ['Planck, no priors', 'only prior', 'Planck']
+    labels = ['Planck, no priors', 'only prior', 'Planck']
 
     cov_matrices = process_fishes(fish_matrices, keep_indices)
 

@@ -1,4 +1,5 @@
-visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_p_prior = append_row_column(
-#     [visb_c, visb_s, visb_f, visp_c, visp_s, visp_f, planck, planck_p_prior],
-#     s8_ders
-# )
+print(process_fishes(
+    [planck_prior, planck, planck_p_prior],
+    [10],   
+    derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]
+    ))

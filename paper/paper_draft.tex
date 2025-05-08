@@ -1214,29 +1214,31 @@ Planck VII:
     \item $ 8 < l < 400$
     \item powerspectrum only
     \item cmb lensing
-    \item 
-    \item derivative step: 5 percent.
+    \item noise: 5 beamwidth, $\Delta_T = 30$, $\Delta_P = 52$.
+    \item derivative step: ??
     \item priors:
     \begin{gather*}
-        \sigma(\ln \Omega_B h^2) = 0.01\\
-        \sigma(n) = 0.008\\
-        \sigma(H_0) = 13
-        \sigma(m_\nu) = \infty
+        \sigma(\Omega_b h^2) = 0.0005\\
+        \sigma(\Omega_c h^2) = [0.01, 0.99]\\
+        \sigma(n_s) = 0.02\\
+        \sigma(10^10A_s) = [1.91, 3.91]\\
+        \sigma(H_0) = [0.4, 1.0]\\
+        \sigma(m_\nu) = \infty\\
+        \sigma(w_0) = \infty
     \end{gather*}
     \item constraints obtained by paper:
     \begin{table}[h!]
         \centering
-        \begin{tabular}{lccc}
+        \begin{tabular}{lc}
           \hline
-          Quantity                & PS   & Bisp & PS+Bisp \\
+          Quantity & PS  \\
           \hline
-          $\sigma(\Omega_{\rm de})$ & 0.14 & 0.13 & 0.023   \\
-          $\sigma(\sigma_8)$        & 0.12 & 0.12 & 0.023   \\
-          $\sigma(w_0)$             & 4.0  & 3.6  & 1.1     \\
-          $\sigma(w_a)$             & 20   & 15   & 5.1     \\
+          $\sigma(\sigma_8\Omega_m^{0.25})$ & 0.020 \\
           \hline
         \end{tabular}
       \end{table}
+      \item constrain that we obtained: 0.0102
+      \item notes: actually different beamwidth for polarization and temperature
 \end{itemize}
 
 
