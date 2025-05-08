@@ -35,7 +35,7 @@ visp_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both.txt')
 ######################
 # Prior Matrices #
 ######################
-planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_powerspec_c_planck_temp.txt')
+planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_powerspec_c_planck.txt')
 
 planck_prior = np.diag([12 / 0.6**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 1e6, 1e19, 1e6])
 
