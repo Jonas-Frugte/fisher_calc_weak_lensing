@@ -27,7 +27,7 @@ def get_k_max():
     return k_max
 
 # specifies the noise that will be used for cmb lensing
-cdef int conv_noise_type = 3
+cdef int noise_type = 3
 # type values correspond to:
 # 0: S0 noise curves (old, remove)
 # 1: sigma = 1, Delta_P = 6 (stage 3 toshiya)
@@ -309,24 +309,24 @@ cdef double lps_f(int l, char* type1, char* type2) noexcept nogil:
 cdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
     cdef float noise = 0.
     if type1[0] == b'c' and type2[0] == b'c':
-        if conv_noise_type == 0:
+        if noise_type == 0:
             noise = 4. * (l * 1.0)**(-2) * (l + 1.0)**(-2) * conv_noise_data[l-2, 7]
-        elif conv_noise_type == 1:
+        elif noise_type == 1:
             # stage 3 wide toshiya
             noise = interp.logspace_linear_interp(l, lmin_cmbn, lmax_cmbn, lnum_cmbn, cmbn_106)
-        elif conv_noise_type == 2:
+        elif noise_type == 2:
             # stage 4 toshiya
             noise = interp.logspace_linear_interp(l, lmin_cmbn, lmax_cmbn, lnum_cmbn, cmbn_301)
-        elif conv_noise_type == 3:
+        elif noise_type == 3:
             noise = interp.logspace_linear_interp(l, lmin_cmbn, lmax_cmbn, lnum_cmbn, planck_noise)
 
     if type1[0] == b's' and type2[0] == b's':
-        if conv_noise_type == 1:
+        if noise_type == 1:
             noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 5
-        if conv_noise_type == 2:
+        if noise_type == 2:
             noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30 # 8 * 10.0 ** (-10) # this should actually be in sterradain, but that gives wrong results so for now we have it like this
-        if conv_noise_type == 3:
-            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30
+        if noise_type == 3:
+            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.4**2 / 100 # noise from https://arxiv.org/pdf/astro-ph/0310125
     return noise
 
 cdef double lps_f_obs(int l, char* type1, char* type2) noexcept nogil:

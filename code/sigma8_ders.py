@@ -5,7 +5,7 @@ par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0')
 fiducial_cosm_par = (67.4, 0.0224, 0.120, 0.965, 2.1e-9, 0.06, -1)
 num_pars = len(par_names)
 
-dx = 0.025 # if you change this here it also needs to be changed at end of data_importer.pyx !!!
+dx = 0.05 # if you change this here it also needs to be changed at end of data_importer.pyx !!!
 
 dx_coeffs = [2, 1, -1, -2]
 
@@ -26,7 +26,7 @@ sigma8s = np.zeros((num_pars, len(dx_coeffs)))
 for j in range(len(dx_coeffs)):
     for i in range(num_pars):
         perturbed_params = [fiducial_cosm_par[k] * (1 + dx_coeffs[j] * dx * int(k == i)) for k in range(num_pars)]
-        spectra = cs.lensing_spectra(*perturbed_params, fiducial_k_nls=True)
+        spectra = cs.lensing_spectra(*perturbed_params)
         sigma8s[i, j] = spectra.results.get_sigma8_0()
 
 print(sigma8s)
