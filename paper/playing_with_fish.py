@@ -42,6 +42,8 @@ planck_prior = np.diag([12 / 0.6**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 1e6,
 
 planck_p_prior = planck + planck_prior
 
+toshiya_prior = np.diag([1 / 0.54**2, 1/(0.00015)**2, 1/(0.0014)**2, 1/(0.0042)**2, 0.05 / 0.06**2, 1e21, 1 / 0.5**2])
+
 # pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'As', b'w0']
 
 
@@ -143,10 +145,10 @@ sigmaomm_ders = [0,
            (0.25 * sigma8 * omm**(-0.75))]
 
 
-keep_indices = [0, 7, 9]
+# keep_indices = [0, 7, 9]
 # keep_indices=[10]
 # keep_indices = [0, 1, 2, 3, 4, 5, 6]
-#keep_indices = [4, 6]
+keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
     fishes_inv = [inv(fish) for fish in fishes]
@@ -393,24 +395,24 @@ if __name__ == "__main__":
 
     # labels = ["CMB", "Galaxy", "CMB + Galaxy"]
 
-    # cov_matrices = [
-    #     inv(visp_c_reduced),
-    #     inv(visb_c_reduced),
-    #     inv(visb_c_reduced + visp_c_reduced)
-    # ]
-
-    # labels = ['cmb powerp', 'cmb bisp', 'cmb power + bisp']
-
-
     fish_matrices = [
-        visp_c + visb_c,
-        visp_s + visb_s,
-        visp_f,
-        visb_f,
-        visb_f + visp_f
+        toshiya_prior + 1.5 * visp_c,
+        toshiya_prior + 1.5 * visb_c,
+        toshiya_prior + 1.5 * visb_c + 1.5 * visp_c
     ]
 
-    labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
+    labels = ['cmb powerp', 'cmb bisp', 'cmb power + bisp']
+
+
+    # fish_matrices = [
+    #     visp_c + visb_c,
+    #     visp_s + visb_s,
+    #     visp_f,
+    #     visb_f,
+    #     visb_f + visp_f
+    # ]
+
+    # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
 
     # cov_matrices = [
     #     inv(planck_reduced),
@@ -435,6 +437,6 @@ if __name__ == "__main__":
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
     #plt.show()
-    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_tight.pdf', dpi = 300)
+    #plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_tight.pdf', dpi = 300)
 
     save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
