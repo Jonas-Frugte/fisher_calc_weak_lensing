@@ -33,13 +33,25 @@ def fisher_calc_wrapper_takada_jain(args, tracers):
     if tracers == 's':
         # lmax should actually be 3000, but interpolation currently doesn't go that high
         return vispy.Fisher_powersp_single(50, 2000, b's', par1 = pars[i], par2 = pars[j])
+    
+def fisher_calc_wrapper_cmb(args, tracers):
+    i, j = args
+    # Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores)
+    # Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type)
+    if tracers == 't':
+        return vispy.Fisher_powersp_single(lmin, lmax, b't', par1 = pars[i], par2 = pars[j])
+    if tracers == 'e':
+        return vispy.Fisher_powersp_single(lmin, lmax, b'e', par1 = pars[i], par2 = pars[j])
+    if tracers == 'both':
+        # lmax should actually be 3000, but interpolation currently doesn't go that high
+        return vispy.Fisher_powersp_cmb(2, 2000, par1 = pars[i], par2 = pars[j])
 
-for tracer in ['s']: #['c', 's', 'both']:
+for tracer in ['both']: #['c', 's', 'both']:
     mat = np.zeros((len(pars), len(pars)))
     for i, j in product(range(len(pars)), repeat = 2):
-        result = fisher_calc_wrapper_takada_jain((i, j), tracer)
+        result = fisher_calc_wrapper_cmb((i, j), tracer)
         mat[i, j] = result
         mat[j, i] = result  # Symmetric assignment
 
-    np.savetxt(f'fisher_matrices/fish_mat_powersp_{tracer}_takada_jain.txt', mat)
+    np.savetxt(f'fisher_matrices/fish_mat_powersp_{tracer}_cmb.txt', mat)
     print(mat)

@@ -67,6 +67,16 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
         np.save(filepath + '/z_at_chi', [cosm_data.results.redshift_at_comoving_radial_distance(chi) for chi in chis])
         print(f'z at chi created to {folder_name}')
 
+        lmax = 3000
+        cmb_ps = cosm_data.results.get_lensed_scalar_cls(lmax = lmax, raw_cl=True)
+
+        cmb_ps_with_ls = np.zeros((np.shape(cmb_ps)[0], np.shape(cmb_ps)[1] + 1))
+        cmb_ps_with_ls[:, 0] = np.arange(lmax + 1)[:]
+        cmb_ps_with_ls[:, 1:] = cmb_ps[:, :]
+
+        np.save(filepath + '/cmb_ps_with_ls', cmb_ps_with_ls)
+        print(f'cmb_ps_with_ls created to {folder_name}')
+
     if lps:
         # lensing power spectrum (convergence, convergence) (1d: k)
         np.save(filepath + '/lensing_power_spectrum_cc', [cosm_data.lps(k, ('convergence', 'convergence')) for k in ks_log_fine])
@@ -150,7 +160,7 @@ delta_delta = 0.05
 # data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True, exp_par = exp_par)
 
 # allows control over which data to create
-which_to_create = [[True, True, True, True, True, True]]
+which_to_create = [[False, False, False, False, False, True]]
 
 exports = [['data_fiducial', fiducial_cosm_par, *create_settings] for create_settings in which_to_create]
 

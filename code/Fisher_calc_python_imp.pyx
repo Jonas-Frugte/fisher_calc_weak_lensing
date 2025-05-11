@@ -273,6 +273,41 @@ def Fisher_powersp(lmin, lmax, par1 = b'snr', par2 = b'snr'):
     
     return result1
 
+def Fisher_powersp_cmb(lmin, lmax, par1 = b'snr', par2 = b'snr'):
+
+    result1 = 0
+
+    # l1 = l2 sum
+    for l in range(lmin, lmax + 1):
+        xyz_configs = ((b't', b't'), (b't', b'e'), (b'e', b'e'))
+
+        vec_l = np.zeros(3)
+        vec_r = np.zeros(3)
+
+        # SNR_case
+        if par1 == b'snr' and par2 == b'snr':
+            for config_num in range(len(xyz_configs)):
+                vec_r[config_num] = lps_f(l, xyz_configs[config_num][0], xyz_configs[config_num][1])
+                vec_l = vec_r
+        # Fisher matrix case
+        else:
+            for config_num in range(len(xyz_configs)):
+                vec_r[config_num] = lps_der(l, xyz_configs[config_num][0], xyz_configs[config_num][1], par2, dd)
+                vec_l[config_num] = lps_der(l, xyz_configs[config_num][0], xyz_configs[config_num][1], par1, dd)
+
+        cov_mat = np.zeros((3, 3))
+        for i, j in product(range(len(xyz_configs)), repeat=2):
+            xyz_config_i = xyz_configs[i]
+            xyz_config_j = xyz_configs[j]
+            for x in permutations((0, 1), 2):
+                cov_mat[i, j] += lps_f_obs(l, xyz_config_i[0], xyz_config_j[x[0]]) * lps_f_obs(l, xyz_config_i[1], xyz_config_j[x[1]])
+
+        condition_check(cov_mat)
+
+        result1 += (2 * l + 1) * vec_l.T @ np.linalg.solve(cov_mat, vec_r) # 2 l + 1 factor is new
+    
+    return result1
+
 def Fisher_powersp_single(lmin, lmax, tracer, par1 = b'snr', par2 = b'snr'):
 
     result1 = 0
