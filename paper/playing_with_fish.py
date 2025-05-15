@@ -154,10 +154,10 @@ sigmaomm_ders = [0,
            (0.25 * sigma8 * omm**(-0.75))]
 
 
-# keep_indices = [0, 7, 9]
+keep_indices = [0, 7, 9]
 #keep_indices=[10]
-# keep_indices = [0, 1, 2, 3, 4, 5, 6]
-keep_indices = [4, 6]
+#keep_indices = [0, 1, 2, 3, 4, 5, 6]
+#keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
     fishes_inv = [inv(fish) for fish in fishes]
@@ -189,7 +189,7 @@ print(0.67**(-0.5) * np.sqrt(process_fishes(
 plt_scale = 0.5
 
 # new version that returns flipped version which I think is correct
-def confidence_ellipse(ax, mean, cov, color='blue', nstd=1.0, **kwargs):
+def confidence_ellipse(ax, mean, cov, color='blue', nstd=1.0, isbig=False, **kwargs):
     """
     Plot the 2D confidence ellipse of a Gaussian distribution given by mean & covariance
     onto the Matplotlib axes 'ax'.
@@ -197,12 +197,19 @@ def confidence_ellipse(ax, mean, cov, color='blue', nstd=1.0, **kwargs):
     - cov: (2x2) covariance matrix
     - color: color for the ellipse
     - nstd: number of standard deviations (1 => ~68% region, 2 => ~95%, etc.)
-    """
+    """        
     vals, vecs = np.linalg.eigh(cov)
     # Angle to rotate the ellipse
     angle = 45 - (np.degrees(np.arctan2(*vecs[:, 1][::-1])) - 45)
     # Major/minor axes
     width, height = 2 * nstd * np.sqrt(vals)
+    if isbig == True:
+        width_small, height_small = (0.5 * width, 0.5 * height)
+        ellip = Ellipse(
+        xy=mean, width=width_small, height=height_small,
+        angle=angle, edgecolor=color, facecolor='none', lw=1, linestyle = '--', **kwargs
+        )
+        ax.add_patch(ellip)
 
     ellip = Ellipse(
         xy=mean, width=width, height=height,
@@ -321,9 +328,13 @@ def plot_corner(
             for (cov, color) in zip(cov_matrices, colors):
                 subcov = cov[[i, j]][:, [i, j]]
                 mean_ij = [param_values[i], param_values[j]]
-                confidence_ellipse(ax_low, mean_ij, subcov, color=color, nstd=nstd)
+                if color == "tab:blue":
+                    print('yay')
+                    confidence_ellipse(ax_low, mean_ij, subcov, color=color, nstd=nstd, isbig=True)
+                else:
+                    confidence_ellipse(ax_low, mean_ij, subcov, color=color, nstd=nstd)
 
-            # Default: ±5σ around param_values
+            # Default: ±σ around param_values
             sigma_i = np.sqrt(cov_matrices[0][i, i])
             sigma_j = np.sqrt(cov_matrices[0][j, j])
             x_min = param_values[i] - plt_scale*sigma_i
@@ -410,14 +421,14 @@ if __name__ == "__main__":
 
     # labels = ["CMB", "Galaxy", "CMB + Galaxy"]
 
-    fish_matrices = [
-        0.5 * viscmb_f,
-        0.5 * (viscmb_f + 1.5 * visp_c),
-        0.5 * (viscmb_f + 1.5 * visb_c),
-        0.5 * (viscmb_f + 1.5 * visb_c + 1.5 * visp_c)
-    ]
+    # fish_matrices = [
+    #     0.5 * viscmb_f,
+    #     0.5 * (viscmb_f + 1.5 * visp_c),
+    #     0.5 * (viscmb_f + 1.5 * visb_c),
+    #     0.5 * (viscmb_f + 1.5 * visb_c + 1.5 * visp_c)
+    # ]
 
-    labels = ['cmb T+E', 'cmb powersp', 'cmb bisp', 'cmb powersp + bisp']
+    # labels = ['cmb T+E', 'cmb powersp', 'cmb bisp', 'cmb powersp + bisp']
 
 
     # fish_matrices = [
@@ -429,6 +440,16 @@ if __name__ == "__main__":
     # ]
 
     # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
+    vis1 = np.array([[1,0],[0,1]])
+    vis1 = np.array([[1,0],[0,1]])
+
+    fish_matrices = [
+        visp_c + visb_c,
+        visp_s + visb_s,
+        visp_f
+    ]
+
+    labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp']
 
     # fish_matrices = [
     #     planck,
@@ -451,8 +472,10 @@ if __name__ == "__main__":
         dpi=100
     )
 
+
+
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
-    #plt.show()
+    plt.show()
     #plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_tight.pdf', dpi = 300)
 
     save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
