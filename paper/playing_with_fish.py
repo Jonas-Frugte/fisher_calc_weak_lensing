@@ -37,7 +37,7 @@ visp_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both.txt')
 ######################
 planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_c_planck.txt')
 
-planck_prior = np.diag([12 / 60**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 1e6, 1e19, 1e6])
+planck_prior = np.diag([12 / 60**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 0.01, 1e18, 0.01])
 
 planck_p_prior = planck + planck_prior
 
@@ -154,9 +154,9 @@ sigmaomm_ders = [0,
            (0.25 * sigma8 * omm**(-0.75))]
 
 
-keep_indices = [0, 7, 9]
+#keep_indices = [4, 6, 7, 9]
 #keep_indices=[10]
-#keep_indices = [0, 1, 2, 3, 4, 5, 6]
+keep_indices = [0, 1, 2, 3, 5]
 #keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
@@ -172,11 +172,11 @@ def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_de
     
     return fishes_inv
 
-print(0.67**(-0.5) * np.sqrt(process_fishes(
-    [planck_prior, planck, planck_p_prior],
-    [10],   
-    derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]
-    )))
+# print(0.67**(-0.5) * np.sqrt(process_fishes(
+#     [planck_prior, planck, planck_p_prior],
+#     [10],   
+#     derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]
+#     )))
 
 # print(0.1**(-0.5) * np.sqrt(process_fishes(
 #     [prior_takada_jain + visp_s_takada_jain, prior_takada_jain + visp_s_takada_jain, prior_takada_jain + visb_s_takada_jain + visb_s_takada_jain],
@@ -186,7 +186,7 @@ print(0.67**(-0.5) * np.sqrt(process_fishes(
 
 ######### PLOTS #########
 
-plt_scale = 0.5
+plt_scale = 1
 
 # new version that returns flipped version which I think is correct
 def confidence_ellipse(ax, mean, cov, color='blue', nstd=1.0, isbig=False, **kwargs):
@@ -280,59 +280,63 @@ def plot_corner(
         color_cycle = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple']
         colors = [color_cycle[i % len(color_cycle)] for i in range(n_matrices)]
 
-    fig, axes = plt.subplots(N, N, figsize=figsize, dpi=dpi)
+    fig, axes = plt.subplots(N-1, N-1, figsize=figsize, dpi=dpi)
     axes = np.atleast_2d(axes)  # ensure it's 2D
 
     # Diagonal subplots: 1D Gaussians + print sigma^2
-    for i in range(N):
-        ax = axes[i, i]
+    # for i in range(N):
+    #     ax = axes[i, i]
 
-        for k, (cov, color) in enumerate(zip(cov_matrices, colors)):
-            sigma = np.sqrt(cov[i, i])
-            x_min = param_values[i] - 100*sigma
-            x_max = param_values[i] + 100*sigma
-            x_plot = np.linspace(x_min, x_max, 5000)
-            pdf = norm.pdf(x_plot, loc=param_values[i], scale=sigma)
+    #     for k, (cov, color) in enumerate(zip(cov_matrices, colors)):
+    #         sigma = np.sqrt(cov[i, i])
+    #         x_min = param_values[i] - 100*sigma
+    #         x_max = param_values[i] + 100*sigma
+    #         x_plot = np.linspace(x_min, x_max, 5000)
+    #         pdf = norm.pdf(x_plot, loc=param_values[i], scale=sigma)
 
-            ax.fill_between(x_plot, pdf, color=color, lw=1, alpha = 0.2)
-            ax.plot(x_plot, pdf, color=color, lw=1, alpha = 1)
+    #         ax.fill_between(x_plot, pdf, color=color, lw=1, alpha = 0.2)
+    #         ax.plot(x_plot, pdf, color=color, lw=1, alpha = 1)
             
-            # Print sigma^2 in matching color, offset each line a bit
-            ax.text(
-                0.05,
-                0.90 - 0.08*k,
-                rf"${sigma:.1e}$",
-                color=color,
-                transform=ax.transAxes
-            )
+    #         # Print sigma^2 in matching color, offset each line a bit
+    #         ax.text(
+    #             0.05,
+    #             0.90 - 0.08*k,
+    #             rf"${sigma:.1e}$",
+    #             color=color,
+    #             transform=ax.transAxes
+    #         )
 
-        # X-limits from the first matrix or whichever you want
-        sigma_ref = np.sqrt(cov_matrices[0][i, i])
-        ax.set_xlim(param_values[i] - plt_scale*sigma_ref, param_values[i] + plt_scale*sigma_ref)
+    #     # X-limits from the first matrix or whichever you want
+    #     sigma_ref = np.sqrt(cov_matrices[0][i, i])
+    #     ax.set_xlim(param_values[i] - plt_scale*sigma_ref, param_values[i] + plt_scale*sigma_ref)
         
-        # # If you have a custom range for this diagonal parameter, override it:
-        # if param_names[i] in custom_ranges:
-        #     ax.set_xlim(*custom_ranges[param_names[i]])
+    #     # # If you have a custom range for this diagonal parameter, override it:
+    #     # if param_names[i] in custom_ranges:
+    #     #     ax.set_xlim(*custom_ranges[param_names[i]])
 
-        ax.set_xlabel(param_names[i])
-        ax.set_yticks([])
+    #     ax.set_xlabel(param_names[i])
+    #     ax.set_yticks([])
 
     # Off-diagonal subplots: 2D ellipses
-    for i in range(N):
-        for j in range(i+1, N):
+    for i in range(N-1):
+        for j in range(i, N-1):
+            print(i, j)
             ax_low = axes[j, i]  # lower triangle
             ax_high = axes[i, j] # upper triangle
-            ax_high.set_visible(False)  # hide mirrored subplot if you want
+            if i != j:
+                ax_high.set_visible(False)  # hide mirrored subplot if you want
+
+            j += 1
 
             # Draw each ellipse
             for (cov, color) in zip(cov_matrices, colors):
                 subcov = cov[[i, j]][:, [i, j]]
                 mean_ij = [param_values[i], param_values[j]]
-                if color == "tab:blue":
-                    print('yay')
-                    confidence_ellipse(ax_low, mean_ij, subcov, color=color, nstd=nstd, isbig=True)
-                else:
-                    confidence_ellipse(ax_low, mean_ij, subcov, color=color, nstd=nstd)
+                # if color == "tab:blue":
+                #     print('yay')
+                #     # confidence_ellipse(ax_low, mean_ij, subcov, color=color, nstd=nstd, isbig=True)
+                # else:
+                confidence_ellipse(ax_low, mean_ij, subcov, color=color, nstd=nstd)
 
             # Default: ±σ around param_values
             sigma_i = np.sqrt(cov_matrices[0][i, i])
@@ -432,24 +436,82 @@ if __name__ == "__main__":
 
 
     # fish_matrices = [
-    #     visp_c + visb_c,
-    #     visp_s + visb_s,
-    #     visp_f,
-    #     visb_f,
-    #     visb_f + visp_f
+    #     planck_prior + visp_c + visb_c,
+    #     planck_prior + visp_s + visb_s,
+    #     planck_prior + visp_f,
+    #     planck_prior + visb_f,
+    #     planck_prior + visb_f + visp_f
     # ]
 
     # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
-    vis1 = np.array([[1,0],[0,1]])
-    vis1 = np.array([[1,0],[0,1]])
+    fish_pond_number = 1
 
-    fish_matrices = [
-        visp_c + visb_c,
-        visp_s + visb_s,
-        visp_f
-    ]
+    if fish_pond_number == 1:
+        fish_matrices = [
+            planck_prior,
+            planck_prior + visp_c,
+            planck_prior + visb_c,
+            planck_prior + visp_c + visb_c,
+            planck_prior + visp_s,
+            planck_prior + visb_s,
+            planck_prior + visp_s + visb_s,
+            planck_prior + visp_f,
+            planck_prior + visb_f,
+            planck_prior + visp_f + visb_f,
+        ]
 
-    labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp']
+        labels = ['prior', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$']
+
+    if fish_pond_number == 2:
+        fish_matrices = [
+            planck_prior + visp_c,
+            planck_prior + visb_c,
+            planck_prior + visp_c + visb_c,
+            planck_prior + visp_f + visb_f,
+        ]
+
+        labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
+
+        plt_name = 'param_constraints_tight_cmb.pdf'
+
+
+    if fish_pond_number == 3:
+        fish_matrices = [
+            planck_prior + visp_s,
+            planck_prior + visb_s,
+            planck_prior + visp_s + visb_s,
+            planck_prior + visp_f + visb_f,
+        ]
+
+        labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
+
+        plt_name = 'param_constraints_tight_gal.pdf'
+
+    if fish_pond_number == 4:
+        fish_matrices = [
+            planck_prior + visp_c,
+            planck_prior + visb_c,
+            planck_prior + visp_c + visb_c,
+            planck_prior + visp_f + visb_f,
+        ]
+
+        labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
+
+        plt_name = 'param_constraints_all_cmb.pdf'
+
+
+    if fish_pond_number == 5:
+        fish_matrices = [
+            planck_prior + visp_s,
+            planck_prior + visb_s,
+            planck_prior + visp_s + visb_s,
+            planck_prior + visp_f + visb_f,
+        ]
+
+        labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
+
+        plt_name = 'param_constraints_all_gal.pdf'
+
 
     # fish_matrices = [
     #     planck,
@@ -461,21 +523,21 @@ if __name__ == "__main__":
 
     cov_matrices = process_fishes(fish_matrices, keep_indices)
 
-    fig, axes = plot_corner(
-        cov_matrices=cov_matrices,
-        param_names=param_names_latex_kept,
-        param_values=param_values_kept,
-        labels=labels,
-        colors=["tab:blue", "tab:orange", 'tab:green', 'tab:red','black'],
-        nstd=1.0,
-        figsize=(16,16),
-        dpi=100
-    )
+    # fig, axes = plot_corner(
+    #     cov_matrices=cov_matrices,
+    #     param_names=param_names_latex_kept,
+    #     param_values=param_values_kept,
+    #     labels=labels,
+    #     colors=["tab:blue", "tab:orange", 'tab:green', 'black'],
+    #     nstd=1.0,
+    #     figsize=(10,10),
+    #     dpi=100
+    # )
 
 
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
-    plt.show()
-    #plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/param_constraints_tight.pdf', dpi = 300)
+    #plt.show()
+    #plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300)
 
     save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)

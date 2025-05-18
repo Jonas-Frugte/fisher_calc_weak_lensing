@@ -1,0 +1,2101 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{nty/global//global/global/global}
+  \entry{Ade2019}{article}{}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{3}{}{%
+      {{hash=AP}{%
+         family={Ade},
+         familyi={A\bibinitperiod},
+         given={PAR},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=AJ}{%
+         family={Aguirre},
+         familyi={A\bibinitperiod},
+         given={J},
+         giveni={J},
+      }}%
+      {{hash=AZ}{%
+         family={Ahmed},
+         familyi={A\bibinitperiod},
+         given={Z},
+         giveni={Z},
+      }}%
+    }
+    \strng{namehash}{APAJAZ+1}
+    \strng{fullhash}{APAJAZ+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{number}{02}
+    \field{pages}{056}
+    \field{title}{The Simons Observatory: science goals and forecasts}
+    \field{volume}{2019}
+    \field{journaltitle}{Journal of Cosmology and Astroparticle Physics}
+    \field{year}{2019}
+  \endentry
+
+  \entry{planckresults}{article}{}{}
+    \name{author}{181}{}{%
+      {{hash=AN}{%
+         family={Aghanim},
+         familyi={A\bibinitperiod},
+         given={N.},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=AY}{%
+         family={Akrami},
+         familyi={A\bibinitperiod},
+         given={Y.},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=AM}{%
+         family={Ashdown},
+         familyi={A\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=AJ}{%
+         family={Aumont},
+         familyi={A\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=BC}{%
+         family={Baccigalupi},
+         familyi={B\bibinitperiod},
+         given={C.},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Ballardini},
+         familyi={B\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BAJ}{%
+         family={Banday},
+         familyi={B\bibinitperiod},
+         given={A.\bibnamedelima J.},
+         giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=BRB}{%
+         family={Barreiro},
+         familyi={B\bibinitperiod},
+         given={R.\bibnamedelima B.},
+         giveni={R\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=BN}{%
+         family={Bartolo},
+         familyi={B\bibinitperiod},
+         given={N.},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Basak},
+         familyi={B\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BR}{%
+         family={Battye},
+         familyi={B\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=BK}{%
+         family={Benabed},
+         familyi={B\bibinitperiod},
+         given={K.},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=BJP}{%
+         family={Bernard},
+         familyi={B\bibinitperiod},
+         given={J.-P.},
+         giveni={J\bibinithyphendelim P\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Bersanelli},
+         familyi={B\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BP}{%
+         family={Bielewicz},
+         familyi={B\bibinitperiod},
+         given={P.},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=BJJ}{%
+         family={Bock},
+         familyi={B\bibinitperiod},
+         given={J.\bibnamedelima J.},
+         giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=BJR}{%
+         family={Bond},
+         familyi={B\bibinitperiod},
+         given={J.\bibnamedelima R.},
+         giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=BJ}{%
+         family={Borrill},
+         familyi={B\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=BFR}{%
+         family={Bouchet},
+         familyi={B\bibinitperiod},
+         given={F.\bibnamedelima R.},
+         giveni={F\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=BF}{%
+         family={Boulanger},
+         familyi={B\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Bucher},
+         familyi={B\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BC}{%
+         family={Burigana},
+         familyi={B\bibinitperiod},
+         given={C.},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=BRC}{%
+         family={Butler},
+         familyi={B\bibinitperiod},
+         given={R.\bibnamedelima C.},
+         giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=CE}{%
+         family={Calabrese},
+         familyi={C\bibinitperiod},
+         given={E.},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=CJF}{%
+         family={Cardoso},
+         familyi={C\bibinitperiod},
+         given={J.-F.},
+         giveni={J\bibinithyphendelim F\bibinitperiod},
+      }}%
+      {{hash=CJ}{%
+         family={Carron},
+         familyi={C\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=CA}{%
+         family={Challinor},
+         familyi={C\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=CHC}{%
+         family={Chiang},
+         familyi={C\bibinitperiod},
+         given={H.\bibnamedelima C.},
+         giveni={H\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=CJ}{%
+         family={Chluba},
+         familyi={C\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=CLPL}{%
+         family={Colombo},
+         familyi={C\bibinitperiod},
+         given={L.\bibnamedelima P.\bibnamedelima L.},
+         giveni={L\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=CC}{%
+         family={Combet},
+         familyi={C\bibinitperiod},
+         given={C.},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Contreras},
+         familyi={C\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=CBP}{%
+         family={Crill},
+         familyi={C\bibinitperiod},
+         given={B.\bibnamedelima P.},
+         giveni={B\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=CF}{%
+         family={Cuttaia},
+         familyi={C\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=dBP}{%
+         prefix={de},
+         prefixi={d\bibinitperiod},
+         family={Bernardis},
+         familyi={B\bibinitperiod},
+         given={P.},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=dZG}{%
+         prefix={de},
+         prefixi={d\bibinitperiod},
+         family={Zotti},
+         familyi={Z\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=DJ}{%
+         family={Delabrouille},
+         familyi={D\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=DJM}{%
+         family={Delouis},
+         familyi={D\bibinitperiod},
+         given={J.-M.},
+         giveni={J\bibinithyphendelim M\bibinitperiod},
+      }}%
+      {{hash=DVE}{%
+         family={Di\bibnamedelima Valentino},
+         familyi={D\bibinitperiod\bibinitdelim V\bibinitperiod},
+         given={E.},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=DJM}{%
+         family={Diego},
+         familyi={D\bibinitperiod},
+         given={J.\bibnamedelima M.},
+         giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=DO}{%
+         family={Dore},
+         familyi={D\bibinitperiod},
+         given={O.},
+         giveni={O\bibinitperiod},
+      }}%
+      {{hash=DM}{%
+         family={Douspis},
+         familyi={D\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=DA}{%
+         family={Ducout},
+         familyi={D\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=DX}{%
+         family={Dupac},
+         familyi={D\bibinitperiod},
+         given={X.},
+         giveni={X\bibinitperiod},
+      }}%
+      {{hash=DS}{%
+         family={Dusini},
+         familyi={D\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=EG}{%
+         family={Efstathiou},
+         familyi={E\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=EF}{%
+         family={Elsner},
+         familyi={E\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=ETA}{%
+         family={Enslin},
+         familyi={E\bibinitperiod},
+         given={T.\bibnamedelima A.},
+         giveni={T\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=EHK}{%
+         family={Eriksen},
+         familyi={E\bibinitperiod},
+         given={H.\bibnamedelima K.},
+         giveni={H\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+      {{hash=FY}{%
+         family={Fantaye},
+         familyi={F\bibinitperiod},
+         given={Y.},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=FM}{%
+         family={Farhang},
+         familyi={F\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=FJ}{%
+         family={Fergusson},
+         familyi={F\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=FCR}{%
+         family={Fernandez-Cobos},
+         familyi={F\bibinithyphendelim C\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=FF}{%
+         family={Finelli},
+         familyi={F\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=FF}{%
+         family={Forastieri},
+         familyi={F\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=FM}{%
+         family={Frailis},
+         familyi={F\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=FAA}{%
+         family={Fraisse},
+         familyi={F\bibinitperiod},
+         given={A.\bibnamedelima A.},
+         giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=FE}{%
+         family={Franceschi},
+         familyi={F\bibinitperiod},
+         given={E.},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=FA}{%
+         family={Frolov},
+         familyi={F\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=GS}{%
+         family={Galeotta},
+         familyi={G\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=GS}{%
+         family={Galli},
+         familyi={G\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=GK}{%
+         family={Ganga},
+         familyi={G\bibinitperiod},
+         given={K.},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=GSRT}{%
+         family={Genova-Santos},
+         familyi={G\bibinithyphendelim S\bibinitperiod},
+         given={R.\bibnamedelima T.},
+         giveni={R\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=GM}{%
+         family={Gerbino},
+         familyi={G\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=GT}{%
+         family={Ghosh},
+         familyi={G\bibinitperiod},
+         given={T.},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=GNJ}{%
+         family={Gonzalez-Nuevo},
+         familyi={G\bibinithyphendelim N\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=GKM}{%
+         family={Gorski},
+         familyi={G\bibinitperiod},
+         given={K.\bibnamedelima M.},
+         giveni={K\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=GS}{%
+         family={Gratton},
+         familyi={G\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=GA}{%
+         family={Gruppuso},
+         familyi={G\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=GJE}{%
+         family={Gudmundsson},
+         familyi={G\bibinitperiod},
+         given={J.\bibnamedelima E.},
+         giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=HJ}{%
+         family={Hamann},
+         familyi={H\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=HW}{%
+         family={Handley},
+         familyi={H\bibinitperiod},
+         given={W.},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=HFK}{%
+         family={Hansen},
+         familyi={H\bibinitperiod},
+         given={F.\bibnamedelima K.},
+         giveni={F\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+      {{hash=HD}{%
+         family={Herranz},
+         familyi={H\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=HSR}{%
+         family={Hildebrandt},
+         familyi={H\bibinitperiod},
+         given={S.\bibnamedelima R.},
+         giveni={S\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=HE}{%
+         family={Hivon},
+         familyi={H\bibinitperiod},
+         given={E.},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=HZ}{%
+         family={Huang},
+         familyi={H\bibinitperiod},
+         given={Z.},
+         giveni={Z\bibinitperiod},
+      }}%
+      {{hash=JAH}{%
+         family={Jaffe},
+         familyi={J\bibinitperiod},
+         given={A.\bibnamedelima H.},
+         giveni={A\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=JWC}{%
+         family={Jones},
+         familyi={J\bibinitperiod},
+         given={W.\bibnamedelima C.},
+         giveni={W\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=KA}{%
+         family={Karakci},
+         familyi={K\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KE}{%
+         family={Keihanen},
+         familyi={K\bibinitperiod},
+         given={E.},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=KR}{%
+         family={Keskitalo},
+         familyi={K\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=KK}{%
+         family={Kiiveri},
+         familyi={K\bibinitperiod},
+         given={K.},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=KJ}{%
+         family={Kim},
+         familyi={K\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=KTS}{%
+         family={Kisner},
+         familyi={K\bibinitperiod},
+         given={T.\bibnamedelima S.},
+         giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=KL}{%
+         family={Knox},
+         familyi={K\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=KN}{%
+         family={Krachmalnicoff},
+         familyi={K\bibinitperiod},
+         given={N.},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=KM}{%
+         family={Kunz},
+         familyi={K\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=KSH}{%
+         family={Kurki-Suonio},
+         familyi={K\bibinithyphendelim S\bibinitperiod},
+         given={H.},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=LG}{%
+         family={Lagache},
+         familyi={L\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=LJM}{%
+         family={Lamarre},
+         familyi={L\bibinitperiod},
+         given={J.-M.},
+         giveni={J\bibinithyphendelim M\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Lasenby},
+         familyi={L\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=LM}{%
+         family={Lattanzi},
+         familyi={L\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=LCR}{%
+         family={Lawrence},
+         familyi={L\bibinitperiod},
+         given={C.\bibnamedelima R.},
+         giveni={C\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=LJM}{%
+         family={Le\bibnamedelima Jeune},
+         familyi={L\bibinitperiod\bibinitdelim J\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=LP}{%
+         family={Lemos},
+         familyi={L\bibinitperiod},
+         given={P.},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=LJ}{%
+         family={Lesgourgues},
+         familyi={L\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=LF}{%
+         family={Levrier},
+         familyi={L\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Lewis},
+         familyi={L\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=LM}{%
+         family={Liguori},
+         familyi={L\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=LPB}{%
+         family={Lilje},
+         familyi={L\bibinitperiod},
+         given={P.\bibnamedelima B.},
+         giveni={P\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=LM}{%
+         family={Lilley},
+         familyi={L\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=LV}{%
+         family={Lindholm},
+         familyi={L\bibinitperiod},
+         given={V.},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=LCM}{%
+         family={Lopez-Caniego},
+         familyi={L\bibinithyphendelim C\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=LPM}{%
+         family={Lubin},
+         familyi={L\bibinitperiod},
+         given={P.\bibnamedelima M.},
+         giveni={P\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=MYZ}{%
+         family={Ma},
+         familyi={M\bibinitperiod},
+         given={Y.-Z.},
+         giveni={Y\bibinithyphendelim Z\bibinitperiod},
+      }}%
+      {{hash=MPJF}{%
+         family={Macias-Perez},
+         familyi={M\bibinithyphendelim P\bibinitperiod},
+         given={J.\bibnamedelima F.},
+         giveni={J\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=MG}{%
+         family={Maggio},
+         familyi={M\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=MD}{%
+         family={Maino},
+         familyi={M\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=MN}{%
+         family={Mandolesi},
+         familyi={M\bibinitperiod},
+         given={N.},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Mangilli},
+         familyi={M\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MCA}{%
+         family={Marcos-Caballero},
+         familyi={M\bibinithyphendelim C\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Maris},
+         familyi={M\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=MPG}{%
+         family={Martin},
+         familyi={M\bibinitperiod},
+         given={P.\bibnamedelima G.},
+         giveni={P\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Martinelli},
+         familyi={M\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=MGE}{%
+         family={Martinez-Gonzalez},
+         familyi={M\bibinithyphendelim G\bibinitperiod},
+         given={E.},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=MS}{%
+         family={Matarrese},
+         familyi={M\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MN}{%
+         family={Mauri},
+         familyi={M\bibinitperiod},
+         given={N.},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=MJD}{%
+         family={McEwen},
+         familyi={M\bibinitperiod},
+         given={J.\bibnamedelima D.},
+         giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=MPR}{%
+         family={Meinhold},
+         familyi={M\bibinitperiod},
+         given={P.\bibnamedelima R.},
+         giveni={P\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Melchiorri},
+         familyi={M\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Mennella},
+         familyi={M\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Migliaccio},
+         familyi={M\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Millea},
+         familyi={M\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=MS}{%
+         family={Mitra},
+         familyi={M\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MDMA}{%
+         family={Miville-Deschenes},
+         familyi={M\bibinithyphendelim D\bibinitperiod},
+         given={M.-A.},
+         giveni={M\bibinithyphendelim A\bibinitperiod},
+      }}%
+      {{hash=MD}{%
+         family={Molinari},
+         familyi={M\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=ML}{%
+         family={Montier},
+         familyi={M\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=MG}{%
+         family={Morgante},
+         familyi={M\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Moss},
+         familyi={M\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=NP}{%
+         family={Natoli},
+         familyi={N\bibinitperiod},
+         given={P.},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=NNHU}{%
+         family={Norgaard-Nielsen},
+         familyi={N\bibinithyphendelim N\bibinitperiod},
+         given={H.\bibnamedelima U.},
+         giveni={H\bibinitperiod\bibinitdelim U\bibinitperiod},
+      }}%
+      {{hash=PL}{%
+         family={Pagano},
+         familyi={P\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=PD}{%
+         family={Paoletti},
+         familyi={P\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=PB}{%
+         family={Partridge},
+         familyi={P\bibinitperiod},
+         given={B.},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=PG}{%
+         family={Patanchon},
+         familyi={P\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=PHV}{%
+         family={Peiris},
+         familyi={P\bibinitperiod},
+         given={H.\bibnamedelima V.},
+         giveni={H\bibinitperiod\bibinitdelim V\bibinitperiod},
+      }}%
+      {{hash=PF}{%
+         family={Perrotta},
+         familyi={P\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=PV}{%
+         family={Pettorino},
+         familyi={P\bibinitperiod},
+         given={V.},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=PF}{%
+         family={Piacentini},
+         familyi={P\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=PL}{%
+         family={Polastri},
+         familyi={P\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=PG}{%
+         family={Polenta},
+         familyi={P\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=PJL}{%
+         family={Puget},
+         familyi={P\bibinitperiod},
+         given={J.-L.},
+         giveni={J\bibinithyphendelim L\bibinitperiod},
+      }}%
+      {{hash=RJP}{%
+         family={Rachen},
+         familyi={R\bibinitperiod},
+         given={J.\bibnamedelima P.},
+         giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=RM}{%
+         family={Reinecke},
+         familyi={R\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=RM}{%
+         family={Remazeilles},
+         familyi={R\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=RA}{%
+         family={Renzi},
+         familyi={R\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=RG}{%
+         family={Rocha},
+         familyi={R\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=RC}{%
+         family={Rosset},
+         familyi={R\bibinitperiod},
+         given={C.},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=RG}{%
+         family={Roudier},
+         familyi={R\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=RMJA}{%
+         family={Rubino-Martin},
+         familyi={R\bibinithyphendelim M\bibinitperiod},
+         given={J.\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=RGB}{%
+         family={Ruiz-Granados},
+         familyi={R\bibinithyphendelim G\bibinitperiod},
+         given={B.},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=SL}{%
+         family={Salvati},
+         familyi={S\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Sandri},
+         familyi={S\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Savelainen},
+         familyi={S\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Scott},
+         familyi={S\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=SEPS}{%
+         family={Shellard},
+         familyi={S\bibinitperiod},
+         given={E.\bibnamedelima P.\bibnamedelima S.},
+         giveni={E\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=SC}{%
+         family={Sirignano},
+         familyi={S\bibinitperiod},
+         given={C.},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=SG}{%
+         family={Sirri},
+         familyi={S\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=SLD}{%
+         family={Spencer},
+         familyi={S\bibinitperiod},
+         given={L.\bibnamedelima D.},
+         giveni={L\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Sunyaev},
+         familyi={S\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SUAS}{%
+         family={Suur-Uski},
+         familyi={S\bibinithyphendelim U\bibinitperiod},
+         given={A.-S.},
+         giveni={A\bibinithyphendelim S\bibinitperiod},
+      }}%
+      {{hash=TJA}{%
+         family={Tauber},
+         familyi={T\bibinitperiod},
+         given={J.\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=TD}{%
+         family={Tavagnacco},
+         familyi={T\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=TM}{%
+         family={Tenti},
+         familyi={T\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=TL}{%
+         family={Toffolatti},
+         familyi={T\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=TM}{%
+         family={Tomasi},
+         familyi={T\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=TT}{%
+         family={Trombetti},
+         familyi={T\bibinitperiod},
+         given={T.},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=VL}{%
+         family={Valenziano},
+         familyi={V\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=VJ}{%
+         family={Valiviita},
+         familyi={V\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=VTB}{%
+         family={Van\bibnamedelima Tent},
+         familyi={V\bibinitperiod\bibinitdelim T\bibinitperiod},
+         given={B.},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=VL}{%
+         family={Vibert},
+         familyi={V\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=VP}{%
+         family={Vielva},
+         familyi={V\bibinitperiod},
+         given={P.},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=VF}{%
+         family={Villa},
+         familyi={V\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=VN}{%
+         family={Vittorio},
+         familyi={V\bibinitperiod},
+         given={N.},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=WBD}{%
+         family={Wandelt},
+         familyi={W\bibinitperiod},
+         given={B.\bibnamedelima D.},
+         giveni={B\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=WIK}{%
+         family={Wehus},
+         familyi={W\bibinitperiod},
+         given={I.\bibnamedelima K.},
+         giveni={I\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+      {{hash=WM}{%
+         family={White},
+         familyi={W\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=WSDM}{%
+         family={White},
+         familyi={W\bibinitperiod},
+         given={S.\bibnamedelima D.\bibnamedelima M.},
+         giveni={S\bibinitperiod\bibinitdelim D\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=ZA}{%
+         family={Zacchei},
+         familyi={Z\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=ZA}{%
+         family={Zonca},
+         familyi={Z\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {EDP Sciences}%
+    }
+    \strng{namehash}{AN+1}
+    \strng{fullhash}{ANAYAMAJBCBMBAJBRBBNBSBRBKBJPBMBPBJJBJRBJBFRBFBMBCBRCCECJFCJCACHCCJCLPLCCCDCBPCFBPdZGdDJDJMDVEDJMDODMDADXDSEGEFETAEHKFYFMFJFCRFFFFFMFAAFEFAGSGSGKGSRTGMGTGNJGKMGSGAGJEHJHWHFKHDHSRHEHZJAHJWCKAKEKRKKKJKTSKLKNKMKSHLGLJMLALMLCRLJMLPLJLFLALMLPBLMLVLCMLPMMYZMPJFMGMDMNMAMCAMMMPGMMMGEMSMNMJDMPRMAMAMMMMMSMDMAMDMLMGMANPNNHUPLPDPBPGPHVPFPVPFPLPGPJLRJPRMRMRARGRCRGRMJARGBSLSMSMSDSEPSSCSGSLDSRSUASTJATDTMTLTMTTVLVJVTBVLVPVFVNWBDWIKWMWSDMZAZA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \verb{doi}
+    \verb 10.1051/0004-6361/201833910
+    \endverb
+    \field{issn}{1432-0746}
+    \field{pages}{A6}
+    \field{title}{Planck2018 results: VI. Cosmological parameters}
+    \verb{url}
+    \verb http://dx.doi.org/10.1051/0004-6361/201833910
+    \endverb
+    \field{volume}{641}
+    \field{journaltitle}{Astronomy and Astrophysics}
+    \field{month}{09}
+    \field{year}{2020}
+  \endentry
+
+  \entry{Bacon2000}{article}{}{}
+    \name{author}{3}{}{%
+      {{hash=BD}{%
+         family={Bacon},
+         familyi={B\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=RA}{%
+         family={Refregier},
+         familyi={R\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=ER}{%
+         family={Ellis},
+         familyi={E\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BDRAER1}
+    \strng{fullhash}{BDRAER1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{pages}{625\bibrangedash 640}
+    \field{title}{Detection of weak gravitational lensing by large-scale structure}
+    \field{volume}{318}
+    \field{journaltitle}{Monthly Notices of the Royal Astronomical Society}
+    \field{year}{2000}
+  \endentry
+
+  \entry{Bartelmann2001}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=BM}{%
+         family={Bartelmann},
+         familyi={B\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SP}{%
+         family={Schneider},
+         familyi={S\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BMSP1}
+    \strng{fullhash}{BMSP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{pages}{291\bibrangedash 472}
+    \field{title}{Weak gravitational lensing}
+    \field{volume}{340}
+    \field{journaltitle}{Physics Reports}
+    \field{year}{2001}
+  \endentry
+
+  \entry{bartelmann2001weak}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=BM}{%
+         family={Bartelmann},
+         familyi={B\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SP}{%
+         family={Schneider},
+         familyi={S\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier}%
+    }
+    \strng{namehash}{BMSP1}
+    \strng{fullhash}{BMSP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \verb{doi}
+    \verb 10.1016/S0370-1573(00)00082-X
+    \endverb
+    \field{number}{4-5}
+    \field{pages}{291\bibrangedash 472}
+    \field{title}{Weak Gravitational Lensing}
+    \field{volume}{340}
+    \field{journaltitle}{Physics Reports}
+    \field{year}{2001}
+  \endentry
+
+  \entry{Bernardeau1997}{article}{}{}
+    \name{author}{3}{}{%
+      {{hash=BF}{%
+         family={Bernardeau},
+         familyi={B\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=VWL}{%
+         family={Van\bibnamedelima Waerbeke},
+         familyi={V\bibinitperiod\bibinitdelim W\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=MY}{%
+         family={Mellier},
+         familyi={M\bibinitperiod},
+         given={Y.},
+         giveni={Y\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BFVWLMY1}
+    \strng{fullhash}{BFVWLMY1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{pages}{1\bibrangedash 18}
+    \field{title}{Weak lensing statistics as a probe of non-Gaussian initial conditions}
+    \field{volume}{322}
+    \field{journaltitle}{Astronomy \& Astrophysics}
+    \field{year}{1997}
+  \endentry
+
+  \entry{casella2002statistical}{book}{}{}
+    \name{author}{2}{}{%
+      {{hash=CG}{%
+         family={Casella},
+         familyi={C\bibinitperiod},
+         given={George},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=BRL}{%
+         family={Berger},
+         familyi={B\bibinitperiod},
+         given={Roger\bibnamedelima L.},
+         giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Duxbury Pacific Grove, CA}%
+    }
+    \strng{namehash}{CGBRL1}
+    \strng{fullhash}{CGBRL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{edition}{2nd}
+    \field{isbn}{9780534243128}
+    \field{title}{Statistical Inference}
+    \field{year}{2002}
+  \endentry
+
+  \entry{Chen:2021vba}{article}{}{}
+    \name{author}{3}{}{%
+      {{hash=CSF}{%
+         family={Chen},
+         familyi={C\bibinitperiod},
+         given={Shu-Fan},
+         giveni={S\bibinithyphendelim F\bibinitperiod},
+      }}%
+      {{hash=LH}{%
+         family={Lee},
+         familyi={L\bibinitperiod},
+         given={Hayden},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=DC}{%
+         family={Dvorkin},
+         familyi={D\bibinitperiod},
+         given={Cora},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CSFLHDC1}
+    \strng{fullhash}{CSFLHDC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \verb{doi}
+    \verb 10.1088/1475-7516/2021/05/030
+    \endverb
+    \verb{eprint}
+    \verb 2103.01229
+    \endverb
+    \field{pages}{030}
+    \field{title}{Precise and accurate cosmology with CMB\texttimes{}LSS power spectra and bispectra}
+    \field{volume}{05}
+    \field{journaltitle}{JCAP}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{astro-ph.CO}
+    \field{year}{2021}
+  \endentry
+
+  \entry{Hu2000}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=CA}{%
+         family={Cooray},
+         familyi={C\bibinitperiod},
+         given={Asantha},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=HW}{%
+         family={Hu},
+         familyi={H\bibinitperiod},
+         given={Wayne},
+         giveni={W\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {American Astronomical Society}%
+    }
+    \strng{namehash}{CAHW1}
+    \strng{fullhash}{CAHW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \verb{doi}
+    \verb 10.1086/318660
+    \endverb
+    \field{issn}{1538-4357}
+    \field{number}{1}
+    \field{pages}{7\bibrangedash 18}
+    \field{title}{Weak Gravitational Lensing Bispectrum}
+    \verb{url}
+    \verb http://dx.doi.org/10.1086/318660
+    \endverb
+    \field{volume}{548}
+    \field{journaltitle}{The Astrophysical Journal}
+    \field{month}{02}
+    \field{year}{2001}
+  \endentry
+
+  \entry{euclidprep10}{article}{}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{3}{}{%
+      {{hash=DECG}{%
+         family={Desprez},
+         familyi={D\bibinitperiod},
+         given={Euclid Collaboration:\bibnamedelima G.},
+         giveni={E\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=PS}{%
+         family={Paltani},
+         familyi={P\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=CJ}{%
+         family={Coupon},
+         familyi={C\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DECGPSCJ+1}
+    \strng{fullhash}{DECGPSCJ+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \verb{doi}
+    \verb 10.1051/0004-6361/202039403
+    \endverb
+    \field{pages}{A31}
+    \field{title}{Euclid Preparation - X. The Euclid Photometric-Redshift Challenge}
+    \verb{url}
+    \verb https://www.aanda.org/articles/aa/pdf/2020/12/aa39403-20.pdf
+    \endverb
+    \field{volume}{644}
+    \field{journaltitle}{Astronomy and Astrophysics}
+    \field{year}{2020}
+  \endentry
+
+  \entry{dodelson2020modern}{book}{}{}
+    \name{author}{2}{}{%
+      {{hash=DS}{%
+         family={Dodelson},
+         familyi={D\bibinitperiod},
+         given={Scott},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=SF}{%
+         family={Schmidt},
+         familyi={S\bibinitperiod},
+         given={Fabian},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier}%
+    }
+    \strng{namehash}{DSSF1}
+    \strng{fullhash}{DSSF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \field{edition}{2nd}
+    \field{isbn}{978-0-12-815948-4}
+    \field{title}{Modern Cosmology}
+    \field{year}{2020}
+  \endentry
+
+  \entry{bispfit}{article}{}{}
+    \name{author}{5}{}{%
+      {{hash=GMH}{%
+         family={Gil-Marin},
+         familyi={G\bibinithyphendelim M\bibinitperiod},
+         given={Hector},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=WC}{%
+         family={Wagner},
+         familyi={W\bibinitperiod},
+         given={Christian},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=FF}{%
+         family={Fragkoudi},
+         familyi={F\bibinitperiod},
+         given={Frantzeska},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=JR}{%
+         family={Jimenez},
+         familyi={J\bibinitperiod},
+         given={Raul},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=VL}{%
+         family={Verde},
+         familyi={V\bibinitperiod},
+         given={Licia},
+         giveni={L\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GMH+1}
+    \strng{fullhash}{GMHWCFFJRVL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \verb{doi}
+    \verb 10.1088/1475-7516/2012/02/047
+    \endverb
+    \verb{eprint}
+    \verb 1111.4477
+    \endverb
+    \field{number}{02}
+    \field{pages}{047}
+    \field{title}{An improved fitting formula for the dark matter bispectrum}
+    \field{volume}{2012}
+    \field{journaltitle}{Journal of Cosmology and Astroparticle Physics}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{astro-ph.CO}
+    \field{year}{2012}
+  \endentry
+
+  \entry{HoekstraJain2008}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=HH}{%
+         family={Hoekstra},
+         familyi={H\bibinitperiod},
+         given={Henk},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=JB}{%
+         family={Jain},
+         familyi={J\bibinitperiod},
+         given={Bhuvnesh},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HHJB1}
+    \strng{fullhash}{HHJB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{number}{1}
+    \field{pages}{99\bibrangedash 123}
+    \field{title}{Weak Gravitational Lensing and Its Cosmological Applications}
+    \field{volume}{58}
+    \field{journaltitle}{Annual Review of Nuclear and Particle Science}
+    \field{year}{2008}
+  \endentry
+
+  \entry{Ivezic2019}{article}{}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{3}{}{%
+      {{hash=IZ}{%
+         family={Ivezi{\'c}},
+         familyi={I\bibinitperiod},
+         given={{\v{Z}}.},
+         giveni={{\v{Z}}\bibinitperiod},
+      }}%
+      {{hash=KSM}{%
+         family={Kahn},
+         familyi={K\bibinitperiod},
+         given={S.\bibnamedelima M.},
+         giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=TJA}{%
+         family={Tyson},
+         familyi={T\bibinitperiod},
+         given={J.\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{IZKSMTJA+1}
+    \strng{fullhash}{IZKSMTJA+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{I}
+    \field{sortinithash}{I}
+    \field{number}{2}
+    \field{pages}{111}
+    \field{title}{{LSST}: From Science Drivers to Reference Design and Anticipated Data Products}
+    \field{volume}{873}
+    \field{journaltitle}{The Astrophysical Journal}
+    \field{year}{2019}
+  \endentry
+
+  \entry{lsstsciencebookchapter3}{incollection}{}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{3}{}{%
+      {{hash=KSM}{%
+         family={Kahn},
+         familyi={K\bibinitperiod},
+         given={Steven\bibnamedelima M.},
+         giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=BJR}{%
+         family={Bankert},
+         familyi={B\bibinitperiod},
+         given={Justin\bibnamedelima R.},
+         giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=CS}{%
+         family={Chandrasekharan},
+         familyi={C\bibinitperiod},
+         given={Srinivasan},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KSMBJRCS+1}
+    \strng{fullhash}{KSMBJRCS+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{booktitle}{LSST Science Book, Version 2.0}
+    \field{note}{Accessed: 2025-02-11}
+    \field{title}{LSST System Performance}
+    \verb{url}
+    \verb https://www.lsst.org/sites/default/files/docs/sciencebook/SB_3.pdf
+    \endverb
+    \field{year}{2009}
+  \endentry
+
+  \entry{Kaiser2000}{article}{}{}
+    \name{author}{3}{}{%
+      {{hash=KN}{%
+         family={Kaiser},
+         familyi={K\bibinitperiod},
+         given={N.},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=WG}{%
+         family={Wilson},
+         familyi={W\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=LG}{%
+         family={Luppino},
+         familyi={L\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KNWGLG1}
+    \strng{fullhash}{KNWGLG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{title}{Large-Scale Cosmic Shear Measurements}
+    \field{journaltitle}{arXiv preprint astro-ph/0003338}
+    \field{year}{2000}
+  \endentry
+
+  \entry{Kalaja_2021}{article}{}{}
+    \name{author}{3}{}{%
+      {{hash=KA}{%
+         family={Kalaja},
+         familyi={K\bibinitperiod},
+         given={Alba},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MPD}{%
+         family={Meerburg},
+         familyi={M\bibinitperiod},
+         given={P.\bibnamedelima Daniel},
+         giveni={P\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=PWRGLC}{%
+         family={Pimentel},
+         familyi={P\bibinitperiod},
+         suffix={Guilherme L.and\bibnamedelima Coulton},
+         suffixi={G\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim C\bibinitperiod},
+         given={William\bibnamedelima R.},
+         giveni={W\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {IOP Publishing}%
+    }
+    \strng{namehash}{KAMPDPGLCWR1}
+    \strng{fullhash}{KAMPDPGLCWR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \verb{doi}
+    \verb 10.1088/1475-7516/2021/04/050
+    \endverb
+    \field{issn}{1475-7516}
+    \field{number}{04}
+    \field{pages}{050}
+    \field{title}{Fundamental limits on constraining primordial non-Gaussianity}
+    \verb{url}
+    \verb http://dx.doi.org/10.1088/1475-7516/2021/04/050
+    \endverb
+    \field{volume}{2021}
+    \field{journaltitle}{Journal of Cosmology and Astroparticle Physics}
+    \field{month}{04}
+    \field{year}{2021}
+  \endentry
+
+  \entry{kilbinger2015cosmology}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=KM}{%
+         family={Kilbinger},
+         familyi={K\bibinitperiod},
+         given={Martin},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {IOP Publishing}%
+    }
+    \strng{namehash}{KM1}
+    \strng{fullhash}{KM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \verb{doi}
+    \verb 10.1088/0034-4885/78/8/086901
+    \endverb
+    \field{number}{8}
+    \field{pages}{086901}
+    \field{title}{Cosmology with cosmic shear observations: a review}
+    \verb{url}
+    \verb https://arxiv.org/abs/1411.0115
+    \endverb
+    \field{volume}{78}
+    \field{journaltitle}{Reports on Progress in Physics}
+    \field{year}{2015}
+  \endentry
+
+  \entry{Laureijs2011}{misc}{}{}
+    \name{author}{2}{}{%
+      {{hash=LR}{%
+         family={Laureijs},
+         familyi={L\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=oEC}{%
+         prefix={others},
+         prefixi={o\bibinitperiod},
+         family={(Euclid\bibnamedelima Collaboration)},
+         familyi={E\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LRECo1}
+    \strng{fullhash}{LRECo1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{L}
+    \field{sortinithash}{L}
+    \verb{eprint}
+    \verb 1110.3193
+    \endverb
+    \field{howpublished}{ESA/SRE(2011)12}
+    \field{title}{Euclid Definition Study Report}
+    \field{eprinttype}{arXiv}
+    \field{year}{2011}
+  \endentry
+
+  \entry{cmblensingestimator}{article}{}{}
+    \name{author}{5}{}{%
+      {{hash=MAS}{%
+         family={Maniyar},
+         familyi={M\bibinitperiod},
+         given={Abhishek\bibnamedelima S},
+         giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=AHY}{%
+         family={Ali-Haimoud},
+         familyi={A\bibinithyphendelim H\bibinitperiod},
+         given={Yacine},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=CJ}{%
+         family={Carron},
+         familyi={C\bibinitperiod},
+         given={Julien},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Lewis},
+         familyi={L\bibinitperiod},
+         given={Antony},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MMS}{%
+         family={Madhavacheril},
+         familyi={M\bibinitperiod},
+         given={Mathew\bibnamedelima S},
+         giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MAS+1}
+    \strng{fullhash}{MASAHYCJLAMMS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{title}{Quadratic Estimators for CMB Weak Lensing}
+    \field{journaltitle}{arXiv preprint arXiv:2101.12193}
+    \field{year}{2021}
+  \endentry
+
+  \entry{Namikawa_2016}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=NT}{%
+         family={Namikawa},
+         familyi={N\bibinitperiod},
+         given={Toshiya},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {American Physical Society (APS)}%
+    }
+    \strng{namehash}{NT1}
+    \strng{fullhash}{NT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{N}
+    \field{sortinithash}{N}
+    \verb{doi}
+    \verb 10.1103/physrevd.93.121301
+    \endverb
+    \field{issn}{2470-0029}
+    \field{number}{12}
+    \field{title}{CMB lensing bispectrum from nonlinear growth of the large scale structure}
+    \verb{url}
+    \verb http://dx.doi.org/10.1103/PhysRevD.93.121301
+    \endverb
+    \field{volume}{93}
+    \field{journaltitle}{Physical Review D}
+    \field{month}{06}
+    \field{year}{2016}
+  \endentry
+
+  \entry{Planck2018Lensing}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=P}{%
+         family={{Planck Collaboration}},
+         familyi={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{P1}
+    \strng{fullhash}{P1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \verb{eprint}
+    \verb 1807.06210
+    \endverb
+    \field{title}{{Planck 2018 results. VIII. Gravitational lensing}}
+    \field{journaltitle}{arXiv e-prints}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{astro-ph.CO}
+    \field{month}{07}
+    \field{year}{2018}
+  \endentry
+
+  \entry{Smith_2012}{article}{}{}
+    \name{author}{5}{}{%
+      {{hash=SKM}{%
+         family={Smith},
+         familyi={S\bibinitperiod},
+         given={Kendrick\bibnamedelima M},
+         giveni={K\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=HD}{%
+         family={Hanson},
+         familyi={H\bibinitperiod},
+         given={Duncan},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=LM}{%
+         family={LoVerde},
+         familyi={L\bibinitperiod},
+         given={Marilena},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=HCM}{%
+         family={Hirata},
+         familyi={H\bibinitperiod},
+         given={Christopher\bibnamedelima M},
+         giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=ZO}{%
+         family={Zahn},
+         familyi={Z\bibinitperiod},
+         given={Oliver},
+         giveni={O\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {IOP Publishing}%
+    }
+    \strng{namehash}{SKM+1}
+    \strng{fullhash}{SKMHDLMHCMZO1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \verb{doi}
+    \verb 10.1088/1475-7516/2012/06/014
+    \endverb
+    \field{issn}{1475-7516}
+    \field{number}{06}
+    \field{pages}{014\bibrangedash 014}
+    \field{title}{Delensing CMB polarization with external datasets}
+    \verb{url}
+    \verb http://dx.doi.org/10.1088/1475-7516/2012/06/014
+    \endverb
+    \field{volume}{2012}
+    \field{journaltitle}{Journal of Cosmology and Astroparticle Physics}
+    \field{month}{06}
+    \field{year}{2012}
+  \endentry
+
+  \entry{Takada2003}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=TM}{%
+         family={Takada},
+         familyi={T\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=JB}{%
+         family={Jain},
+         familyi={J\bibinitperiod},
+         given={B.},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{TMJB1}
+    \strng{fullhash}{TMJB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+    \field{pages}{580\bibrangedash 608}
+    \field{title}{Cosmological parameters from lensing power spectrum and bispectrum tomography}
+    \field{volume}{340}
+    \field{journaltitle}{Monthly Notices of the Royal Astronomical Society}
+    \field{year}{2003}
+  \endentry
+
+  \entry{tegmark1997cosmic}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=TM}{%
+         family={Tegmark},
+         familyi={T\bibinitperiod},
+         given={Max},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Oxford University Press}%
+    }
+    \strng{namehash}{TM1}
+    \strng{fullhash}{TM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+    \verb{doi}
+    \verb 10.1093/mnras/294.2.337
+    \endverb
+    \field{number}{2}
+    \field{pages}{337\bibrangedash 348}
+    \field{title}{Cosmic Confusion: Degeneracies among Cosmological Parameters Derived from Measurements of Microwave Background Anisotropies}
+    \field{volume}{294}
+    \field{journaltitle}{Monthly Notices of the Royal Astronomical Society}
+    \field{year}{1997}
+  \endentry
+
+  \entry{Waerbeke2000}{article}{}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{3}{}{%
+      {{hash=VWL}{%
+         family={Van\bibnamedelima Waerbeke},
+         familyi={V\bibinitperiod\bibinitdelim W\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=MY}{%
+         family={Mellier},
+         familyi={M\bibinitperiod},
+         given={Y.},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=ET}{%
+         family={Erben},
+         familyi={E\bibinitperiod},
+         given={T.},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{VWLMYET+1}
+    \strng{fullhash}{VWLMYET+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{V}
+    \field{sortinithash}{V}
+    \field{pages}{30\bibrangedash 44}
+    \field{title}{Detection of correlated galaxy ellipticities from CFH12k VLT data: first evidence for gravitational lensing by large-scale structures}
+    \field{volume}{358}
+    \field{journaltitle}{Astronomy \& Astrophysics}
+    \field{year}{2000}
+  \endentry
+
+  \entry{vanWaerbeke2002}{article}{}{}
+    \name{author}{6}{}{%
+      {{hash=vWL}{%
+         prefix={van},
+         prefixi={v\bibinitperiod},
+         family={Waerbeke},
+         familyi={W\bibinitperiod},
+         given={L.},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=MY}{%
+         family={Mellier},
+         familyi={M\bibinitperiod},
+         given={Y.},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=PR}{%
+         family={Pello},
+         familyi={P\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=PUL}{%
+         family={Pen},
+         familyi={P\bibinitperiod},
+         given={U.-L.},
+         giveni={U\bibinithyphendelim L\bibinitperiod},
+      }}%
+      {{hash=MHJ}{%
+         family={McCracken},
+         familyi={M\bibinitperiod},
+         given={H.\bibnamedelima J.},
+         giveni={H\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=JB}{%
+         family={Jain},
+         familyi={J\bibinitperiod},
+         given={B.},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WLv+1}
+    \strng{fullhash}{WLvMYPRPULMHJJB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \verb{eprint}
+    \verb astro-ph/0101511
+    \endverb
+    \field{pages}{369\bibrangedash 381}
+    \field{title}{{Measurement of cosmic shear three-point correlations in the VIRMOS-Descart survey}}
+    \field{volume}{393}
+    \field{journaltitle}{Astronomy and Astrophysics}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{astro-ph}
+    \field{year}{2002}
+  \endentry
+\enddatalist
+\endinput
