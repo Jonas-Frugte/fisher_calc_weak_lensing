@@ -54,7 +54,7 @@ def main():
             mat[i, j] = result
             mat[j, i] = result  # Symmetric assignment
 
-        np.savetxt(f'fisher_matrices/fish_mat_powersp_{tracer}_cmb.txt', mat)
+        np.savetxt(f'fisher_matrices/fish_mat_powersp_{tracer}_cmb_toshiya.txt', mat)
         print(mat)
 
 if __name__ == '__main__':
