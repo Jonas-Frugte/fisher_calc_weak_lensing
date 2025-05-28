@@ -47,7 +47,7 @@ def fisher_calc_wrapper_cmb(args, tracers):
         return vispy.Fisher_powersp_cmb(2, 2000, par1 = pars[i], par2 = pars[j])
 
 def main():
-    for tracer in ['both']: #['c', 's', 'both']:
+    for tracer in ['e', 't']: #['c', 's', 'both']:
         mat = np.zeros((len(pars), len(pars)))
         for i, j in product(range(len(pars)), repeat = 2):
             result = fisher_calc_wrapper_cmb((i, j), tracer)

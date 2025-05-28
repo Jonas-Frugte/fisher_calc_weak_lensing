@@ -10,7 +10,7 @@ from libc.stdlib cimport getenv
 
 from interp_settings import exp_par
 
-# ddeclare interpolation parameters, NEEDS TO BE SAME AS INTERPOLATION 
+# declare interpolation parameters, NEEDS TO BE SAME AS INTERPOLATION 
 cdef double k_min = exp_par['k_min']
 cdef double k_max = exp_par['k_max'] 
 cdef int k_num = exp_par['k_num'] # * 2 # for finer data option
@@ -106,7 +106,7 @@ cpdef double c(double k, double z, double[:, :] c_data) noexcept nogil:
 
 # without gil cython doesn't like strings bc they are python objects, you can use char* C objects (C like strings)
 
-cpdef double lps(double l, char* type1, char* type2, double[:] lps_cc_data, double[:] lps_cs_data, double[:] lps_ss_data, double[:, :] cmbps) noexcept nogil:
+cdef double lps(double l, char* type1, char* type2, double[:] lps_cc_data, double[:] lps_cs_data, double[:] lps_ss_data, double[:, :] cmbps) noexcept nogil:
     # CAUTION: this function doesn't throw error messages if type1 or type2 are not of type convergence or shear
     # for optimization purposes
     if type1[0] == b'c' and type2[0] == b'c':
@@ -504,7 +504,7 @@ cdef double cmbps_noise(double l, double sigma, double Delta_X) noexcept nogil:
     
     return (Delta_X / Tcmb)**2 * exp(l * (l + 1) * sigma**2 / (8 * log(2)))
 
-cdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
+cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
     cdef float noise = 0.
 
     if type1[0] == b'c' and type2[0] == b'c':
@@ -549,11 +549,11 @@ cdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
         if cmb_noise_type == 1:
             # stage 3 wide toshiya
             sigma = 1
-            Delta_X = 6 * 1.41
+            Delta_X = 6
         elif cmb_noise_type == 2:
             # stage 4 toshiya
             sigma = 3
-            Delta_X = 1 * 1.41
+            Delta_X = 1
         elif cmb_noise_type == 3:
             sigma = 5
             Delta_X = 52
@@ -564,11 +564,11 @@ cdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
         if cmb_noise_type == 1:
             # stage 3 wide toshiya
             sigma = 1
-            Delta_X = 6 * 1.41
+            Delta_X = 6
         elif cmb_noise_type == 2:
             # stage 4 toshiya
             sigma = 3
-            Delta_X = 1 * 1.41
+            Delta_X = 1
         elif cmb_noise_type == 3:
             sigma = 5
             Delta_X = 52

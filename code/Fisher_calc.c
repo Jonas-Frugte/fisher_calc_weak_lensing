@@ -19734,6 +19734,8 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
  */
                             __pyx_t_15 = __pyx_v_index;
                             __pyx_t_16 = 0;
+                            if (__pyx_t_15 < 0) __pyx_t_15 += __pyx_v_triangles.shape[0];
+                            if (__pyx_t_16 < 0) __pyx_t_16 += __pyx_v_triangles.shape[1];
                             __pyx_v_k1 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_15 * __pyx_v_triangles.strides[0]) ) + __pyx_t_16 * __pyx_v_triangles.strides[1]) )));
 
                             /* "Fisher_calc.pyx":86
@@ -19745,6 +19747,8 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
  */
                             __pyx_t_16 = __pyx_v_index;
                             __pyx_t_15 = 1;
+                            if (__pyx_t_16 < 0) __pyx_t_16 += __pyx_v_triangles.shape[0];
+                            if (__pyx_t_15 < 0) __pyx_t_15 += __pyx_v_triangles.shape[1];
                             __pyx_v_k2 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_16 * __pyx_v_triangles.strides[0]) ) + __pyx_t_15 * __pyx_v_triangles.strides[1]) )));
 
                             /* "Fisher_calc.pyx":87
@@ -19756,6 +19760,8 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_single(int __pyx_v_lmin, int __py
  */
                             __pyx_t_15 = __pyx_v_index;
                             __pyx_t_16 = 2;
+                            if (__pyx_t_15 < 0) __pyx_t_15 += __pyx_v_triangles.shape[0];
+                            if (__pyx_t_16 < 0) __pyx_t_16 += __pyx_v_triangles.shape[1];
                             __pyx_v_k3 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_15 * __pyx_v_triangles.strides[0]) ) + __pyx_t_16 * __pyx_v_triangles.strides[1]) )));
 
                             /* "Fisher_calc.pyx":88
@@ -20669,6 +20675,8 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
  */
                               __pyx_t_25 = __pyx_v_index;
                               __pyx_t_26 = 0;
+                              if (__pyx_t_25 < 0) __pyx_t_25 += __pyx_v_triangles.shape[0];
+                              if (__pyx_t_26 < 0) __pyx_t_26 += __pyx_v_triangles.shape[1];
                               __pyx_v_k1 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_25 * __pyx_v_triangles.strides[0]) ) + __pyx_t_26 * __pyx_v_triangles.strides[1]) )));
 
                               /* "Fisher_calc.pyx":132
@@ -20680,6 +20688,8 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
  */
                               __pyx_t_26 = __pyx_v_index;
                               __pyx_t_25 = 1;
+                              if (__pyx_t_26 < 0) __pyx_t_26 += __pyx_v_triangles.shape[0];
+                              if (__pyx_t_25 < 0) __pyx_t_25 += __pyx_v_triangles.shape[1];
                               __pyx_v_k2 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_26 * __pyx_v_triangles.strides[0]) ) + __pyx_t_25 * __pyx_v_triangles.strides[1]) )));
 
                               /* "Fisher_calc.pyx":133
@@ -20691,6 +20701,8 @@ static double __pyx_f_11Fisher_calc_Fisher_mat_full(int __pyx_v_lmin, int __pyx_
  */
                               __pyx_t_25 = __pyx_v_index;
                               __pyx_t_26 = 2;
+                              if (__pyx_t_25 < 0) __pyx_t_25 += __pyx_v_triangles.shape[0];
+                              if (__pyx_t_26 < 0) __pyx_t_26 += __pyx_v_triangles.shape[1];
                               __pyx_v_k3 = (*((int *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_triangles.data + __pyx_t_25 * __pyx_v_triangles.strides[0]) ) + __pyx_t_26 * __pyx_v_triangles.strides[1]) )));
 
                               /* "Fisher_calc.pyx":134

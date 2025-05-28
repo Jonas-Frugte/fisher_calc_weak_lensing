@@ -10,6 +10,7 @@ from libc.stdio cimport printf
 from data_importer_new cimport lbs_f, lbs_der, lps_f, lps_f_obs, lps_der
 
 cdef int dd = 0
+cdef bint pb_correction = 0
 
 def distinct_l_inverse_check(l1, l2, l3):
 
