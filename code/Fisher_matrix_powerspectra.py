@@ -46,12 +46,16 @@ def fisher_calc_wrapper_cmb(args, tracers):
         # lmax should actually be 3000, but interpolation currently doesn't go that high
         return vispy.Fisher_powersp_cmb(2, 2000, par1 = pars[i], par2 = pars[j])
 
-for tracer in ['both']: #['c', 's', 'both']:
-    mat = np.zeros((len(pars), len(pars)))
-    for i, j in product(range(len(pars)), repeat = 2):
-        result = fisher_calc_wrapper_cmb((i, j), tracer)
-        mat[i, j] = result
-        mat[j, i] = result  # Symmetric assignment
+def main():
+    for tracer in ['both']: #['c', 's', 'both']:
+        mat = np.zeros((len(pars), len(pars)))
+        for i, j in product(range(len(pars)), repeat = 2):
+            result = fisher_calc_wrapper_cmb((i, j), tracer)
+            mat[i, j] = result
+            mat[j, i] = result  # Symmetric assignment
 
-    np.savetxt(f'fisher_matrices/fish_mat_powersp_{tracer}_cmb.txt', mat)
-    print(mat)
+        np.savetxt(f'fisher_matrices/fish_mat_powersp_{tracer}_cmb.txt', mat)
+        print(mat)
+
+if __name__ == '__main__':
+    main()

@@ -16,8 +16,8 @@ exp_par = interp_settings.exp_par
 def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True):
     cosm_data = cosm_setup.lensing_spectra(*cosm_par)
 
-    filepath = '/scratch/p319950/data/' + folder_name
-    pathlib.Path(filepath).mkdir(exist_ok=True)
+    filepath = '/scratch/p319950/data_toshiya_like/' + folder_name
+    pathlib.Path(filepath).mkdir(exist_ok=True, parents=True)
 
     #ks = np.linspace(exp_par['k_min'], exp_par['k_max'], exp_par['k_num'])
     ks = np.logspace(np.log10(exp_par['k_min']), np.log10(exp_par['k_max']), exp_par['k_num'])
@@ -123,25 +123,25 @@ par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0')
 fiducial_cosm_par = np.array([67.4, 0.0223, 0.119, 0.965, 2.13e-9, 0.06, -1])
 # based on values that toshiya told me about
 cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
-                           fiducial_cosm_par[1] * 0.2,
+                           fiducial_cosm_par[1] * 0.1,
                            fiducial_cosm_par[2] * 0.005,
-                           fiducial_cosm_par[3] * 0.02,
-                           fiducial_cosm_par[4] * 0.15,
-                           fiducial_cosm_par[5] * 0.15,
-                           0.06])
+                           fiducial_cosm_par[3] * 0.005,
+                           fiducial_cosm_par[4] * 0.1,
+                           fiducial_cosm_par[5] * 0.1,
+                           0.03])
 
 # cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
-#                            fiducial_cosm_par[1] * 0.15,
-#                            fiducial_cosm_par[2] * 0.05,
-#                            fiducial_cosm_par[3] * 0.01,
-#                            fiducial_cosm_par[4] * 0.1,
-#                            fiducial_cosm_par[5] * 0.15, # mnu h should probably be smaller
+#                            fiducial_cosm_par[1] * 0.2,
+#                            fiducial_cosm_par[2] * 0.005,
+#                            fiducial_cosm_par[3] * 0.02,
+#                            fiducial_cosm_par[4] * 0.15,
+#                            fiducial_cosm_par[5] * 0.15,
 #                            0.06])
 
 num_pars = len(par_names)
 
 # perturb the delta used to calculate derivative in order to test stability
-delta_delta_coeffs = [2, 1, 0, -1, -2]
+delta_delta_coeffs = [0]
 
 def delta_delta_coeffs_to_str(coeff):
     if coeff == 2:
@@ -160,7 +160,7 @@ delta_delta = 0.05
 # data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True, exp_par = exp_par)
 
 # allows control over which data to create
-which_to_create = [[False, False, False, False, False, True]]
+which_to_create = [[True, True, True, True, True, True]]
 
 exports = [['data_fiducial', fiducial_cosm_par, *create_settings] for create_settings in which_to_create]
 

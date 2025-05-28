@@ -59,8 +59,8 @@ def distinct_l_psd_check(lmin, lmax, num_bispec_samples, par1, par2):
         for l2 in range(l1 + 1, lmax + 1):
             for l3 in range(l2 + 1, lmax + 1):
                 for config_num in range(len(xyz_configs)):
-                    vec_r[config_num] = lbs_der(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, par2, dd)
-                    vec_l[config_num] = lbs_der(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, par1, dd)
+                    vec_r[config_num] = lbs_der(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction, par2, dd)
+                    vec_l[config_num] = lbs_der(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction, par1, dd)
                     
                 for i, j in product(range(8), repeat = 2):
                     xyz_config_i = xyz_configs[i]
@@ -107,14 +107,14 @@ def Fisher_bisp(lmin, lmax, num_bispec_samples, stepsize, par1 = b'snr', par2 = 
         # SNR_case
         if par1 == b'snr' and par2 == b'snr':
             for config_num in range(len(xyz_configs)):
-                vec_r[config_num] = lbs_f(l, l, l, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples)
+                vec_r[config_num] = lbs_f(l, l, l, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction)
                 vec_l = vec_r
 
         # Fisher matrix case
         else:
             for config_num in range(len(xyz_configs)):
-                vec_r[config_num] = lbs_der(l, l, l, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, par2, dd)
-                vec_l[config_num] = lbs_der(l, l, l, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, par1, dd)
+                vec_r[config_num] = lbs_der(l, l, l, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction, par2, dd)
+                vec_l[config_num] = lbs_der(l, l, l, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction, par1, dd)
 
         cov_mat = np.zeros((4, 4))
         for i, j in product(range(4), repeat=2):
@@ -135,7 +135,7 @@ def Fisher_bisp(lmin, lmax, num_bispec_samples, stepsize, par1 = b'snr', par2 = 
 
             vec = np.zeros(6)
             for config_num in range(len(xyz_configs)):
-                vec[config_num] = lbs_f(l1, l1, l2, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples)
+                vec[config_num] = lbs_f(l1, l1, l2, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction)
 
             vec_l = np.zeros(6)
             vec_r = np.zeros(6)
@@ -143,14 +143,14 @@ def Fisher_bisp(lmin, lmax, num_bispec_samples, stepsize, par1 = b'snr', par2 = 
             # SNR_case
             if par1 == b'snr' and par2 == b'snr':
                 for config_num in range(len(xyz_configs)):
-                    vec_r[config_num] = lbs_f(l1, l1, l2, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples)
+                    vec_r[config_num] = lbs_f(l1, l1, l2, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction)
                     vec_l = vec_r
 
             # Fisher matrix case
             else:
                 for config_num in range(len(xyz_configs)):
-                    vec_r[config_num] = lbs_der(l1, l1, l2, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, par2, dd)
-                    vec_l[config_num] = lbs_der(l1, l1, l2, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, par1, dd)
+                    vec_r[config_num] = lbs_der(l1, l1, l2, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction, par2, dd)
+                    vec_l[config_num] = lbs_der(l1, l1, l2, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction, par1, dd)
 
             cov_mat = np.zeros((6, 6))
             for i, j in product(range(6), repeat=2):
@@ -182,12 +182,12 @@ def Fisher_bisp(lmin, lmax, num_bispec_samples, stepsize, par1 = b'snr', par2 = 
 
                 for config_num in range(len(xyz_configs)):
                     if par1 == b'snr' and par2 == b'snr':
-                        vec_r[config_num] = lbs_f_obs(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples)
+                        vec_r[config_num] = lbs_f_obs(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction)
                         vec_l[config_num] = vec_r
 
                     else:
-                        vec_r[config_num] = lbs_der(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, par2, dd)
-                        vec_l[config_num] = lbs_der(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, par1, dd)
+                        vec_r[config_num] = lbs_der(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction, par2, dd)
+                        vec_l[config_num] = lbs_der(l1, l2, l3, xyz_configs[config_num][0], xyz_configs[config_num][1], xyz_configs[config_num][2], num_bispec_samples, pb_correction, par1, dd)
                     
                 for i, j in product(range(8), repeat = 2):
                     xyz_config_i = xyz_configs[i]
@@ -233,7 +233,7 @@ def Fisher_bisp_single(lmin, lmax, num_bispec_samples, stepsize, par1 = b'snr', 
     for l1 in range(lmin, lmax + 1, stepsize):
         for l2 in range(l1, lmax + 1, stepsize):
             for l3 in range(l2, lmax + 1):
-                result += Delta(l1, l2, l3)**(-1) * lbs_der(l1, l2, l3, source, source, source, num_bispec_samples, par1, dd) * lbs_der(l1, l2, l3, source, source, source, num_bispec_samples, par2, dd) / ( lps_f_obs(l1, source, source) * lps_f_obs(l2, source, source) * lps_f_obs(l3, source, source) )
+                result += Delta(l1, l2, l3)**(-1) * lbs_der(l1, l2, l3, source, source, source, num_bispec_samples, pb_correction, par1, dd) * lbs_der(l1, l2, l3, source, source, source, num_bispec_samples, pb_correction, par2, dd) / ( lps_f_obs(l1, source, source) * lps_f_obs(l2, source, source) * lps_f_obs(l3, source, source) )
     
     return result * stepsize**2
 

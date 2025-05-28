@@ -68,7 +68,7 @@ setup(
         compiler_directives={
             "nonecheck": False,
             "boundscheck": False,
-            "wraparound": False,
+            "wraparound": True,
             "initializedcheck": False,
             "cdivision": True,
         },

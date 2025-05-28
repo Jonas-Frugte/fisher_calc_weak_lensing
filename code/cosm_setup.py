@@ -258,7 +258,25 @@ class lensing_spectra:
       float
     '''
     integrand = lambda chi : chi**2 * self.scale_factor(chi)**(-2) * self.window_func(chi, types[0]) * self.window_func(chi, types[1]) * self.mps(l/chi, self.results.redshift_at_comoving_radial_distance(chi))
+    # self.rho_bar = 3 * self.omega_m * H0**2 / (2 * self.lightspeed_kms**2)
     result =  9 * (1/l)**4 * self.omega_m**2 * self.H0**4 * self.lightspeed_kms**(-4) * scipy.integrate.quad(integrand, 1e-5, self.chi_last_scatter, epsabs=1e-30, epsrel=1e-3, limit = 50)[0]
+
+    return result()
+
+  def lps_new(self, l, types):
+    '''
+    Parameters:
+    k : float
+      wavenumber
+    types : iterable of 'shear' or 'convergence' length 2
+      denotes which lensing power spectrum to calculate
+    
+    Returns:
+      float
+    '''
+    integrand = lambda chi : chi**2 * self.scale_factor(chi)**(-2) * self.window_func(chi, types[0]) * self.window_func(chi, types[1]) * self.mps(l/chi, self.results.redshift_at_comoving_radial_distance(chi))
+    # self.rho_bar = 3 * self.omega_m * H0**2 / (2 * self.lightspeed_kms**2)
+    result = (1/l)**4 * 4 * self.rho_bar**2 * scipy.integrate.quad(integrand, 1e-5, self.chi_last_scatter, epsabs=1e-30, epsrel=1e-3, limit = 50)[0]
 
     return result
 

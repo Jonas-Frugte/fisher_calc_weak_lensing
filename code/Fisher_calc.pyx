@@ -11,6 +11,7 @@ from data_importer_new import get_k_max
 from itertools import *
 
 cdef int dd = 0
+cdef bint pb_correction = 0
 
 k_max = get_k_max()
 
@@ -60,8 +61,8 @@ cdef int Delta(int l1, int l2, int l3) noexcept nogil:
         return 1
 
 cdef double Fisher_mat_single_term(int l1, int l2, int l3, char* type, char* par1, char* par2, int num_samples) noexcept nogil:
-        return lbs_der(l1, l2, l3, type, type, type, num_samples, par1, dd) * lps_f_obs(l1, type, type)**(-1) \
-        * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, par2, dd) / Delta(l1, l2, l3)
+        return lbs_der(l1, l2, l3, type, type, type, num_samples, pb_correction, par1, dd) * lps_f_obs(l1, type, type)**(-1) \
+        * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, pb_correction, par2, dd) / Delta(l1, l2, l3)
 
 cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):
     if lmax > k_max:
@@ -99,8 +100,8 @@ cdef double lensing_power_spectrum_inv(int l, char* type1, char* type2) noexcept
             return -1 * lps_f_obs(l, b'c', b's') / det
 
 cdef double Fisher_mat_full_term(int l1, int l2, int l3, char* type11, char* type12, char* type13, char* type21, char* type22, char* type23, char* par1, char* par2, int num_samples) noexcept nogil:
-        return lbs_der(l1, l2, l3, type11, type12, type13, num_samples, par1, dd) * lensing_power_spectrum_inv(l1, type11, type21) \
-        * lensing_power_spectrum_inv(l2, type12, type22) * lensing_power_spectrum_inv(l3, type13, type23) * lbs_der(l1, l2, l3, type21, type22, type23, num_samples, par2, dd) / Delta(l1, l2, l3)
+        return lbs_der(l1, l2, l3, type11, type12, type13, num_samples, pb_correction, par1, dd) * lensing_power_spectrum_inv(l1, type11, type21) \
+        * lensing_power_spectrum_inv(l2, type12, type22) * lensing_power_spectrum_inv(l3, type13, type23) * lbs_der(l1, l2, l3, type21, type22, type23, num_samples, pb_correction, par2, dd) / Delta(l1, l2, l3)
 
 cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores):
     if lmax > k_max:
