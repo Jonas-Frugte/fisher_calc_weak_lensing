@@ -12,7 +12,7 @@ np.set_printoptions(
     formatter={'float_kind': lambda x: f"{x:.2e}"}
 )
 
-fisher_matrices_dir = '/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/code/fisher_matrices'
+fisher_matrices_dir = 'code/fisher_matrices'
 
 ######################
 # Bispectra Matrices #
@@ -43,6 +43,12 @@ planck_p_prior = planck + planck_prior
 
 viscmb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both_cmb.txt')
 
+viscmb_f_toshiya = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both_cmb_toshiya.txt')
+
+viscmb_t_toshiya = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_t_cmb_toshiya.txt')
+
+viscmb_e_toshiya = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_e_cmb_toshiya.txt')
+
 ######################
 # Takada & Jain #
 ######################
@@ -64,6 +70,7 @@ param_values_normalization = np.array([
     0.120,        # Omega_c h^2
     0.965,        # n_s
     0.06,         # m_\nu
+    0.063,        # tau
     2.1e-9,       # A_s
     -1.0          # w_0
 ])
@@ -109,12 +116,14 @@ def append_row_column(mats, vec):
     
     return matsnew
 
+# update this
 s8_ders = np.array([
     2.76945054e-03, # H_0
     -6.50570238e+00, # Omega_b h^2 
     4.30234556e+00,  # Omega_c h^2
     3.06272435e-01,# n_s
     -2.15681667e-01, # m_\nu
+    0,              # tau
     1.93167857e+08, # A_s
     -2.01175433e-01  # w_0
     ])
@@ -127,11 +136,13 @@ S8_ders = [(0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01),
            0,
            0,
            0,
+           0,
            y**(1/2)]
 
 omm_ders = [(0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01), 
            1 / 0.674**2,
            1 / 0.674**2,
+           0,
            0,
            0,
            0,
@@ -151,12 +162,13 @@ sigmaomm_ders = [0,
            0,
            (omm**0.25),
            0,
+           0,
            (0.25 * sigma8 * omm**(-0.75))]
 
 
 #keep_indices = [4, 6, 7, 9]
 #keep_indices=[10]
-keep_indices = [0, 1, 2, 3, 5]
+keep_indices = [0, 1, 2, 3, 5, 4, 6]
 #keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
@@ -377,9 +389,9 @@ def save_table(param_names, param_vals, which_pars, constraints, labels):
         #table[i][1] = param_vals[i]
         #constraints
         for j in range(len(constraints)):
-            table[i][j+1] = np.abs(np.sqrt(constraints[j][i][i]) / param_vals[i]) * 100
+            table[i][j+1] = np.abs(np.sqrt(constraints[j][i][i]))
     labels = ['Par'] + labels
-    print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.2f'))
+    print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.2e'))
         
     
 
@@ -390,7 +402,8 @@ if __name__ == "__main__":
         r"$\Omega_b h^2$",
         r"$\Omega_c h^2$",
         r"$n_s$",         
-        r"$m_\nu$",       
+        r"$m_\nu$", 
+        r"$\tau$"      
         r"$A_s$",         
         r"$w_0$",         
         r"$\sigma_8$",
@@ -405,6 +418,7 @@ if __name__ == "__main__":
         0.120,       # Omega_c h^2
         0.965,       # n_s
         0.06,        # m_nu
+        0.063,       # tau
         2.1e-9,      # A_s
         -1.0,        # w_0
         0.811,       # sigma8
@@ -444,7 +458,21 @@ if __name__ == "__main__":
     # ]
 
     # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
-    fish_pond_number = 1
+    fish_pond_number = 0
+    f_sky = 0.5
+    if fish_pond_number == 0:
+        fish_matrices = [
+            f_sky * (viscmb_t_toshiya),
+            f_sky * (viscmb_e_toshiya)
+            # f_sky * (viscmb_f_toshiya),
+            # f_sky * (viscmb_f),
+            # f_sky * (viscmb_f_toshiya + visp_c),
+            # f_sky * (viscmb_e_toshiya + visb_c),
+            # f_sky * (viscmb_e_toshiya + visp_c + visb_c)
+        ]
+
+        labels = ['T toshiya', 'E toshiya'] #, 'cmb primaries, tosh', 'cmb primaries', 'lps', 'lbs', 'lps + lbs']
+
 
     if fish_pond_number == 1:
         fish_matrices = [
