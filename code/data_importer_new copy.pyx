@@ -5,12 +5,8 @@ import math
 import numpy as np
 from libc.stdio cimport printf
 from libc.math cimport fmax, fabs
-from libc.stdlib cimport malloc, free
-
-cimport numpy as cnp
 
 from libc.stdlib cimport getenv
-from libc.string cimport memcpy
 
 from interp_settings import exp_par
 
@@ -59,94 +55,6 @@ cdef double lmax_cmbn = ls_cmbn[lnum_cmbn - 1]
 cdef double[:] cmbn_301 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma3_DeltaT0_DeltaP1.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 cdef double[:] cmbn_106 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma1_DeltaT0_DeltaP6.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 cdef double[:] planck_noise = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma_planck.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
-
-# compile time constants
-DEF K_NUM      = 600
-DEF K_FINE     = 15000        # k grid, log-fine
-DEF Z_NUM      = 200
-DEF Z_FINE     = 5000         # z grid, fine
-DEF CHI_NUM    = 5000
-DEF LMAX       = 3000
-DEF CL_ROWS    = LMAX + 1     # 3001
-DEF CL_COLS    = 5            # l, TT, EE, TE, BB
-
-cdef struct DataSet:
-    double cosm_par[7]
-    double C
-
-    # 2-D: k_fine × z_fine  (75 000 000 doubles ≈ 600 MB each)
-    double a_data[K_FINE][Z_FINE]
-    double b_data[K_FINE][Z_FINE]
-    double c_data[K_FINE][Z_FINE]
-    double mps_data[K_FINE][Z_FINE]
-
-    # 1-D: k_fine
-    double lps_cc_data[K_FINE]
-    double lps_cs_data[K_FINE]
-    double lps_ss_data[K_FINE]
-
-    # 1-D: χ- or z-based
-    double scale_factor_data[CHI_NUM]
-    double window_c_data[CHI_NUM]
-    double window_s_data[CHI_NUM]
-    double z_at_chi_data[CHI_NUM]
-
-    # CMB Cls: (ℓ = 0…LMAX, 5 columns)
-    double cmbps[CL_ROWS][CL_COLS]
-
-cdef class DataSetBox:
-    cdef DataSet *ptr
-    def __cinit__(self):
-        self.ptr = <DataSet*>malloc(sizeof(DataSet))
-
-    def __dealloc__(self):
-        free(self.ptr)
-
-cdef void load_1d(double dst[], Py_ssize_t n, str path):
-    cdef cnp.ndarray[double, ndim=1] arr = np.load(path)
-    memcpy(dst, <double*>arr.data, n * sizeof(double))
-
-cdef void load_2d(double dst[][Z_FINE], Py_ssize_t n0, Py_ssize_t n1, str path):
-    cdef cnp.ndarray[double, ndim=2] arr = np.load(path)
-    memcpy(&dst[0][0], <double*>arr.data, n0 * n1 * sizeof(double))
-
-cpdef DataSetBox read_dataset(str folder):
-    cdef DataSetBox box = DataSetBox()
-    cdef DataSet *ds    = box.ptr          # shorthand
-
-    # -----  scalar + 1-D stuff -----
-    load_1d(ds.cosm_par, 7,        f"{folder}/cosm_par.npy")
-    load_1d(ds.lps_cc_data, K_FINE, f"{folder}/lensing_power_spectrum_cc.npy")
-    load_1d(ds.lps_cs_data, K_FINE, f"{folder}/lensing_power_spectrum_cs.npy")
-    load_1d(ds.lps_ss_data, K_FINE, f"{folder}/lensing_power_spectrum_ss.npy")
-    #load_1d(ds.scale_factor_data, CHI_NUM, f"{folder}/scale_factor")
-    load_1d(ds.window_c_data,   CHI_NUM, f"{folder}/window_func_c.npy")
-    load_1d(ds.window_s_data,   CHI_NUM, f"{folder}/window_func_s.npy")
-    load_1d(ds.z_at_chi_data,   CHI_NUM, f"{folder}/z_at_chi.npy")
-
-    # -----  2-D grids -----
-    load_2d(ds.a_data,   K_FINE, Z_FINE, f"{folder}/a.npy")
-    load_2d(ds.b_data,   K_FINE, Z_FINE, f"{folder}/b.npy")
-    load_2d(ds.c_data,   K_FINE, Z_FINE, f"{folder}/c.npy")
-    load_2d(ds.mps_data, K_FINE, Z_FINE, f"{folder}/matter_power_spectrum.npy")
-
-    # CMB Cls: shape (3001, 5)
-    load_2d(ds.cmbps, CL_ROWS, CL_COLS, f"{folder}/cmb_ps_with_ls.npy")
-
-    # any extra scalar you compute, e.g. rho_bar:
-    with open(f"{folder}/rho_bar") as file:
-        ds.C = float(file.read())
-
-    return box        # Python receives a DataSetBox instance
-
-cdef DataSetBox box = read_dataset('/scratch/p319950/data_toshiya_like/data_fiducial')
-cdef DataSet* ds = box.ptr
-
-print(ds.C)
-
-
-
-
 
 toshiya_derivatives = True
 

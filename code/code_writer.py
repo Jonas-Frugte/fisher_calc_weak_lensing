@@ -1,8 +1,8 @@
 
 code = ''
-for cosm_par in ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0'):
+for cosm_par in ('H', 'ombh2', 'omch2', 'ns', 'As', 'tau', 'mnu', 'w0'):
     for pm in ['p', 'm']:
-        for delta_delta_coeff in ['2m', '1m', '0', '1p', '2p']:
+        for delta_delta_coeff in ['0']: # ['2m', '1m', '0', '1p', '2p']:
             code += f'''
 
 cdef double[:] cosm_par_{cosm_par}_{pm}_{delta_delta_coeff}

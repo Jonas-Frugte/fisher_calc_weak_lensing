@@ -12,7 +12,7 @@ class lensing_spectra:
   '''
   Calculates relevant features of a cosmology given input parameters and matter bispectrum fitting constants
   '''
-  def __init__(self, H0=67.4, ombh2=0.0223, omch2=0.119, ns=0.965, As=2.13e-9, mnu=0.06, w0=-1, redshifts=np.linspace(1100, 0, 200), matter_bispec_fit_params = matter_bispec_fit_params):
+  def __init__(self, H0=67.4, ombh2=0.0223, omch2=0.119, ns=0.965, As=2.13e-9, tau=0.06, mnu=0.06, w0=-1, redshifts=np.linspace(1100, 0, 200), matter_bispec_fit_params = matter_bispec_fit_params):
     '''
     Initialize instance of class, set results and some methods/attributes, default inputs are for fiducial cosmology
 
@@ -41,6 +41,7 @@ class lensing_spectra:
     self.ns = ns          # Spectral index
     self.redshifts = redshifts  # Array of redshift values
     self.As = As          # Scalar amplitude
+    self.tau = tau        # reionization depth
     self.mnu = mnu        # Sum of neutrino masses
     self.w0 = w0
     self.matter_bispec_fit_params = matter_bispec_fit_params # params of matter bispectrum fitting function as (a_1, ..., a_9)
@@ -84,7 +85,7 @@ class lensing_spectra:
 
     pars = camb.CAMBparams()
     lmax = 3000
-    pars.set_cosmology(H0=self.H0, ombh2=self.ombh2, omch2=self.omch2, mnu=self.mnu, omk=0, tau=0.063, neutrino_hierarchy='normal')
+    pars.set_cosmology(H0=self.H0, ombh2=self.ombh2, omch2=self.omch2, mnu=self.mnu, omk=0, tau=self.tau, neutrino_hierarchy='normal')
     pars.InitPower.set_params(As=self.As, ns=self.ns, r=0)
     pars.InitPower.pivot_scalar = 0.05
     pars.set_for_lmax(lmax, lens_potential_accuracy=0)
@@ -258,25 +259,7 @@ class lensing_spectra:
       float
     '''
     integrand = lambda chi : chi**2 * self.scale_factor(chi)**(-2) * self.window_func(chi, types[0]) * self.window_func(chi, types[1]) * self.mps(l/chi, self.results.redshift_at_comoving_radial_distance(chi))
-    # self.rho_bar = 3 * self.omega_m * H0**2 / (2 * self.lightspeed_kms**2)
     result =  9 * (1/l)**4 * self.omega_m**2 * self.H0**4 * self.lightspeed_kms**(-4) * scipy.integrate.quad(integrand, 1e-5, self.chi_last_scatter, epsabs=1e-30, epsrel=1e-3, limit = 50)[0]
-
-    return result()
-
-  def lps_new(self, l, types):
-    '''
-    Parameters:
-    k : float
-      wavenumber
-    types : iterable of 'shear' or 'convergence' length 2
-      denotes which lensing power spectrum to calculate
-    
-    Returns:
-      float
-    '''
-    integrand = lambda chi : chi**2 * self.scale_factor(chi)**(-2) * self.window_func(chi, types[0]) * self.window_func(chi, types[1]) * self.mps(l/chi, self.results.redshift_at_comoving_radial_distance(chi))
-    # self.rho_bar = 3 * self.omega_m * H0**2 / (2 * self.lightspeed_kms**2)
-    result = (1/l)**4 * 4 * self.rho_bar**2 * scipy.integrate.quad(integrand, 1e-5, self.chi_last_scatter, epsabs=1e-30, epsrel=1e-3, limit = 50)[0]
 
     return result
 

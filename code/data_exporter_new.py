@@ -36,23 +36,26 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
             'omch2': cosm_par[2],
             'ns': cosm_par[3],
             'As': cosm_par[4],
-            'mnu': cosm_par[5],
-            'w0' : cosm_par[6]
+            'tau' : cosm_par[5],
+            'mnu': cosm_par[6],
+            'w0' : cosm_par[7]
             }
 
     if rest:
         np.save(filepath + '/cosm_par', cosm_par)
+        print(cosm_par)
         print(f'cosm_par created for {folder_name}')
 
         with open(filepath + '/rho_bar', 'w') as file:
             file.write(str(cosm_data.rho_bar))
         print(f'rho_bar file created to {folder_name}')
 
-        # scale factor as func of chi (1d: chi)
-        with open(filepath + '/scale_factor', 'w') as file:
-            data = [cosm_data.scale_factor(chi) for chi in chis]
-            for num in data:
-                file.write(str(num) + '\n')
+        np.save(filepath + '/scale_factor', [cosm_data.scale_factor(chi) for chi in chis])
+        # # scale factor as func of chi (1d: chi)
+        # with open(filepath + '/scale_factor', 'w') as file:
+        #     data = [cosm_data.scale_factor(chi) for chi in chis]
+        #     for num in data:
+        #         file.write(str(num) + '\n')
         print(f'scale_factor created to {folder_name}')
 
         # window func (convergence) (1d: chi)
@@ -119,16 +122,18 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
 
 # first arguments of spectra class: H0=67.4, ombh2=0.0224, omch2=0.120, ns=0.965, As=2.1e-9, mnu=0.06, w0 = -1., wa = 0.
 
-par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0')
-fiducial_cosm_par = np.array([67.4, 0.0223, 0.119, 0.965, 2.13e-9, 0.06, -1])
+par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'tau', 'mnu', 'w0')
+fiducial_cosm_par = np.array([67.4, 0.0223, 0.119, 0.965, 2.13e-9, 0.063, 0.06, -1])
 # based on values that toshiya told me about
-cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
-                           fiducial_cosm_par[1] * 0.1,
-                           fiducial_cosm_par[2] * 0.005,
-                           fiducial_cosm_par[3] * 0.005,
-                           fiducial_cosm_par[4] * 0.1,
-                           fiducial_cosm_par[5] * 0.1,
-                           0.03])
+cosm_par_delta = np.array([
+    fiducial_cosm_par[0] * 0.1,
+    fiducial_cosm_par[1] * 0.1,
+    fiducial_cosm_par[2] * 0.005,
+    fiducial_cosm_par[3] * 0.005,
+    fiducial_cosm_par[4] * 0.1,
+    fiducial_cosm_par[5] * 0.1,
+    fiducial_cosm_par[6] * 0.1,
+    0.03])
 
 # cosm_par_delta = np.array([fiducial_cosm_par[0] * 0.1,
 #                            fiducial_cosm_par[1] * 0.2,
@@ -160,7 +165,7 @@ delta_delta = 0.05
 # data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True, exp_par = exp_par)
 
 # allows control over which data to create
-which_to_create = [[True, True, True, True, True, True]]
+which_to_create = [[False, False, False, False, False, True]]
 
 exports = [['data_fiducial', fiducial_cosm_par, *create_settings] for create_settings in which_to_create]
 

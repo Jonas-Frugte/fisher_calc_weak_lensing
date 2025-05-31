@@ -9,7 +9,7 @@ stepsizes = [1 * 4, 5 * 4, 10 * 4]
 num_bispec_samples = 200
 num_cores = 128
 
-pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'As', b'w0']
+pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'tau', b'As', b'w0']
 
 # Wrapper function for multiprocessing
 def fisher_calc_wrapper(args, tracers):
