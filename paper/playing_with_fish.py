@@ -15,7 +15,7 @@ np.set_printoptions(
 fisher_matrices_dir = 'code/fisher_matrices'
 
 ######################
-# Bispectra Matrices #
+# Bispectra Matrices
 ######################
 visb_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_c.txt')
 
@@ -26,6 +26,7 @@ visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_both.txt')
 ########################
 # Powerspectra Matrices
 ########################
+
 visp_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_c.txt')
 
 visp_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_s.txt')
@@ -33,7 +34,7 @@ visp_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_s.txt')
 visp_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both.txt')
 
 ######################
-# Planck #
+# Planck
 ######################
 planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_c_planck.txt')
 
@@ -41,16 +42,18 @@ planck_prior = np.diag([12 / 60**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 0.01,
 
 planck_p_prior = planck + planck_prior
 
+######################
+# CMB Stage 4
+######################
+
 viscmb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both_cmb.txt')
 
-viscmb_f_toshiya = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both_cmb_toshiya.txt')
+viscmb_t = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_t_cmb.txt')
 
-viscmb_t_toshiya = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_t_cmb_toshiya.txt')
-
-viscmb_e_toshiya = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_e_cmb_toshiya.txt')
+viscmb_e = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_e_cmb.txt')
 
 ######################
-# Takada & Jain #
+# Takada & Jain
 ######################
 
 visp_s_takada_jain = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_s_takada_jain.txt')
@@ -129,41 +132,44 @@ s8_ders = np.array([
     ])
 
 y = (0.0224 + 0.120) / (0.3 * 0.674**2) # used to calculate S8
-S8_ders = [(0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01), 
-           (0.811 * y**(-1/2) * (0.3 * 0.674**2)**(-1) * 0.5),
-           (0.811 * y**(-1/2) * (0.3 * 0.674**2)**(-1) * 0.5),
-           0,
-           0,
-           0,
-           0,
-           0,
-           y**(1/2)]
+S8_ders = [
+    (0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01), 
+    (0.811 * y**(-1/2) * (0.3 * 0.674**2)**(-1) * 0.5),
+    (0.811 * y**(-1/2) * (0.3 * 0.674**2)**(-1) * 0.5),
+    0,
+    0,
+    0,
+    0,
+    0,
+    y**(1/2)]
 
-omm_ders = [(0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01), 
-           1 / 0.674**2,
-           1 / 0.674**2,
-           0,
-           0,
-           0,
-           0,
-           0,
-           0,
-           0]
+omm_ders = [
+    (0.811 * y**(-1/2) * 0.5 * y * (0.674)**(-1) * (-2) * 0.01), 
+    1 / 0.674**2,
+    1 / 0.674**2,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0]
 
 omm = (0.0224 + 0.120) / (0.674**2)
 sigma8 = 0.811
 
-sigmaomm_ders = [0, 
-           0,
-           0,
-           0,
-           0,
-           0,
-           0,
-           (omm**0.25),
-           0,
-           0,
-           (0.25 * sigma8 * omm**(-0.75))]
+sigmaomm_ders = [
+    0, 
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    (omm**0.25),
+    0,
+    0,
+    (0.25 * sigma8 * omm**(-0.75))]
 
 
 #keep_indices = [4, 6, 7, 9]
@@ -466,12 +472,11 @@ if __name__ == "__main__":
     fish_pond_number = 0
     f_sky = 0.5
     if fish_pond_number == 0:
-        perfect_tau_knowledge = np.diag([0, 0, 0, 0, 0, 1e20, 0, 0])
         fish_matrices = [
-            f_sky * (viscmb_t_toshiya + perfect_tau_knowledge),
-            f_sky * (viscmb_e_toshiya) + perfect_tau_knowledge,
-            f_sky * (viscmb_f_toshiya + perfect_tau_knowledge),
-            f_sky * (viscmb_f_toshiya + visp_c + perfect_tau_knowledge)
+            f_sky * (viscmb_t),
+            f_sky * (viscmb_e),
+            f_sky * (viscmb_f),
+            f_sky * (viscmb_f + visp_c)
             #f_sky * (viscmb_f_toshiya + visb_c),
             #f_sky * (viscmb_f_toshiya + visp_c + visb_c)
         ]
