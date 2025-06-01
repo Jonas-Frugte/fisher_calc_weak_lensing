@@ -63,7 +63,7 @@ toshiya_derivatives = True
 #cdef (dict[str, double], double, double[:, :], double[:, :], double[:], double[:], double[:], double[:], double[:], double[:], double[:, :], double[:]) data_importer(str folder_name):
 def data_import_func(folder_name):
     cdef str filepath
-    if toshiya_derivatives and folder_name[-1] == '0':
+    if toshiya_derivatives:# and (folder_name[-1] == '0' or folder_name == 'data_fiducial'):
         print(folder_name, 'toshiya')
         filepath = '/scratch/p319950/data_toshiya_like/' + folder_name
 
@@ -982,6 +982,16 @@ cpdef double der(double fp, double fm, double dx) noexcept nogil:
     return (fp - fm) / (2 * dx)
 
 # cdef double[:] fiducial_cosm_par = np.array([67.4, 0.0224, 0.120, 0.965, 2.1e-9, 0.06])
+
+print((cosm_par_H_p_0[0] - cosm_par_f[0]) / cosm_par_f[0])
+print((cosm_par_ombh2_p_0[1] - cosm_par_f[1]) / cosm_par_f[1])
+print((cosm_par_omch2_p_0[2] - cosm_par_f[2]) / cosm_par_f[2])
+print((cosm_par_ns_p_0[3] - cosm_par_f[3]) / cosm_par_f[3])
+print((cosm_par_As_p_0[4] - cosm_par_f[4]) / cosm_par_f[4])
+print((cosm_par_tau_p_0[5] - cosm_par_f[5]) / cosm_par_f[5])
+print((cosm_par_mnu_p_0[6] - cosm_par_f[6]) / cosm_par_f[6])
+print((cosm_par_w0_p_0[7] - cosm_par_f[7]) / cosm_par_f[7])
+
 
 
 cdef double lps_der(int k, char* type1, char* type2, char* par, int delta_delta) noexcept nogil:
