@@ -6,8 +6,8 @@ from itertools import *
 lmin = 2
 lmax = 2000
 
-pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'tau' b'As', b'w0']
-
+pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'tau', b'As', b'w0']
+print(len(pars))
 # Wrapper function for multiprocessing
 def fisher_calc_wrapper(args, tracers):
     i, j = args
@@ -47,10 +47,13 @@ def fisher_calc_wrapper_cmb(args, tracers):
         return vispy.Fisher_powersp_cmb(2, 2000, par1 = pars[i], par2 = pars[j])
 
 def main():
+    print(pars)
     for tracer in ['e', 't']: #['c', 's', 'both']:
         mat = np.zeros((len(pars), len(pars)))
+        print(np.shape(mat))
         for i, j in product(range(len(pars)), repeat = 2):
             result = fisher_calc_wrapper_cmb((i, j), tracer)
+            print(i, j)
             mat[i, j] = result
             mat[j, i] = result  # Symmetric assignment
 
