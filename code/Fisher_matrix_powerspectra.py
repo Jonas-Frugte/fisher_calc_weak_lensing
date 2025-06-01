@@ -48,16 +48,15 @@ def fisher_calc_wrapper_cmb(args, tracers):
 
 def main():
     print(pars)
-    for tracer in ['e', 't']: #['c', 's', 'both']:
+    for tracer in ['c', 's', 'both']: #['c', 's', 'both']:
         mat = np.zeros((len(pars), len(pars)))
         print(np.shape(mat))
         for i, j in product(range(len(pars)), repeat = 2):
-            result = fisher_calc_wrapper_cmb((i, j), tracer)
-            print(i, j)
+            result = fisher_calc_wrapper((i, j), tracer)
             mat[i, j] = result
             mat[j, i] = result  # Symmetric assignment
 
-        np.savetxt(f'fisher_matrices/fish_mat_powersp_{tracer}_cmb_toshiya.txt', mat)
+        np.savetxt(f'fisher_matrices/fish_mat_powersp_{tracer}.txt', mat)
         print(mat)
 
 if __name__ == '__main__':
