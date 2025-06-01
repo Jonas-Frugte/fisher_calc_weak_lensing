@@ -168,7 +168,7 @@ sigmaomm_ders = [0,
 
 #keep_indices = [4, 6, 7, 9]
 #keep_indices=[10]
-keep_indices = [0, 1, 2, 3, 5, 4, 6]
+keep_indices = [0, 1, 2, 3, 4, 5, 6, 7]
 #keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
@@ -176,6 +176,9 @@ def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_de
 
     # extend to include derived params
     for derived_param_derivs in derived_param_derivss:
+        print(np.shape(fishes_inv))
+        print(np.shape(derived_param_derivs))
+
         fishes_inv = append_row_column(fishes_inv, derived_param_derivs)
     
     # marginalize over unwanted params
@@ -382,6 +385,8 @@ def plot_corner(
 from tabulate import tabulate
 
 def save_table(param_names, param_vals, which_pars, constraints, labels):
+    print(param_names)
+    print(which_pars)
     table = [[0 for i in range(len(constraints) + 1)] for j in range(len(which_pars))]
     for i in range(len(which_pars)):
         # param names and fiducial values
@@ -403,7 +408,7 @@ if __name__ == "__main__":
         r"$\Omega_c h^2$",
         r"$n_s$",         
         r"$m_\nu$", 
-        r"$\tau$"      
+        r"$\tau$",      
         r"$A_s$",         
         r"$w_0$",         
         r"$\sigma_8$",
@@ -461,17 +466,17 @@ if __name__ == "__main__":
     fish_pond_number = 0
     f_sky = 0.5
     if fish_pond_number == 0:
+        perfect_tau_knowledge = np.diag([0, 0, 0, 0, 0, 1e20, 0, 0])
         fish_matrices = [
-            f_sky * (viscmb_t_toshiya),
-            f_sky * (viscmb_e_toshiya)
-            # f_sky * (viscmb_f_toshiya),
-            # f_sky * (viscmb_f),
-            # f_sky * (viscmb_f_toshiya + visp_c),
-            # f_sky * (viscmb_e_toshiya + visb_c),
-            # f_sky * (viscmb_e_toshiya + visp_c + visb_c)
+            f_sky * (viscmb_t_toshiya + perfect_tau_knowledge),
+            f_sky * (viscmb_e_toshiya) + perfect_tau_knowledge,
+            f_sky * (viscmb_f_toshiya + perfect_tau_knowledge),
+            f_sky * (viscmb_f_toshiya + visp_c + perfect_tau_knowledge)
+            #f_sky * (viscmb_f_toshiya + visb_c),
+            #f_sky * (viscmb_f_toshiya + visp_c + visb_c)
         ]
 
-        labels = ['T toshiya', 'E toshiya'] #, 'cmb primaries, tosh', 'cmb primaries', 'lps', 'lbs', 'lps + lbs']
+        labels = ['cmb T', 'cmb E', 'cmb E + T', 'cmb E + T + lps']#, 'cmb E + T + lbs', 'cmb E + T + lps + lbs'] #, 'cmb primaries, tosh', 'cmb primaries', 'lps', 'lbs', 'lps + lbs']
 
 
     if fish_pond_number == 1:
