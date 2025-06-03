@@ -534,11 +534,11 @@ cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
         if cmb_noise_type == 1:
             # stage 3 wide toshiya
             sigma = 1
-            Delta_X = 6
+            Delta_X = 6 * 0.71
         elif cmb_noise_type == 2:
             # stage 4 toshiya
             sigma = 3
-            Delta_X = 1
+            Delta_X = 0.71
         elif cmb_noise_type == 3:
             sigma = 5
             Delta_X = 30

@@ -25021,7 +25021,7 @@ static double __pyx_f_17data_importer_new_lps_noise(int __pyx_v_l, char *__pyx_v
  *         if cmb_noise_type == 1:
  *             # stage 3 wide toshiya
  *             sigma = 1             # <<<<<<<<<<<<<<
- *             Delta_X = 6
+ *             Delta_X = 6 * 0.71
  *         elif cmb_noise_type == 2:
  */
       __pyx_v_sigma = 1.0;
@@ -25029,11 +25029,11 @@ static double __pyx_f_17data_importer_new_lps_noise(int __pyx_v_l, char *__pyx_v
       /* "data_importer_new.pyx":537
  *             # stage 3 wide toshiya
  *             sigma = 1
- *             Delta_X = 6             # <<<<<<<<<<<<<<
+ *             Delta_X = 6 * 0.71             # <<<<<<<<<<<<<<
  *         elif cmb_noise_type == 2:
  *             # stage 4 toshiya
  */
-      __pyx_v_Delta_X = 6.0;
+      __pyx_v_Delta_X = (6.0 * 0.71);
 
       /* "data_importer_new.pyx":534
  * 
@@ -25049,7 +25049,7 @@ static double __pyx_f_17data_importer_new_lps_noise(int __pyx_v_l, char *__pyx_v
  *         elif cmb_noise_type == 2:
  *             # stage 4 toshiya
  *             sigma = 3             # <<<<<<<<<<<<<<
- *             Delta_X = 1
+ *             Delta_X = 0.71
  *         elif cmb_noise_type == 3:
  */
       __pyx_v_sigma = 3.0;
@@ -25057,15 +25057,15 @@ static double __pyx_f_17data_importer_new_lps_noise(int __pyx_v_l, char *__pyx_v
       /* "data_importer_new.pyx":541
  *             # stage 4 toshiya
  *             sigma = 3
- *             Delta_X = 1             # <<<<<<<<<<<<<<
+ *             Delta_X = 0.71             # <<<<<<<<<<<<<<
  *         elif cmb_noise_type == 3:
  *             sigma = 5
  */
-      __pyx_v_Delta_X = 1.0;
+      __pyx_v_Delta_X = 0.71;
 
       /* "data_importer_new.pyx":538
  *             sigma = 1
- *             Delta_X = 6
+ *             Delta_X = 6 * 0.71
  *         elif cmb_noise_type == 2:             # <<<<<<<<<<<<<<
  *             # stage 4 toshiya
  *             sigma = 3
@@ -25074,7 +25074,7 @@ static double __pyx_f_17data_importer_new_lps_noise(int __pyx_v_l, char *__pyx_v
       case 3:
 
       /* "data_importer_new.pyx":543
- *             Delta_X = 1
+ *             Delta_X = 0.71
  *         elif cmb_noise_type == 3:
  *             sigma = 5             # <<<<<<<<<<<<<<
  *             Delta_X = 30
@@ -25093,7 +25093,7 @@ static double __pyx_f_17data_importer_new_lps_noise(int __pyx_v_l, char *__pyx_v
 
       /* "data_importer_new.pyx":542
  *             sigma = 3
- *             Delta_X = 1
+ *             Delta_X = 0.71
  *         elif cmb_noise_type == 3:             # <<<<<<<<<<<<<<
  *             sigma = 5
  *             Delta_X = 30
