@@ -44,7 +44,7 @@ cdef str folder_file_path = '/scratch/p319950/data/'
 # cdef str filepath_convergence_noise_file_path = '/scratch/p319950/data_rough/' + 'conv_noise.dat'
 # conv_noise_data_array = np.loadtxt(filepath_convergence_noise_file_path)
 # cdef double[:, :] conv_noise_data = conv_noise_data_array
-
+print('wahoo2')
 # conv noise from quadratic estimator
 cdef double[:] ls_cmbn = np.loadtxt('cmb_noise_files/ls_1_3000_64.txt')
 ls_cmbn_np_array = np.loadtxt('cmb_noise_files/ls_1_3000_64.txt') # need to also have a np array version to easily convert noise values from convergence to lens potential below
@@ -52,12 +52,12 @@ cdef double lmin_cmbn = ls_cmbn[0]
 cdef int lnum_cmbn = len(ls_cmbn)
 cdef double lmax_cmbn = ls_cmbn[lnum_cmbn - 1]
 
-cdef double[:] cmbn_301 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma3_DeltaT0_DeltaP1.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
+cdef double[:] cmbn_301 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma3_DeltaT0.71_DeltaP1.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 cdef double[:] cmbn_106 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma1_DeltaT0_DeltaP6.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 cdef double[:] planck_noise = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma_planck.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 
 toshiya_derivatives = True
-
+print('wahoo3')
 # perhaps we can export data as c arrays instead of as memory views in the future so that we can specify return types like below and can avoid having to 
 # declare types of all data before every data import
 #cdef (dict[str, double], double, double[:, :], double[:, :], double[:], double[:], double[:], double[:], double[:], double[:], double[:, :], double[:]) data_importer(str folder_name):

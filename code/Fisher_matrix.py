@@ -5,9 +5,9 @@ from itertools import *
 
 lmin = 2
 lmax = 2000
-stepsizes = [1 * 4, 5 * 4, 10 * 4]
-num_bispec_samples = 200
-num_cores = 128
+stepsizes = [1 * 4 * 5, 5 * 4 * 5, 10 * 4 * 5]
+num_bispec_samples = 100
+num_cores = 64
 
 pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'tau', b'As', b'w0']
 
@@ -24,9 +24,9 @@ def fisher_calc_wrapper(args, tracers):
         return vis.Fisher_mat_full(lmin, 0, 200, stepsizes[0], num_bispec_samples, pars[i], pars[j], num_cores) + vis.Fisher_mat_full(lmin, 200, 1000, stepsizes[1], num_bispec_samples, pars[i], pars[j], num_cores) + vis.Fisher_mat_full(lmin, 1000, lmax, stepsizes[2], num_bispec_samples, pars[i], pars[j], num_cores)
 
 num_pars = len(pars)
-
-for tracer in ['c', 's', 'both']:
-    if tracer == 'both': # !!!
+print('koopie')
+def main():
+    for tracer in ['c', 's', 'both']:
         mat = np.zeros((num_pars, num_pars))
         counter = 1
         for i in range(num_pars):
@@ -39,6 +39,9 @@ for tracer in ['c', 's', 'both']:
         
         np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}.txt', mat)
         print(mat)
+
+if __name__ == '__main__':
+    main()
 
 
 # for python implementation

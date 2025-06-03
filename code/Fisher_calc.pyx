@@ -64,6 +64,10 @@ cdef double Fisher_mat_single_term(int l1, int l2, int l3, char* type, char* par
         return lbs_der(l1, l2, l3, type, type, type, num_samples, pb_correction, par1, dd) * lps_f_obs(l1, type, type)**(-1) \
         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, pb_correction, par2, dd) / Delta(l1, l2, l3)
 
+def singlefishtest(l1,  l2,  l3,  type,  par1,  par2,  num_samples):
+    print('wanoo')
+    return Fisher_mat_single_term( l1,  l2,  l3, type, par1, par2,  num_samples)
+
 cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):
     if lmax > k_max:
         raise Exception('lmax should be less than upper bound for interpolation (k_max)')
@@ -80,6 +84,7 @@ cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_ste
 
     cdef int k1, k2, k3
     cdef int index
+    print('wapoo')
 
     for index in prange(0, num_samples, schedule='static', num_threads=num_cores, nogil=True):
         k1 = triangles[index, 0]

@@ -59,8 +59,9 @@ if __name__ == '__main__':
         os.makedirs(out_dir, exist_ok=True)
         
         # Filename includes sigma, Delta_T, and Delta_P.
-        filename = f"{out_dir}/Ns_sigma{sigma}_DeltaT{Delta_T}_DeltaP{Delta_P}_EB.txt"
+        filename = f"{out_dir}/Ns_sigma{sigma}_DeltaT{Delta_T}_DeltaP{Delta_P}.txt"
         np.savetxt(filename, noise_vals)
+        print('saved:', filename)
         
         print(f'\nParameters: sigma={sigma}, Delta_T={Delta_T}, Delta_P={Delta_P}\nComputed l(l+1)Ns/2pi:\n', np.array(noise_vals) * Ls * (Ls + 1) / 2 / np.pi)
 
@@ -78,7 +79,7 @@ if __name__ == '__main__':
     # ]
 
     noise_configs = [
-        (5, 30, 52),
+        (3, 0.71, 1),
     ]
 
     # noise_configs = [
