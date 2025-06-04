@@ -17,11 +17,11 @@ fisher_matrices_dir = 'code/fisher_matrices'
 ######################
 # Bispectra Matrices
 ######################
-visb_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_c.txt')
+visb_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_c.txt')
 
-visb_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_s.txt')
+visb_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_s.txt')
 
-visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_approx_both.txt')
+visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_both.txt')
 
 ########################
 # Powerspectra Matrices
@@ -36,11 +36,11 @@ visp_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both.txt')
 ######################
 # Planck
 ######################
-planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_c_planck.txt')
+#planck = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_c_planck.txt')
 
-planck_prior = np.diag([12 / 60**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 0.01, 1e18, 0.01])
+planck_prior = np.diag([12 / 60**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 0.01, 0.063**(-2), 1e18, 0.01])
 
-planck_p_prior = planck + planck_prior
+#planck_p_prior = planck + planck_prior
 
 ######################
 # CMB Stage 4
@@ -120,15 +120,16 @@ def append_row_column(mats, vec):
     return matsnew
 
 # update this
+
 s8_ders = np.array([
-    2.76945054e-03, # H_0
-    -6.50570238e+00, # Omega_b h^2 
-    4.30234556e+00,  # Omega_c h^2
-    3.06272435e-01,# n_s
-    -2.15681667e-01, # m_\nu
-    0,              # tau
-    1.93167857e+08, # A_s
-    -2.01175433e-01  # w_0
+    2.81584114e-03, # H_0
+    -6.50119625e+00, # Omega_b h^2 
+    4.29501171e+00,  # Omega_c h^2
+    3.05820443e-01,# n_s
+    -6.46329517e-02, # m_\nu
+    -6.88215707e-04, # tau
+    1.93110023e+08, # A_s
+    -2.01089472e-01  # w_0
     ])
 
 y = (0.0224 + 0.120) / (0.3 * 0.674**2) # used to calculate S8
@@ -172,9 +173,9 @@ sigmaomm_ders = [
     (0.25 * sigma8 * omm**(-0.75))]
 
 
-#keep_indices = [4, 6, 7, 9]
+keep_indices = [4, 7, 8, 10]
 #keep_indices=[10]
-keep_indices = [0, 1, 2, 3, 4, 5, 6, 7]
+#keep_indices = [0, 1, 2, 3, 4, 5, 6, 7]
 #keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
@@ -469,19 +470,39 @@ if __name__ == "__main__":
     # ]
 
     # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
-    fish_pond_number = 0
+    fish_pond_number = 3
     f_sky = 0.5
     if fish_pond_number == 0:
         fish_matrices = [
-            f_sky * (viscmb_t),
-            f_sky * (viscmb_e),
-            f_sky * (viscmb_f),
-            f_sky * (viscmb_f + visp_c)
-            #f_sky * (viscmb_f_toshiya + visb_c),
-            #f_sky * (viscmb_f_toshiya + visp_c + visb_c)
+            f_sky * viscmb_f,
+            f_sky * (viscmb_f + visp_c),
+            f_sky * (viscmb_f + visb_c),
+            f_sky * (viscmb_f + visp_c + visb_c),
+            f_sky * (viscmb_f + visp_s),
+            f_sky * (viscmb_f + visb_s),
+            f_sky * (viscmb_f + visp_s + visb_s),
+            f_sky * (viscmb_f + visp_f),
+            f_sky * (viscmb_f + visb_f),
+            f_sky * (viscmb_f + visp_f + visb_f)
         ]
 
-        labels = ['cmb T', 'cmb E', 'cmb E + T', 'cmb E + T + lps']#, 'cmb E + T + lbs', 'cmb E + T + lps + lbs'] #, 'cmb primaries, tosh', 'cmb primaries', 'lps', 'lbs', 'lps + lbs']
+        labels = ['cmb prior', 'lps cmb', 'lbs cmb', 'lps + lbs cmb', 'lps s', 'lbs s', 'lps + lbs s', 'lps cmb + s', 'lbs cmb + s', 'lps + lbs, s + cmb']
+    
+    if fish_pond_number == 6:
+        fish_matrices = [
+            planck_prior,
+            planck_prior + f_sky * (visp_c),
+            planck_prior + f_sky * (visb_c),
+            planck_prior + f_sky * (visp_c + visb_c),
+            planck_prior + f_sky * (visp_s),
+            planck_prior + f_sky * (visb_s),
+            planck_prior + f_sky * (visp_s + visb_s),
+            planck_prior + f_sky * (visp_f),
+            planck_prior + f_sky * (visb_f),
+            planck_prior + f_sky * (visp_f + visb_f)
+        ]
+
+        labels = ['weak prior', 'lps cmb', 'lbs cmb', 'lps + lbs cmb', 'lps s', 'lbs s', 'lps + lbs s', 'lps cmb + s', 'lbs cmb + s', 'lps + lbs, s + cmb']
 
 
     if fish_pond_number == 1:
@@ -502,28 +523,28 @@ if __name__ == "__main__":
 
     if fish_pond_number == 2:
         fish_matrices = [
-            planck_prior + visp_c,
-            planck_prior + visb_c,
-            planck_prior + visp_c + visb_c,
-            planck_prior + visp_f + visb_f,
+            planck_prior + f_sky * visp_c,
+            planck_prior + f_sky * visb_c,
+            planck_prior + f_sky * (visp_c + visb_c),
+            planck_prior + f_sky * (visp_f + visb_f)
         ]
 
         labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
 
-        plt_name = 'param_constraints_tight_cmb.pdf'
+        plt_name = 'param_constraints_tight_cmb_weak_prior.pdf'
 
 
     if fish_pond_number == 3:
         fish_matrices = [
-            planck_prior + visp_s,
-            planck_prior + visb_s,
-            planck_prior + visp_s + visb_s,
-            planck_prior + visp_f + visb_f,
+            planck_prior + f_sky * visp_s,
+            planck_prior + f_sky * visb_s,
+            planck_prior + f_sky * (visp_s + visb_s),
+            planck_prior + f_sky * (visp_f + visb_f),
         ]
 
         labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
 
-        plt_name = 'param_constraints_tight_gal.pdf'
+        plt_name = 'param_constraints_tight_gal_weak_prior.pdf'
 
     if fish_pond_number == 4:
         fish_matrices = [
@@ -561,21 +582,21 @@ if __name__ == "__main__":
 
     cov_matrices = process_fishes(fish_matrices, keep_indices)
 
-    # fig, axes = plot_corner(
-    #     cov_matrices=cov_matrices,
-    #     param_names=param_names_latex_kept,
-    #     param_values=param_values_kept,
-    #     labels=labels,
-    #     colors=["tab:blue", "tab:orange", 'tab:green', 'black'],
-    #     nstd=1.0,
-    #     figsize=(10,10),
-    #     dpi=100
-    # )
+    fig, axes = plot_corner(
+        cov_matrices=cov_matrices,
+        param_names=param_names_latex_kept,
+        param_values=param_values_kept,
+        labels=labels,
+        colors=["tab:blue", "tab:orange", 'tab:green', 'black'],
+        nstd=1.0,
+        figsize=(10,10),
+        dpi=100
+    )
 
 
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
     #plt.show()
-    #plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300)
+    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300)
 
-    save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
+    #save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
