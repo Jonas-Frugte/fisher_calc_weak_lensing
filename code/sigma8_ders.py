@@ -1,11 +1,12 @@
 # first arguments of spectra class: H0=67.4, ombh2=0.0224, omch2=0.120, ns=0.965, As=2.1e-9, mnu=0.06, w0 = -1., wa = 0.
 import numpy as np
 import cosm_setup as cs
-par_names = ('H', 'ombh2', 'omch2', 'ns', 'As', 'mnu', 'w0')
-fiducial_cosm_par = (67.4, 0.0224, 0.120, 0.965, 2.1e-9, 0.06, -1)
+# this needs to be in the same order as used for fisher matrix calculations, otherwise you will die later trying to fix param constraints :)
+par_names = ('H', 'ombh2', 'omch2', 'ns', 'mnu', 'tau', 'As', 'w0')
+fiducial_cosm_par = (67.4, 0.0224, 0.120, 0.965, 2.1e-9, 0.06, 0.06, -1)
 num_pars = len(par_names)
 
-dx = 0.05 # if you change this here it also needs to be changed at end of data_importer.pyx !!!
+dx = 0.05 
 
 dx_coeffs = [2, 1, -1, -2]
 
@@ -37,6 +38,8 @@ for i in range(num_pars):
 
 print(ders)
 
-
-# sigma8_vals = np.zeros((num_pars, 4))
+# IMPORTANT!
+# the derivatives are gonna be in order: (H0, ombh2, omch2, ns, As, tau, mnu, w0),
+# but for the fisher matrices they need to be switched around to be in order: ('H', 'ombh2', 'omch2', 'ns', 'mnu', 'tau', 'As', 'w0')
+# mnu and As need to be switched basically
 
