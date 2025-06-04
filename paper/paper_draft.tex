@@ -54,7 +54,7 @@
 % Additional customizations (optional)
 \setlength{\parindent}{0pt}   % No paragraph indentation
 \setlength{\parskip}{1em}     % Add space between paragraphs
-\title{Parameter Forecasts From CMB Lensing and Galaxy Lensing Power- and Bispectra}
+\title{Future Parameter constraints from weak lensing CMB and Galaxy Lensing Power- and Bi-spectra}
 
 \author[1]{Jonas Frugte}
 \author[1]{P. Daniel Meerburg}
@@ -87,7 +87,7 @@
 %\tableofcontents
 
 % \section{Conventions}
-% Use $\mathbf k$ for wave numbers (Fourier space), $l$ for multipole moments, $m$ for magnetic quantum number. $P^{XY}(k, \eta, \eta')$ and $B^{XYZ}(k_1,k_2,k_3, \eta_1, \eta_2, \eta_3)$ correspond to bi and power spectra of fields $X$, $Y$, and $Z$ in Fourier space. $P_l^{XY}(\eta,\eta')$ and $B_{l_1l_2l_3}^{XYZ}(\eta_1, \eta_2, \eta_3)$ correspond to the multipole moments of the bi and power spectra of fields $X$, $Y$, and $Z$. If all times are the same we may instead write only one time argument and if the time is current time then we omit the time argument entirely. In other words,
+% Use $\mathbf k$ for wave numbers (Fourier space), $l$ for multipole moments, $m$ for magnetic quantum number. $P^{XY}(k, \eta, \eta')$ and $B^{XYZ}(k_1,k_2,k_3, \eta_1, \eta_2, \eta_3)$ correspond to bi and power spectra of fields $X$, $Y$, and $Z$ in Fourier space. $P_l^{XY}(\eta,\eta')$ and $B_{\ell_1\ell_2\ell_3}^{XYZ}(\eta_1, \eta_2, \eta_3)$ correspond to the multipole moments of the bi and power spectra of fields $X$, $Y$, and $Z$. If all times are the same we may instead write only one time argument and if the time is current time then we omit the time argument entirely. In other words,
 % $$
 % P_l^{XY}(\eta):=P_l^{XY}(\eta,\eta), \quad P_l^{XY}:=P_l^{XY}(\eta_{\text{current}}), \quad \text{similarly for all other spectra}.
 % $$
@@ -105,59 +105,74 @@
 
 \section{Introduction}
 
-Weak lensing has been used as a probe to constrain cosmological parameters since the 2000's \cite{kilbinger2015cosmology,Bacon2000,Kaiser2000,Waerbeke2000,Bartelmann2001}. A range of upcoming surveys, such as the survey by the Simons Observatory (SO) \cite{Ade2019}, the Legacy Survey of Space and Time (LSST) \cite{Ivezic2019}, and Euclid \cite{Laureijs2011} aim to measure weak lensing of the CMB and of galaxies. These upcoming surveys are expected to achieve significantly higher accuracy than their predecessors, leading to tighter constraints on cosmological parameters and advancing our overall understanding of physics. Typically, the statistic of interest is the power spectrum (or equivalently, two point function) of the lensing potential. This can be measured in terms of the lensing convergence $\kappa$, lensing shear $\gamma$, or lensing potential $\psi$. In the weak lensing regime they all contain the same amount of information and can be directly converted into one another, see appendix \ref{sec:weaklensstats}. In CMB surveys the temperature and polarization anisotropies are used to estimate the lensing potential \cite{Planck2018Lensing}, while with galaxies one instead calculates lensing effects by measuring the lensing shear, which can be deduced from the ellipiticity distribution of the observed galaxies \cite{HoekstraJain2008}.
+Weak lensing has been used as a probe to constrain cosmological parameters for over a decade \cite{kilbinger2015cosmology,Bacon2000,Kaiser2000,Waerbeke2000,Bartelmann2001}. A range of upcoming surveys, such as the survey by the Simons Observatory (SO) \cite{Ade2019}, the Legacy Survey of Space and Time (LSST) \cite{Ivezic2019}, and Euclid \cite{Laureijs2011} aims to measure weak lensing of the cosmic microwave background (CMB) and galaxies respectively. These upcoming surveys are expected to achieve significantly higher accuracy than their predecessors, leading to tighter constraints on cosmological parameters and advancing our overall understanding of cosmology. Typically, the standard summary statistic of interest is the power spectrum (or equivalently, two-point function) of the lensing potential (as well as cross-correlations with galaxy clustering). This can be measured in terms of the lensing convergence $\kappa$, lensing shear $\gamma$, or lensing potential $\psi$. In the weak lensing regime they are all equivalent, in the sense that they can be directly converted into one another (appendix \ref{sec:weaklensstats}). In CMB surveys, the temperature and polarization anisotropies are used to reconstruct the lensing potential \cite{Hu_2002}, while with galaxies one instead calculates lensing effects by measuring the lensing shear, which can be deduced from the ellipticity distribution of the observed galaxies \cite{HoekstraJain2008}.
 
-Even with Gaussian initial conditions, there are significant amounts of non-Gaussianity in the weak lensing signal, especially in galaxy lensing due to it being a probe of the more recent distribution of matter \cite{Bernardeau1997,Takada2003}. In addition to looking at the power spectrum, a natural next step is thus to measure the lensing bispectrum. While the bispectrum has been measured for galaxy lensing signals \cite{vanWaerbeke2002}, a definitive detection of the CMB lensing bispectrum is still pending. Upcoming surveys such as the ones mentioned earlier may detect this signal. Therefore it is timely to consider the detectability, as well as ability to constrain cosmological parameter of CMB lensing power- and bispectra, galaxy lensing power- and bispectra, and cross correlations between the two weak lensing observables.
+Even with Gaussian initial conditions, there are significant amounts of non-Gaussianity in the weak lensing signal, especially in galaxy lensing due to it being a probe of the more recent distribution of matter \cite{Bernardeau1997,Takada2003}. In addition to looking at the power spectrum, a natural next step is thus to measure weak lensing bispectra. While the bispectrum has been measured for galaxy lensing signals \cite{vanWaerbeke2002}, a definitive detection of the CMB lensing bispectrum is still pending. Upcoming surveys, such as the ones mentioned earlier may be able to detect this signal. Therefore it is timely to consider the potential of higher order spectra to constrain cosmological parameters. 
 
-In this paper we aim to answer this question in the context of experimental parameters similar to those of next generation surveys. We are especially interested in seeing if approximate parameter degeneracies can be broken by combining all data. Calculating the covariance matrix of unbiased optimal estimators of the cosmological parameters can be done by combining a Boltzmann code for cosmological perturbations with a Fisher matrix analysis. See figure \ref{fig:flowchart} for an overview of the calculation done in this paper. We look at $\lambda$CDM parameters as well as the sum of neutrino masses $\sum m_\nu$ and dark energy equation of state parameter, $w_0$. 
+In this paper, we aim to answer this question by adopting experimental parameters similar to those of next-generation surveys. We are especially interested in seeing if approximate parameter degeneracies can be broken by combining CMB and galaxy weak lensing power- and bi-spectra. 
+%Calculating the covariance matrix of unbiased optimal estimators of the cosmological parameters can be done by combining a Boltzmann code for cosmological perturbations with a Fisher matrix analysis. 
+%See figure \ref{fig:flowchart} for an overview of the calculation done in this paper. 
+We will consider $\Lambda$CDM parameters and extensions thereof. Of particular interest are the sum of neutrino masses $\sum m_\nu$ and dark energy equation of state parameter, $w_0$. 
 
-Useful derivations relevant to this paper can be found in the appendices. In particular, they include a derivation for the Fisher matrix formalism for the non-trivial context of bispectra with multiple tracers. While the final formula is available in the literature (e.g., the appendix of \cite{Kalaja_2021}), this paper includes a derivation as the authors were unable to locate one elsewhere.
+ 
+% While the final formula is available in the literature (e.g., the appendix of \cite{Kalaja_2021}), this paper includes a derivation as the authors were unable to locate one elsewhere.
 
-The structure of this paper is as follows: we introduce relevant formulas for weak lensing statistics, nonlinear matter bispectrum, and fisher matrix formalism in section \ref{sec:theory}. We specify details such as the fiducial values of the parameters and noise models used in section \ref{sec:calcdetails}. Parameter constraints and signal to noise ratios are presented in section \ref{sec:results} and discussed in section \ref{sec:discussion}. The appendices review the derivations of the formulas for weak lensing power- and bispectra. We also derive the Fisher matrix formalism, in particular for the more involved case of measuring bispectra with multiple tracers.
+The structure of this paper is as follows: we introduce relevant formulas for weak lensing statistics, nonlinear matter bispectrum, and Fisher matrix formalism in section \ref{sec:theory}. We specify details such as the fiducial values of the parameters and noise models used in section \ref{sec:calcdetails}. Parameter constraints and signal-to-noise ratios are presented in section \ref{sec:results} and discussed in section \ref{sec:discussion}. Useful derivations relevant to this paper can be found in the appendices. In particular, they include a derivation for the Fisher matrix formalism for the non-trivial context of bispectra with multiple tracers.
 
-All code written for this project is uploaded on github at \url{https://github.com/Jonas-Frugte/fisher_calc_weak_lensing}.
+All code used to derive the resukts in this paper is publically available on GitHub at \url{https://github.com/Jonas-Frugte/fisher_calc_weak_lensing}.
 
 
 
-\begin{figure}[h!]
-    \centering
-    \input{figures/calc_flowchart.tikz}
-    \caption{Flowchart of steps involved in calculating the minimum error/uncertainty in cosmological parameter estimates using convergence and shear power- and bi-spectra.}
-    \label{fig:flowchart}
-\end{figure}
+% \begin{figure}[h!]
+%     \centering
+%     \input{figures/calc_flowchart.tikz}
+%     \caption{Flowchart of steps involved in calculating the minimum error/uncertainty in cosmological parameter estimates using convergence and shear power- and bi-spectra.}
+%     \label{fig:flowchart}
+% \end{figure}
 
-\section{Theory}
+\section{Background}
 \label{sec:theory}
 \subsection{Weak lensing spectra}
-Radiation from cosmological objects is distorted due to gravitational lensing. Typically, this lensing is a relatively weak effect and is thus referred to as weak lensing. Weak lensing is quantified through the deflection field $\mathbf d(\hat {\mathbf n})$ which equals the difference between the observed angle of a point on the sky and the true (unlensed) angle. This field is the gradient of the lensing potential, $\psi(\hat {\mathbf n})$, which is expressed as a weighted integral of the mass distribution along the line of sight from the observer to the source.
+Radiation from cosmological objects is distorted due to gravitational lensing. Due to the low density of the cosmic web, the average deflection of a photon as it propagates through the universe is relatively weak and is thus referred to as weak lensing. Weak lensing is quantified through the deflection field $\mathbf d(\hat {\mathbf n})$ which equals the difference between the observed angle of a point in the sky and the true (unlensed) angle. This field is the gradient of the lensing potential, $\psi(\hat {\mathbf n})$, which is expressed as a weighted integral of the mass distribution along the line-of-sight from the observer to the source.
 
-In the case of CMB surveys, lensing alters the statistical properties of the temperature and polarization fields and can thus be calculated by comparing to the expected unlensed signal, see e.g. \cite{cmblensingestimator}. In galaxy surveys, lensing alters the ellipiticities of observed galaxies. If a large enough number of galaxies are observed, this effect can be separated from the intrinsic ellipiticities of the galaxies and thus the lensing potential can be estimated.
+In the case of CMB surveys, lensing alters the statistical properties of the temperature and polarization fields and can thus be calculated by comparing the observed signal to the expected unlensed signal(see e.g. \cite{cmblensingestimator}). In galaxy surveys, lensing alters the ellipticities of observed galaxies. If a large enough number of galaxies are observed, this effect can be separated from the intrinsic ellipticities of the galaxies which allows us to estimate the lensing potential.
 
 To constrain cosmological parameters we can then look at the lensing potential of the CMB, $\psi_\CMB$, and of galaxy surveys, $\psi_\gal$. These are directly related to the matter power and bispectra as
 \begin{empheq}[box=\fbox]{align*}
-    C^{\psi_X\psi_Y}_l
-    & = \frac{9}{\ell^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)C^\delta(\ell/\chi,\eta_0-\chi),\\
-    B^{\psi_X\psi_Y\psi_Z}_{\ell_1\ell_2\ell_3} &= \sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{l_1^2l_2^2l_3^2}\Omega_m^3H_0^6\\
-    & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{l_i/\chi\}, \eta_0-\chi),
+    C^{\psi_X\psi_Y}_\ell
+    & = \frac{9}{\ell^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)P^\delta(\ell/\chi,\eta_0-\chi),\\
+    B^{\psi_X\psi_Y\psi_Z}_{\el\ell_1\el\ell_2\el\ell_3} &= \sqrt{\frac{(2\ell_1 + 1)(2\ell_2 + 1)(2\ell_3 + 1)}{4\pi}} \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{\ell_1^2\ell_2^2\ell_3^2}\Omega_m^3H_0^6\\
+    & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{\ell_i/\chi\}, \eta_0-\chi),
 \end{empheq}
-with $X, Y, Z \in \{\CMB, \gal\}$. A derivation can be found in appendices \ref{sec:weaklensing} and \ref{sec:weaklensstats}, or in the literature, see e.g. \cite{bartelmann2001weak}. $\Omega_m$ is the present day matter density parameter, $H_0$ is the present day Hubble constant, $a(\eta)$ is the scale factor, $\eta_0$ is the conformal time today, $\chi$ is the comoving radial distance, $\chi_*$ the distance to surface of last scattering, $C^\delta(k, \eta)$ the matter power spectrum, $B^\delta(k_1, k_2, k_3, \eta)$ the matter bispectrum, $W_X(\chi)$ the window function, and
+with $X, Y, Z \in \{\CMB, \gal\}$. A derivation can be found in appendices \ref{sec:weaklensing} and \ref{sec:weaklensstats}, or in the literature; see, e.g. \cite{bartelmann2001weak}. $\Omega_m$ is the present day matter density parameter. $H_0$ is the present-day Hubble constant. $a(\eta)$ is the scale factor. $\eta_0$ is the conformal time today. $\chi$ is the comoving radial distance. $\chi_*$ is the distance to surface of last scattering. $P^\delta(k, \eta)$ is the matter power spectrum. $B^\delta(k_1, k_2, k_3, \eta)$ is the matter bispectrum. $W_X(\chi)$ is the window function. Finally,
 $$
 \begin{pmatrix}
-    l_1&l_2&l_3 \\ m_1 & m_2 & m_3
+    \ell_1&\ell_2&\ell_3 \\ m_1 & m_2 & m_3
 \end{pmatrix},
 $$ 
-the Wigner 3-j symbol. The only factor that differs between CMB and galaxy lensing is the window function, defined as
+is the Wigner 3-j symbol. The difference between CMB and galaxy lensing is the window function, defined as
 \begin{equation*}
     W_X(\chi) = \int_\chi^{\infty}\d\chi' p_X(\chi')\frac{\chi'-\chi}{\chi'\chi},
 \end{equation*}
-with $p_X$ the radius distribution of the radiation source. For the CMB we take $p(\chi) = \delta(\chi - \chi_*)$.
+with $p_X$ the radius distribution of the radiation source. For the CMB we take $p(\chi) = \delta(\chi - \chi_*)$. The window function presents the distribution of redshifts at which a CMB photon or galaxy photon is deflected. As a result, the CMB lensing window function is broader and peaks at lower redshift compared to the galaxy window function.
+
+Our convention for defining the linear and non-linear matter power spectrum is
+\begin{equation*}
+    \langle \delta(\mathbf k, \eta) \delta(\mathbf{k}',\eta) \rangle = (2\pi)^3\delta(\mathbf k + \mathbf k ')P^\delta(\mathbf k, \eta),
+\end{equation*}
+and for the bispectrum it is 
+\begin{equation*}
+    \langle \delta(\mathbf k_1, \eta) \delta(\mathbf k_2, \eta)\delta(\mathbf k_3, \eta) \rangle = (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\delta(k_1,k_2,k_3, \eta),
+\end{equation*}
+with $\delta$ the fractional matter density perturbation field.
 
 \subsection{Nonlinear matter bispectrum}
-Determining the nonlinear matter powerspectrum can be done using numerical codes such as CAMB \cite{Lewis2000}. The nonlinear matter bispectrum was calculated from the powerspectrum using a fitting formula based on perturbation theory in \cite{bispfit}. It is given by
+
+Determining the nonlinear matter power spectrum can be done using numerical codes such as CAMB \cite{Lewis2000}. The nonlinear matter bispectrum was calculated from the power spectrum using a fitting formula based on perturbation theory in \cite{bispfit}. It is given by
 \begin{equation}
-    B^\delta(k_1, k_2, k_3, \chi) = 2 F_2(k_1, k_2, z) C^\delta(k_1, z) C^\delta(k_2, z) + \text{2 perm},
+    B^\delta(k_1, k_2, k_3, \chi) = 2 F_2(k_1, k_2, z) P^\delta(k_1, z) P^\delta(k_2, z) + \text{2 perm},
 \end{equation}
-where \( C^\delta \) is the nonlinear matter power spectrum\footnote{Compare to the tree level bispectrum where we instead use the linear powerspectrum.}, and the kernel \( F_2 \) is modified from the tree level result with factors \( a(k, z) \), \( b(k, z) \), and \( c(k, z) \):
+where \( C^\delta \) is the nonlinear matter power spectrum\footnote{Compare to the tree level bispectrum where we instead use the linear power spectrum.}, and the kernel \( F_2 \) is modified from the tree level result with factors \( a(k, z) \), \( b(k, z) \), and \( c(k, z) \):
 \begin{equation}
     F_2(k_1, k_2, z) = \frac{5}{7} a(k_1, z) a(k_2, z) + \frac{k_1^2 + k_2^2}{2 k_1 k_2} b(k_1, z) b(k_2, z) \cos \theta + \frac{2}{7} c(k_1, z) c(k_2, z) \cos^2 \theta.
 \end{equation}
@@ -177,7 +192,7 @@ Here, \( Q(n_{\text{eff}}) \) is given by:
 \end{equation}
 The effective spectral index of the linear power spectrum is defined as:
 \begin{equation}
-    n_{\text{eff}} \equiv \frac{d \ln C^\delta_{\text{lin}}(k)}{d \ln k}.
+    n_{\text{eff}} \equiv \frac{d \ln P^\delta_{\text{lin}}(k)}{d \ln k}.
 \end{equation}
 Additionally, \( q \) is given by:
 \begin{equation}
@@ -185,7 +200,7 @@ Additionally, \( q \) is given by:
 \end{equation}
 where \( k_{\text{NL}} \) is the scale at which nonlinearities become significant, satisfying:
 \begin{equation}
-    4 \pi k_{\text{NL}}^3 C^\delta_{\text{lin}}(k_{\text{NL}}, 0) = 1.
+    4 \pi k_{\text{NL}}^3 P^\delta_{\text{lin}}(k_{\text{NL}}, 0) = 1.
 \end{equation}
 The coefficients \( a_i \) are:
 \begin{align*}
@@ -194,43 +209,43 @@ The coefficients \( a_i \) are:
 \end{align*}
 
 \subsection{Fisher matrix analysis}
-SNR and parameter constraints are obtained through a Fisher matrix analysis as is standard \cite{dodelson2020modern}. A full derivation of below statements can be found in appendix \ref{sec:fisher}. The auto and cross power spectrum Fisher matrix is given as
+The signal-to-noise (SNR) and parameter constraints are obtained through a Fisher matrix analysis as is standard in cosmology\cite{dodelson2020modern}. A full derivation of the equations used below can be found in appendix \ref{sec:fisher}. The auto- and cross- power spectrum Fisher matrix is given as
 \begin{equation*}
-    F_{\alpha\beta} = \sum_{l} \sum_{XY}\sum_{X'Y'}(2l+1)\partial_\alpha C_l^{XY} (C^{-1})_l^{XX'}(C^{-1})_l^{YY'} \partial_\beta C^{X'Y'}_l,
+    F_{\alpha\beta} = \sum_{\ell} \sum_{XY}\sum_{X'Y'}(2\ell+1)\partial_\alpha C_\ell^{XY} (C^{-1})_\ell^{XX'}(C^{-1})_\ell^{YY'} \partial_\beta C^{X'Y'}_\ell,
 \end{equation*}
 where
 \begin{equation*}
-    C_{l} := \begin{pmatrix}
-        C^{\psi_\kappa\psi_\kappa}_l & C^{\psi_\kappa\psi_\gamma}_l \\
-        C^{\psi_\kappa\psi_\gamma}_l & C^{\psi_\gamma\psi_\gamma}_l
+    C_{\ell} := \begin{pmatrix}
+        C^{\psi_\kappa\psi_\kappa}_\ell & C^{\psi_\kappa\psi_\gamma}_\ell \\
+        C^{\psi_\kappa\psi_\gamma}_\ell & C^{\psi_\gamma\psi_\gamma}_\ell
     \end{pmatrix}.
 \end{equation*}
-For the bispectra we instead get 
+For the bispectra we instead have 
 \begin{equation*}
-    F_{\alpha\beta} = \sum_{l_1 \leq l_2 \leq l_3} \frac{\mathcal P _{l_1l_2l_3}}{6}
+    F_{\alpha\beta} = \sum_{\ell_1 \leq \ell_2 \leq \ell_3} \frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6}
     \sum_{XYZ}\sum_{X'Y'Z'} 
-    \partial_\alpha B^{X Y Z}_{l_1 l_2 l_3} 
-    (C^{-1})^{X X'}_{l_1}
-    (C^{-1})^{Y Y'}_{l_2}
-    (C^{-1})^{Z Z'}_{l_3}
-    \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3},
+    \partial_\alpha B^{X Y Z}_{\ell_1 \ell_2 \ell_3} 
+    (C^{-1})^{X X'}_{\ell_1}
+    (C^{-1})^{Y Y'}_{\ell_2}
+    (C^{-1})^{Z Z'}_{\ell_3}
+    \partial_\beta B^{X' Y' Z'}_{\ell_1 \ell_2 \ell_3},
 \end{equation*}
-with $\mathcal P_{l_1l_2l_3}$ defined as the number of distinct permutations that can be made with $l_1l_2l_3$. When only considering autospectra the formulas simplify to
+with $\mathcal P_{\ell_1\ell_2\ell_3}$ defined as the number of distinct permutations that can be made with $\ell_1\ell_2\ell_3$. When only considering auto spectra the formulas simplify to:
 \begin{equation*}
-    F_{\alpha\beta} = \sum_{l} \sum_{XY}\sum_{X'Y'}\frac{2l+1}{2}\frac{\partial_{\alpha}C_l^{XX} \partial_\beta C^{XX}_l}{(C_l^{XX})^2},
+    F_{\alpha\beta} = \sum_{\ell} \sum_{XY}\sum_{X'Y'}\frac{2\ell+1}{2}\frac{\partial_{\alpha}C_\ell^{XX} \partial_\beta C^{XX}_\ell}{(C_\ell^{XX})^2},
 \end{equation*}
-and (for bispectra)
+and (for bispectra, assuming Gaussian, diagonal, covariance)
 \begin{equation*}
-    F_{\alpha\beta} = \sum_{l_1 \leq l_2 \leq l_3} \frac{\mathcal P _{l_1l_2l_3}}{6}
-    \frac{\partial_\alpha B^{X X X}_{l_1 l_2 l_3} 
-    \partial_\beta B^{XXX}_{l_1 l_2 l_3}}{C^{XX}_{l_1}C^{XX}_{l_2}C^{XX}_{l_3}}.
+    F_{\alpha\beta} = \sum_{\ell_1 \leq \ell_2 \leq \ell_3} \frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6}
+    \frac{\partial_\alpha B^{X X X}_{\ell_1 \ell_2 \ell_3} 
+    \partial_\beta B^{XXX}_{\ell_1 \ell_2 \ell_3}}{C^{XX}_{\ell_1}C^{XX}_{\ell_2}C^{XX}_{\ell_3}}.
 \end{equation*}
 
 
 
 \section{Calculation Details}\label{sec:calcdetails}
 % TODO: find proper references for stage 3 and stage 4 names as well as experimental parameters and real life surveys
-We chose our fiducial cosmology in line with the results from the Planck mission \cite{planckresults}, see table \ref{tab:fiducialpars}. For all parameter constraints we use a prior similar to the one used in \cite{Planck2018Lensing}, see table \ref{tab:fiducialpars}. This prior only restricts $\Omega_b h^2$ and $n_s$ significantly. The power spectra, in particular, exhibit complete insensitivity to certain parameters. Consequently, relying solely on them to constrain the entire cosmological model results in very poor constraints. Future lensing surveys will of course use information from surveys measuring other statistics such as galaxy distributions or primary CMB anisotropies, so not using any priors is not representative of what stage 4 experiments could achieve. Even a weak prior improves the constraining power of our power spectra considerably.
+Our fiducial cosmology is derived from the Planck results \cite{planckresults} (see table \ref{tab:fiducialpars}). For all parameter constraints we use a prior similar to the one used in \cite{Planck2018Lensing} (see table \ref{tab:fiducialpars}). This prior only restricts $\Omega_b h^2$ and $n_s$ significantly. The power spectra, in particular, exhibit complete insensitivity to certain parameters. Consequently, relying solely on them to constrain the entire cosmological model results in very poor constraints. Future lensing surveys will of course use information from surveys measuring other statistics such as galaxy distributions or primary CMB anisotropies, so not using any priors is not representative of what stage 3 and 4 experiments could achieve. Even a weak prior improves the constraining power of our power spectra considerably.
 \begin{table}[h!]
     \centering
     \begin{tabular}{|c|c|c|c|}
@@ -256,7 +271,7 @@ We chose our fiducial cosmology in line with the results from the Planck mission
 \end{table}
 
 
-This paper considers noise levels for ``stage 3'' and ``stage 4'' weak lensing surveys. Values can be found in table \ref{tab:noiselevels}, including the experiments they are representative of. A comparison of noise power spectrum to lensing power spectrum can be found in figure \ref{fig:lpsplusnoise}. 
+This paper considers noise levels for ``stage 3'' and ``stage 4'' weak lensing surveys. Values can be found in table \ref{tab:noiselevels}, including the experiments they are representative of. A comparison of the noise power spectra to the lensing power spectra are shown     in figure \ref{fig:lpsplusnoise}. Effectively, for galaxy lensing, the power spectrum is signal-dominated up until $\ell \sim 200$ (stage 2) and $\ell \sim 700$ (stage 4). For CMB lensing, the power spectrum is signal-dominated for $\ell \sim 300$ (stage 3) and $\ell \sim 1000$ (stage 4). 
 
 \begin{table}[h!]
     \centering
@@ -279,16 +294,16 @@ This paper considers noise levels for ``stage 3'' and ``stage 4'' weak lensing s
     \label{tab:noiselevels}
 \end{table}
 
-CMB lensing noise is estimated through the quadratic estimator developed in \cite{cmblensingestimator}. We consider experiments that only measure polarization noise. This is similarly done in \cite{Namikawa_2016}. The parameters characterizing the noise levels are thus beam width, $\sigma$ and polarization white noise, $\Delta_P$. Galaxy lensing is determined by measuring lensing shear (see appendices \ref{sec:weaklensing} and \ref{sec:shear}). The noise in this measurement is dominated by scale independent shot noise and has associated noise power spectrum $N_l^{\text{shear}} = \sigma_{\text{rms}}^2 / n_g$, \cite{bartelmann2001weak}. $n_g$ is the amount of galaxies observed per unit angle. The noise power spectrum for the lensing potential then equals
+CMB lensing noise is estimated using quadratic estimator \cite{cmblensingestimator}. We consider experiments that only measure polarization noise. This is similarly done in \cite{Namikawa_2016}. The parameters characterizing the noise levels are thus beam width, $\sigma$, and polarization white noise, $\Delta_P$. Galaxy lensing is determined by measuring lensing shear (see appendices \ref{sec:weaklensing} and \ref{sec:shear}). The noise in this measurement is dominated by scale-independent shot noise and has associated noise power spectrum $N_l^{\text{shear}} = \sigma_{\text{rms}}^2 / n_g$, \cite{bartelmann2001weak}. $n_g$ is the amount of galaxies observed per unit angle. The noise power spectrum for the lensing potential then equals
 \begin{equation*}
-    N_l^{\text{lens. potential}} = \frac{(l-1)l(l+1)(l+2)}{4}N_l^{\text{shear}}.
+    N_\ell^{\text{lens. potential}} = \frac{(\ell-1)\ell(\ell+1)(\ell+2)}{4}N_\ell^{\text{shear}}.
 \end{equation*}
-For parameter constraints we use stage 4 noise levels.
+For parameter constraints, we will consider only stage 4 noise levels.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{../code/plots/spectraplusnoise.pdf}
-    \caption{CMB (right) and galaxy (left) lensing potential power spectra compared to associated experimental noise. Current (stage 3) noise values are displayed as well as near future (stage 4) noise values. The CMB lensing experiment uses only polarization. CMB noise values are chosen in accordance with \cite{Namikawa_2016}. Shear noise values are chosen to be similar to e.g. Euclid measurements for stage 4 and e.g. KiDS for stage 3.}
+    \caption{CMB (right) and galaxy (left) lensing potential power spectra compared to associated experimental noise. Current (stage 3) noise values are displayed as well as near future (stage 4) noise values. The CMB lensing experiment uses only polarization. CMB noise values are chosen in accordance with \cite{Namikawa_2016}. For comparison we also how the noise reconstruction for the Simons Observatory. Shear noise values are chosen to be similar to e.g. Euclid measurements for stage 4 and e.g. KiDS for stage 3.}
     \label{fig:lpsplusnoise}
 \end{figure}
 
@@ -314,47 +329,66 @@ The redshift distribution of the observed galaxies is commonly parameterized as 
     n(z) \propto z^a \exp\sbr{-\br{\frac{z}{z_0}}^b}.
 \end{equation*}
 We choose the parameter combination $a = 2$, $b = 3/2$ and $z_0 = 0.64$ which is similar to the expected distributions of Euclid, (which will probe primarily in the 0.2 - 2.6 redshift range \cite{euclidprep10})
-and the LSST mission (which has $a \approx 2$, $b \approx 1$, and $z_0 \approx 0.3$ from predictions for the obtained data \cite{lsstsciencebookchapter3}).
+and the LSST mission (which has $a \approx 2$, $b \approx 1$, and $z_0 \approx 0.3$ from predictions for the obtained data \cite{lsstsciencebookchapter3}). For simplicity, we do not implement a tomographic binning of the source galaxies, and instead model the population with a single effective redshift distribution.
 
-Derivatives are calculated with a central difference formula, more information can be found in appendix \ref{sec:derivatives}. Obtaining accurate derivatives was challenging. In order to check the accuracy of our results we calculated constraints for similar experimental parameters as in references \cite{Planck2018Lensing, Takada2003, Namikawa_2016} and found good agreement in all cases.
+Derivatives are calculated with a central difference formula (see appendix \ref{sec:derivatives} for convergence).  To check the accuracy of our results we calculated constraints for similar experimental parameters as in references \cite{Planck2018Lensing, Takada2003, Namikawa_2016} and found good agreement in all cases.
 
 \section{Results}\label{sec:results}
-Lensing power spectra are well detectable in nearly all cases. 
-The signal to noise ratios of the CMB and galaxy lensing bispectra versus the maximum multipole moment measured can be found in figure \ref{fig:snrplots}. Shear bispectra can be measured well by both stage 3 and stage 4 experiments, while CMB lensing is only marginally detectable by a stage 3 experiment but well detectable by stage 4 experiments. CMB $S/N$ results match those of reference \cite{Namikawa_2016}.
+Lensing power spectra have high signal-to-noise in all cases. 
+The signal-to-noise of the CMB and galaxy lensing bispectra versus the maximum multipole moment measured is shown in figure \ref{fig:snrplots}. In the absence of systematics, shear bispectra can be detected at high signal-to-noise with both stage 3 and stage 4 experiments. CMB lensing bispectra could be  detectable by a stage 3 experiment (see e.g. ref.~\cite{} for the effect of noise biases) and with high signal-to-noise with a stage 4 experiment. CMB $S/N$ results match those of reference \cite{Namikawa_2016}.
 %It can be seen that the CMB bispectrum signal to noise never exceeds 2 even for $l_{\max} = 2000$, meaning that this signal is not likely to be able to contribute to parameter constraints in future surveys. All other quantities should be well detectable for $l_{\max}\geq 500$.
 \begin{figure}[h!]
     \includegraphics[width=\textwidth]{figures/snrplots.pdf}
-    \caption{Signal to noise ratios for galaxy lensing (dashed) and CMB lensing (non-dashes) power- (in red) and bispectra (in blue). The $x$-axis labels the maximum multipole moment measured up to, starting from $l_{\min}=2$.}
+    \caption{Signal-to-noise ratios for galaxy lensing (dashed) and CMB lensing (non-dashes) power- (in red) and bispectra (in blue). The $x$-axis labels the maximum multipole moment measured up to, starting from $\ell_{\min}=2$.  SAY SOMETHING ABOUT LMIN FOR RECONSTRUCTION The maximum multipole used for CMB lensing reconstruction is $\ell = 10^4$. Using lower maximum multipole such as 3000 doesn't significantly affect results.}
     \label{fig:snrplots}
 \end{figure}
 
-Below we show parameter constraints for a selection of variables that have the potential to be particularly well constrained by weak lensing, i.e. $m_\nu$, $w_0$, $\sigma_8$, and $\Omega_m$. Constraints for $\Lambda$CDM parameters can be found in appendix \ref{sec:lambdacdmconstraints}. Figures \ref{fig:paramconstraintstightcmb} and \ref{fig:paramconstraintstightgal} show confidence ellipses from stage 4 CMB and galaxy lensing surveys, respectively. Table \ref{tab:paramconstraintstight} contains the forecasted constraints as uncertainties in percentage of the fiducial values. Despite picking priors that significantly increase powerspectrum constraining power, constraints are significantly improved by including bispectrum information in nearly all cases. Again in agreement with reference \cite{Namikawa_2016}, where a 33 percent and 35 percent improvement was found for $m_\nu$ and $w_0$, respectively, by measuring the CMB lensing bispectrum in addition to the powerspectrum. Constraints also improve significantly, though not quite as much, when combining CMB and galaxy lensing, compared to only measuring one of these signals. Other key observations are:
+Next, we consider cosmological parameter constraints. We include both the power spectrum and the bispectrum of the weak lensing. We emphezize on several two extension of $\Lambda CDM$, $m_\nu$ and $w_0$ as well as $\sigma_8$, and $\Omega_m$. Constraints on other parameters can be found found in appendix \ref{sec:lambdacdmconstraints}. Results shown include marganlization over all parameters. Figures \ref{fig:paramconstraintstightcmb} and \ref{fig:paramconstraintstightgal} show confidence ellipses from stage 4 CMB and galaxy lensing surveys, respectively. Table \ref{tab:paramconstraintstight} contains the forecasted constraints as uncertainties in the percentage of the fiducial values. 
+
+!!
+By itsef lensing power spectra are not very constraining, hence we have to assume weak priors. inflated constraints from lps, however still good bispectrum info. 
+!!
+
+
+Despite using priors that significantly increase power spectrum constraining power, constraints are significantly improved by including bispectrum information in nearly all cases. Again in agreement with reference \cite{Namikawa_2016}, in which case a 33 percent and 35 percent improvement was found for $m_\nu$ and $w_0$, respectively, by measuring the CMB lensing bispectrum in addition to the power spectrum. Constraints also improve significantly, though not quite as much, when combining CMB and galaxy lensing, compared to only measuring one of these signals. 
+
+Besides these obvious findings, we make several other conclusions:
 \begin{itemize}
-    \item Lensing powerspectra alone are not sufficient to competitively constrain $\Lambda\mathrm{CDM} + w_0 + m_\nu$ without priors even in the case of stage 4 surveys.
-    \item For low-enough noise values (in particular for stage 4 noise) the bispectra by themselves can competitively constrain the parameters and contain more information than the power spectra. If we denote the multipole moment at which the noise surpasses the powerspectrum signal as $\ell_{N>C}$, than the fisher matrices for the bispectra roughly scale as $F^{B}_{\alpha\beta}\propto \ell_{N>C}^3$ while for the powerspectra they scale as $F^{C}_{\alpha\beta}\propto \ell_{N>C}^2$ (with an extra multipole factor due to the $2\ell + 1$ factor in the powerspectrum estimator covariance). The powerspectrum is sufficiently bigger than the bispectrum that it contains more information given current day noise levels, however as surveys get better the bispectra may eventually contain more information because of the more favorable $\ell_{N>C}$ scaling.
+    \item Lensing powers pectra alone are not sufficient to competitively constrain $\Lambda\mathrm{CDM} + w_0 + m_\nu$ without priors, even in the case of stage 4 surveys.
+    \item For low-enough noise values (in particular for stage 4 noise) the bispectra can contain more information than the power spectra . If we denote the multipole moment at which the noise surpasses the power spectrum signal as $\ell_{N>C}$, than the fisher matrices for the bispectra roughly scale as $F^{B}_{\alpha\beta}\propto \ell_{N>C}^3$ while for the powerspectra they scale as $F^{C}_{\alpha\beta}\propto \ell_{N>C}^2$ (with an extra multipole factor due to the $2\ell + 1$ factor in the power spectrum estimator covariance). The power spectrum is sufficiently bigger than the bispectrum that it contains more information given current-day noise levels, however as surveys get better the bispectra may eventually contain more information because of the more favorable $\ell_{N>C}$ scaling. REMOVE L SCALING ARGUMENT YAP ABOUT NON GAUSSIANITY INSTEAD AND EXPLAIN ABOUT DIFFERENCE BETWEEN KERNELS
 
-    \item The information from bispectra is sensitive to the cosmology in a different way than that of the powerspectra. The main parameter combinations where approximate degeneracies are broken are $(n_s,\Omega_b h^2),\;(\Omega_b h^2,H_0),\;(\Omega_c h^2,H_0),\;(\Omega_c h^2,\Omega_b h^2)\;(n_s,\Omega_c h^2),\;(m_\nu,H_0),\;(m_\nu,n_s),$ $(A_s,\Omega_b h^2)$. This means that even if stage 4 surveys aren't able to reach the noise levels assumed in this paper, the bispectra will likely still lead to significantly tighter constraints.
+    \item The information from bispectra is sensitive to cosmology in a different way than that of the power spectra. The main parameter combinations where approximate degeneracies are broken are $(n_s,\Omega_b h^2),\;(\Omega_b h^2,H_0),\;(\Omega_c h^2,H_0),\;(\Omega_c h^2,\Omega_b h^2)\;(n_s,\Omega_c h^2),\;(m_\nu,H_0),\;(m_\nu,n_s),$ $(A_s,\Omega_b h^2)$. This means that even if stage 4 surveys aren't able to reach the noise levels assumed in this paper, the bispectra will likely still lead to significantly tighter constraints.
 
-    \item Stage 4 CMB and galaxy weak lensing surveys have similar constraining power if both measure powerspectra and bispectra. Galaxy surveys are usually somewhat better, but not significantly so. Some degeneracies are broken but not quite as much as when looking at combining power and bispectra. The main parameter combinations where this happens are  $(n_s, H_0),\;(n_s,\Omega_b h^2),\;(m_\nu,H_0),\;(m_\nu,\Omega_s),\;(A_s,H_0)\;(w_0,A_s),\;(w_0, m_\nu),\;(w_0,\Omega_s)$.
-  \end{itemize}
-  
-
-
+    \item Stage 4 galaxy weak lensing surveys contain significantly more information than CMB surveys. Comparing the confidence ellipses, it is clear that the two types of surveys depend on the underlying parameters in different ways. This leads to substantially better constraints for $\sigma_8$, $\Omega_m$, and $m_\nu$, (but not for $w_0$) when combining CMB and galaxy lensing.
+\end{itemize}
 
 \begin{table}
     \centering
     \scriptsize
-    \begin{tabular}{|l|rrr|rrr|rrr|}
+    \begin{tabular}{|l|r|rrr|rrr|rrr|}
         \hline
-        & \multicolumn{3}{c|}{CMB lensing}& \multicolumn{3}{c|}{Gal. lensing}& \multicolumn{3}{c|}{CMB $\times$ Gal. lensing} \\
+        \multicolumn{11}{|c|}{weak priors} \\
         \hline
-         Par        &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ \\
+        && \multicolumn{3}{c|}{CMB lensing}& \multicolumn{3}{c|}{Gal. lensing}& \multicolumn{3}{c|}{CMB $\times$ Gal. lensing} \\
         \hline
-         $m_\nu$    &    1262.54 &                    1630.18 &                              779.06 &     435.57 &                    1015.84 &                              268.14 &     304.87 &                     250.06 &                              169.29 \\
-         $w_0$      &      77.72 &                     103.75 &                               57.12 &      19.05 &                      14.94 &                                2.46 &      17.58 &                       9.37 &                                2.26 \\
-         $\sigma_8$ &      15.62 &                      13.64 &                               12.35 &       7.92 &                      14.67 &                                3.26 &       6.73 &                       3.47 &                                1.47 \\
-         $\Omega_m$ &      64.20 &                      57.93 &                               52.32 &      21.14 &                      18.26 &                                4.44 &      20.46 &                      10.21 &                                2.74 \\
-         \hline
+        Par            &   prior &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ \\
+        \hline
+        $m_\nu$    &     1.00e+01 &  2.82e-01 &  1.13e+00 &        2.26e-01 & 2.60e-01 & 4.07e-01 &      1.85e-01 &      9.54e-02 &      1.81e-01 &             6.46e-02 \\
+        $w_0$      &     1.00e+01 &  5.42e-01 &  1.44e+00 &        3.87e-01 & 2.14e-01 & 1.28e-01 &      3.22e-02 &      1.51e-01 &      1.13e-01 &             2.45e-02 \\
+        $\sigma_8$ &     2.46e+00 &  1.18e-01 &  1.95e-01 &        5.69e-02 & 5.36e-02 & 5.43e-02 &      1.73e-02 &      3.48e-02 &      3.32e-02 &             9.20e-03 \\
+        $\Omega_m$ &     6.70e-01 &  1.95e-01 &  1.84e-01 &        7.73e-02 & 7.57e-02 & 5.88e-02 &      1.81e-02 &      5.15e-02 &      3.76e-02 &             8.57e-03 \\
+       \hline
+        \multicolumn{11}{|c|}{CMB $T + E$ priors} \\
+        \hline
+        && \multicolumn{3}{c|}{CMB lensing}& \multicolumn{3}{c|}{Gal. lensing}& \multicolumn{3}{c|}{CMB $\times$ Gal. lensing} \\
+        \hline
+         Par            &   prior &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ \\
+        \hline
+        $m_\nu$    &    1.54e-01 &  5.23e-02 &  8.76e-02 &        5.18e-02 & 1.17e-01 & 1.13e-01 &      8.79e-02 &      1.87e-02 &      7.47e-02 &             1.62e-02 \\
+        $w_0$      &    4.64e-02 &  4.18e-02 &  4.54e-02 &        4.18e-02 & 4.06e-02 & 4.14e-02 &      2.25e-02 &      3.34e-02 &      3.90e-02 &             1.99e-02 \\
+        $\sigma_8$ &    1.38e-02 &  1.06e-02 &  1.16e-02 &        1.06e-02 & 9.86e-03 & 1.00e-02 &      6.99e-03 &      8.98e-03 &      9.72e-03 &             5.28e-03 \\
+        $\Omega_m$ &    1.39e-02 &  1.20e-02 &  1.26e-02 &        1.19e-02 & 1.26e-02 & 1.15e-02 &      9.03e-03 &      1.13e-02 &      1.07e-02 &             6.16e-03 \\
+       \hline
         \end{tabular}
 \caption{Parameter constraints in percentage of the fiducial values for different combinations of weak lensing information. $C$ stands for powerspectra, and $B$ for bispectra. All surveys are assumed to be stage 4 surveys with multipole range $2 \leq \ell \leq 2000$. We use the prior described in table \ref{tab:fiducialpars}.}
 \label{tab:paramconstraintstight}
@@ -401,20 +435,20 @@ Below we show parameter constraints for a selection of variables that have the p
 
 
 \section{Discussion and conclusion}\label{sec:discussion}
-In this work, we have presented parameter forecasts from CMB lensing and galaxy lensing power- and bispectra, considering experimental setups similar to Stage 3 and Stage 4 surveys. Our analysis shows that while lensing power spectra are generally well detectable, the inclusion of bispectra offers significant improvements. Notably, shear bispectra are found to be measurable with both Stage 3 and Stage 4 experimental noise levels, whereas CMB lensing bispectra are semi-detectable with Stage 3 and well-detectable with Stage 4 noise levels.
+In this work, we have presented parameter forecasts from CMB lensing and galaxy lensing power- and bispectra, considering experimental parameters representative of Stage 3 and Stage 4 CMB and galaxy surveys. Our analysis shows that while lensing power spectra are generally well detectable, the inclusion of bispectra offers significant improvements when considering paramater constraints. Notably, both CMB and galaxy bispectra are found to be measurable, even with Stage 3 experimental noise levels.
 
-The primary impact of incorporating bispectrum information is a significant tightening of cosmological parameter constraints, particularly for parameters like $H_0$, $\sigma_8$, and $\Omega_m$, and in breaking key parameter degeneracies. We found that for sufficiently low noise levels, characteristic of Stage 4 surveys, the bispectra themselves can offer constraining power comparable to or even exceeding that of the power spectra, due to a more favorable scaling of information content with the maximum usable multipole\footnote{The multipole at which the noise powerspectrum starts exceeding the cosmological powerspectrum.}. Furthermore, the combination of CMB and galaxy lensing probes, especially when both power spectra and bispectra are utilized, further enhances constraints and aids in mitigating degeneracies. However, lensing power spectra alone, even for Stage 4 surveys, appear insufficient to competitively constrain an 8-parameter $\Lambda\text{CDM} + w_0 + \sum m_\nu$ model without priors.
+The primary impact of incorporating bispectrum information is a tightening of cosmological parameter constraints, particularly for parameters like $H_0$, $\sigma_8$, and $\Omega_m$, and in breaking key parameter degeneracies. We found that for sufficiently low noise levels, characteristic of Stage 4 surveys, the bispectra themselves can offer constraining power comparable to or even exceeding that of the power spectra, due to a more favorable scaling of information content with the maximum usable multipole\footnote{The multipole at which the noise power spectrum starts exceeding the cosmological power spectrum.}. Furthermore, the combination of CMB and galaxy lensing probes, especially when both power spectra and bispectra are utilized, further enhances constraints and aids in mitigating degeneracies. However, lensing power spectra alone, even for Stage 4 surveys, appear insufficient to competitively constrain an 8-parameter $\Lambda\text{CDM} + w_0 + \sum m_\nu$ model without priors.
 
-There are a number of limitations in this work. The limitations inherent to the fisher matrix formalism and to non physical noise models such as those considered in this paper are already well known. The main limitations specific to this work are:
+There are a number of limitations to the results presented in this paper. The limitations inherent to the Fisher matrix formalism and to non-physical noise models such as those considered in this paper are already well known. The main limitations specific to this work are:
 \begin{itemize}
      \item The fitting formula used for the nonlinear matter bispectrum (from \cite{bispfit}) has an estimated accuracy of only up to about 10 percent. This intrinsic inaccuracy in the model for $B^{\delta}$ will propagate to the lensing bispectra.
-     \item Certain cosmological parameters that affect nonlinear large-scale structure, such as neutrino masses, likely alter the fitting parameters of the matter bispectrum formula when varied. In the literature this is currently not considered, which can make the derivatives of the bispectrum with respect to these cosmological parameters less accurate.
-     \item We assumed throughout this paper that surveys would measure multipoles as low as $\ell = 2$.  However, our analytical formulas to calculate lensing spectra utilize the Limber approximation, which is only robust for $\ell \gtrsim 50$. Avoiding the Limber approximation would significantly complicate calculations, requiring knowledge of unequal-time matter power and bispectra, and would be computationally much more demanding due to the need to evaluate double integrals instead of single integrals. With the methods used in this paper, recalculating Fisher matrices without the Limber approximation would not be feasible, even if unequal-time matter spectra were readily available. Methods such as those explored in reference \cite{Chen:2021vba} might offer a path to address this.
+     \item Certain cosmological parameters that affect nonlinear large-scale structure, such as neutrino masses, likely alter the fitting parameters of the matter bispectrum formula when varied. In the literature, this is currently not considered, which can make the derivatives of the bispectrum with respect to these cosmological parameters less accurate.
+     \item We assumed throughout this paper that surveys would measure multipoles as low as $\ell = 2$.  However, our analytical formulas to calculate lensing spectra utilize the Limber approximation, which is only robust for $\ell \gtrsim 50$. Avoiding the Limber approximation would complicate calculations, requiring knowledge of unequal-time matter power and bispectra, and would be computationally much more demanding due to the need to evaluate double integrals instead of single integrals. With the methods used in this paper, recalculating Fisher matrices without the Limber approximation would not be feasible, even if unequal-time matter spectra were readily available. Methods such as those explored in reference \cite{Chen:2021vba} might offer a path to address this.
 
-     \item As noted in appendix \ref{sec:fisher}, the Gaussian approximation was used for the covariance of the spectra estimators, i.e. we ignored any contributions not arising from standard Wick contractions. A next step could be to account for these additional contributions, perhaps through N-body and ray-tracing simulations. Notably, such simulations could potentially also allow for a more accurate calculation of the lensing spectra themselves, without relying on fitting formulas for the matter bispectrum or the Limber approximation, depending on simulation accuracy. 
+     \item As noted in appendix \ref{sec:fisher}, the Gaussian approximation was used for the covariance of the spectra estimators, i.e. we ignored any contributions not arising from standard Wick contractions. A next step could be to account for these additional contributions, perhaps through N-body and ray-tracing simulations. Notably, such simulations could potentially also allow for a more accurate calculation of the lensing spectra themselves, without relying on fitting formulas for the matter bispectrum or the Limber approximation, depending on simulation accuracy. This might also explain the fact that in some instances the bispectra appear more constraining compared to the power spectra.  
 
     \item The CMB lensing noise was estimated via a quadratic estimator. While standard, such estimators may not be strictly optimal, especially with complex foregrounds or non-Gaussianities. Better estimators exist; for example, the iterative estimator developed in \cite{Smith_2012} can lead to a significantly better signal-to-noise ratio for the CMB lensing bispectrum, as shown in \cite{Namikawa_2016}.
-    \item To calculate the Fisher matrices within a manageable timeframe, derivatives of the lensing spectra with respect to cosmological parameters were computed using a central difference formula.  This introduces errors (estimated at most a few percent, though larger for neutrino mass derivatives, see appendix \ref{sec:derivatives}). Functions such as the matter power spectrum and fitting parameters for the matter bispectrum were approximated using pre-generated data and interpolation, also introducing errors of at most a few percent. Currently, these numerical errors are not considered significant because this paper primarily aims to provide a qualitative understanding of the utility of CMB and galaxy weak lensing spectra.  However, for precise quantitative results, these factors would need to be revisited and improved.
+    \item To calculate the Fisher matrices, derivatives of the lensing spectra with respect to cosmological parameters were computed using a central difference formula.  This introduces errors (estimated at most a few percent, though larger for neutrino mass derivatives, see appendix \ref{sec:derivatives}). Functions such as the matter power spectrum and fitting parameters for the matter bispectrum were approximated using pre-generated data and interpolation, also introducing errors of at most a few percent. Currently, these numerical errors are not considered significant because this paper primarily aims to provide a qualitative understanding of the utility of CMB and galaxy weak lensing spectra.  However, for precise quantitative results, these factors would need to be revisited and improved.
 \end{itemize}
 
 Despite these limitations, this work provides valuable insight into the potential of future weak lensing surveys. Addressing these limitations will be crucial for obtaining robust cosmological constraints from upcoming observational data.
@@ -425,7 +459,7 @@ Despite these limitations, this work provides valuable insight into the potentia
 
 \section{Weak Lensing}\label{sec:weaklensing}
 \subsection{Perturbed Photon Paths}
-We work in the conformal newtonian gauge and with natural units. Denoting conformal time and conformal radial distance by $\eta$ and $\chi$, respectively, the perturbed line element in FLRW spacetime is given by
+We work in the conformal Newtonian gauge and with natural units. Denoting conformal time and conformal radial distance by $\eta$ and $\chi$, respectively, the perturbed line element in FLRW spacetime is given by
 \begin{equation}
     \d s^2 = a^2(\eta)((1 + 2\Psi_N) \d \eta^2 - (1 + 2\Phi_N) \gamma_{ij}\d x^i \d x^j),
 \end{equation}
@@ -433,7 +467,7 @@ where $\gamma_{ij}$ is the unperturbed line element
 \begin{equation}
     \gamma_{ij} = \d x^i \d x^j = \d \chi^2 + f^2_K(\chi)(\d \theta^2 + \sin ^2 \theta \d \phi ^2),
 \end{equation}
-and $f_K(\chi)$ is the comoving angular diameter distance. We will hereafter only consider a flat universe, so that $f_K(\chi) = \chi$. Weak lensing of a point source can be quantified by looking at the deflection field $\mathbf d (\hat{\mathbf n}) = \mathbf \theta_{\text{obs}} - \mathbf \theta_{\text{true}}$, i.e. the (small) difference between the angle at which we see the object and the angle at which we would see the object had no lensing occued. To first order in $\Psi_N$ and $\Phi_N$, the deflection is given as \cite{dodelson2020modern}
+and $f_K(\chi)$ is the comoving angular diameter distance. We will hereafter only consider a flat universe so that $f_K(\chi) = \chi$. Weak lensing of a point source can be quantified by looking at the deflection field $\mathbf d (\hat{\mathbf n}) = \mathbf \theta_{\text{obs}} - \mathbf \theta_{\text{true}}$, i.e. the (small) difference between the angle at which we see the object and the angle at which we would see the object had no lensing occurred. To first order in $\Psi_N$ and $\Phi_N$, the deflection is given as \cite{dodelson2020modern}
 \begin{equation}
     \mathbf d(\hat{\mathbf n}) = -2 \int_0^{\chi_*}\d \chi \frac{\chi_* - \chi}{\chi_*\chi}\nabla_{\hat{\mathbf n}}\Psi(\chi\hat{\mathbf n};\eta_0 - \chi),
 \end{equation}
@@ -450,7 +484,7 @@ $W(\chi)$ is then called the window function. In the most general case, the lens
 \begin{equation}
     \psi(\hat {\mathbf n}) := -2 \int_0^{\infty}\d \chi W(\chi)\Psi(\chi\hat{\mathbf n};\eta_0 - \chi).
 \end{equation}
-The integration limit is sometimes also taken to be the surface of last scattering, as any window function vanishes after that distance. In the case of CMB lensing we can take $p(\chi')=\delta(\chi'-\chi_*)$, in which case the window function reduces to $H(\chi_* - \chi)(\chi_*-\chi)/(\chi_*\chi)$, with $H(\chi)$ the Heaviside step function.
+The integration limit is sometimes also taken to be the surface of the last scattering, as any window function vanishes after that distance. In the case of CMB lensing we can take $p(\chi')=\delta(\chi'-\chi_*)$, in which case the window function reduces to $H(\chi_* - \chi)(\chi_*-\chi)/(\chi_*\chi)$, with $H(\chi)$ the Heaviside step function.
 
 % From here of on work in first order in the scalar potentials $\Phi_N$ and $\Psi_N$. For lensing we consider null-geodesics so $\d s^2 = 0$ and we can rewrite the perturbed line element as
 % \begin{equation}
@@ -512,11 +546,11 @@ This matrix can be decomposed in the following form, which immediately gives us 
         -\gamma_2 - \omega & 1 - \kappa + \gamma_1
     \end{pmatrix}.
 \end{equation}
-At 1st order $A$ is a symetric matrix by definition and $\omega$ vanishes, we will ignore it from here on out. Intuitively, $A$ tells you how a small patch in the sky transforms due to lensing. If we change the unlensed direction of a light source by $\delta\hat{\mathbf n}$, then the corresponding change in direction in the lensed image can be calculated as
+At 1st order, $A$ is a symmetric matrix by definition and $\omega$ vanishes, we will ignore it from here on out. Intuitively, $A$ tells you how a small patch in the sky transforms due to lensing. If we change the unlensed direction of a light source by $\delta\hat{\mathbf n}$, then the corresponding change in direction in the lensed image can be calculated as
 \begin{equation}
 \hat{\mathbf{n}} + \delta \hat{\mathbf{n}} \rightarrow \hat{\mathbf{n}} + \delta \hat{\mathbf{n}} + \mathbf d (\hat{\mathbf{n}} + \delta \hat{\mathbf{n}}) = \hat{\mathbf{n}} + \mathbf d (\hat{\mathbf n}) + \delta \hat{\mathbf n} + A_{ij}(\delta \hat{\mathbf{n}})_j.
 \end{equation}
-For an image on the sky, $A_{ij}$ thus introduces distortion. Note that $|A_{ij}| = (1 - \kappa)^2 + \omega^2 - |\gamma|^2 = 1 - 2\kappa + O(\kappa^2, \gamma^2, \omega^2)$. We can thus interpret $\kappa$ as telling us about the overal magnification of the source. The $\gamma_i$ represent the area preserving distortion, i.e. stretching and squeezing in a specific direction.
+For an image of the sky, $A_{ij}$ thus introduces distortion. Note that $|A_{ij}| = (1 - \kappa)^2 + \omega^2 - |\gamma|^2 = 1 - 2\kappa + O(\kappa^2, \gamma^2, \omega^2)$. We can thus interpret $\kappa$ as telling us about the overall magnification of the source. The $\gamma_i$ represents the area-preserving distortion, i.e. stretching and squeezing in a specific direction.
 
 We can relate $\kappa$ and $\gamma$ directly to the lensing potential as
 \begin{equation}
@@ -532,7 +566,7 @@ $\eth_s$ can be written in spherical coordinates $(\theta, \phi)$ as\footnote{We
 \begin{equation}
     \eth_s = -\sin^s\theta(\partial_\theta + \frac{i}{\sin\theta})\frac{1}{\sin^s\theta}.
 \end{equation}
-In this context a spin $s$ function referes to a function $_sf(\theta, \phi)$ that transforms under any rotation of coordinates by picking up a phase factor $e^{is\alpha}$, with $\alpha$ the angle of the rotation, i.e.
+In this context, a spin $s$ function refers to a function $_sf(\theta, \phi)$ that transforms under any rotation of coordinates by picking up a phase factor $e^{is\alpha}$, with $\alpha$ the angle of the rotation, i.e.
 \begin{equation}
     f'(\theta', \phi') = e^{is\alpha}f(\theta, \phi).
 \end{equation}
@@ -548,18 +582,18 @@ The spherical harmonics are eigenfunctions of $\nabla^2$ and the spin raising an
 \end{equation*}
 
 \section{Weak Lensing Statistics}\label{sec:weaklensstats}
-\subsection{Lensing Potential Powerspectrum}
+\subsection{Lensing Potential Power spectrum}
 The lensing potential can be decomposed into spherical harmonics as
 \begin{equation}
-    \psi(\hat{\mathbf n}) = \sum_{lm} \psi_{lm}Y_{lm}(\hat{\mathbf n}).
+    \psi(\hat{\mathbf n}) = \sum_{\ell m} \psi_{\ell m}Y_{\ell m}(\hat{\mathbf n}).
 \end{equation}
 On the other hand, consider the decomposition of $\Psi$ in Fourier modes with the Fourier convention $\Psi(\mathbf x, \eta)=\int\frac{\d^3 \mathbf k}{(2\pi)^{3}}\Psi(\mathbf k, \eta)e^{i\mathbf k \cdot\mathbf x}$,
 \begin{equation}
     \psi(\hat{\mathbf n}) = -2 \int_0^{\chi_*}\d \chi W(\chi) \int\frac{\d^3 \mathbf k}{(2\pi)^{3}}\Psi(\mathbf k, \eta_0 - \chi)e^{i\mathbf k \cdot\hat{\mathbf n}\chi}.
 \end{equation}
-We can than relate the multipole modes of $\psi$ to the fourier modes of $\Psi$ through % TODO: check sign convention here
+We can then relate the multipole modes of $\psi$ to the Fourier modes of $\Psi$ through % TODO: check sign convention here
 \begin{gather}
-    \psi_{lm} = \langle Y_l^m | \psi \rangle = \int\d^2\hat{\mathbf n} Y_l^m(\hat{\mathbf n})^* \psi(\hat{\mathbf n})\\ 
+    \psi_{lm} = \langle Y_\ell^m | \psi \rangle = \int\d^2\hat{\mathbf n} Y_\ell^m(\hat{\mathbf n})^* \psi(\hat{\mathbf n})\\ 
     = -2\int\d^2\hat{\mathbf n} Y_l^m(\hat{\mathbf n})^* \int_0^{\chi_*}\d \chi W(\chi) \int\frac{\d^3 \mathbf k}{(2\pi)^{3}}\Psi(\mathbf k, \eta_0 - \chi)e^{i\mathbf k \cdot\hat{\mathbf n}\chi}
 \end{gather}
 Now define the power spectrum as
@@ -571,42 +605,42 @@ with $\eta$ denoting the conformal time. This gives
 \begin{equation}
     \langle \psi(\hat{\mathbf n})\psi(\hat{\mathbf n}') \rangle = 4\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int \frac{\d^3\mathbf k}{(2\pi)^6}\frac{2\pi^2}{k^3}P_\psi(k,\eta_0 - \chi, \eta_0-\chi')e^{i\mathbf k\cdot\hat {\mathbf n}\chi}e^{-i\mathbf k\cdot\hat {\mathbf n}'\chi'},
 \end{equation}
-where we used that $\eta = \eta_0 - \chi$ along the unperturbed photon path (this is known as the Born approximation), with $\eta_0$ the time at which the light ray hits earth. 
+where we used that $\eta = \eta_0 - \chi$ along the unperturbed photon path (this is known as the Born approximation), with $\eta_0$ the time at which the light ray hits Earth. 
 We can use the result
 \begin{equation}
-    e^{i\mathbf k \cdot \hat {\mathbf n}\chi}=4\pi\sum_{lm}i^lj_l(k\chi )Y_l^m(\hat{\mathbf n})^*Y_l^m(\hat{\mathbf k}) = 4\pi\sum_{lm}i^lj_l(k\chi )Y_l^m(\hat{\mathbf n})Y_l^m(\hat{\mathbf k})^*, \label{eq:complexexp}
+    e^{i\mathbf k \cdot \hat {\mathbf n}\chi}=4\pi\sum_{\ell m}i^\ell j_\ell(k\chi )Y_\ell^m(\hat{\mathbf n})^*Y_\ell^m(\hat{\mathbf k}) = 4\pi\sum_{\ell m}i^\ell j_\ell(k\chi )Y_\ell^m(\hat{\mathbf n})Y_\ell^m(\hat{\mathbf k})^*, \label{eq:complexexp}
 \end{equation}
-where $j_l$ is the spherical Bessel function, to rewrite the above equation. Using both versions of the identity above, we immediately get a factor $Y_l^m(\hat{\mathbf k})Y_{l'}^{m'}(\hat{\mathbf k})^*$ in our integral. We can factor the differential element of $\d^3\mathbf k$ into a radial and angular part as $k^2\d k\d^2\Omega_k$, with $\Omega_k$ the solid angle, to apply the orthonormality condition of the spherical harmonics. Note that we take the same sequence of steps a number of times in other parts of the derivations of the lensing spectra. We thus obtain
+where $j_l$ is the spherical Bessel function, to rewrite the above equation. Using both versions of the identity above, we immediately get a factor $Y_\ell^m(\hat{\mathbf k})Y_{\ell'}^{m'}(\hat{\mathbf k})^*$ in our integral. We can factor the differential element of $\d^3\mathbf k$ into a radial and angular part as $k^2\d k\d^2\Omega_k$, with $\Omega_k$ the solid angle, to apply the orthonormality condition of the spherical harmonics. Note that we take the same sequence of steps a number of times in other parts of the derivations of the lensing spectra. We thus obtain
 \begin{gather}
-    \langle \psi(\hat{\mathbf n})\psi(\hat{\mathbf n}') \rangle = 4(4\pi)^2\sum_{ll'mm'}i^{l-l'}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\\\times\int \frac{k^2\d k}{(2\pi)^6}\frac{2\pi^2}{k^3}j_l(k\chi)j_{l'}(k\chi')P_\psi(k,\eta_0 - \chi, \eta_0-\chi')Y_{lm}(\hat{\mathbf n})Y_{l'm'}(\hat{\mathbf n}')^*\delta_{ll'}\delta_{mm'}. \label{eq:lenspotcorrexpanded}
+    \langle \psi(\hat{\mathbf n})\psi(\hat{\mathbf n}') \rangle = 4(4\pi)^2\sum_{ll'mm'}i^{l-l'}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\\\times\int \frac{k^2\d k}{(2\pi)^6}\frac{2\pi^2}{k^3}j_\ell(k\chi)j_{\ell'}(k\chi')P_\psi(k,\eta_0 - \chi, \eta_0-\chi')Y_{\ell m}(\hat{\mathbf n})Y_{\ell'm'}(\hat{\mathbf n}')^*\delta_{\ell \ell'}\delta_{mm'}. \label{eq:lenspotcorrexpanded}
 \end{gather}
 The angular power spectrum is defined similarly to the power spectrum, i.e.
 \begin{equation}
-    \langle \psi_{lm}\psi_{l'm'}^* \rangle = \delta_{ll'}\delta_{mm'}C_l^\psi.
+    \langle \psi_{\ell m}\psi_{\ell'm'}^* \rangle = \delta_{\ell \ell'}\delta_{mm'}C_\ell^\psi.
 \end{equation}
 Note that the correlation is independent of $m$ and $m'$. %TODO: explain how this relates to statistical isotropy
 We can thus read from equation \ref{eq:lenspotcorrexpanded} that
 \begin{gather}
-    C_l^\psi = 4(4\pi)^2\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int \frac{k^2\d k}{(2\pi)^6}\frac{2\pi^2}{k^3}j_l(k\chi)j_{l}(k\chi')P_\psi(k,\eta_0 - \chi, \eta_0-\chi'),
+    C_l^\psi = 4(4\pi)^2\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int \frac{k^2\d k}{(2\pi)^6}\frac{2\pi^2}{k^3}j_\ell(k\chi)j_{\ell}(k\chi')P_\psi(k,\eta_0 - \chi, \eta_0-\chi'),
 \end{gather}
 which can be simplified to
 \begin{gather}
-    C_l^\psi = \frac{2}{\pi^2}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int k^2\d kj_l(k\chi)j_{l}(k\chi')\frac{P_\psi(k,\eta_0 - \chi, \eta_0-\chi')}{k^3}.
+    C_\ell^\psi = \frac{2}{\pi^2}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi')\int k^2\d kj_\ell(k\chi)j_{\ell}(k\chi')\frac{P_\psi(k,\eta_0 - \chi, \eta_0-\chi')}{k^3}.
 \end{gather}
 
 To further evaluate the integral we will make the Limber approximation. The Bessel functions peak sharply at $l=x$\footnote{Some sources use $x\approx l+1/2$ instead, which is slightly more accurate for larger scales (low $l$) and slightly less accurate for smaller scales.}, with the peak being increasingly sharp for higher $l$. Similarly to $\delta(x-x_0)f(x)=\delta(x-x_0)f(x_0)$, we thus take $j_l(k\chi)f(k)\approx j_l(k\chi)f(l/\chi)$. The Bessel functions satisfy an orthogonality condition,
 \begin{equation}
-    \int k^2\d k j_l(k\chi)j_l(k\chi') = \frac{\pi}{2\chi^2}\delta(\chi-\chi').
+    \int k^2\d k j_\ell(k\chi)j_\ell(k\chi') = \frac{\pi}{2\chi^2}\delta(\chi-\chi').
 \end{equation}
 In combination with the Limber approximation we thus find
 \begin{equation}
-    \int k^2\d k j_l(k\chi)j_l(k\chi')f(k) \approx \frac{\pi}{2\chi^2}\delta(\chi-\chi')f(l/\chi).
+    \int k^2\d k j_\ell(k\chi)j_\ell(k\chi')f(k) \approx \frac{\pi}{2\chi^2}\delta(\chi-\chi')f(\ell/\chi).
 \end{equation}
 %TODO: how high? quantify limber approx, perhaps using convergence x LSS paper
 It allows us to write the Limber-approximate angular spectrum as
 \begin{gather}
-    C^\psi(l) = \frac{2}{\pi^2}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi') \frac{\pi}{2\chi^2}\delta(\chi-\chi')\frac{\chi^3}{l^3}P_\psi(l/\chi,\eta_0 - \chi, \eta_0-\chi')\\
-    = \frac{1}{l^3\pi}\int_0^{\chi_*}\chi\d \chi W(\chi)^2 P_\psi(l/\chi,\eta_0 - \chi, \eta_0-\chi). \label{eq:lpsintermsofpsi}
+    C^\psi_{\ell} = \frac{2}{\pi^2}\int_0^{\chi_*}\d \chi\int_0^{\chi_*}\d \chi' W(\chi)W(\chi') \frac{\pi}{2\chi^2}\delta(\chi-\chi')\frac{\chi^3}{\ell^3}P_\psi(\ell/\chi,\eta_0 - \chi, \eta_0-\chi')\\
+    = \frac{1}{\ell^3\pi}\int_0^{\chi_*}\chi\d \chi W(\chi)^2 P_\psi(\ell/\chi,\eta_0 - \chi, \eta_0-\chi). \label{eq:lpsintermsofpsi}
 \end{gather}
 % The power spectrum of the potential can be related to the power spectrum of the matter density using the Poisson equation %TODO: create ref
 % For a flat universe in atter or dark energy domination we thus find the relation
@@ -621,95 +655,95 @@ It allows us to write the Limber-approximate angular spectrum as
 \subsection{Lensing potential bispectrum}
 The derivation of the bispectrum proceeds similarly to that of the power spectrum. We aim to compute the bispectrum of the lensing potential fields of 3 (possibly distinct sources), $\psi_1$, $\psi_2$, $\psi_3$. 
 \begin{gather*}
-    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle = 
-    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{l_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}e^{i\mathbf k_i \cdot\hat{\mathbf n_i}\chi_i}} \\
+    \langle (\psi_1)_{\ell_1m_1}(\psi_2)_{\ell_2m_2}(\psi_3)_{\ell_3m_3} \rangle = 
+    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{\ell_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}e^{i\mathbf k_i \cdot\hat{\mathbf n_i}\chi_i}} \\
     \times \langle \prod_i\Psi(\mathbf k_i, \eta_0 - \chi_i) \rangle.
 \end{gather*}
-Defining the bispectrum of the graviational potential as
+Defining the bispectrum of the gravitational potential as
 \begin{equation*}
     \langle \prod_{i=1,2,3}\Psi(\mathbf k_i, \eta_0 - \chi_i) \rangle = (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}),
 \end{equation*}
-we rewrite the lensing potential bispecrum as
+we rewrite the lensing potential bispectrum as
 \begin{gather*}
-    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle = 
-    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{l_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}e^{i\mathbf k_i \cdot\hat{\mathbf n_i}\chi_i}}\\ \times (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
+    \langle (\psi_1)_{\ell_1m_1}(\psi_2)_{\ell_2m_2}(\psi_3)_{\ell_3m_3} \rangle = 
+    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{\ell_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}e^{i\mathbf k_i \cdot\hat{\mathbf n_i}\chi_i}}\\ \times (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
 \end{gather*}
 Now using equation \ref{eq:complexexp} to rewrite the complex exponential:
 \begin{gather*}
-    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle \\ = 
-    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{l_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi\sum_{lm}i^{l}j_{l}(k_i\chi_i)Y_{l}^{m}(\hat{\mathbf n_i})Y_{l}^{m}(\hat{\mathbf k_i})^*}\\
+    \langle (\psi_1)_{\ell_1m_1}(\psi_2)_{\ell_2m_2}(\psi_3)_{\ell_3m_3} \rangle \\ = 
+    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{\ell_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi\sum_{\ellm}i^{\ell}j_{l}(k_i\chi_i)Y_{\ell}^{m}(\hat{\mathbf n_i})Y_{\ell}^{m}(\hat{\mathbf k_i})^*}\\
     \times (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}) \\
-    = \sbr{\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi i^{l_i}j_{l_i}(k_i\chi_i)Y_{l_i}^{m_i}(\hat{\mathbf k_i})^*}} (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
+    = \sbr{\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi i^{\ell_i}j_{\ell_i}(k_i\chi_i)Y_{\ell_i}^{m_i}(\hat{\mathbf k_i})^*}} (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
 \end{gather*}
-We can write the 3D dirac delta function in terms of spherical harmonics as
+We can write the 3D Dirac delta function in terms of spherical harmonics as
 \begin{equation*}
-    \delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3) = 8\int\d^3\mathbf x\prod_{i=1,2,3}\br{ \sum_{l_jm_j} i^{l_j}j_{l_j}(k_ix)Y_{l_j}^{m_j}(\hat{\mathbf k_i}) Y_{l_j}^{m_j}(\hat{\mathbf x})^* }.
+    \delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3) = 8\int\d^3\mathbf x\prod_{i=1,2,3}\br{ \sum_{\ell_jm_j} i^{\ell_j}j_{\ell_j}(k_ix)Y_{\ell_j}^{m_j}(\hat{\mathbf k_i}) Y_{\ell_j}^{m_j}(\hat{\mathbf x})^* }.
 \end{equation*}
 This results in
 \begin{gather*}
-    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle= \prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi i^{l_i}j_{l_i}(k_i\chi_i)Y_{l_i}^{m_i}(\hat{\mathbf k_i})^*} \\
-    \times (2\pi)^38\int\d^3\mathbf x\prod_{i}\br{ \sum_{lm} i^{l}j_{l}(k_ix)Y_{l}^{m}(\hat{\mathbf k_i}) Y_{l}^{m}(\hat{\mathbf x})^* }B^\Psi(\{k_i\}, \{\eta_0-\chi_i\})\\
-    = (2\pi)^38\int\d^3\mathbf x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3}}4\pi (-1)^{l_i}j_{l_i}(k_i\chi_i)j_{l_i}(k_ix) Y_{l_i}^{m_i}(\hat{\mathbf x})^*} B^\Psi(\{k_i\}, \{\eta_0-\chi_i\})
+    \langle (\psi_1)_{\ell_1m_1}(\psi_2)_{\ell_2m_2}(\psi_3)_{\ell_3m_3} \rangle= \prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi i^{\ell_i}j_{\ell_i}(k_i\chi_i)Y_{\ell_i}^{m_i}(\hat{\mathbf k_i})^*} \\
+    \times (2\pi)^38\int\d^3\mathbf x\prod_{i}\br{ \sum_{\ell m} i^{\ell}j_{\ell}(k_ix)Y_{\ell}^{m}(\hat{\mathbf k_i}) Y_{\ell}^{m}(\hat{\mathbf x})^* }B^\Psi(\{k_i\}, \{\eta_0-\chi_i\})\\
+    = (2\pi)^38\int\d^3\mathbf x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3}}4\pi (-1)^{\ell_i}j_{\ell_i}(k_i\chi_i)j_{\ell_i}(k_ix) Y_{\ell_i}^{m_i}(\hat{\mathbf x})^*} B^\Psi(\{k_i\}, \{\eta_0-\chi_i\})
 \end{gather*}
 The angular part of the $\mathbf x$ integral can be evaluated using the identity
 \begin{gather*}
-    \int \mathrm{d}\Omega_{\hat{n}} \, Y_{l_1 m_1}^*(\hat{x}) Y_{l_2 m_2}^*(\hat{n}) Y_{l_3 m_3}^*(\hat{n}) = (-1)^{m_1 + m_2 + m_3} 
-    \int \mathrm{d}\Omega_{\hat{n}} \, Y_{l_1 -m_1}(\hat{n}) Y_{l_2 -m_2}(\hat{n})Y_{l_3 -m_3}(\hat{n}) \\
+    \int \mathrm{d}\Omega_{\hat{n}} \, Y_{\ell_1 m_1}^*(\hat{x}) Y_{\ell_2 m_2}^*(\hat{n}) Y_{\ell_3 m_3}^*(\hat{n}) = (-1)^{m_1 + m_2 + m_3} 
+    \int \mathrm{d}\Omega_{\hat{n}} \, Y_{\ell_1 -m_1}(\hat{n}) Y_{\ell_2 -m_2}(\hat{n})Y_{\ell_3 -m_3}(\hat{n}) \\
     = (-1)^{m_1 + m_2 + m_3} 
-    \sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix}
-    \begin{pmatrix} l_1 & l_2 & l_3 \\ -m_1 & -m_2 & -m_3 \end{pmatrix} \equiv A_{\mathbf{l}}^{\mathbf{m}},
+    \sqrt{\frac{(2\ell_1 + 1)(2\ell_2 + 1)(2\ell_3 + 1)}{4\pi}} \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ 0 & 0 & 0 \end{pmatrix}
+    \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ -m_1 & -m_2 & -m_3 \end{pmatrix} \equiv A_{\mathbf{l}}^{\mathbf{m}},
 \end{gather*}
 giving
 \begin{gather*}
-    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle 
-    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3}}4\pi (-1)^{l_i}j_{l_i}(k_i\chi_i)j_{l_i}(k_ix)} \\ \times B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
+    \langle (\psi_1)_{\ell_1m_1}(\psi_2)_{\ell_2m_2}(\psi_3)_{\ell_3m_3} \rangle 
+    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3}}4\pi (-1)^{\elli}j_{\ell_i}(k_i\chi_i)j_{\ell_i}(k_ix)} \\ \times B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
 \end{gather*}
 Now applying the Limber approximation again:
 \begin{gather*}
-    \langle (\psi_1)_{l_1m_1}(\psi_2)_{l_2m_2}(\psi_3)_{l_3m_3} \rangle 
-    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\frac{1}{(2\pi)^{3}}\frac{\pi}{2\chi_i^2}\delta(x-\chi_i)4\pi (-1)^{l_i}} \\ \times B^\Psi(\{l_i/\chi_i\}, \{\eta_0-\chi_i\}) \\
-    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int \chi^2\d \chi\prod_i\br{-2 W_i(\chi)\frac{1}{(2\pi)^{3}}\frac{\pi}{2\chi^2}4\pi (-1)^{l_i}} B^\Psi(\{l_i/\chi\}, \eta_0-\chi).
+    \langle (\psi_1)_{\ell_1m_1}(\psi_2)_{\ell_2m_2}(\psi_3)_{\ell_3m_3} \rangle 
+    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\frac{1}{(2\pi)^{3}}\frac{\pi}{2\chi_i^2}\delta(x-\chi_i)4\pi (-1)^{\ell_i}} \\ \times B^\Psi(\{\ell_i/\chi_i\}, \{\eta_0-\chi_i\}) \\
+    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int \chi^2\d \chi\prod_i\br{-2 W_i(\chi)\frac{1}{(2\pi)^{3}}\frac{\pi}{2\chi^2}4\pi (-1)^{\ell_i}} B^\Psi(\{\ell_i/\chi\}, \eta_0-\chi).
 \end{gather*}
 Finally, we aim to rewrite the above in terms of the angular bispectrum of the lensing potential. 
 
-The definition for the bispectrum of any set of randomly distributed spherical harmonic components $X^k_{lm}$ is \cite{Hu2000}
+The definition for the bispectrum of any set of randomly distributed spherical harmonic components $X^k_{\ell m}$ is \cite{Hu2000}
 \begin{equation*}
-    \langle (X_1)_{l_1m_1}(X_2)_{l_2m_2}(X_3)_{x_3m_3} \rangle = \begin{pmatrix}
-        l_1 & l_2 & l_3 \\ m_1 & m_2 & m_3
+    \langle (X_1)_{\ell_1m_1}(X_2)_{\ell_2m_2}(X_3)_{x_3m_3} \rangle = \begin{pmatrix}
+        \ell_1 & \ell_2 & \ell_3 \\ m_1 & m_2 & m_3
     \end{pmatrix}
-    B_{l_1l_2l_3}^{X_1X_2X_3}.
+    B_{\ell_1\ell_2\ell_3}^{X_1X_2X_3}.
 \end{equation*}
-Note the independence on $m_i$, this necesarilly follows from statistical isotropy. % TODO: add a short explanation here
+Note the independence on $m_i$, this necessarily follows from statistical isotropy. % TODO: add a short explanation here
 If $m_1+m_2+m_3\neq 0$, the associated Wigner-3j symbol vanishes and the bispectrum is set to zero.
-Also note that in this definition we have immediately generalized to include cross correlation between different fields $X_1$, $X_2$, $X_3$. This is relevant when we look at cross correlations between CMB and galaxy lensing.
+Also note that in this definition we have immediately generalized to include cross correlation between different fields $X_1$, $X_2$, $X_3$. This is relevant when we look at cross-correlations between CMB and galaxy lensing.
 6758
 Using the above definition and the symmetry property
 \begin{equation*}
     \begin{pmatrix}
-        l_1 & l_2 & l_3\\
+        \ell_1 & \ell_2 & \ell_3\\
         -m_1 & -m_2 & -m_3
       \end{pmatrix}
       =
-      (-1)^{l_1+l_2+l_3}
+      (-1)^{\ell_1+\ell_2+\ell_3}
       \begin{pmatrix}
-        l_1 & l_2 & l_3\\
+        \ell_1 & \ell_2 & \ell_3\\
         m_1 & m_2 & m_3
       \end{pmatrix},
 \end{equation*}
 we find
 \begin{gather*}
-    B^{\psi_1\psi_2\psi_3}_{l_1l_2l_3}
-    = (-1)^{l_1+l_2+l_3}
-    \sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix}
+    B^{\psi_1\psi_2\psi_3}_{\ell_1\ell_2\ell_3}
+    = (-1)^{\ell_1+\ell_2+\ell_3}
+    \sqrt{\frac{(2\ell_1 + 1)(2\ell_2 + 1)(2\ell_3 + 1)}{4\pi}} \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ 0 & 0 & 0 \end{pmatrix}
     (2\pi)^3 8 \\
-    \times \int \chi^2\d \chi\prod_i\br{-2 W_i(\chi, \chi_*)\frac{1}{(2\pi)^{3}}\frac{\pi}{2\chi^2}4\pi (-1)^{l_i}} B^\Psi(\{l_i/\chi\}, \{\eta_0-\chi\}),
+    \times \int \chi^2\d \chi\prod_i\br{-2 W_i(\chi, \chi_*)\frac{1}{(2\pi)^{3}}\frac{\pi}{2\chi^2}4\pi (-1)^{\ell_i}} B^\Psi(\{\ell_i/\chi\}, \{\eta_0-\chi\}),
 \end{gather*}
-where we were able to drop the $(-1)^{m_1+m_2+m_3}$ factor due to the bispecrum vanishing if that sum doesn't equal $0$, as mentioned earlier. When all $m_i$ equal zero, the Wigner 3j-symbol gains a number of useful properties % TODO: discuss all of them
-In particular, it vanishes if $l_1+l_2+l_3$ is odd, meaning we can drop the $(-1)^{l_1+l_2+l_3}$ factor. Additionally cancelling common factors then gives
+where we were able to drop the $(-1)^{m_1+m_2+m_3}$ factor due to the bispectrum vanishing if that sum does not equal $0$, as mentioned earlier. When all $m_i$ equal zero, the Wigner 3j-symbol gains a number of useful properties % TODO: discuss all of them
+In particular, it vanishes if $\ell_1+\ell_2+\ell_3$ is odd, meaning we can drop the $(-1)^{\ell_1+\ell_2+\ell_3}$ factor. Additionally cancelling common factors then gives
 \begin{align}
-    B^{\psi_1\psi_2\psi_3}_{l_1l_2l_3}
+    B^{\psi_1\psi_2\psi_3}_{\ell_1\ell_2\ell_3}
     =
-    -\sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix} 8 \int \frac{\d \chi }{\chi^4} W_1(\chi)W_2(\chi)W_3(\chi) B^\Psi(\{l_i/\chi\}, \eta_0-\chi). \label{eq:lbsintermsofpsi}
+    -\sqrt{\frac{(2\ell_1 + 1)(2\ell_2 + 1)(2\ell_3 + 1)}{4\pi}} \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ 0 & 0 & 0 \end{pmatrix} 8 \int \frac{\d \chi }{\chi^4} W_1(\chi)W_2(\chi)W_3(\chi) B^\Psi(\{l_i/\chi\}, \eta_0-\chi). \label{eq:lbsintermsofpsi}
 \end{align}
 
 % \begin{gather*}
@@ -724,10 +758,10 @@ In particular, it vanishes if $l_1+l_2+l_3$ is odd, meaning we can drop the $(-1
 %     = A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3/2}}4\pi i^{l_i}(2i^{l_i})j_{l_i}(k_i\chi_i)j_{l_i}(k_ix)}
 %     (2\pi)^3  B_\Psi(k_1, k_2, k_3) \\
 %     = A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\frac{1}{(2\pi)^{3/2}}4\pi i^{l_i}(2i^{l_i})\frac{\pi}{2\chi_i^2}\delta(x-\chi_i)}
-%     (2\pi)^3  B_\Psi(l_1/\chi, l_2/\chi, l_3/\chi) \\
+%     (2\pi)^3  B_\Psi(\ell_1/\chi, \ell_2/\chi, \ell_3/\chi) \\
 %     = A_{\mathbf l}^{\mathbf m}\int_0^{\chi_*} x^2\d x\prod_i\br{-2 W(x, \chi_*)\frac{1}{(2\pi)^{3/2}}4\pi i^{l_i}(2i^{l_i})\frac{\pi}{2x^2}}
-%     (2\pi)^3  B_\Psi(l_1/\chi, l_2/\chi, l_3/\chi) \\
-%     = A_{\mathbf{l}}^{\mathbf{m}} (-1)^{1 + l_1 + l_2 + l_3} 8 (2\pi)^{9/2} \int_0^{\chi_*} \frac{[W(\chi, \chi_*)]^3}{\chi^4} \, B_\Psi\left( \frac{l_1}{\chi}, \frac{l_2}{\chi}, \frac{l_3}{\chi} \right ) \, \mathrm{d}\chi.
+%     (2\pi)^3  B_\Psi(\ell_1/\chi, \ell_2/\chi, \ell_3/\chi) \\
+%     = A_{\mathbf{l}}^{\mathbf{m}} (-1)^{1 + \ell_1 + \ell_2 + \ell_3} 8 (2\pi)^{9/2} \int_0^{\chi_*} \frac{[W(\chi, \chi_*)]^3}{\chi^4} \, B_\Psi\left( \frac{\ell_1}{\chi}, \frac{\ell_2}{\chi}, \frac{\ell_3}{\chi} \right ) \, \mathrm{d}\chi.
 % \end{gather*}
 
 
@@ -765,10 +799,10 @@ where $\Psi(k,\eta)$ and $\delta(k,\eta)$ are functions in Fourier space. For th
 \end{gather*}
 Finally, we obtain:
 \begin{empheq}[box=\fbox]{align*}
-    C^{\psi_X\psi_Y}_l
-    & = \frac{9}{l^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)C^\delta(l/\chi,\eta_0-\chi),\\
-    B^{\psi_X\psi_Y\psi_Z}_{l_1l_2l_3} &= \sqrt{\frac{(2l_1 + 1)(2l_2 + 1)(2l_3 + 1)}{4\pi}} \begin{pmatrix} l_1 & l_2 & l_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{l_1^2l_2^2l_3^2}\Omega_m^3H_0^6\\
-    & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{l_i/\chi\}, \eta_0-\chi).
+    C^{\psi_X\psi_Y}_\ell
+    & = \frac{9}{\ell^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)P^\delta(\ell/\chi,\eta_0-\chi),\\
+    B^{\psi_X\psi_Y\psi_Z}_{\ell_1\ell_2\ell_3} &= \sqrt{\frac{(2\ell_1 + 1)(2\ell_2 + 1)(2\ell_3 + 1)}{4\pi}} \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{\ell_1^2\ell_2^2\ell_3^2}\Omega_m^3H_0^6\\
+    & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{\ell_i/\chi\}, \eta_0-\chi).
 \end{empheq}
 
 \section{Fisher Matrix Analysis} \label{sec:fisher}
@@ -790,44 +824,44 @@ where Cov is the covariance matrix associated with the random vector $(x_1, ...,
 \subsection{Fisher matrices for power- and bispectra with multiple tracers}
 For power spectra, the definition of the Fisher matrix gives 
 \begin{equation*}
-    F_{\alpha\beta} = \sum_{l_{min}\leq l, l' \leq l_{max}}\sum_{[XY][X'Y']} \partial_\alpha C_{l}^{XY} \br{\Cov^{-1}}^{XY, X'Y'}_{l, l'} \partial_\beta C^{X'Y'}_{l'}.
+    F_{\alpha\beta} = \sum_{l_{min}\leq \ell, \ell' \leq \ell_{max}}\sum_{[XY][X'Y']} \partial_\alpha C_{\ell}^{XY} \br{\Cov^{-1}}^{XY, X'Y'}_{\ell, \ell'} \partial_\beta C^{X'Y'}_{\ell'}.
 \end{equation*}
 Here the covariance matrix is given as
 \begin{equation*}
-    \Cov^{XY, X'Y'}_{l, l'} = \langle \hat C^{XY}_{l} \hat C^{X'Y'}_{l'} \rangle.
+    \Cov^{XY, X'Y'}_{\ell, \ell'} = \langle \hat C^{XY}_{\ell} \hat C^{X'Y'}_{\ell'} \rangle.
 \end{equation*}
-The estimator of a power or bispectrum is the product of the estimators of the appropriate tracers, e.g. $\hat C^{XY}_{l} = \hat X(l) \hat Y(l)$. The sum over $[XY]$ and $[X'Y']$ denotes a sum over possible tracer combinations \textit{without} counting permutations of tracer configuration. This is because permutations are not distinct signals, i.e. $\hat X(l) \hat Y(l) = \hat Y(l) \hat X(l)$. In fact, if we were to count these permutations as distinct signals we will get identical columns and/or rows in our covariance matrix making inversion impossible:
+The estimator of the power- or bi-spectrum is the product of the estimators of the appropriate tracers, e.g. $\hat C^{XY}_{\ell} = \hat X(\ell) \hat Y(\ell)$. The sum over $[XY]$ and $[X'Y']$ denotes a sum over possible tracer combinations \textit{without} counting permutations of tracer configuration. This is because permutations are not distinct signals, i.e. $\hat X(\ell) \hat Y(\ell) = \hat Y(\ell) \hat X(\ell)$. In fact, if we were to count these permutations as distinct signals we would get identical columns and/or rows in our covariance matrix making inversion impossible:
 \begin{equation*}
-    \langle \hat X(l) \hat Y (l) \hat X'(l') \hat Y' (l') \rangle = \langle \hat Y (l) \hat X (l) \hat X'(l') \hat Y' (l') \rangle, \quad \forall X', Y', l'. 
+    \langle \hat X(\ell) \hat Y (\ell) \hat X'(\ell') \hat Y' (\ell') \rangle = \langle \hat Y (\ell) \hat X (\ell) \hat X'(\ell') \hat Y' (\ell') \rangle, \quad \forall X', Y', \ell'. 
 \end{equation*}
 
-To evaluate the covariance matrix we again assume that the estimators are gaussian distributed so that we can apply a wick contraction, as is commonly done \cite{tegmark1997cosmic}. In this case we get
+To evaluate the covariance matrix we again assume that the estimators are Gaussian distributed so that we can apply a wick contraction, as is commonly done \cite{tegmark1997cosmic}. In this case we get
 \begin{equation*}
-    \Cov^{XY, X'Y'}_{l, l'} = \frac{1}{2l+1}\delta_{ll'}\br{\tilde C^{XX'}_l \tilde C^{YY'}_l + \tilde C^{XY'}_l \tilde C^{YX'}_l}.
+    \Cov^{XY, X'Y'}_{\ell, \ell'} = \frac{1}{2\ell+1}\delta_{\ell \ell'}\br{\tilde C^{XX'}_\ell \tilde C^{YY'}_\ell + \tilde C^{XY'}_\ell \tilde C^{YX'}_\ell}.
 \end{equation*}
 Two remarks are in order.
 \begin{enumerate}
     \item By definition
     \begin{equation*}
-        \langle X_{lm}X'_{l'm'} \rangle = (2\pi)^3 \delta_{ll'}\delta_{mm'}C_l^{XX'},
+        \langle X_{\ell m}X'_{\ell'm'} \rangle = (2\pi)^3 \delta_{\ell\ell'}\delta_{mm'}C_\ell^{XX'},
     \end{equation*}
-    so you can average over the measurements done for different values of $m$, i.e. $X_{l(-l)}$, $X_{l(-l+1)}$, $\cdots$, $X_{l(l-1)}$, $X_{ll}$. This results in the $(2l+1)^{-1}$ factor in the power spectrum covariance. 
-    \item The tilde is used to denote the powerspectrum as calculated earlier plus the noise power spectrum, $N^{XX'}_l$, which is the power spectrum of the noise associated with the estimator of the field. This is where experimental noise is incorporated into the calculation. 
+    so you can average over the measurements done for different values of $m$, i.e. $X_{\ell(-\ell)}$, $X_{\ell(-\ell+1)}$, $\cdots$, $X_{\ell(\ell-1)}$, $X_{\ell \ell}$. This results in the $(2\ell+1)^{-1}$ factor in the power spectrum covariance. 
+    \item The tilde is used to denote the power spectrum as calculated earlier plus the noise power spectrum, $N^{XX'}_\ell$, which is the power spectrum of the noise associated with the estimator of the field. This is where experimental noise is incorporated into the calculation. 
 \end{enumerate}
-Under the Gaussian approximation the covariance matrix vanishes except for $3\times 3$ block matrices (in the case of 2 tracers) on the diagonal. The fisher matrix is then
+Under the Gaussian approximation, the covariance matrix vanishes except for $3\times 3$ block matrices (in the case of 2 tracers) on the diagonal. The fisher matrix is then
 \begin{equation*}
-    F_{\alpha\beta} = \sum_{l}\sum_{[XY][X'Y']} \partial_\alpha C_{l}^{XY} \br{\Cov^{-1}_l}^{XY, X'Y'} \partial_\beta C^{X'Y'}_{l}.
+    F_{\alpha\beta} = \sum_{\ell}\sum_{[XY][X'Y']} \partial_\alpha C_{\ell}^{XY} \br{\Cov^{-1}_\ell}^{XY, X'Y'} \partial_\beta C^{X'Y'}_{\ell}.
 \end{equation*} 
-$\Cov^{-1}_l$ here denotes the inverse of the block matrix at $l$.
+$\Cov^{-1}_\ell$ here denotes the inverse of the block matrix at $l$.
 
 
 Next, we consider the Fisher matrix for bispectra measurements.
 \begin{equation*}
-    F_{\alpha\beta} = \sum_{\text{distinct signals}}\sum_{\text{distinct signals prime}} B^{XYZ}_{l_1l_2l_3}\br{\Cov^{-1}}^{XYZ,X'Z'Y'}_{l_1l_2l_3,l_1'l_2'l_3'}B^{X'Y'Z'}_{l_1'l_2'l_3'}.
+    F_{\alpha\beta} = \sum_{\text{distinct signals}}\sum_{\text{distinct signals prime}} B^{XYZ}_{\ell_1\ell_2\ell_3}\br{\Cov^{-1}}^{XYZ,X'Z'Y'}_{\ell_1\ell_2\ell_3,\ell_1'\ell_2'\ell_3'}B^{X'Y'Z'}_{\ell_1'\ell_2'\ell_3'}.
 \end{equation*} 
-Counting only distinct signals requires more care compared to the power spectra. The rule is that $B^{XYZ}_{l_1l_2l_3}$ and $B^{X'Y'Z'}_{l_1'l_2'l_3'}$ are not distinct signals if there exists a permutation $\sigma$ that simultaniously maps $X'Y'Z'$ to $XYZ$ and $l_1'l_2'l_3'$ to $l_1l_2l_3$. It turns out that we can write a sum over distinct signals explicitly as
+Counting only distinct signals requires more care compared to the power spectra. The rule is that $B^{XYZ}_{\ell_1\ell_2\ell_3}$ and $B^{X'Y'Z'}_{\ell_1'\ell_2'\ell_3'}$ are not distinct signals if there exists a permutation $\sigma$ that simultaniously maps $X'Y'Z'$ to $XYZ$ and $\ell_1'\ell_2'\ell_3'$ to $\ell_1\ell_2\ell_3$. It turns out that we can write a sum over distinct signals explicitly as
 \begin{gather*}
-    \sum_{\text{distinct signals}} = \underbrace{\sum_{l_1=l_2=l_3}\sum_{[XYZ]}}_{\text{sum }1} + \underbrace{\sum_{l_1=l_2\neq l_3}\sum_{[XY]Z}}_{\text{sum }2} + \underbrace{\sum_{l_1<l_2<l_3}\sum_{XYZ}}_{\text{sum }3}.
+    \sum_{\text{distinct signals}} = \underbrace{\sum_{\ell_1=\ell_2=\ell_3}\sum_{[XYZ]}}_{\text{sum }1} + \underbrace{\sum_{\ell_1=\ell_2\neq \ell_3}\sum_{[XY]Z}}_{\text{sum }2} + \underbrace{\sum_{\ell_1<\ell_2<\ell_3}\sum_{XYZ}}_{\text{sum }3}.
 \end{gather*}
 With the same definition again for the $[\cdot]$ notation. For example:
 \begin{gather*}
@@ -835,24 +869,24 @@ With the same definition again for the $[\cdot]$ notation. For example:
     \{[XY]Z|X,Y,Z\in\{\psi_\kappa, \psi_\gamma\}\} = \{\psi_\kappa\psi_\kappa\psi_\kappa, \psi_\kappa\psi_\gamma\psi_\kappa, \psi_\gamma\psi_\gamma\psi_\kappa,\psi_\kappa\psi_\kappa\psi_\gamma, \psi_\kappa\psi_\gamma\psi_\gamma, \psi_\gamma\psi_\gamma\psi_\gamma\}.
 \end{gather*}
 
-It follows to show that the sets that these sums sum over form a partition of the set of all distinct signals. Clearly all 3 sets are pairwise disjoint (no common elements) because of the criteria for the $l_i$'s. To show that their union covers the set of distinct signals, start by considering an arbitrary signal. Its $l$ configuration will trivially correspond to exactly one of the three sums. If it is sum 1, then we are free to permute the $XYZ$'s by virtue of the $l$'s being identical so we will be able to match the $XYZ$ configuration to one of the elements of $\{\{XYZ\}\}$. Similarly, if the $l$ configuration corresponds to sum 2, then we are free to permute the $XY$ configuration to match with one of the elements of $\{\{XY\}Z\}$. The $Z$ value does not matter because any $Z$ value is accounted for. For sum 3 we can argue that we can switch around the order of the $l$'s to satisfy $l_1 < l2 < l3$ and the corresponding $XYZ$ configuration will be accounted for in sum 3 because all $XYZ$ combinations are counted. Finally, it is simple to verify that no distinct signal is counted more than once within each sum.
+It follows to show that the sets that these sums sum over form a partition of the set of all distinct signals. Clearly all 3 sets are pairwise disjoint (no common elements) because of the criteria for the $l_i$'s. To show that their union covers the set of distinct signals, start by considering an arbitrary signal. Its $l$ configuration will trivially correspond to exactly one of the three sums. If it is sum 1, then we are free to permute the $XYZ$'s by virtue of the $l$'s being identical so we will be able to match the $XYZ$ configuration to one of the elements of $\{\{XYZ\}\}$. Similarly, if the $l$ configuration corresponds to sum 2, then we are free to permute the $XY$ configuration to match with one of the elements of $\{\{XY\}Z\}$. The $Z$ value does not matter because any $Z$ value is accounted for. For sum 3 we can argue that we can switch around the order of the $l$'s to satisfy $\ell_1 < l2 < l3$ and the corresponding $XYZ$ configuration will be accounted for in sum 3 because all $XYZ$ combinations are counted. Finally, it is simple to verify that no distinct signal is counted more than once within each sum.
 
-To calculate the elements of the covariance matrix consider the following. Every element of the Fisher matrix can be seen as an inner product weighted by the inverse covariance matrix. We can choose how we order the vectors\footnote{The entries are the derivatives of the bispectra}. We organize the vectors according to the sum 1, 2, and 3 parts first. Then by $l$ configuration. Within each $l$ configuration we can choose any ordering for the $XYZ$ configurations. The covariance matrix now becomes a block matrix with each block corresponding to an $l_i$ and $l_i'$ configuration. When wick contracting using the gaussian approximation, every block matrix where $(l_1,l_2,l_3)\neq (l_1',l_2',l_3')$ vanishes. It can then be shown that the entries of each block matrix are given as
+To calculate the elements of the covariance matrix consider the following. Every element of the Fisher matrix can be seen as an inner product weighted by the inverse covariance matrix. We can choose how we order the vectors\footnote{The entries are the derivatives of the bispectra}. We organize the vectors according to the sum 1, 2, and 3 parts first. Then by $l$ configuration. Within each $l$ configuration we can choose any ordering for the $XYZ$ configurations. The covariance matrix now becomes a block matrix with each block corresponding to an $l_i$ and $l_i'$ configuration. When wick contracting using the gaussian approximation, every block matrix where $(\ell_1,\ell_2,\ell_3)\neq (\ell_1',\ell_2',\ell_3')$ vanishes. It can then be shown that the entries of each block matrix are given as
 \begin{gather*}
-    \br{\Cov_{l_1l_2l_3}}^{XYZ,X'Y'Z'} = \tilde C^{XX'}_{l_1}\tilde C^{YY'}_{l_2}\tilde C^{ZZ'}_{l_3} + \delta_{l_1l_2}\tilde C^{XY'}_{l_1}\tilde C^{YX'}_{l_2}\tilde C^{ZZ'}_{l_3} +\delta_{l_2l_3}\tilde C^{XX'}_{l_1}\tilde C^{YZ'}_{l_2}\tilde C^{ZX'}_{l_3} \\ + \delta_{l_3l_1}\tilde C^{XZ'}_{l_1}\tilde C^{YY'}_{l_2}\tilde C^{ZX'}_{l_3} +\delta_{l_1l_2}\delta_{l_2l_3}\br{\tilde C^{XY'}_{l_1}\tilde C^{YZ'}_{l_2}\tilde C^{ZX'}_{l_3} +\tilde C^{XZ'}_{l_1}\tilde C^{YX'}_{l_2}\tilde C^{ZY'}_{l_3}}.
+    \br{\Cov_{\ell_1\ell_2\ell_3}}^{XYZ,X'Y'Z'} = \tilde C^{XX'}_{\ell_1}\tilde C^{YY'}_{\ell_2}\tilde C^{ZZ'}_{\ell_3} + \delta_{\ell_1\ell_2}\tilde C^{XY'}_{\ell_1}\tilde C^{YX'}_{\ell_2}\tilde C^{ZZ'}_{\ell_3} +\delta_{\ell_2\ell_3}\tilde C^{XX'}_{\ell_1}\tilde C^{YZ'}_{\ell_2}\tilde C^{ZX'}_{\ell_3} \\ + \delta_{\ell_3\ell_1}\tilde C^{XZ'}_{\ell_1}\tilde C^{YY'}_{\ell_2}\tilde C^{ZX'}_{\ell_3} +\delta_{\ell_1\ell_2}\delta_{\ell_2\ell_3}\br{\tilde C^{XY'}_{\ell_1}\tilde C^{YZ'}_{\ell_2}\tilde C^{ZX'}_{\ell_3} +\tilde C^{XZ'}_{\ell_1}\tilde C^{YX'}_{\ell_2}\tilde C^{ZY'}_{\ell_3}}.
 \end{gather*}
 With our ordering this means that the covariance matrix is again a diagonal block matrix, now with blocks of size $4 \times 4$ (sum 1), $6 \times 6$ (sum 2), and $8 \times 8$ (sum 3).
 
 \subsection{Explicit form for inverse covariance matrix}
 The Fisher matrix above can be significantly simplified and written as
 \begin{equation*}
-F_{\alpha\beta} = \sum_{l_1 \leq l_2 \leq l_3} \frac{\mathcal P _{l_1l_2l_3}}{6}
+F_{\alpha\beta} = \sum_{\ell_1 \leq \ell_2 \leq \ell_3} \frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6}
 \sum_{XYZ}\sum_{X'Y'Z'} 
-\partial_\alpha B^{X Y Z}_{l_1 l_2 l_3} 
-(\tilde C^{-1})^{X X'}_{l_1}
-(\tilde C^{-1})^{Y Y'}_{l_2}
-(\tilde C^{-1})^{Z Z'}_{l_3}
-\partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3}
+\partial_\alpha B^{X Y Z}_{\ell_1 \ell_2 \ell_3} 
+(\tilde C^{-1})^{X X'}_{\ell_1}
+(\tilde C^{-1})^{Y Y'}_{\ell_2}
+(\tilde C^{-1})^{Z Z'}_{\ell_3}
+\partial_\beta B^{X' Y' Z'}_{\ell_1 \ell_2 \ell_3}
 \end{equation*}
 where, in the case of two tracers, 
 \begin{equation*}
@@ -861,50 +895,50 @@ where, in the case of two tracers,
         \tilde C^{\psi_1\psi_2}_l & \tilde C^{\psi_2\psi_2}_l
     \end{pmatrix}
 \end{equation*}
-and $\mathcal P_{l_1l_2l_3}$ is defined as the number of distinct permutations that can be made with $l_1l_2l_3$. This form was, for example, used in \cite{Kalaja_2021}\footnote{Note that in \cite{Kalaja_2021} this is based on a previous equation summing over \textit{all} $l_i$ (so including permutations of each configuration) which is missing a factor of $1/6$.}.
+and $\mathcal P_{\ell_1\ell_2\ell_3}$ is defined as the number of distinct permutations that can be made with $\ell_1\ell_2\ell_3$. This form was, for example, used in \cite{Kalaja_2021}\footnote{Note that in \cite{Kalaja_2021} this is based on a previous equation summing over \textit{all} $l_i$ (so including permutations of each configuration) which is missing a factor of $1/6$.}.
 
 To show that the above is the same as the formula for the Fisher matrix given earlier, first parition the sum in the same way and collect all terms that fit in the different categories.
 \begin{align*}
-    F_{\alpha\beta} &= \sum_{l_1=l_2=l_3} \sum_{[XYZ]}\sum_{[X'Y'Z']} \partial_{\alpha} B^{XYZ}_{l_1 l_2 l_3}\br{\frac{\mathcal P _{l_1l_2l_3}}{6}\sum_{d. p. XYZ} \sum_{d. p. X'Y'Z'}(\tilde C^{-1})^{X X'}_{l_1}
-    (\tilde C^{-1})^{Y Y'}_{l_2}
-    (\tilde C^{-1})^{Z Z'}_{l_3}}
-    \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3} \\
-    &+ \sum_{l_1=l_2\neq l_3} \sum_{[XY]Z}\sum_{[X'Y']Z'} \partial_{\alpha} B^{XYZ}_{l_1 l_2 l_3}\br{\frac{\mathcal P _{l_1l_2l_3}}{6}\sum_{d. p. XY} \sum_{d. p. X'Y'}(\tilde C^{-1})^{X X'}_{l_1}
-    (\tilde C^{-1})^{Y Y'}_{l_2}
-    (\tilde C^{-1})^{Z Z'}_{l_3}}
-    \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3} \\
-    &+ \sum_{l_1<l_2<l_3} \sum_{XYZ}\sum_{X'Y'Z'} \partial_{\alpha} B^{XYZ}_{l_1 l_2 l_3}(\tilde C^{-1})^{X X'}_{l_1}
-    (\tilde C^{-1})^{Y Y'}_{l_2}
-    (\tilde C^{-1})^{Z Z'}_{l_3}
-    \partial_\beta B^{X' Y' Z'}_{l_1 l_2 l_3},
+    F_{\alpha\beta} &= \sum_{\ell_1=\ell_2=\ell_3} \sum_{[XYZ]}\sum_{[X'Y'Z']} \partial_{\alpha} B^{XYZ}_{\ell_1 \ell_2 \ell_3}\br{\frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6}\sum_{d. p. XYZ} \sum_{d. p. X'Y'Z'}(\tilde C^{-1})^{X X'}_{\ell_1}
+    (\tilde C^{-1})^{Y Y'}_{\ell_2}
+    (\tilde C^{-1})^{Z Z'}_{\ell_3}}
+    \partial_\beta B^{X' Y' Z'}_{\ell_1 \ell_2 \ell_3} \\
+    &+ \sum_{\ell_1=\ell_2\neq \ell_3} \sum_{[XY]Z}\sum_{[X'Y']Z'} \partial_{\alpha} B^{XYZ}_{\ell_1 \ell_2 \ell_3}\br{\frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6}\sum_{d. p. XY} \sum_{d. p. X'Y'}(\tilde C^{-1})^{X X'}_{\ell_1}
+    (\tilde C^{-1})^{Y Y'}_{\ell_2}
+    (\tilde C^{-1})^{Z Z'}_{\ell_3}}
+    \partial_\beta B^{X' Y' Z'}_{\ell_1 \ell_2 \ell_3} \\
+    &+ \sum_{\ell_1<\ell_2<\ell_3} \sum_{XYZ}\sum_{X'Y'Z'} \partial_{\alpha} B^{XYZ}_{\ell_1 \ell_2 \ell_3}(\tilde C^{-1})^{X X'}_{\ell_1}
+    (\tilde C^{-1})^{Y Y'}_{\ell_2}
+    (\tilde C^{-1})^{Z Z'}_{\ell_3}
+    \partial_\beta B^{X' Y' Z'}_{\ell_1 \ell_2 \ell_3},
 \end{align*}
 where ``$d. p.$'' stands for ``distinct permutations''.
-The entries above are then the entries of the inverses of the block matrices mentioned earlier. This can be checked. For example, for the $l_1 = l_2 = l_3$ sum the multiplication of block matrices corresponding to the same $l_i$ configuration can be written as:
+The entries above are then the entries of the inverses of the block matrices mentioned earlier. This can be checked. For example, for the $\ell_1 = \ell_2 = \ell_3$ sum the multiplication of block matrices corresponding to the same $l_i$ configuration can be written as:
 \begin{gather*}
-    \sum_{[X'Y'Z']} \br{\frac{\mathcal P _{l_1l_2l_3}}{6} \sum_{d. p. XYZ} \sum_{d. p. X'Y'Z'}(\tilde C^{-1})^{X X'}_{l}
+    \sum_{[X'Y'Z']} \br{\frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6} \sum_{d. p. XYZ} \sum_{d. p. X'Y'Z'}(\tilde C^{-1})^{X X'}_{l}
     (\tilde C^{-1})^{Y Y'}_{l}
     (\tilde C^{-1})^{Z Z'}_{l}} \br{\tilde C^{X'X''}_l \tilde C^{Y'Y''}_l \tilde C^{Z'Z''}_l + \text{perms } X''Y''Z''} \\
-    = \frac{\mathcal P _{l_1l_2l_3}}{6}\sbr{\br{\sum_{d. p. XYZ} \sum_{X'Y'Z'}(\tilde C^{-1})^{X X'}_{l}
+    = \frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6}\sbr{\br{\sum_{d. p. XYZ} \sum_{X'Y'Z'}(\tilde C^{-1})^{X X'}_{l}
     (\tilde C^{-1})^{Y Y'}_{l}
     (\tilde C^{-1})^{Z Z'}_{l}} \tilde C^{X'X''}_l \tilde C^{Y'Y''}_l \tilde C^{Z'Z''}_l} + \text{perms } X''Y''Z'' \\
-    = \frac{\mathcal P _{l_1l_2l_3}}{6} \sum_{d. p. XYZ} \delta_{XX''}\delta_{YY''}\delta_{ZZ''} + \text{perms } X''Y''Z''
-    = \frac{\mathcal P _{l_1l_2l_3}}{6} \delta_{[XYZ], [X''Y''Z'']} + \text{perms } X''Y''Z''\\
+    = \frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6} \sum_{d. p. XYZ} \delta_{XX''}\delta_{YY''}\delta_{ZZ''} + \text{perms } X''Y''Z''
+    = \frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6} \delta_{[XYZ], [X''Y''Z'']} + \text{perms } X''Y''Z''\\
     = \delta_{[XYZ], [X''Y''Z'']} .
 \end{gather*}
-The sum over the different wick contractions will similarly cancel with the $\mathcal P_{l_1l_2l_3} / 6$ factor for the $l_1 = l_2 \neq l_3$ sum. For the $l_1 < l_2 < l_3$ sum the proof is similar as well except no cancellation is required.
+The sum over the different wick contractions will similarly cancel with the $\mathcal P_{\ell_1\ell_2\ell_3} / 6$ factor for the $\ell_1 = \ell_2 \neq \ell_3$ sum. For the $\ell_1 < \ell_2 < \ell_3$ sum the proof is similar as well except no cancellation is required.
 
 The same type of simplification can be made in the Fisher matrix for the power spectrum, though it doesn't offer any significant benefits compared to our current $3\times 3$ block matrix form.
 
 \subsection{Signal to Noise Ratio (SNR)}
-To quantify the detectability of the lensing spectra, we introduce an overal amplitude of our signal, $A$, with fiducial value 1 as experimental parameter and compute $F_{AA}$. Obviously, $\partial_A\br{A B^{XYZ}_{l_1l_2l_3}}|_{A=1} = B^{XYZ}_{l_1l_2l_3}$, so we find
+To quantify the detectability of the lensing spectra, we introduce an overal amplitude of our signal, $A$, with fiducial value 1 as experimental parameter and compute $F_{AA}$. Obviously, $\partial_A\br{A B^{XYZ}_{\ell_1\ell_2\ell_3}}|_{A=1} = B^{XYZ}_{\ell_1\ell_2\ell_3}$, so we find
 \begin{equation*}
     \br{\frac{S}{N}}^2 := F_{AA} =
-\sum_{XYZ, X'Y'Z'} \sum_{l_1\leq l_2 \leq l_3} \frac{\mathcal P _{l_1l_2l_3}}{6}
-B^{X Y Z}_{l_1 l_2 l_3} 
-(\tilde C^{-1})^{X X'}_{l_1}
-(\tilde C^{-1})^{Y Y'}_{l_2}
-(\tilde C^{-1})^{Z Z'}_{l_3}
-B^{X' Y' Z'}_{l_1 l_2 l_3}.
+\sum_{XYZ, X'Y'Z'} \sum_{\ell_1\leq \ell_2 \leq \ell_3} \frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6}
+B^{X Y Z}_{\ell_1 \ell_2 \ell_3} 
+(\tilde C^{-1})^{X X'}_{\ell_1}
+(\tilde C^{-1})^{Y Y'}_{\ell_2}
+(\tilde C^{-1})^{Z Z'}_{\ell_3}
+B^{X' Y' Z'}_{\ell_1 \ell_2 \ell_3}.
 \end{equation*}
 The equation for the SNR of the power spectra is identical in form.
 
@@ -928,19 +962,19 @@ To compute the Fisher matrix of an experiment measuring both lensing power- and 
 % Before inverting a Fisher matrix, it is thus recommended to remove rows and columns corresponding to parameters that are poorly constrained by the experiment, which can be determined by checking for small eigenvalues and their eigenvectors.
 
 
-% Computing the inverse is then reduced to computing the inverse of the individual block matrices. The block matrices for sum 1 and 2 don't have a particularly nice form (cite paper about multiple tracer fisher matrices for bispectra) but for sum 3 the inverse of the block matrix corresponding to $l_1l_2l_3$ is
+% Computing the inverse is then reduced to computing the inverse of the individual block matrices. The block matrices for sum 1 and 2 don't have a particularly nice form (cite paper about multiple tracer fisher matrices for bispectra) but for sum 3 the inverse of the block matrix corresponding to $\ell_1\ell_2\ell_3$ is
 % \begin{equation*}
-%     (\Cov_{l_1l_2l_3}^{-1})^{XYZ, X'Y'Z'} = \hat C_{l_1}^{X,X'}\hat C_{l_2}^{Y,Y'}\hat C_{l_3}^{Z,Z'}.
+%     (\Cov_{\ell_1\ell_2\ell_3}^{-1})^{XYZ, X'Y'Z'} = \hat C_{\ell_1}^{X,X'}\hat C_{\ell_2}^{Y,Y'}\hat C_{\ell_3}^{Z,Z'}.
 % \end{equation*}
 % \begin{equation*}
-%     (\Cov)^{XYZ, X'Y'Z'} = C_{l_1}^{X,X'} C_{l_2}^{Y,Y'} C_{l_3}^{Z,Z'}.
+%     (\Cov)^{XYZ, X'Y'Z'} = C_{\ell_1}^{X,X'} C_{\ell_2}^{Y,Y'} C_{\ell_3}^{Z,Z'}.
 % \end{equation*}
 % As can be seen from
 % \begin{equation*}
-%     \sum_{X'Y'Z'} = \hat C_{l_1}^{X,X'}\hat C_{l_2}^{Y,Y'}\hat C_{l_3}^{Z,Z'} C_{l_1}^{X'X''}C_{l_2}^{Y'Y''}C_{l_3}^{Z'Z''} = \delta_{XX''}\delta_{YY''}\delta_{ZZ''} = \delta_{XYZ, X''Y''Z''}
+%     \sum_{X'Y'Z'} = \hat C_{\ell_1}^{X,X'}\hat C_{\ell_2}^{Y,Y'}\hat C_{\ell_3}^{Z,Z'} C_{\ell_1}^{X'X''}C_{\ell_2}^{Y'Y''}C_{\ell_3}^{Z'Z''} = \delta_{XX''}\delta_{YY''}\delta_{ZZ''} = \delta_{XYZ, X''Y''Z''}
 % \end{equation*}
 
-% It's worth mentioning that due to all $l$'s being distinct in each configuration of sum 3 the Wick contraction corresponding to each element of the covariance matrix can only be done in one way and we thus only have one term. In the sum 2 we get two terms due to $l_1$ and $l_2$ being identical. In sum 3 we similarly get 6 terms corresponding to all possible Wick contractions being nonzero.
+% It's worth mentioning that due to all $l$'s being distinct in each configuration of sum 3 the Wick contraction corresponding to each element of the covariance matrix can only be done in one way and we thus only have one term. In the sum 2 we get two terms due to $\ell_1$ and $\ell_2$ being identical. In sum 3 we similarly get 6 terms corresponding to all possible Wick contractions being nonzero.
 
 % \subsection{Shear noise}
 % In the absence of lensing, galaxies will generally still look elliptical rather than perfectly spherical. This \textbf{intrinsic ellipticity} is a major cause of noise when measuring lensing shear. We can define the ellipticity of a galaxy image (or any type of object, for that matter) in terms of \textbf{quadrupole moments} of the surface brightness as
@@ -1121,7 +1155,7 @@ Consider a point on $S^2$, $(r_0, \theta_0, \phi_0)$, at which we observe some c
     \label{fig:tildecoords}
 \end{figure}
 
-Note that there it isn't obvious whether to define these coordinates at the point where the lensed light hits $S^2$ or the unlensed light hits $S^2$. We will assume that lensing effects are sufficiently weak that either definition works. We can then express the tilde coordinates in terms of spherical coordinates either by applying a rotation matrix or by calculating the $r, \theta, \phi$ derivatives of $(x,y,z)$ coordinates at $(r_0, \theta_0, \phi_0)$ to find $\hat{\tilde{\mathbf r}}$, $\hat{\tilde{\boldsymbol{\theta}}}$, and $\hat{\tilde{\boldsymbol{\phi}}}$ and then take inner products. Regardless, we find
+Note that it is not obvious whether to define these coordinates at the point where the lensed light hits $S^2$ or the unlensed light hits $S^2$. We will assume that lensing effects are sufficiently weak that either definition works. We can then express the tilde coordinates in terms of spherical coordinates either by applying a rotation matrix or by calculating the $r, \theta, \phi$ derivatives of $(x,y,z)$ coordinates at $(r_0, \theta_0, \phi_0)$ to find $\hat{\tilde{\mathbf r}}$, $\hat{\tilde{\boldsymbol{\theta}}}$, and $\hat{\tilde{\boldsymbol{\phi}}}$ and then take inner products. Regardless, we find
 \begin{align}
     \tilde r &= r\sin\theta\cos\phi\sin\theta_0\cos\phi_0+r\sin\theta\sin\phi\sin\theta_0\sin\phi_0+r\cos\theta\cos\theta_0,\\
     \tilde y &= r\sin\theta\cos\phi\cos\theta_0\cos\phi_0+r\sin\theta\sin\phi\cos\theta_0\sin\phi_0-r\cos\theta\sin\theta_0,\\
@@ -1136,7 +1170,7 @@ This gives derivatives
 & + \left( -r \sin \theta \sin \phi \cos \theta_0 \cos \phi_0 + r \sin \theta \cos \phi \cos \theta_0 \sin \phi_0 \right) \frac{\partial}{\partial \tilde{y}} \\
 & + \left( r \sin \theta \sin \phi \sin \phi_0 + r \sin \theta \cos \phi \cos \phi_0 \right) \frac{\partial}{\partial \tilde{x}}.
 \end{align*}
-Evaluated at our point of interest we obtain $\partial_\theta=\partial_{\tilde y}$ and $\partial_\phi=\sin\theta_0\partial_{\tilde x}$. The second order derivatives can then be obtained using the first order derivatives. We can immediately evaluate them at the point to get
+Evaluated at our point of interest we obtain $\partial_\theta=\partial_{\tilde y}$ and $\partial_\phi=\sin\theta_0\partial_{\tilde x}$. The second-order derivatives can then be obtained using the first-order derivatives. We can immediately evaluate them at the point to get
 \begin{align*}
     \partial_\phi^2|_{(r_0,\theta_0,\phi_0)}&=-\sin^2\theta_0\partial_{\tilde r}-\sin\theta_0\cos\theta_0\partial_{\tilde y}+\sin^2\theta_0\partial^2_{\tilde x},\\
     \partial_\theta\partial_\phi|_{(r_0,\theta_0,\phi_0)}&=\cos\theta_0\partial_{\tilde x}+\sin\theta_0\partial_{\tilde x}\partial_{\tilde y},\\
@@ -1179,12 +1213,12 @@ Each change of the cosmological parameters requires a recalculation of the entir
     
     
 
-To test the accuracy, we vary $h$ by $\pm 5\%$ and $\pm 10\%$ and plot the relative change in the derivative of the equilateral bispectrum in figure \ref{fig:deraccuracy}. As long as numerical noise doesn't dominate, it can be shown that the relative error in our approximation is approximately 5 times the relative difference that taking $h \rightarrow h(1 \pm 0.1)$ leads to. We thus conclude that, based on this test, the derivatives are almost always computed with up to one percent of error. The exception is the derivative with respect to neutrino masses, which introduces a larger error. 
+To test the accuracy, we vary $h$ by $\pm 5\%$ and $\pm 10\%$ and plot the relative change in the derivative of the equilateral bispectrum in figure \ref{fig:deraccuracy}. As long as numerical noise doesn't dominate, it can be shown that the relative error in our approximation is approximately 5 times the relative difference that taking $h \rightarrow h(1 \pm 0.1)$ leads to. We thus conclude that, based on this test, the derivatives are almost always computed with up to one percent error. The exception is the derivative with respect to neutrino masses, which introduces a larger error. 
 
 \begin{figure}[t]
     \centering
     \includegraphics[height=\textheight]{../code/plots/derivative_accuracy.png}
-    \caption{Central difference approximation of derivative of equilateral CMB weak lensing bispectrum (left) and powerspectrum (right) for differences as specified in table \ref{tab:cosmo-params-diff} as well as for differences $5\%$ and $10\%$ larger and smaller.}
+    \caption{Central difference approximation of derivative of equilateral CMB weak lensing bispectrum (left) and power spectrum (right) for differences as specified in table \ref{tab:cosmo-params-diff} as well as for differences $5\%$ and $10\%$ larger and smaller.}
     \label{fig:deraccuracy}
 \end{figure}
 
@@ -1194,19 +1228,35 @@ To test the accuracy, we vary $h$ by $\pm 5\%$ and $\pm 10\%$ and plot the relat
 We do not expect to use weak lensing surveys to competitively constrain the main $\Lambda$CDM parameters. Despite this, we include these constraints for completeness in figures \ref{fig:paramconstraintsallcmb} and \ref{fig:paramconstraintsallgal} for CMB and galaxy lensing, respectively, and in table \ref{tab:paramconstraintsall}. CMB and galaxy lensing respectively. All survey parameters are the same as in section \ref{sec:results}.
 \begin{table}[h!]
     \centering
-    \scriptsize
+    \tiny
     \begin{tabular}{|l|r|rrr|rrr|rrr|}
+        \hline
+        \multicolumn{11}{|c|}{weak priors} \\
+        \hline
+        && \multicolumn{3}{c|}{CMB lensing}& \multicolumn{3}{c|}{Gal. lensing}& \multicolumn{3}{c|}{CMB $\times$ Gal. lensing} \\
+        \hline
+        Par            &   prior &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ \\
+        \hline
+        $H_0$          &     1.73e+01 &  1.65e+01 &  1.65e+01 &        6.91e+00 & 6.39e+00 & 5.04e+00 &      1.65e+00 &      4.13e+00 &      2.88e+00 &             6.65e-01 \\
+        $\Omega_b h^2$ &     5.00e-04 &  5.00e-04 &  5.00e-04 &        5.00e-04 & 5.00e-04 & 4.98e-04 &      4.95e-04 &      4.86e-04 &      4.94e-04 &             4.65e-04 \\
+        $\Omega_c h^2$ &     2.89e-01 &  6.99e-03 &  1.35e-02 &        6.42e-03 & 5.22e-03 & 4.74e-03 &      2.04e-03 &      1.07e-03 &      2.63e-03 &             8.62e-04 \\
+        $n_s$          &     2.00e-02 &  1.90e-02 &  1.99e-02 &        1.82e-02 & 8.04e-03 & 1.89e-02 &      5.54e-03 &      2.98e-03 &      1.52e-02 &             2.34e-03 \\
+        $\tau$         &     6.30e-02 &  4.69e-04 &  6.30e-02 &        4.46e-04 & 6.30e-02 & 6.30e-02 &      6.30e-02 &      5.20e-05 &      6.30e-02 &             5.07e-05 \\
+        $A_s$          &     1.00e-09 &  3.64e-10 &  9.29e-10 &        3.07e-10 & 2.56e-10 & 1.16e-10 &      7.27e-11 &      8.39e-11 &      1.10e-10 &             4.51e-11 \\
+        \hline
+        \multicolumn{11}{|c|}{CMB $T + E$ priors} \\
         \hline
         && \multicolumn{3}{c|}{CMB lensing}& \multicolumn{3}{c|}{Gal. lensing}& \multicolumn{3}{c|}{CMB $\times$ Gal. lensing} \\
         \hline
          Par            &   prior &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ \\
         \hline
-         $H_0$          &   25.70 &      25.56 &                      24.62 &                               22.49 &       8.23 &                       7.02 &                                1.90 &       7.52 &                       3.56 &                                0.92 \\
-         $\Omega_b h^2$ &    2.23 &       2.23 &                       2.23 &                                2.23 &       2.23 &                       2.22 &                                2.21 &       2.22 &                       2.20 &                                2.19 \\
-         $\Omega_c h^2$ &  240.56 &       8.91 &                      11.16 &                                7.83 &       4.51 &                       3.22 &                                2.15 &       3.10 &                       2.01 &                                1.33 \\
-         $n_s$          &    2.07 &       2.06 &                       2.07 &                                2.05 &       2.03 &                       1.90 &                                0.88 &       1.44 &                       1.44 &                                0.67 \\
-         $A_s$          &   47.62 &      45.54 &                      44.79 &                               29.26 &      10.63 &                       4.57 &                                3.50 &       6.93 &                       4.01 &                                2.84 \\
-        \hline
+        $H_0$          &    1.16e+00 &  1.00e+00 &  1.05e+00 &        1.00e+00 & 1.02e+00 & 9.47e-01 &      7.09e-01 &      9.32e-01 &      9.03e-01 &             5.17e-01 \\
+        $\Omega_b h^2$ &    5.62e-05 &  5.16e-05 &  5.58e-05 &        5.15e-05 & 5.38e-05 & 5.26e-05 &      5.10e-05 &      4.73e-05 &      5.08e-05 &             4.69e-05 \\
+        $\Omega_c h^2$ &    7.13e-04 &  6.03e-04 &  7.10e-04 &        5.94e-04 & 4.76e-04 & 5.70e-04 &      3.87e-04 &      1.63e-04 &      4.41e-04 &             1.54e-04 \\
+        $n_s$          &    2.29e-03 &  2.13e-03 &  2.25e-03 &        2.12e-03 & 2.00e-03 & 2.22e-03 &      1.96e-03 &      1.43e-03 &      2.01e-03 &             1.38e-03 \\
+        $\tau$         &    2.44e-03 &  4.30e-05 &  2.44e-03 &        4.27e-05 & 2.41e-03 & 2.42e-03 &      2.40e-03 &      2.92e-05 &      2.42e-03 &             2.80e-05 \\
+        $A_s$          &    1.05e-11 &  4.76e-12 &  1.04e-11 &        4.71e-12 & 1.02e-11 & 1.03e-11 &      9.95e-12 &      2.81e-12 &      1.01e-11 &             2.65e-12 \\
+       \hline
         \end{tabular}
         \caption{Same as table \ref{tab:paramconstraintstight}, except for $\Lambda$CDM parameters.}
         \label{tab:paramconstraintsall}
@@ -1214,13 +1264,13 @@ We do not expect to use weak lensing surveys to competitively constrain the main
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/param_constraints_all_cmb.pdf}
+    \includegraphics[width=\textwidth]{figures/param_constraints_all_cmb.pdf}
     \caption{Same as figure \ref{fig:paramconstraintstightcmb}, except for the standard $\Lambda$CDM parameters.}
     \label{fig:paramconstraintsallcmb}
 \end{figure}
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/param_constraints_all_gal.pdf}
+    \includegraphics[width=\textwidth]{figures/param_constraints_all_gal.pdf}
     \caption{Same as figure \ref{fig:paramconstraintstightgal}, except for the standard $\Lambda$CDM parameters.}
     \label{fig:paramconstraintsallgal}
 \end{figure}
