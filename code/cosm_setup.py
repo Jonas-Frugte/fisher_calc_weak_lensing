@@ -484,4 +484,4 @@ class lensing_spectra:
 if __name__ == '__main__':
   # for testing purposes
   results = lensing_spectra()
-  print(results.window_func(200, 's'))
+  print(results.window_func(200, 's

@@ -68,5 +68,4 @@ axs[1].legend(fontsize=10, loc='upper left')
 plt.tight_layout()
 
 # Save the figure
-plt.savefig('/Users/jonasfrugte/Desktop/fisher_calc_weak_lensing/paper/figures/snrplots.pdf', dpi=300)
-# plt.show()
+plt.savefig('/Users/jonasfrugte/Desktop/fisher_calc_weak_lensing/paper/figures/snrplots.
