@@ -105,9 +105,9 @@
 
 \section{Introduction}
 
-Weak lensing has been used as a probe to constrain cosmological parameters for over a decade \cite{kilbinger2015cosmology,Bacon2000,Kaiser2000,Waerbeke2000,Bartelmann2001}. A range of upcoming surveys, such as the survey by the Simons Observatory (SO) \cite{Ade2019}, the Legacy Survey of Space and Time (LSST) \cite{Ivezic2019}, and Euclid \cite{Laureijs2011} aims to measure weak lensing of the cosmic microwave background (CMB) and galaxies respectively. These upcoming surveys are expected to achieve significantly higher accuracy than their predecessors, leading to tighter constraints on cosmological parameters and advancing our overall understanding of cosmology. Typically, the standard summary statistic of interest is the power spectrum (or equivalently, two-point function) of the lensing potential (as well as cross-correlations with galaxy clustering). This can be measured in terms of the lensing convergence $\kappa$, lensing shear $\gamma$, or lensing potential $\psi$. In the weak lensing regime they are all equivalent, in the sense that they can be directly converted into one another (appendix \ref{sec:weaklensstats}). In CMB surveys, the temperature and polarization anisotropies are used to reconstruct the lensing potential \cite{Hu_2002}, while with galaxies one instead calculates lensing effects by measuring the lensing shear, which can be deduced from the ellipticity distribution of the observed galaxies \cite{HoekstraJain2008}.
+Weak lensing has been used as a probe to constrain cosmological parameters for over a decade \cite{kilbinger2015cosmology,Bacon2000,Kaiser2000,Waerbeke2000,Bartelmann2001,Planck2018Lensing}. A range of upcoming surveys, such as the survey by the Simons Observatory (SO) \cite{Ade2019}, the Legacy Survey of Space and Time (LSST) \cite{Ivezic2019}, and Euclid \cite{Laureijs2011} aims to measure weak lensing of the cosmic microwave background (CMB) and galaxies respectively. These upcoming surveys are expected to achieve significantly higher accuracy than their predecessors, leading to tighter constraints on cosmological parameters and advancing our overall understanding of cosmology. Typically, the standard summary statistic of interest is the power spectrum (or equivalently, two-point function) of the lensing potential (as well as cross-correlations with galaxy clustering). This can be measured in terms of the lensing convergence $\kappa$, lensing shear $\gamma$, or lensing potential $\psi$. In the weak lensing regime they are all equivalent, in the sense that they can be directly converted into one another (appendix \ref{sec:weaklensstats}). In CMB surveys, the temperature and polarization anisotropies are used to reconstruct the lensing potential \cite{Hu_2002}, while with galaxies one instead calculates lensing effects by measuring the lensing shear, which can be deduced from the ellipticity distribution of the observed galaxies \cite{HoekstraJain2008}.
 
-Even with Gaussian initial conditions, there are significant amounts of non-Gaussianity in the weak lensing signal, especially in galaxy lensing due to it being a probe of the more recent distribution of matter \cite{Bernardeau1997,Takada2003}. In addition to looking at the power spectrum, a natural next step is thus to measure weak lensing bispectra. While the bispectrum has been measured for galaxy lensing signals \cite{vanWaerbeke2002}, a definitive detection of the CMB lensing bispectrum is still pending. Upcoming surveys, such as the ones mentioned earlier may be able to detect this signal. Therefore it is timely to consider the potential of higher order spectra to constrain cosmological parameters. 
+Even with Gaussian initial conditions, there are significant amounts of non-Gaussianity in the weak lensing signal, especially in galaxy lensing due to it being a probe of the more recent distribution of matter \cite{Bernardeau1997,Takada2003}. In addition to looking at the power spectrum, a natural next step is thus to measure weak lensing bispectra. While the bispectrum has been measured for galaxy lensing signals \cite{vanWaerbeke2002}, a definitive detection of the CMB lensing bispectrum is still pending \cite{Kalaja_2023,Namikawa_2016}. Upcoming surveys, such as the ones mentioned earlier may be able to detect this signal. Therefore it is timely to consider the potential of higher order spectra to constrain cosmological parameters. 
 
 In this paper, we aim to answer this question by adopting experimental parameters similar to those of next-generation surveys. We are especially interested in seeing if approximate parameter degeneracies can be broken by combining CMB and galaxy weak lensing power- and bi-spectra. 
 %Calculating the covariance matrix of unbiased optimal estimators of the cosmological parameters can be done by combining a Boltzmann code for cosmological perturbations with a Fisher matrix analysis. 
@@ -119,7 +119,7 @@ We will consider $\Lambda$CDM parameters and extensions thereof. Of particular i
 
 The structure of this paper is as follows: we introduce relevant formulas for weak lensing statistics, nonlinear matter bispectrum, and Fisher matrix formalism in section \ref{sec:theory}. We specify details such as the fiducial values of the parameters and noise models used in section \ref{sec:calcdetails}. Parameter constraints and signal-to-noise ratios are presented in section \ref{sec:results} and discussed in section \ref{sec:discussion}. Useful derivations relevant to this paper can be found in the appendices. In particular, they include a derivation for the Fisher matrix formalism for the non-trivial context of bispectra with multiple tracers.
 
-All code used to derive the resukts in this paper is publically available on GitHub at \url{https://github.com/Jonas-Frugte/fisher_calc_weak_lensing}.
+All code used to derive the results in this paper is publically available on GitHub at \url{https://github.com/Jonas-Frugte/fisher_calc_weak_lensing}.
 
 
 
@@ -138,12 +138,12 @@ Radiation from cosmological objects is distorted due to gravitational lensing. D
 In the case of CMB surveys, lensing alters the statistical properties of the temperature and polarization fields and can thus be calculated by comparing the observed signal to the expected unlensed signal(see e.g. \cite{cmblensingestimator}). In galaxy surveys, lensing alters the ellipticities of observed galaxies. If a large enough number of galaxies are observed, this effect can be separated from the intrinsic ellipticities of the galaxies which allows us to estimate the lensing potential.
 
 To constrain cosmological parameters we can then look at the lensing potential of the CMB, $\psi_\CMB$, and of galaxy surveys, $\psi_\gal$. These are directly related to the matter power and bispectra as
-\begin{empheq}[box=\fbox]{align*}
+\begin{align}%[box=\fbox]{align*}
     C^{\psi_X\psi_Y}_\ell
     & = \frac{9}{\ell^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)P^\delta(\ell/\chi,\eta_0-\chi),\\
-    B^{\psi_X\psi_Y\psi_Z}_{\el\ell_1\el\ell_2\el\ell_3} &= \sqrt{\frac{(2\ell_1 + 1)(2\ell_2 + 1)(2\ell_3 + 1)}{4\pi}} \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{\ell_1^2\ell_2^2\ell_3^2}\Omega_m^3H_0^6\\
+    B^{\psi_X\psi_Y\psi_Z}_{\ell\ell_1\ell\ell_2\ell\ell_3} &= \sqrt{\frac{(2\ell_1 + 1)(2\ell_2 + 1)(2\ell_3 + 1)}{4\pi}} \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{\ell_1^2\ell_2^2\ell_3^2}\Omega_m^3H_0^6\\
     & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{\ell_i/\chi\}, \eta_0-\chi),
-\end{empheq}
+\end{align}
 with $X, Y, Z \in \{\CMB, \gal\}$. A derivation can be found in appendices \ref{sec:weaklensing} and \ref{sec:weaklensstats}, or in the literature; see, e.g. \cite{bartelmann2001weak}. $\Omega_m$ is the present day matter density parameter. $H_0$ is the present-day Hubble constant. $a(\eta)$ is the scale factor. $\eta_0$ is the conformal time today. $\chi$ is the comoving radial distance. $\chi_*$ is the distance to surface of last scattering. $P^\delta(k, \eta)$ is the matter power spectrum. $B^\delta(k_1, k_2, k_3, \eta)$ is the matter bispectrum. $W_X(\chi)$ is the window function. Finally,
 $$
 \begin{pmatrix}
@@ -240,38 +240,42 @@ and (for bispectra, assuming Gaussian, diagonal, covariance)
     \frac{\partial_\alpha B^{X X X}_{\ell_1 \ell_2 \ell_3} 
     \partial_\beta B^{XXX}_{\ell_1 \ell_2 \ell_3}}{C^{XX}_{\ell_1}C^{XX}_{\ell_2}C^{XX}_{\ell_3}}.
 \end{equation*}
-
+If only some fraction of the sky, $f_{\text{sky}}$, is measured, all Fisher matrices are multiplied by $f_{\text{sky}}$ \cite{Takada2003}.
 
 
 \section{Calculation Details}\label{sec:calcdetails}
 % TODO: find proper references for stage 3 and stage 4 names as well as experimental parameters and real life surveys
-Our fiducial cosmology is derived from the Planck results \cite{planckresults} (see table \ref{tab:fiducialpars}). For all parameter constraints we use a prior similar to the one used in \cite{Planck2018Lensing} (see table \ref{tab:fiducialpars}). This prior only restricts $\Omega_b h^2$ and $n_s$ significantly. The power spectra, in particular, exhibit complete insensitivity to certain parameters. Consequently, relying solely on them to constrain the entire cosmological model results in very poor constraints. Future lensing surveys will of course use information from surveys measuring other statistics such as galaxy distributions or primary CMB anisotropies, so not using any priors is not representative of what stage 3 and 4 experiments could achieve. Even a weak prior improves the constraining power of our power spectra considerably.
+Our fiducial cosmology is based on the Planck results \cite{planckresults} (see table \ref{tab:fiducialpars}). Throughout this paper we consider two priors. The first we refer to as our ``weak prior'' and is similar to the one used in \cite{Planck2018Lensing} (see table \ref{tab:fiducialpars}). This prior only restricts $\Omega_b h^2$ and $n_s$ significantly. The purpose of the weak prior is as follows. The power spectra, in particular, exhibit complete insensitivity to certain parameters. Consequently, relying solely on them to constrain the entire cosmological model results in very poor constraints. Future lensing surveys will of course use information from surveys measuring other statistics such as galaxy distributions or primary CMB anisotropies, so these poor constraints are not representative of what stage 3 and 4 experiments could achieve. By adding a prior our calculations become more realistic. Additionally, by having the prior be conservative, it stays clear how the different lensing spectra complement each other. The other prior we will use is based on the CMB temperature and $E$-mode polarization cross- and auto-powerspectra from $\ell=30$ to $\ell = 2000$. With the same noise values as used for the CMB weak lensing spectra. These results will be more realistic and serve to test whether weak lensing spectra are able to further tighten constraints in the presence of surveys measuring more standard statistics (such as the primary CMB anisotropies) with similar noise values.
 \begin{table}[h!]
     \centering
-    \begin{tabular}{|c|c|c|c|}
+    \scriptsize
+    \begin{tabular}{|c|c|c|c|c|}
         \hline
-        \textbf{parameter} & \textbf{notation} & \textbf{fiducial value} & \textbf{$\sigma$ of prior}\\
+        \textbf{parameter} & \textbf{notation} & \textbf{fiducial value} & \textbf{$\sigma$ of weak prior} & \textbf{$\sigma$ of $T + E$ prior}\\
         \hline
-        Hubble constant & $H_0$ & $67.4 \, \text{km/s/Mpc}$ & 17.3\\
+        Hubble constant & $H_0$ & $67.4 \, \text{km/s/Mpc}$ & 17.3 & 1.21\\
         \hline
-        Physical baryon density parameter & $\Omega_b h^2$ & $0.0223$ & 0.0005\\
+        Physical baryon density parameter & $\Omega_b h^2$ & $0.0223$ & 0.0005 & 0.000057\\
         \hline
-        Physical cold dark matter density parameter & $\Omega_c h^2$ & $0.119$ & $0.288$\\
+        Physical cold dark matter density parameter & $\Omega_c h^2$ & $0.119$ & $0.288$ & 0.00083\\
         \hline
-        Scalar spectral index & $n_s$ & 0.965 & 0.02 \\
+        Scalar spectral index & $n_s$ & 0.965 & 0.02 & 0.0025 \\
         \hline
-        Amplitude of primordial scalar fluctuations & $A_s$ & $2.13 \times 10^{-9}$ & $1\times 10^{-9}$ \\
+        Reionization depth & $\tau$ & 0.063 & 0.063 & 0.0013 \\
         \hline
-        Sum of neutrino masses & $\sum m_\nu$ & $0.06$ & $\infty$\\
+        Amplitude of primordial scalar fluctuations & $A_s$ & $2.13 \times 10^{-9}$ & $1\times 10^{-9}$ & $5.5\times 10^{-11}$\\
         \hline
-        Dark energy equation of state parameter & $w_0$ & -1 & $\infty$\\ \hline
+        Sum of neutrino masses & $\sum m_\nu$ & $0.06$ & $\infty$ & 0.22\\
+        \hline
+        Dark energy equation of state parameter & $w_0$ & -1 & $\infty$ & 0.058 \\ 
+        \hline
     \end{tabular}
     \caption{Cosmological parameters varied ($\Lambda \text{CDM} + w_0 + m_\nu$). We use a prior similar to the one used by the Planck weak lensing results \cite{Planck2018Lensing} which essentially only restricts $\Omega_bh^2$ and $n_s$ significantly.}
     \label{tab:fiducialpars}
 \end{table}
 
 
-This paper considers noise levels for ``stage 3'' and ``stage 4'' weak lensing surveys. Values can be found in table \ref{tab:noiselevels}, including the experiments they are representative of. A comparison of the noise power spectra to the lensing power spectra are shown     in figure \ref{fig:lpsplusnoise}. Effectively, for galaxy lensing, the power spectrum is signal-dominated up until $\ell \sim 200$ (stage 2) and $\ell \sim 700$ (stage 4). For CMB lensing, the power spectrum is signal-dominated for $\ell \sim 300$ (stage 3) and $\ell \sim 1000$ (stage 4). 
+This paper considers noise levels for ``stage 3'' and ``stage 4'' weak lensing surveys. Values can be found in table \ref{tab:noiselevels}, including the experiments they are representative of. A comparison of the noise power spectra to the lensing power spectra are shown     in figure \ref{fig:lpsplusnoise}. Effectively, for galaxy lensing, the power spectrum is signal-dominated up until $\ell \sim 200$ (stage 3) and $\ell \sim 700$ (stage 4). For CMB lensing, the power spectrum is signal-dominated for $\ell \sim 300$ (stage 3) and $\ell \sim 1000$ (stage 4). 
 
 \begin{table}[h!]
     \centering
@@ -294,10 +298,13 @@ This paper considers noise levels for ``stage 3'' and ``stage 4'' weak lensing s
     \label{tab:noiselevels}
 \end{table}
 
-CMB lensing noise is estimated using quadratic estimator \cite{cmblensingestimator}. We consider experiments that only measure polarization noise. This is similarly done in \cite{Namikawa_2016}. The parameters characterizing the noise levels are thus beam width, $\sigma$, and polarization white noise, $\Delta_P$. Galaxy lensing is determined by measuring lensing shear (see appendices \ref{sec:weaklensing} and \ref{sec:shear}). The noise in this measurement is dominated by scale-independent shot noise and has associated noise power spectrum $N_l^{\text{shear}} = \sigma_{\text{rms}}^2 / n_g$, \cite{bartelmann2001weak}. $n_g$ is the amount of galaxies observed per unit angle. The noise power spectrum for the lensing potential then equals
+CMB lensing noise is estimated using the quadratic estimator from \cite{cmblensingestimator}.
+% We consider experiments that only measure polarization noise. This is similarly done in \cite{Namikawa_2016}. 
+The parameters characterizing the noise levels are beam width, $\sigma$, polarization white noise, $\Delta_P$, and temperature white noise $\Delta_T$. We take $\Delta_T = \Delta_P / \sqrt 2$ throughout. Galaxy lensing is determined by measuring lensing shear (see appendices \ref{sec:weaklensing} and \ref{sec:shear}). The noise in this measurement is dominated by scale-independent shot noise and has associated noise power spectrum $N_l^{\text{shear}} = \sigma_{\text{rms}}^2 / n_g$, \cite{bartelmann2001weak}. $n_g$ is the amount of galaxies observed per unit angle. The noise power spectrum for the lensing potential then equals
 \begin{equation*}
     N_\ell^{\text{lens. potential}} = \frac{(\ell-1)\ell(\ell+1)(\ell+2)}{4}N_\ell^{\text{shear}}.
 \end{equation*}
+In all cases we assume that the proportion of the sky surveyed, $f_{\text{sky}}$, equals 0.5.
 For parameter constraints, we will consider only stage 4 noise levels.
 
 \begin{figure}[t]
@@ -331,35 +338,35 @@ The redshift distribution of the observed galaxies is commonly parameterized as 
 We choose the parameter combination $a = 2$, $b = 3/2$ and $z_0 = 0.64$ which is similar to the expected distributions of Euclid, (which will probe primarily in the 0.2 - 2.6 redshift range \cite{euclidprep10})
 and the LSST mission (which has $a \approx 2$, $b \approx 1$, and $z_0 \approx 0.3$ from predictions for the obtained data \cite{lsstsciencebookchapter3}). For simplicity, we do not implement a tomographic binning of the source galaxies, and instead model the population with a single effective redshift distribution.
 
-Derivatives are calculated with a central difference formula (see appendix \ref{sec:derivatives} for convergence).  To check the accuracy of our results we calculated constraints for similar experimental parameters as in references \cite{Planck2018Lensing, Takada2003, Namikawa_2016} and found good agreement in all cases.
+Derivatives are calculated with a central difference formula (see appendix \ref{sec:derivatives} for convergence).  To check the accuracy of our results we calculated constraints for similar experimental parameters as in references \cite{Planck2018Lensing, Takada2003, cmbs4sciencebook,neutrinoconstraints} and found good agreement in all cases.
 
 \section{Results}\label{sec:results}
 Lensing power spectra have high signal-to-noise in all cases. 
-The signal-to-noise of the CMB and galaxy lensing bispectra versus the maximum multipole moment measured is shown in figure \ref{fig:snrplots}. In the absence of systematics, shear bispectra can be detected at high signal-to-noise with both stage 3 and stage 4 experiments. CMB lensing bispectra could be  detectable by a stage 3 experiment (see e.g. ref.~\cite{} for the effect of noise biases) and with high signal-to-noise with a stage 4 experiment. CMB $S/N$ results match those of reference \cite{Namikawa_2016}.
+The signal-to-noise of the CMB and galaxy lensing bispectra versus the maximum multipole moment measured is shown in figure \ref{fig:snrplots}. In the absence of systematics, shear bispectra can be detected at high signal-to-noise with both stage 3 and stage 4 experiments. CMB lensing bispectra could be  detectable by a stage 3 experiment (see e.g. ref. \cite{Kalaja_2023} for the effect of noise biases) and with high signal-to-noise with a stage 4 experiment. CMB $S/N$ results match those of reference \cite{Namikawa_2016}.
 %It can be seen that the CMB bispectrum signal to noise never exceeds 2 even for $l_{\max} = 2000$, meaning that this signal is not likely to be able to contribute to parameter constraints in future surveys. All other quantities should be well detectable for $l_{\max}\geq 500$.
 \begin{figure}[h!]
     \includegraphics[width=\textwidth]{figures/snrplots.pdf}
-    \caption{Signal-to-noise ratios for galaxy lensing (dashed) and CMB lensing (non-dashes) power- (in red) and bispectra (in blue). The $x$-axis labels the maximum multipole moment measured up to, starting from $\ell_{\min}=2$.  SAY SOMETHING ABOUT LMIN FOR RECONSTRUCTION The maximum multipole used for CMB lensing reconstruction is $\ell = 10^4$. Using lower maximum multipole such as 3000 doesn't significantly affect results.}
+    \caption{Signal-to-noise ratios for galaxy lensing (left) and CMB lensing (right) for stage 3 (dashed) and stage 4 (not dashed) surveys as a function of maximum multipole measured. The minimum multipole is always $l_{\text{min}}=2$. The multipole range used for CMB lensing reconstruction is $2\leq \ell \leq 10^4$. Using a more conservative range such as $30\leq \ell \leq 5000$ used to calculate Simons Observatory noise curves don't significantly affect the results.}
     \label{fig:snrplots}
 \end{figure}
 
-Next, we consider cosmological parameter constraints. We include both the power spectrum and the bispectrum of the weak lensing. We emphezize on several two extension of $\Lambda CDM$, $m_\nu$ and $w_0$ as well as $\sigma_8$, and $\Omega_m$. Constraints on other parameters can be found found in appendix \ref{sec:lambdacdmconstraints}. Results shown include marganlization over all parameters. Figures \ref{fig:paramconstraintstightcmb} and \ref{fig:paramconstraintstightgal} show confidence ellipses from stage 4 CMB and galaxy lensing surveys, respectively. Table \ref{tab:paramconstraintstight} contains the forecasted constraints as uncertainties in the percentage of the fiducial values. 
+Next, we consider cosmological parameter constraints. We include both the power spectrum and the bispectrum of the weak lensing. We look at two extension of $\Lambda CDM$, $m_\nu$ and $w_0$ as well as the derived parameters $\sigma_8$, and $\Omega_m$. Constraints on the full set of $\Lambda$CDM parameters can be found found in appendix \ref{sec:lambdacdmconstraints}. Results shown include marginalization over all parameters. Figures \ref{fig:paramconstraintstightcmb} and \ref{fig:paramconstraintstightgal} show confidence ellipses from stage 4 CMB and galaxy lensing surveys with the weak prior, respectively. Figures \ref{fig:paramconstraintstightcmbcmbprior} and \ref{fig:paramconstraintstightgalcmbprior} show confidence ellipses in the case of our CMB $T+E$ prior. Table \ref{tab:paramconstraintstight} lists all forecasted constraints . 
 
-!!
-By itsef lensing power spectra are not very constraining, hence we have to assume weak priors. inflated constraints from lps, however still good bispectrum info. 
-!!
+Constraints are significantly improved by including bispectrum information in nearly all cases when using weak priors. When including the CMB $T+E$ priors, both the CMB lensing power- and bispectra significantly improve prior constraints, however combining them doesn't lead to significant improvements compared to only using lensing power spectra. For galaxy lensing, the power- and bispectra yield nearly identical improvements compared to the CMB $T+E$ prior. In this case, combining both statistics leads to significantly tighter constraints (in contrast to CMB lensing). When combining CMB and galaxy lensing we see that the bispectrum is slightly less competitive than the lensing power spectrum, but can still significantly improve constraints compared to only using the lensing power spectrum.
+% Again in agreement with reference \cite{Namikawa_2016}, in which case a 33 percent and 35 percent improvement was found for $m_\nu$ and $w_0$, respectively, by measuring the CMB lensing bispectrum in addition to the power spectrum. 
 
-
-Despite using priors that significantly increase power spectrum constraining power, constraints are significantly improved by including bispectrum information in nearly all cases. Again in agreement with reference \cite{Namikawa_2016}, in which case a 33 percent and 35 percent improvement was found for $m_\nu$ and $w_0$, respectively, by measuring the CMB lensing bispectrum in addition to the power spectrum. Constraints also improve significantly, though not quite as much, when combining CMB and galaxy lensing, compared to only measuring one of these signals. 
+Furthermore, it is clear that, in general, combining CMB and galaxy lensing surveys also leads to significant improvements in constraining power, even in the case of the CMB $T+E$ prior. The improvement is strongest for the neutrino constraint.
 
 Besides these obvious findings, we make several other conclusions:
 \begin{itemize}
     \item Lensing powers pectra alone are not sufficient to competitively constrain $\Lambda\mathrm{CDM} + w_0 + m_\nu$ without priors, even in the case of stage 4 surveys.
-    \item For low-enough noise values (in particular for stage 4 noise) the bispectra can contain more information than the power spectra . If we denote the multipole moment at which the noise surpasses the power spectrum signal as $\ell_{N>C}$, than the fisher matrices for the bispectra roughly scale as $F^{B}_{\alpha\beta}\propto \ell_{N>C}^3$ while for the powerspectra they scale as $F^{C}_{\alpha\beta}\propto \ell_{N>C}^2$ (with an extra multipole factor due to the $2\ell + 1$ factor in the power spectrum estimator covariance). The power spectrum is sufficiently bigger than the bispectrum that it contains more information given current-day noise levels, however as surveys get better the bispectra may eventually contain more information because of the more favorable $\ell_{N>C}$ scaling. REMOVE L SCALING ARGUMENT YAP ABOUT NON GAUSSIANITY INSTEAD AND EXPLAIN ABOUT DIFFERENCE BETWEEN KERNELS
 
-    \item The information from bispectra is sensitive to cosmology in a different way than that of the power spectra. The main parameter combinations where approximate degeneracies are broken are $(n_s,\Omega_b h^2),\;(\Omega_b h^2,H_0),\;(\Omega_c h^2,H_0),\;(\Omega_c h^2,\Omega_b h^2)\;(n_s,\Omega_c h^2),\;(m_\nu,H_0),\;(m_\nu,n_s),$ $(A_s,\Omega_b h^2)$. This means that even if stage 4 surveys aren't able to reach the noise levels assumed in this paper, the bispectra will likely still lead to significantly tighter constraints.
+    \item For lower noise values (in particular for stage 4 noise) the bispectra becomes increasingly important compared to the powerspectra. The lensing bispectra are directly related to the amount of non-gaussianity in the matter distribution. As noise levels becomes lower, we are are able to measure the matter distribution on small enough scales where nonlinear matter evolution becomes apparent. Additionally, for galaxy lensing, the window function peaks at earlier redshifts than compared to CMB lensing. The bispectrum is largest at late times, and thus the galaxy lensing bispectrum is significantly easier to detect and is better at constraining parameters then the CMB lensing bispectrum.
 
-    \item Stage 4 galaxy weak lensing surveys contain significantly more information than CMB surveys. Comparing the confidence ellipses, it is clear that the two types of surveys depend on the underlying parameters in different ways. This leads to substantially better constraints for $\sigma_8$, $\Omega_m$, and $m_\nu$, (but not for $w_0$) when combining CMB and galaxy lensing.
+    \item The information from bispectra is sensitive to cosmology in a different way than that of the power spectra. The main parameter combinations where approximate degeneracies are broken are $(n_s,\Omega_b h^2),\;(\Omega_b h^2,H_0),\;(\Omega_c h^2,H_0),\;(\Omega_c h^2,\Omega_b h^2)\;(n_s,\Omega_c h^2),\;(m_\nu,H_0),\;(m_\nu,n_s),$ $(A_s,\Omega_b h^2)$ (see also appendix \ref{sec:lambdacdmconstraints}). This means that even if stage 4 surveys aren't able to reach the noise levels assumed in this paper, the bispectra will likely still lead to significantly tighter constraints.
+
+    \item Stage 4 galaxy weak lensing surveys generally contain more information than CMB surveys. 
+    % Comparing the confidence ellipses, it is clear that the two types of surveys depend on the underlying parameters in different ways. This leads to substantially better constraints for $\sigma_8$, $\Omega_m$, $m_\nu$, and $w_0$ when combining CMB and galaxy lensing.
 \end{itemize}
 
 \begin{table}
@@ -384,27 +391,44 @@ Besides these obvious findings, we make several other conclusions:
         \hline
          Par            &   prior &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ \\
         \hline
-        $m_\nu$    &    1.54e-01 &  5.23e-02 &  8.76e-02 &        5.18e-02 & 1.17e-01 & 1.13e-01 &      8.79e-02 &      1.87e-02 &      7.47e-02 &             1.62e-02 \\
-        $w_0$      &    4.64e-02 &  4.18e-02 &  4.54e-02 &        4.18e-02 & 4.06e-02 & 4.14e-02 &      2.25e-02 &      3.34e-02 &      3.90e-02 &             1.99e-02 \\
-        $\sigma_8$ &    1.38e-02 &  1.06e-02 &  1.16e-02 &        1.06e-02 & 9.86e-03 & 1.00e-02 &      6.99e-03 &      8.98e-03 &      9.72e-03 &             5.28e-03 \\
-        $\Omega_m$ &    1.39e-02 &  1.20e-02 &  1.26e-02 &        1.19e-02 & 1.26e-02 & 1.15e-02 &      9.03e-03 &      1.13e-02 &      1.07e-02 &             6.16e-03 \\
+        $m_\nu$    &    2.16e-01 &  5.28e-02 &  1.21e-01 &        5.22e-02 & 1.48e-01 & 1.49e-01 &      1.12e-01 &      1.88e-02 &      1.02e-01 &             1.62e-02 \\
+        $w_0$      &    5.78e-02 &  4.19e-02 &  5.30e-02 &        4.19e-02 & 4.66e-02 & 4.77e-02 &      2.55e-02 &      3.35e-02 &      4.33e-02 &             1.99e-02 \\
+        $\sigma_8$ &    1.55e-02 &  1.06e-02 &  1.50e-02 &        1.06e-02 & 1.18e-02 & 1.21e-02 &      8.18e-03 &      8.99e-03 &      1.19e-02 &             5.28e-03 \\
+        $\Omega_m$ &    1.50e-02 &  1.20e-02 &  1.46e-02 &        1.20e-02 & 1.34e-02 & 1.23e-02 &      9.32e-03 &      1.13e-02 &      1.19e-02 &             6.16e-03 \\
        \hline
         \end{tabular}
-\caption{Parameter constraints in percentage of the fiducial values for different combinations of weak lensing information. $C$ stands for powerspectra, and $B$ for bispectra. All surveys are assumed to be stage 4 surveys with multipole range $2 \leq \ell \leq 2000$. We use the prior described in table \ref{tab:fiducialpars}.}
+\caption{Parameter constraints for different combinations of weak lensing information. $C$ stands for powerspectra, and $B$ for bispectra. All surveys are assumed to be stage 4 surveys with multipole range $2 \leq \ell \leq 2000$. We use the weak and CMB priors described in table \ref{tab:fiducialpars}.}
 \label{tab:paramconstraintstight}
 \end{table}
 
+% CONFIDENCE ELLIPSES
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/param_constraints_tight_cmb.pdf}
-    \caption{Parameter constraints and confidence ellipses for $\mu_\nu$, $w_0$, $\sigma_8$, and $\Omega_m$. Using ``stage 4'' noise with multipole range from $2$ to $2000$. The colored plots show CMB lensing power- and/or bispectrum constraints. Priors used can be found in table \ref{tab:fiducialpars}. The confidence ellipses are for $1\sigma$ certainty. They show approximate degeneracies in the information gained from a survey if they are ``stretched''. When the information of ellipses with degeneracies in different directions is combined, the degeneracies are removed and the constraints typically becomes much better on the relevant parameters. The black plots show the constraints using all lensing information, i.e. CMB lensing spectra, galaxy lensing spectram, and all cross spectra.}
+    \includegraphics[width=0.7\textwidth]{figures/param_constraints_tight_cmb_weak_prior.pdf}
+    \caption{Parameter constraints and confidence ellipses for $\mu_\nu$, $w_0$, $\sigma_8$, and $\Omega_m$. Using ``stage 4'' noise with multipole range from $2$ to $2000$. The colored plots show CMB lensing power- and/or bispectrum constraints. We use the weak priors listed in table \ref{tab:fiducialpars}. The confidence ellipses are for $1\sigma$ certainty. They show approximate degeneracies in the information gained from a survey if they are ``stretched''. When the information of ellipses with degeneracies in different directions is combined, the degeneracies are removed and the constraints typically becomes much better on the relevant parameters. The black plots show the constraints using all lensing information, i.e. CMB lensing spectra, galaxy lensing spectram, and all cross spectra.}
     \label{fig:paramconstraintstightcmb}
 \end{figure}
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/param_constraints_tight_gal.pdf}
+    \includegraphics[width=0.7\textwidth]{figures/param_constraints_tight_cmb_cmb_prior.pdf}
+    \caption{Same as figure \ref{fig:paramconstraintstightcmb}, except we use the CMB temperature and polarization based priors listed in table \ref{tab:fiducialpars}.}
+    \label{fig:paramconstraintstightcmbcmbprior}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/param_constraints_tight_gal_weak_prior.pdf}
     \caption{Same as figure \ref{fig:paramconstraintstightcmb}, except here the colored plots show galaxy lensing constraints.}
     \label{fig:paramconstraintstightgal}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/param_constraints_tight_gal_cmb_prior.pdf}
+    \caption{Same as figure \ref{fig:paramconstraintstightcmbcmbprior}, except here the colored plots show galaxy lensing constraints.}
+    \label{fig:paramconstraintstightgalcmbprior}
 \end{figure}
 
 % \begin{figure}
@@ -435,7 +459,7 @@ Besides these obvious findings, we make several other conclusions:
 
 
 \section{Discussion and conclusion}\label{sec:discussion}
-In this work, we have presented parameter forecasts from CMB lensing and galaxy lensing power- and bispectra, considering experimental parameters representative of Stage 3 and Stage 4 CMB and galaxy surveys. Our analysis shows that while lensing power spectra are generally well detectable, the inclusion of bispectra offers significant improvements when considering paramater constraints. Notably, both CMB and galaxy bispectra are found to be measurable, even with Stage 3 experimental noise levels.
+In this work, we have presented parameter forecasts from CMB lensing and galaxy lensing power- and bispectra, considering experimental parameters representative of Stage 3 and Stage 4 CMB and galaxy surveys. Our analysis shows that while lensing power spectra are well detectable, the inclusion of bispectra generally offers significant improvements when considering parameter constraints. Notably, both CMB and galaxy bispectra are found to be measurable, even with Stage 3 experimental noise levels.
 
 The primary impact of incorporating bispectrum information is a tightening of cosmological parameter constraints, particularly for parameters like $H_0$, $\sigma_8$, and $\Omega_m$, and in breaking key parameter degeneracies. We found that for sufficiently low noise levels, characteristic of Stage 4 surveys, the bispectra themselves can offer constraining power comparable to or even exceeding that of the power spectra, due to a more favorable scaling of information content with the maximum usable multipole\footnote{The multipole at which the noise power spectrum starts exceeding the cosmological power spectrum.}. Furthermore, the combination of CMB and galaxy lensing probes, especially when both power spectra and bispectra are utilized, further enhances constraints and aids in mitigating degeneracies. However, lensing power spectra alone, even for Stage 4 surveys, appear insufficient to competitively constrain an 8-parameter $\Lambda\text{CDM} + w_0 + \sum m_\nu$ model without priors.
 
@@ -447,8 +471,11 @@ There are a number of limitations to the results presented in this paper. The li
 
      \item As noted in appendix \ref{sec:fisher}, the Gaussian approximation was used for the covariance of the spectra estimators, i.e. we ignored any contributions not arising from standard Wick contractions. A next step could be to account for these additional contributions, perhaps through N-body and ray-tracing simulations. Notably, such simulations could potentially also allow for a more accurate calculation of the lensing spectra themselves, without relying on fitting formulas for the matter bispectrum or the Limber approximation, depending on simulation accuracy. This might also explain the fact that in some instances the bispectra appear more constraining compared to the power spectra.  
 
-    \item The CMB lensing noise was estimated via a quadratic estimator. While standard, such estimators may not be strictly optimal, especially with complex foregrounds or non-Gaussianities. Better estimators exist; for example, the iterative estimator developed in \cite{Smith_2012} can lead to a significantly better signal-to-noise ratio for the CMB lensing bispectrum, as shown in \cite{Namikawa_2016}.
+    \item The CMB lensing noise was estimated via a quadratic estimator. While standard, such estimators may not be strictly optimal, especially with complex foregrounds or non-Gaussianities. Better estimators exist; for example, the iterative estimator developed in \cite{Smith_2012} can lead to a significantly better signal-to-noise ratio for the CMB lensing bispectrum, as shown in \cite{Namikawa_2016}. Using such an iterative estimator may also result in the CMB bispectrum being able to significantly improve parameter constraints when combined with lensing power spectra and a CMB $T+E$ prior.
+    
     \item To calculate the Fisher matrices, derivatives of the lensing spectra with respect to cosmological parameters were computed using a central difference formula.  This introduces errors (estimated at most a few percent, though larger for neutrino mass derivatives, see appendix \ref{sec:derivatives}). Functions such as the matter power spectrum and fitting parameters for the matter bispectrum were approximated using pre-generated data and interpolation, also introducing errors of at most a few percent. Currently, these numerical errors are not considered significant because this paper primarily aims to provide a qualitative understanding of the utility of CMB and galaxy weak lensing spectra.  However, for precise quantitative results, these factors would need to be revisited and improved.
+    
+    \item A recent paper \cite{postborn} has shown that the Born approximation used to derive the formulas for the lensing power and bispectra, is no longer negligible for the lensing bispectrum. The post-Born corrections calculated in that paper only changed the lensing power spectra by $\leq 0.2\%$, while for the bispectra this effect was much larger, in particular for folded configurations. For future work it would thus be worthwile to analyze how these post-Born corrections affect the results presented in this paper.
 \end{itemize}
 
 Despite these limitations, this work provides valuable insight into the potential of future weak lensing surveys. Addressing these limitations will be crucial for obtaining robust cosmological constraints from upcoming observational data.
@@ -669,9 +696,10 @@ we rewrite the lensing potential bispectrum as
     \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{\ell_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}e^{i\mathbf k_i \cdot\hat{\mathbf n_i}\chi_i}}\\ \times (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
 \end{gather*}
 Now using equation \ref{eq:complexexp} to rewrite the complex exponential:
+%TODO: check \ell m here
 \begin{gather*}
     \langle (\psi_1)_{\ell_1m_1}(\psi_2)_{\ell_2m_2}(\psi_3)_{\ell_3m_3} \rangle \\ = 
-    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{\ell_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi\sum_{\ellm}i^{\ell}j_{l}(k_i\chi_i)Y_{\ell}^{m}(\hat{\mathbf n_i})Y_{\ell}^{m}(\hat{\mathbf k_i})^*}\\
+    \prod_i\br{-2\int\d^2\hat{\mathbf n_i}(Y^{m_i}_{\ell_i}(\hat{\mathbf n_i}))^*\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi\sum_{\ell m}i^{\ell}j_{l}(k_i\chi_i)Y_{\ell}^{m}(\hat{\mathbf n_i})Y_{\ell}^{m}(\hat{\mathbf k_i})^*}\\
     \times (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}) \\
     = \sbr{\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{\d^3\mathbf k_i}{(2\pi)^{3}}4\pi i^{\ell_i}j_{\ell_i}(k_i\chi_i)Y_{\ell_i}^{m_i}(\hat{\mathbf k_i})^*}} (2\pi)^3\delta(\mathbf k_1 + \mathbf k_2 + \mathbf k_3)B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
 \end{gather*}
@@ -696,7 +724,7 @@ The angular part of the $\mathbf x$ integral can be evaluated using the identity
 giving
 \begin{gather*}
     \langle (\psi_1)_{\ell_1m_1}(\psi_2)_{\ell_2m_2}(\psi_3)_{\ell_3m_3} \rangle 
-    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3}}4\pi (-1)^{\elli}j_{\ell_i}(k_i\chi_i)j_{\ell_i}(k_ix)} \\ \times B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
+    = (2\pi)^3 8 A_{\mathbf l}^{\mathbf m}\int x^2\d x\prod_i\br{-2\int_0^{\chi_*}\d\chi_i W_i(\chi_i)\int\frac{k_i^2\d k_i}{(2\pi)^{3}}4\pi (-1)^{\ell_i}j_{\ell_i}(k_i\chi_i)j_{\ell_i}(k_ix)} \\ \times B^\Psi(\{k_i\}, \{\eta_0-\chi_i\}).
 \end{gather*}
 Now applying the Limber approximation again:
 \begin{gather*}
@@ -1194,18 +1222,19 @@ Each change of the cosmological parameters requires a recalculation of the entir
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{lcc}
-    \toprule
+    \begin{tabular}{|l|c|c|}
+    \hline
     Parameter & Fiducial value & Finite difference ($h$) \\
-    \midrule
+    \hline
     $H$            & $67.4$               & fiducial\,$\times0.1$   \\
-    $\Omega_b h^2$ & $0.0223$             & fiducial\,$\times0.2$   \\
+    $\Omega_b h^2$ & $0.0223$             & fiducial\,$\times0.1$   \\
     $\Omega_c h^2$ & $0.119$              & fiducial\,$\times0.005$ \\
-    $n_s$          & $0.965$              & fiducial\,$\times0.02$ \\
-    $A_s$          & $2.13\times10^{-9}$  & fiducial\,$\times0.15$   \\
-    $m_\nu$        & $0.06$               & fiducial\,$\times0.15$   \\
-    $w_0$          & $-1$                 & $0.06$                  \\
-    \bottomrule
+    $n_s$          & $0.965$              & fiducial\,$\times0.005$ \\
+    $A_s$          & $2.13\times10^{-9}$  & fiducial\,$\times0.1$   \\
+    $\tau$         & $0.063$              & fiducial\,$\times 0.1$   \\
+    $m_\nu$        & $0.06$               & fiducial\,$\times0.1$   \\
+    $w_0$          & $-1$                 & $0.03$                  \\
+    \hline
     \end{tabular}
     \caption{Fiducial cosmological parameters and their finite-difference steps}
     \label{tab:cosmo-params-diff}
@@ -1213,14 +1242,14 @@ Each change of the cosmological parameters requires a recalculation of the entir
     
     
 
-To test the accuracy, we vary $h$ by $\pm 5\%$ and $\pm 10\%$ and plot the relative change in the derivative of the equilateral bispectrum in figure \ref{fig:deraccuracy}. As long as numerical noise doesn't dominate, it can be shown that the relative error in our approximation is approximately 5 times the relative difference that taking $h \rightarrow h(1 \pm 0.1)$ leads to. We thus conclude that, based on this test, the derivatives are almost always computed with up to one percent error. The exception is the derivative with respect to neutrino masses, which introduces a larger error. 
+To test the accuracy, we varied $h$ by $\pm 5\%$ and $\pm 10\%$ and compared the relative change in the derivative of the equilateral lensing bispectra and the lensing powerspectra. As long as numerical noise doesn't dominate, it can be shown that the relative error in our approximation is approximately 5 times the relative difference that taking $h \rightarrow h(1 \pm 0.1)$ leads to. We thus conclude that, based on the tests conducted, the derivatives are almost always computed with up to one percent error. The exception is the derivative with respect to neutrino masses, which introduces a larger error of around 10 percent.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[height=\textheight]{../code/plots/derivative_accuracy.png}
-    \caption{Central difference approximation of derivative of equilateral CMB weak lensing bispectrum (left) and power spectrum (right) for differences as specified in table \ref{tab:cosmo-params-diff} as well as for differences $5\%$ and $10\%$ larger and smaller.}
-    \label{fig:deraccuracy}
-\end{figure}
+% \begin{figure}[t]
+%     \centering
+%     \includegraphics[height=\textheight]{../code/plots/derivative_accuracy.png}
+%     \caption{Central difference approximation of derivative of equilateral CMB weak lensing bispectrum (left) and power spectrum (right) for differences as specified in table \ref{tab:cosmo-params-diff} as well as for differences $5\%$ and $10\%$ larger and smaller.}
+%     \label{fig:deraccuracy}
+% \end{figure}
 
 \section{$\Lambda$CDM constraints}
 \label{sec:lambdacdmconstraints}
@@ -1250,12 +1279,12 @@ We do not expect to use weak lensing surveys to competitively constrain the main
         \hline
          Par            &   prior &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ &   $C_\ell$ &   $B_{\ell_1\ell_2\ell_3}$ &   $C_\ell + B_{\ell_1\ell_2\ell_3}$ \\
         \hline
-        $H_0$          &    1.16e+00 &  1.00e+00 &  1.05e+00 &        1.00e+00 & 1.02e+00 & 9.47e-01 &      7.09e-01 &      9.32e-01 &      9.03e-01 &             5.17e-01 \\
-        $\Omega_b h^2$ &    5.62e-05 &  5.16e-05 &  5.58e-05 &        5.15e-05 & 5.38e-05 & 5.26e-05 &      5.10e-05 &      4.73e-05 &      5.08e-05 &             4.69e-05 \\
-        $\Omega_c h^2$ &    7.13e-04 &  6.03e-04 &  7.10e-04 &        5.94e-04 & 4.76e-04 & 5.70e-04 &      3.87e-04 &      1.63e-04 &      4.41e-04 &             1.54e-04 \\
-        $n_s$          &    2.29e-03 &  2.13e-03 &  2.25e-03 &        2.12e-03 & 2.00e-03 & 2.22e-03 &      1.96e-03 &      1.43e-03 &      2.01e-03 &             1.38e-03 \\
-        $\tau$         &    2.44e-03 &  4.30e-05 &  2.44e-03 &        4.27e-05 & 2.41e-03 & 2.42e-03 &      2.40e-03 &      2.92e-05 &      2.42e-03 &             2.80e-05 \\
-        $A_s$          &    1.05e-11 &  4.76e-12 &  1.04e-11 &        4.71e-12 & 1.02e-11 & 1.03e-11 &      9.95e-12 &      2.81e-12 &      1.01e-11 &             2.65e-12 \\
+        $H_0$          &    1.21e+00 &  1.00e+00 &  1.18e+00 &        1.00e+00 & 1.07e+00 & 9.93e-01 &      7.20e-01 &      9.32e-01 &      9.68e-01 &             5.17e-01 \\
+        $\Omega_b h^2$ &    5.69e-05 &  5.16e-05 &  5.67e-05 &        5.15e-05 & 5.49e-05 & 5.29e-05 &      5.18e-05 &      4.74e-05 &      5.15e-05 &             4.69e-05 \\
+        $\Omega_c h^2$ &    8.27e-04 &  6.08e-04 &  8.15e-04 &        5.99e-04 & 5.89e-04 & 6.57e-04 &      5.27e-04 &      1.63e-04 &      6.03e-04 &             1.54e-04 \\
+        $n_s$          &    2.50e-03 &  2.17e-03 &  2.50e-03 &        2.15e-03 & 2.12e-03 & 2.42e-03 &      2.11e-03 &      1.44e-03 &      2.33e-03 &             1.38e-03 \\
+        $\tau$         &    1.34e-02 &  4.37e-05 &  1.22e-02 &        4.33e-05 & 1.08e-02 & 1.13e-02 &      9.73e-03 &      2.94e-05 &      1.08e-02 &             2.82e-05 \\
+        $A_s$          &    5.45e-11 &  4.82e-12 &  4.94e-11 &        4.77e-12 & 4.39e-11 & 4.58e-11 &      3.92e-11 &      2.83e-12 &      4.32e-11 &             2.66e-12 \\
        \hline
         \end{tabular}
         \caption{Same as table \ref{tab:paramconstraintstight}, except for $\Lambda$CDM parameters.}

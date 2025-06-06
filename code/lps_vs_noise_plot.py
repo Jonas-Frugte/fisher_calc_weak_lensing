@@ -6,15 +6,15 @@ fig, axs = plt.subplots(1, 2, figsize = (10, 5))
 
 # LENSING SPECTRA
 l_values = np.logspace(np.log10(2), np.log10(3000), 100)
-spectra = cs.lensing_spectra() # don't need matter bispectrum
+spectra = cs.lensing_spectra()
 gal_lps = np.array([spectra.lps(l, ('s', 's')) for l in l_values])  # Shear-shear power spectrum
 cmb_lps = np.array([spectra.lps(l, ('c', 'c')) for l in l_values])
 
 # CMB NOISE QUAD ESTIMATOR
 # original noise is of deflection signal, so divide by l(l+1) to convert to lens potential
 ls_cmbn = np.loadtxt('cmb_noise_files/ls_1_3000_64.txt')
-cmbn_301 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma3_DeltaT0_DeltaP1.txt')) / (ls_cmbn * (ls_cmbn + 1)) # S4
-cmbn_106 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma1_DeltaT0_DeltaP6.txt')) / (ls_cmbn * (ls_cmbn + 1)) # S3
+cmbn_301 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma3_DeltaT0.71_DeltaP1.txt')) / (ls_cmbn * (ls_cmbn + 1)) # S4
+cmbn_106 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma1_DeltaT4.2_DeltaP6.txt')) / (ls_cmbn * (ls_cmbn + 1)) # S3
 
 # to cross check with paper
 cmbn_41sqrt2 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma4_DeltaT1_DeltaP1.41.txt')) / (ls_cmbn * (ls_cmbn + 1)) 
@@ -29,16 +29,16 @@ cmbn_test_vals = [cmbn_TT, cmbn_TE, cmbn_TB, cmbn_EE, cmbn_EB]
 names = ['TT', 'TE', 'TB', 'EE', 'EB']
  
 # SIMONS OBSERVATORY NOISE LEVELS
-SO_noise_baseline_file_path = '/scratch/p319950/data/conv_noise.dat'
-SO_noise_goal_file_path = '/scratch/p319950/data/conv_noise_goal.dat'
+# SO_noise_baseline_file_path = '/scratch/p319950/data/conv_noise.dat'
+SO_noise_goal_file_path = '/Users/jonasfrugte/Desktop/fisher_calc_weak_lensing/code/cmb_noise_files/nlkk_v3_1_0_deproj0_SENS2_fsky0p4_it_lT30-3000_lP30-5000.dat'
 
-conv_noise_data_array = np.loadtxt(SO_noise_baseline_file_path)
+# conv_noise_data_array = np.loadtxt(SO_noise_baseline_file_path)
 conv_noise_goal_data_array = np.loadtxt(SO_noise_goal_file_path)
 
-SO_noise = lambda l : conv_noise_data_array[l-2, 7] * 4. # * (l * 1.0)**(-2) * (l + 1.0)**(-2)
-SO_noise_values = np.array([SO_noise(int(l)) for l in l_values])
+# SO_noise = lambda l : conv_noise_data_array[l-2, 7] * 4. # * (l * 1.0)**(-2) * (l + 1.0)**(-2)
+# SO_noise_values = np.array([SO_noise(int(l)) for l in l_values])
 
-SO_noise_goal = lambda l : conv_noise_goal_data_array[l-2, 7] * 4. # * (l * 1.0)**(-2) * (l + 1.0)**(-2)
+SO_noise_goal = lambda l : 0.4 * conv_noise_goal_data_array[l-2, 7] * 4. # * (l * 1.0)**(-2) * (l + 1.0)**(-2)
 SO_noise_goal_values = np.array([SO_noise_goal(int(l)) for l in l_values])
 
 # GALAXY LENSING NOISE
@@ -79,8 +79,8 @@ axs[1].loglog(l_values, SO_noise_goal_values, label='SO Noise, goal', linestyle=
 #     axs[1].loglog(ls_cmbn, ls_cmbn**2 * (ls_cmbn + 1)**2 * cmbn_test_vals[i], linestyle='dotted', label = names[i])
 # axs[1].loglog(ls_cmbn, ls_cmbn**2 * (ls_cmbn + 1)**2 * cmbn_410, label=r'quad est. noise, $\sigma = 4$, $\Delta_T = 1$, $\Delta_P = \infty$', linestyle='dotted', color='red')
 
-axs[1].loglog(ls_cmbn, ls_cmbn**4 * cmbn_106, label=r'S3 noise, $\sigma = 1$, $\Delta_T = \infty$, $\Delta_P = 6$', linestyle='dashed')
-axs[1].loglog(ls_cmbn, ls_cmbn**4 * cmbn_301, label=r'S4 noise, $\sigma = 3$, $\Delta_T = \infty$, $\Delta_P = 1$', linestyle='dashed')
+axs[1].loglog(ls_cmbn, ls_cmbn**4 * cmbn_106, label=r'S3 noise, $\sigma = 1$, $\Delta_T = 4.2$, $\Delta_P = 6$', linestyle='dashed')
+axs[1].loglog(ls_cmbn, ls_cmbn**4 * cmbn_301, label=r'S4 noise, $\sigma = 3$, $\Delta_T = 0.71$, $\Delta_P = 1$', linestyle='dashed')
 
 axs[1].set_xlabel('$l$')
 axs[1].set_ylabel(r'$l^4 C_l^{\psi_c\psi_c}$')
@@ -92,5 +92,5 @@ fig.tight_layout()
 
 # Save the figure as a vector-based format for inclusion in papers
 #plt.savefig("spectraplusnoise.pdf", format="pdf", dpi=300)
-plt.savefig("/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/plots/spectraplusnoise.png", format="png", dpi=300)
-plt.savefig("/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/plots/spectraplusnoise.pdf", format="pdf", dpi=300)
+plt.savefig("plots/spectraplusnoise.png", format="png", dpi=300)
+plt.savefig("plots/spectraplusnoise.pdf", format="pdf", dpi=300)

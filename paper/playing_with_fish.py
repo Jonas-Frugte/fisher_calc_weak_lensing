@@ -46,7 +46,11 @@ planck_prior = np.diag([12 / 60**2, 1/(0.0005)**2, 12 / 1**2, 1/(0.02)**2, 0.01,
 # CMB Stage 4
 ######################
 
-viscmb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both_cmb.txt')
+viscmb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both_cmb_lmin30.txt')
+
+viscmb_f_lmin2 = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both_cmb.txt')
+
+# these still have lmin = 2
 
 viscmb_t = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_t_cmb.txt')
 
@@ -175,7 +179,7 @@ sigmaomm_ders = [
 
 keep_indices = [4, 7, 8, 10]
 #keep_indices=[10]
-#keep_indices = [0, 1, 2, 3, 4, 5, 6, 7]
+#keep_indices = [0, 1, 2, 3, 5, 6]
 #keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
@@ -470,7 +474,7 @@ if __name__ == "__main__":
     # ]
 
     # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
-    fish_pond_number = 3
+    fish_pond_number = 4
     f_sky = 0.5
     if fish_pond_number == 0:
         fish_matrices = [
@@ -487,6 +491,14 @@ if __name__ == "__main__":
         ]
 
         labels = ['cmb prior', 'lps cmb', 'lbs cmb', 'lps + lbs cmb', 'lps s', 'lbs s', 'lps + lbs s', 'lps cmb + s', 'lbs cmb + s', 'lps + lbs, s + cmb']
+    
+    if fish_pond_number == 7:
+        fish_matrices = [
+            f_sky * viscmb_f,
+            f_sky * viscmb_f_lmin30
+        ]
+
+        labels = ['cmb prior lmin 2', 'cmb prior lmin 30']
     
     if fish_pond_number == 6:
         fish_matrices = [
@@ -531,7 +543,7 @@ if __name__ == "__main__":
 
         labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
 
-        plt_name = 'param_constraints_tight_cmb_weak_prior.pdf'
+        plt_name = 'param_constraints_lcdm_cmb_weak_prior.pdf'
 
 
     if fish_pond_number == 3:
@@ -544,33 +556,32 @@ if __name__ == "__main__":
 
         labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
 
-        plt_name = 'param_constraints_tight_gal_weak_prior.pdf'
+        plt_name = 'param_constraints_lcdm_gal_weak_prior.pdf'
 
     if fish_pond_number == 4:
         fish_matrices = [
-            planck_prior + visp_c,
-            planck_prior + visb_c,
-            planck_prior + visp_c + visb_c,
-            planck_prior + visp_f + visb_f,
+            f_sky * (viscmb_f + visp_c),
+            f_sky * (viscmb_f + visb_c),
+            f_sky * (viscmb_f + visp_c + visb_c),
+            f_sky * (viscmb_f + visp_f + visb_f)
         ]
 
         labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
 
-        plt_name = 'param_constraints_all_cmb.pdf'
+        plt_name = 'param_constraints_tight_cmb_cmb_prior.pdf'
 
 
     if fish_pond_number == 5:
         fish_matrices = [
-            planck_prior + visp_s,
-            planck_prior + visb_s,
-            planck_prior + visp_s + visb_s,
-            planck_prior + visp_f + visb_f,
+            f_sky * (viscmb_f + visp_s),
+            f_sky * (viscmb_f + visb_s),
+            f_sky * (viscmb_f + visp_s + visb_s),
+            f_sky * (viscmb_f + visp_f + visb_f)
         ]
 
         labels = [r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', 'All']
 
-        plt_name = 'param_constraints_all_gal.pdf'
-
+        plt_name = 'param_constraints_tight_gal_cmb_prior.pdf'
 
     # fish_matrices = [
     #     planck,
@@ -597,6 +608,7 @@ if __name__ == "__main__":
 
     #print(np.linalg.inv(visp_f_reduced + visb_f_reduced))
     #plt.show()
-    plt.savefig('/Users/jonasfrugte/Desktop/Research_Project/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300)
+    plt.savefig('/Users/jonasfrugte/Desktop/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300)
+    print('created:', plt_name)
 
     #save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)

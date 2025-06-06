@@ -1,24 +1,24 @@
 \contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
-\contentsline {section}{\numberline {2}Theory}{2}{section.2}%
+\contentsline {section}{\numberline {2}Background}{2}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Weak lensing spectra}{2}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Nonlinear matter bispectrum}{4}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Fisher matrix analysis}{5}{subsection.2.3}%
-\contentsline {section}{\numberline {3}Calculation Details}{6}{section.3}%
+\contentsline {subsection}{\numberline {2.2}Nonlinear matter bispectrum}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Fisher matrix analysis}{4}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Calculation Details}{5}{section.3}%
 \contentsline {section}{\numberline {4}Results}{7}{section.4}%
 \contentsline {section}{\numberline {5}Discussion and conclusion}{10}{section.5}%
-\contentsline {section}{\numberline {A}Weak Lensing}{13}{appendix.A}%
-\contentsline {subsection}{\numberline {A.1}Perturbed Photon Paths}{13}{subsection.A.1}%
-\contentsline {subsection}{\numberline {A.2}Convergence and Shear}{14}{subsection.A.2}%
-\contentsline {section}{\numberline {B}Weak Lensing Statistics}{15}{appendix.B}%
-\contentsline {subsection}{\numberline {B.1}Lensing Potential Powerspectrum}{15}{subsection.B.1}%
-\contentsline {subsection}{\numberline {B.2}Lensing potential bispectrum}{17}{subsection.B.2}%
-\contentsline {subsection}{\numberline {B.3}Gravitational potential spectra in terms of matter spectra}{19}{subsection.B.3}%
-\contentsline {section}{\numberline {C}Fisher Matrix Analysis}{20}{appendix.C}%
-\contentsline {subsection}{\numberline {C.1}Determing uncertainty in experimental parameters}{20}{subsection.C.1}%
-\contentsline {subsection}{\numberline {C.2}Fisher matrices for power- and bispectra with multiple tracers}{20}{subsection.C.2}%
-\contentsline {subsection}{\numberline {C.3}Explicit form for inverse covariance matrix}{22}{subsection.C.3}%
-\contentsline {subsection}{\numberline {C.4}Signal to Noise Ratio (SNR)}{23}{subsection.C.4}%
-\contentsline {subsection}{\numberline {C.5}Fisher matrix of power- + bispectra}{24}{subsection.C.5}%
-\contentsline {section}{\numberline {D}Shear equals twice spin raised lensing potential}{24}{appendix.D}%
-\contentsline {section}{\numberline {E}Numerical derivative}{25}{appendix.E}%
-\contentsline {section}{\numberline {F}$\Lambda $CDM constraints}{26}{appendix.F}%
+\contentsline {section}{\numberline {A}Weak Lensing}{15}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}Perturbed Photon Paths}{15}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}Convergence and Shear}{16}{subsection.A.2}%
+\contentsline {section}{\numberline {B}Weak Lensing Statistics}{17}{appendix.B}%
+\contentsline {subsection}{\numberline {B.1}Lensing Potential Power spectrum}{17}{subsection.B.1}%
+\contentsline {subsection}{\numberline {B.2}Lensing potential bispectrum}{19}{subsection.B.2}%
+\contentsline {subsection}{\numberline {B.3}Gravitational potential spectra in terms of matter spectra}{21}{subsection.B.3}%
+\contentsline {section}{\numberline {C}Fisher Matrix Analysis}{22}{appendix.C}%
+\contentsline {subsection}{\numberline {C.1}Determing uncertainty in experimental parameters}{22}{subsection.C.1}%
+\contentsline {subsection}{\numberline {C.2}Fisher matrices for power- and bispectra with multiple tracers}{22}{subsection.C.2}%
+\contentsline {subsection}{\numberline {C.3}Explicit form for inverse covariance matrix}{24}{subsection.C.3}%
+\contentsline {subsection}{\numberline {C.4}Signal to Noise Ratio (SNR)}{25}{subsection.C.4}%
+\contentsline {subsection}{\numberline {C.5}Fisher matrix of power- + bispectra}{26}{subsection.C.5}%
+\contentsline {section}{\numberline {D}Shear equals twice spin raised lensing potential}{26}{appendix.D}%
+\contentsline {section}{\numberline {E}Numerical derivative}{27}{appendix.E}%
+\contentsline {section}{\numberline {F}$\Lambda $CDM constraints}{28}{appendix.F}%

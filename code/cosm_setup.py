@@ -45,7 +45,7 @@ class lensing_spectra:
     self.mnu = mnu        # Sum of neutrino masses
     self.w0 = w0
     self.matter_bispec_fit_params = matter_bispec_fit_params # params of matter bispectrum fitting function as (a_1, ..., a_9)
-    self.k_nl_max = 505
+    self.k_nl_max = 3000
 
     self.obtain_results()
 
@@ -84,7 +84,7 @@ class lensing_spectra:
     print('Obtaining cosmological results.')
 
     pars = camb.CAMBparams()
-    lmax = 505
+    lmax = 3000
     pars.set_cosmology(H0=self.H0, ombh2=self.ombh2, omch2=self.omch2, mnu=self.mnu, omk=0, tau=self.tau, neutrino_hierarchy='normal')
     pars.InitPower.set_params(As=self.As, ns=self.ns, r=0)
     pars.InitPower.pivot_scalar = 0.05
@@ -93,7 +93,7 @@ class lensing_spectra:
     pars.set_dark_energy(w=self.w0)
     self.pars = pars
 
-    kmax_interp = 505
+    kmax_interp = 3000
 
     # power spectrum in units of Mpc^3, k in units of Mpc^-1, with input (z, k) on RHS 
     print('Creating linear mps')
