@@ -82,7 +82,7 @@ class lensing_spectra:
     '''
     
     print('Obtaining cosmological results.')
-
+ 
     pars = camb.CAMBparams()
     lmax = 3000
     pars.set_cosmology(H0=self.H0, ombh2=self.ombh2, omch2=self.omch2, mnu=self.mnu, omk=0, tau=self.tau, neutrino_hierarchy='normal')
@@ -480,6 +480,21 @@ class lensing_spectra:
           chi, self.chi_galaxy_source, epsabs = 1e-3, epsrel = 1e-3)[0]
     else:
       raise Exception('Unknown window function type, string needs to start with s or c')
+  
+  def window_func_pbs(self, chi, chi_s):
+    N = 50
+    sum=0
+    if chi >= chi_s:
+        return 0.
+
+    dchi = (chi_s - chi) / N
+    for i in range(N + 1):
+        chi_prime = chi + i * dchi
+        weight = 0.5 if (i == 0 or i == N) else 1.0
+        kernel = (chi_prime - chi) / (chi_prime * chi)
+        sum += weight * self.galaxy_density(self.z_at_chi(chi_prime)) * kernel
+
+    return dchi * sum
 
 if __name__ == '__main__':
   # for testing purposes

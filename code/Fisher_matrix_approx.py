@@ -2,13 +2,14 @@ import numpy as np
 import multiprocessing
 import Fisher_calc as vis
 from itertools import *
-print('snoopie')
 lmin = 2
 lmax = 2000
-stepsizes = [1 * 4 * 4, 5 * 4 * 4, 10 * 4 * 4]
+stepsizes = [33, 133, 166]
 
-num_bispec_samples = 100
-num_cores = 4
+print(f'Stepsizes are: {stepsizes}')
+
+num_bispec_samples = 50
+num_cores = 64
 
 pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'tau', b'As', b'w0']
 
@@ -42,7 +43,7 @@ num_pars = len(pars)
 print('snoopie2')
 
 def main():
-    for tracer in ['c', 's', 'both']:
+    for tracer in ['both', 's', 'c']:
         mat = np.zeros((num_pars, num_pars))
         counter = 1
         for i in range(num_pars):
@@ -53,7 +54,7 @@ def main():
                 print(f'{tracer}:', counter, '/', num_pars * (num_pars + 1) / 2)
                 counter += 1
         
-        np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}_approx.txt', mat)
+        np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}_pb_exp_fix.txt', mat)
         print(mat)
 
 if __name__ == '__main__':

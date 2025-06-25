@@ -4,7 +4,7 @@ cimport interpolation as interp
 import math
 import numpy as np
 from libc.stdio cimport printf
-from libc.math cimport fmax, fabs
+from libc.math cimport fmax, fabs, pow
 
 from libc.stdlib cimport getenv
 
@@ -35,6 +35,8 @@ cdef int galaxy_noise_type = 2
 # 2: sigma = 3, Delta_P = 1 (stage 4 toshiya)
 # 3: sigma = 5, Delta_T = 30, Delta_P = 52 (planck (double check))
 
+print(f'CMB noise type: {cmb_noise_type}\nGalaxy noise type: {galaxy_noise_type}')
+
 # (units are in microKelvin arcmin and arcmin)
 
 cdef int lmax_cmbps = 3000
@@ -53,11 +55,10 @@ cdef int lnum_cmbn = len(ls_cmbn)
 cdef double lmax_cmbn = ls_cmbn[lnum_cmbn - 1]
 
 cdef double[:] cmbn_301 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma3_DeltaT0.71_DeltaP1.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
-cdef double[:] cmbn_106 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma1_DeltaT0_DeltaP6.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
+cdef double[:] cmbn_106 = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma1_DeltaT4.2_DeltaP6.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 cdef double[:] planck_noise = np.abs(np.loadtxt('cmb_noise_files/Ns_sigma_planck.txt')) / (ls_cmbn_np_array * (ls_cmbn_np_array + 1))
 
 toshiya_derivatives = True
-print('wahoo3')
 # perhaps we can export data as c arrays instead of as memory views in the future so that we can specify return types like below and can avoid having to 
 # declare types of all data before every data import
 #cdef (dict[str, double], double, double[:, :], double[:, :], double[:], double[:], double[:], double[:], double[:], double[:], double[:, :], double[:]) data_importer(str folder_name):
@@ -173,19 +174,85 @@ cpdef double mbs(double k1, double k2, double k3, double z, double[:, :] mps_dat
 
 # post born corrections, based on https://arxiv.org/pdf/1605.05662
 
-cdef double lbs_pb_lps_integrand(
+# from cosm_setup:
+# # galaxy density dist as a function of redshift
+# f = lambda z : float(z)**2
+# z0 = 0.64
+# beta = 1.5
+# normalization = scipy.integrate.quad(lambda z : f(z) * np.exp(float(-(z / z0)**beta)), 1e-8, self.results.get_derived_params()['zstar'])[0]
+
+# self.galaxy_density = lambda z : f(z) * np.exp(-(max(1e-12, z / z0))**beta) / normalization # normalizes integral of func to 1
+
+cdef double galaxy_density(double chi, double[:] z_at_chi_data) noexcept nogil:
+    cdef double z = z_at_chi(chi, z_at_chi_data)
+    return pow(z, 2) * 0.64 * exp(-pow(z/0.64, 1.5)) / 0.111848  # TODO: check that exp here works, last factor is for normalization
+
+cdef double pb_window_func(
     double chi,
     double chi_s,
+    char* source_type,
+    double[:] z_at_chi_data
+) noexcept nogil:
+    cdef int N = 20 # TODO: convergence check in window_func_convergence.png, N=20 seems to be fine to a percent or so
+    cdef double dchi, chi_prime
+    cdef double sum = 0.0
+    cdef double weight, kernel
+    cdef int i
+
+    if source_type[0] == b'c':
+        if chi < chi_s:
+            return (chi_s - chi) / (chi * chi_s)
+        else:
+            return 0.
+
+    if source_type[0] == b's':
+        if chi >= chi_s:
+            return 0.
+
+        dchi = (chi_s - chi) / N
+        for i in range(N + 1):
+            chi_prime = chi + i * dchi
+            weight = 0.5 if (i == 0 or i == N) else 1.0
+            kernel = (chi_prime - chi) / (chi_prime * chi)
+            sum += weight * galaxy_density(chi_prime, z_at_chi_data) * kernel
+
+        return dchi * sum
+
+# version from 21/06/2025
+# cdef double lbs_pb_lps_integrand(
+#     double chi,
+#     double chi_s, # chi_s should be chi of last scattering in the M_s formula because that is the one associated with source 2
+#     double chi_s_prime, 
+#     double l, 
+#     double C_data, 
+#     double [:,:] mps_data, 
+#     double [:] scale_factor_data,
+#     double [:] z_at_chi_data,
+#     char* source_type_2,
+#     char* source_type_3
+#     ) noexcept nogil:
+#     # C = 3 * self.omega_m * H0**2 / (2 * self.lightspeed_kms**2)
+#     if chi < chi_s and chi < chi_s_prime:
+#         return 0.25 * 4 * C_data**2 * chi**2 * scale_factor(chi, scale_factor_data)**(-2) * pb_window_func(chi, chi_s, source_type_2, z_at_chi_data) * pb_window_func(chi, chi_s_prime, source_type_3, z_at_chi_data) * matter_power_spectrum(l / chi, z_at_chi(chi, z_at_chi_data), mps_data)
+#     else:
+#         return 0.
+
+# new version
+cdef double lbs_pb_lps_integrand(
+    double chi,
+    double chi_s, # chi_s should be chi of last scattering in the M_s formula because that is the one associated with source 2
     double chi_s_prime, 
     double l, 
     double C_data, 
     double [:,:] mps_data, 
     double [:] scale_factor_data,
-    double [:] z_at_chi_data
+    double [:] z_at_chi_data,
+    char* source_type_2,
+    char* source_type_3
     ) noexcept nogil:
     # C = 3 * self.omega_m * H0**2 / (2 * self.lightspeed_kms**2)
     if chi < chi_s and chi < chi_s_prime:
-        return 0.25 * 4 * C_data**2 * chi**2 * scale_factor(chi, scale_factor_data)**(-2) * ((chi - chi_s)  / (chi * chi_s)) * ((chi - chi_s_prime)  / (chi * chi_s_prime)) * matter_power_spectrum(l / chi, z_at_chi(chi, z_at_chi_data), mps_data)
+        return 0.25 * 4 * C_data**2 * chi**2 * scale_factor(chi, scale_factor_data)**(-2) * pb_window_func(chi, chi_s, source_type_2, z_at_chi_data) * (chi_s_prime - chi) / (chi_s_prime * chi) * matter_power_spectrum(l / chi, z_at_chi(chi, z_at_chi_data), mps_data)
     else:
         return 0.
 
@@ -197,24 +264,26 @@ cpdef double lbs_pb_lps(
     double [:,:] mps_data, 
     double [:] scale_factor_data,
     double [:] z_at_chi_data,
-    int num_samples
+    int num_samples,
+    char* source_type_2, # starting from 2 is to follow notation in the paper
+    char* source_type_3
     ) noexcept nogil:
     cdef double int_width = (chi_max - chi_min) / (num_samples - 1)
     cdef double result = 0
     cdef int i
     for i in range(1, num_samples - 1):
-        result += lbs_pb_lps_integrand(chi_min + int_width * i, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data)
+        result += lbs_pb_lps_integrand(chi_min + int_width * i, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data, source_type_2, source_type_3)
         # for boundary values use values that lie *just* inside the boundaries to prevent some nasty errors
     result += 0.5 * (
-        lbs_pb_lps_integrand(chi_min * 1.01, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data) 
-        + lbs_pb_lps_integrand(chi_max - 1.0, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data)
+        lbs_pb_lps_integrand(chi_min * 1.01, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data, source_type_2, source_type_3) 
+        + lbs_pb_lps_integrand(chi_max - 1.0, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data, source_type_2, source_type_3)
         )
     result *= int_width
 
     return result
 
 cdef double lbs_pb_ms_integrand(
-    double chi, 
+    double chi, # this is the integration variable, called chi_1 in my notes
     double l, 
     double l_prime, 
     double C_data, 
@@ -223,12 +292,17 @@ cdef double lbs_pb_ms_integrand(
     double [:] z_at_chi_data,
     double [:] window_c_data,
     double [:] window_s_data,
-    int num_samples
+    int num_samples,
+    char* source_type_1,
+    char* source_type_2,
+    char* source_type_3
     ) noexcept nogil:
+
+    # here l is l_1, l_prime is l_2, l_3 is not used (explicitly, at least)
 
     cdef double chi_last_scatter = 13912 # according to fiducial model
 
-    return 0.25 * 4 * C_data**2 * chi**2 * scale_factor(chi, scale_factor_data)**(-2) * ((chi - chi_last_scatter)  / (chi * chi_last_scatter)) ** 2 * matter_power_spectrum(l / chi, z_at_chi(chi, z_at_chi_data), mps_data) * lbs_pb_lps(chi, chi_last_scatter, l_prime, C_data, mps_data, scale_factor_data,z_at_chi_data, num_samples)
+    return 0.25 * 4 * C_data**2 * chi**2 * scale_factor(chi, scale_factor_data)**(-2) * pb_window_func(chi, chi_last_scatter, source_type_1, z_at_chi_data) * pb_window_func(chi, chi_last_scatter, source_type_3, z_at_chi_data) * matter_power_spectrum(l / chi, z_at_chi(chi, z_at_chi_data), mps_data) * lbs_pb_lps(chi_last_scatter, chi, l_prime, C_data, mps_data, scale_factor_data,z_at_chi_data, num_samples, source_type_2, source_type_3)
 
 cpdef double lbs_pb_ms(
     double l,
@@ -239,17 +313,20 @@ cpdef double lbs_pb_ms(
     double [:] z_at_chi_data,
     double [:] window_c_data,
     double [:] window_s_data,
-    int num_samples
+    int num_samples,
+    char* type1,
+    char* type2,
+    char* type3
     ) noexcept nogil:
     cdef double int_width = (chi_max - chi_min) / (num_samples - 1)
     cdef double result = 0
     cdef int i
     for i in range(1, num_samples - 1):
-        result += lbs_pb_ms_integrand(chi_min + int_width * i, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples)
+        result += lbs_pb_ms_integrand(chi_min + int_width * i, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3)
         # for boundary values use values that lie *just* inside the boundaries to prevent some nasty errors
     result += 0.5 * (
-        lbs_pb_ms_integrand(chi_min * 1.01, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples)
-        + lbs_pb_ms_integrand(chi_max - 1.0, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples)
+        lbs_pb_ms_integrand(chi_min * 1.01, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3)
+        + lbs_pb_ms_integrand(chi_max - 1.0, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3)
         )
     result *= int_width
 
@@ -265,12 +342,16 @@ cdef double lbs_pb_term(
     double [:] z_at_chi_data,
     double [:] window_c_data,
     double [:] window_s_data,
-    int num_samples
+    int num_samples,
+    char* type1,
+    char* type2,
+    char* type3
     ) noexcept nogil:
     # cdef double law_cosines(double x, double y, double z) noexcept nogil:
     # gives cosine of angle between vector x and y, where we know the magnitudes of x, y, z and that x + y + z = 0 vector
     # return -1 * (x**2 + y**2 - z**2) / (2 * x * y)
-    return 2 * law_cosines(l1, l2, l3) * l1**(-1) * l2**(-1) * (law_cosines(l1, l3, l2) * l1 * l3 * lbs_pb_ms(l1, l2, C_data, mps_data,scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples) + law_cosines(l2, l3, l1) * l2 * l3 * lbs_pb_ms(l2, l1, C_data, mps_data,scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples))
+
+    return 2 * law_cosines(l1, l2, l3) * l1**(-1) * l2**(-1) * (law_cosines(l1, l3, l2) * l1 * l3 * lbs_pb_ms(l1, l2, C_data, mps_data,scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3) + law_cosines(l2, l3, l1) * l2 * l3 * lbs_pb_ms(l2, l1, C_data, mps_data,scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type2, type1, type3))
 
 cdef double lbs_pb_flat(
     double l1, 
@@ -282,9 +363,12 @@ cdef double lbs_pb_flat(
     double [:] z_at_chi_data,
     double [:] window_c_data,
     double [:] window_s_data,
-    int num_samples
+    int num_samples,
+    char* type1,
+    char* type2,
+    char* type3
     ) noexcept nogil:
-    return lbs_pb_term(l1, l2, l3, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples) + lbs_pb_term(l2, l3, l1, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples) + lbs_pb_term(l3, l1, l2, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples)
+    return lbs_pb_term(l1, l2, l3, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3) + lbs_pb_term(l2, l3, l1, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type2, type3, type1) + lbs_pb_term(l3, l1, l2, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type3, type1, type2)
 
 ############
 
@@ -366,8 +450,10 @@ cdef double lbs_flat(
     cdef double const_factor = C**3 * 8
 
     cdef double pb_correction_val = 0.
+    cdef double convergence_to_potential
     if pb_correction:
-        pb_correction_val = (k1 * 1.)**2 * (k2 * 1.)**2 * (k3 * 1.)**2 / 8 * lbs_pb_flat(k1, k2, k3, C, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples)
+        convergence_to_potential = 1 / ((k1 * 1.)**2 * (k2 * 1.)**2 * (k3 * 1.)**2 / 8)
+        pb_correction_val = convergence_to_potential * lbs_pb_flat(k1, k2, k3, C, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3)
 
     return fraction_factor * const_factor * result + pb_correction_val
 
@@ -482,11 +568,11 @@ cpdef double lbs_flat_f(int k1, int k2, int k3, char* type1, char* type2, char* 
 cdef double lbs_f(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_f, a_data_f, b_data_f, c_data_f, scale_factor_data_f, window_c_data_f, window_s_data_f, mps_data_f, z_at_chi_data_f)
 
-cpdef double lbs_pb_lps_f(double chi_source, double chi_source_prime, double l, int num_samples) noexcept nogil:
-    return lbs_pb_lps(chi_source, chi_source_prime, l, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, num_samples)
+cpdef double lbs_pb_lps_f(double chi_source, double chi_source_prime, char* type1, char* type2, double l, int num_samples) noexcept nogil:
+    return lbs_pb_lps(chi_source, chi_source_prime, l, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, num_samples, type1, type2)
 
-cpdef double lbs_pb_flat_f(double l1, double l2, double l3, int num_samples) noexcept nogil:
-    return lbs_pb_flat(l1, l2, l3, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, window_c_data_f, window_s_data_f, num_samples)
+cpdef double lbs_pb_flat_f(double l1, double l2, double l3, char* type1, char* type2, char* type3, int num_samples) noexcept nogil:
+    return lbs_pb_flat(l1, l2, l3, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, window_c_data_f, window_s_data_f, num_samples, type1, type2, type3)
 
 cdef double lps_f(int l, char* type1, char* type2) noexcept nogil:
     return lps(l, type1, type2, lps_cc_data_f, lps_cs_data_f, lps_ss_data_f, cmbps_f)
@@ -1073,6 +1159,9 @@ def mbs_test(k1, k2, k3, z):
 
 def window_func_test(chi, type):
     return window_func(chi, type, window_c_data=window_c_data_f, window_s_data=window_s_data_f)
+
+def window_func_pb_test(chi, chi_s, source_type):
+    return pb_window_func(chi, chi_s, source_type, z_at_chi_data_f)
 
 def scale_factor_test(chi):
     return scale_factor(chi, scale_factor_data=scale_factor_data_f)

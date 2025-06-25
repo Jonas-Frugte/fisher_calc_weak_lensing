@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=JFFish
-#SBATCH --output=/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/outputs/fish_mat_approx_output.log
-#SBATCH --error=/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/outputs/fish_mat_approx_error.log
+#SBATCH --output=/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/outputs/fish_mat_approx_output_exp_fix.log
+#SBATCH --error=/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/outputs/fish_mat_approx_error_exp_fix.log
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=32
-#SBATCH --time=10:00:00
-#SBATCH --mem=150GB
+#SBATCH --cpus-per-task=64
+#SBATCH --time=5-00:00:00
+#SBATCH --mem=70GB
 
 echo "Starting"
 source /home3/p319950/venvs/mainenv/bin/activate

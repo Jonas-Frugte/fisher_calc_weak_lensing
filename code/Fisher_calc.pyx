@@ -11,7 +11,10 @@ from data_importer_new import get_k_max
 from itertools import *
 
 cdef int dd = 0
-cdef bint pb_correction = 0
+cdef bint pb_correction = False
+
+print(f'Post-Born corrections: {pb_correction}')
+
 
 k_max = get_k_max()
 
