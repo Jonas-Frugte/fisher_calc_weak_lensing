@@ -24,7 +24,6 @@ def fisher_calc_wrapper(args, tracers):
         return vis.Fisher_mat_full(lmin, 0, 200, stepsizes[0], num_bispec_samples, pars[i], pars[j], num_cores) + vis.Fisher_mat_full(lmin, 200, 1000, stepsizes[1], num_bispec_samples, pars[i], pars[j], num_cores) + vis.Fisher_mat_full(lmin, 1000, lmax, stepsizes[2], num_bispec_samples, pars[i], pars[j], num_cores)
 
 num_pars = len(pars)
-print('koopie')
 def main():
     for tracer in ['c', 's', 'both']:
         mat = np.zeros((num_pars, num_pars))
@@ -41,6 +40,7 @@ def main():
         print(mat)
 
 if __name__ == '__main__':
+    vis.set_pb_correction(False)
     main()
 
 

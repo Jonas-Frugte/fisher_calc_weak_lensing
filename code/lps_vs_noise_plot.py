@@ -30,16 +30,16 @@ names = ['TT', 'TE', 'TB', 'EE', 'EB']
  
 # SIMONS OBSERVATORY NOISE LEVELS
 # SO_noise_baseline_file_path = '/scratch/p319950/data/conv_noise.dat'
-SO_noise_goal_file_path = '/Users/jonasfrugte/Desktop/fisher_calc_weak_lensing/code/cmb_noise_files/nlkk_v3_1_0_deproj0_SENS2_fsky0p4_it_lT30-3000_lP30-5000.dat'
+#SO_noise_goal_file_path = '/Users/jonasfrugte/Desktop/fisher_calc_weak_lensing/code/cmb_noise_files/nlkk_v3_1_0_deproj0_SENS2_fsky0p4_it_lT30-3000_lP30-5000.dat'
 
 # conv_noise_data_array = np.loadtxt(SO_noise_baseline_file_path)
-conv_noise_goal_data_array = np.loadtxt(SO_noise_goal_file_path)
+#conv_noise_goal_data_array = np.loadtxt(SO_noise_goal_file_path)
 
 # SO_noise = lambda l : conv_noise_data_array[l-2, 7] * 4. # * (l * 1.0)**(-2) * (l + 1.0)**(-2)
 # SO_noise_values = np.array([SO_noise(int(l)) for l in l_values])
 
-SO_noise_goal = lambda l : 0.4 * conv_noise_goal_data_array[l-2, 7] * 4. # * (l * 1.0)**(-2) * (l + 1.0)**(-2)
-SO_noise_goal_values = np.array([SO_noise_goal(int(l)) for l in l_values])
+#SO_noise_goal = lambda l : 0.4 * conv_noise_goal_data_array[l-2, 7] * 4. # * (l * 1.0)**(-2) * (l + 1.0)**(-2)
+#SO_noise_goal_values = np.array([SO_noise_goal(int(l)) for l in l_values])
 
 # GALAXY LENSING NOISE
 sigma_rms_S3 = 0.3
@@ -48,8 +48,8 @@ sigma_rms_S4 = 0.3  # e.g. the Euclid ellipticity dispersion
 # Number density per steradian (converted from per arcmin^2)
 # actually shouldn't be computed to get proper ratio with galaxy lensing spectrum, no idea why
 arcmin2_to_steradian = (np.pi / (180 * 60)) ** 2
-n_g_S3 = 5
-n_g_S4 = 30 # / arcmin2_to_steradian
+n_g_S3 = 5 / arcmin2_to_steradian
+n_g_S4 = 30 / arcmin2_to_steradian
 
 # converts from shear to lensing potential noise
 conversion_factor = 4 / ((l_values - 1) * l_values * (l_values + 1) * (l_values + 2)) 
@@ -71,7 +71,7 @@ axs[0].grid(True, which='both', linestyle='--', linewidth=0.5)
 axs[1].loglog(l_values, l_values**4 * cmb_lps, label='CMB lensing potential powerspectrum', color='black')
 # CHECK CONVERSION FACTOR HERE
 # axs[1].loglog(l_values, SO_noise_values, label='SO Noise, baseline', linestyle='dashed', color='blue')
-axs[1].loglog(l_values, SO_noise_goal_values, label='SO Noise, goal', linestyle='dashed', color='green')
+#axs[1].loglog(l_values, SO_noise_goal_values, label='SO Noise, goal', linestyle='dashed', color='green')
 
 # STUFF TO COMPARE WITH QUAD EST PAPER
 #axs[1].loglog(ls_cmbn, ls_cmbn**2 * (ls_cmbn + 1)**2 * cmbn_41sqrt2, label=r'quad est. noise, $\sigma = 4$, $\Delta_T = 1$, $\Delta_P = \sqrt{2}$', linestyle='dashed', color='red')

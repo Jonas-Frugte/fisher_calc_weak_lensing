@@ -66,7 +66,8 @@ class lensing_spectra:
     beta = 1.5
     normalization = scipy.integrate.quad(lambda z : f(z) * np.exp(float(-(z / z0)**beta)), 1e-8, self.results.get_derived_params()['zstar'])[0]
 
-    self.galaxy_density = lambda z : f(z) * np.exp(-(max(1e-12, z / z0))**beta) / normalization # normalizes integral of func to 1
+    self.galaxy_density_z = lambda z : f(z) * np.exp(-(max(1e-12, z / z0))**beta) / normalization # normalizes integral of func to 1
+    self.galaxy_density_chi = lambda chi : self.galaxy_density_z(self.results.redshift_at_comoving_radial_distance(chi)) * np.abs((self.results.redshift_at_comoving_radial_distance(chi + 0.1) - self.results.redshift_at_comoving_radial_distance(chi)) / 0.1)
 
     # source redshift and comoving dist of galaxies using Luna's convention
     self.z_galaxy_source = 5
@@ -129,30 +130,6 @@ class lensing_spectra:
     
     pass
 
-  # def lps_cc_CAMB(self, lmax=10000):
-  #   """
-  #   Calculate the lensing potential power spectrum (C_phi_phi) using CAMB for the CMB (convergence) case.
-
-  #   Parameters:
-  #   -----------
-  #   lmax : int
-  #       Maximum multipole for the calculation.
-
-  #   Returns:
-  #   --------
-  #   ell : ndarray
-  #       Array of multipole moments.
-  #   C_phi_phi : ndarray
-  #       Array of lensing potential power spectrum values.
-  #   """
-  #   # Get the lensing potential power spectrum
-  #   # if raw_cl = false then returns L^2(L+1)^2 / (2pi) times the result
-  #   lens_potential_cls = self.results.get_lens_potential_cls(lmax=lmax, raw_cl=True)
-  #   ell = np.arange(lmax + 1)
-  #   C_phi_phi = lens_potential_cls[:, 0]
-
-  #   return ell, C_phi_phi
-  
   def ns_eff(self, k, z):
     '''
     Parameters:
@@ -476,7 +453,7 @@ class lensing_spectra:
       return (self.chi_last_scatter - chi)/(self.chi_last_scatter * chi)
     elif type[0] == 's':
       return scipy.integrate.quad(
-          lambda chi_prime : self.galaxy_density(self.results.redshift_at_comoving_radial_distance(chi_prime)) * (chi_prime - chi) / (chi_prime * chi),
+          lambda chi_prime : self.galaxy_density_chi(chi_prime) * (chi_prime - chi) / (chi_prime * chi),
           chi, self.chi_galaxy_source, epsabs = 1e-3, epsrel = 1e-3)[0]
     else:
       raise Exception('Unknown window function type, string needs to start with s or c')
@@ -499,4 +476,4 @@ class lensing_spectra:
 if __name__ == '__main__':
   # for testing purposes
   results = lensing_spectra()
-  print(results.window_func(200, 's
+  print(results.window_func(200, 's'))

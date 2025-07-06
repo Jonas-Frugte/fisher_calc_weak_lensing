@@ -40,7 +40,8 @@ def fisher_calc_wrapper_takada_jain(args, tracers):
         # lmax should actually be 3000, but interpolation currently doesn't go that high
         return vis.Fisher_mat_single(50, 0, 200, stepsizes[0], num_bispec_samples, pars[i], pars[j], num_cores, b's') + vis.Fisher_mat_single(50, 200, 1000, stepsizes[1], num_bispec_samples, pars[i], pars[j], num_cores, b's') + vis.Fisher_mat_single(50, 1000, 2000, stepsizes[2], num_bispec_samples, pars[i], pars[j], num_cores, b's')
 num_pars = len(pars)
-print('snoopie2')
+
+pb_corrections = True
 
 def main():
     for tracer in ['both', 's', 'c']:
@@ -53,9 +54,17 @@ def main():
                 mat[j, i] = result  # Symmetric assignment
                 print(f'{tracer}:', counter, '/', num_pars * (num_pars + 1) / 2)
                 counter += 1
+
+        if pb_corrections:
+            filepath = f'fisher_matrices/fish_mat_bisp_{tracer}_pb.txt'
+        else:
+            filepath = f'fisher_matrices/fish_mat_bisp_{tracer}.txt'
         
-        np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}_pb_exp_fix.txt', mat)
+        np.savetxt(filepath, mat)
+        print(f'Created Fisher matrix at {filepath}')
         print(mat)
+    pass
 
 if __name__ == '__main__':
+    vis.set_pb_correction(pb_corrections)
     main()

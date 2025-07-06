@@ -13,7 +13,11 @@ from itertools import *
 cdef int dd = 0
 cdef bint pb_correction = False
 
-print(f'Post-Born corrections: {pb_correction}')
+def set_pb_correction(val):
+    global pb_correction
+    pb_correction = val
+    print(f'Post-Born corrections are now: {pb_correction}')
+    pass
 
 
 k_max = get_k_max()
@@ -67,27 +71,20 @@ cdef double Fisher_mat_single_term(int l1, int l2, int l3, char* type, char* par
         return lbs_der(l1, l2, l3, type, type, type, num_samples, pb_correction, par1, dd) * lps_f_obs(l1, type, type)**(-1) \
         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, pb_correction, par2, dd) / Delta(l1, l2, l3)
 
-def singlefishtest(l1,  l2,  l3,  type,  par1,  par2,  num_samples):
-    print('wanoo')
-    return Fisher_mat_single_term( l1,  l2,  l3, type, par1, par2,  num_samples)
-
 cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):
+    # print(f'Post-Born corrections: {pb_correction}')
+
     if lmax > k_max:
         raise Exception('lmax should be less than upper bound for interpolation (k_max)')
-
     cdef int[:, :] triangles
     cdef double prop_calc
     triangles, prop_calc = generate_triangles(lmin, lminbin, lmax, triangle_step_size, ordermatters = False)
-
     cdef int num_samples = int(len(triangles))
-
     # Create a local result array for each thread
     #cdef double[:] local_results = np.zeros(num_cores, dtype=np.float64)
     cdef double result = 0
-
     cdef int k1, k2, k3
     cdef int index
-    print('wapoo')
 
     for index in prange(0, num_samples, schedule='static', num_threads=num_cores, nogil=True):
         k1 = triangles[index, 0]
@@ -99,19 +96,21 @@ cpdef double Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_ste
 
 # CAUTION: function doesn't check for invalid type1, 2 input to optimize performance
 cdef double lensing_power_spectrum_inv(int l, char* type1, char* type2) noexcept nogil:
-        cdef double det = lps_f_obs(l, b'c', b'c') * lps_f_obs(l, b's', b's') - lps_f_obs(l, b'c', b's')**2
-        if type1[0] == b'c' and type2[0] == b'c':
-            return lps_f_obs(l, b's', b's') / det
-        if type1[0] == b's' and type2[0] == b's':
-            return lps_f_obs(l, b'c', b'c') / det
-        else:
-            return -1 * lps_f_obs(l, b'c', b's') / det
+    cdef double det = lps_f_obs(l, b'c', b'c') * lps_f_obs(l, b's', b's') - lps_f_obs(l, b'c', b's')**2
+    if type1[0] == b'c' and type2[0] == b'c':
+        return lps_f_obs(l, b's', b's') / det
+    if type1[0] == b's' and type2[0] == b's':
+        return lps_f_obs(l, b'c', b'c') / det
+    else:
+        return -1 * lps_f_obs(l, b'c', b's') / det
 
 cdef double Fisher_mat_full_term(int l1, int l2, int l3, char* type11, char* type12, char* type13, char* type21, char* type22, char* type23, char* par1, char* par2, int num_samples) noexcept nogil:
         return lbs_der(l1, l2, l3, type11, type12, type13, num_samples, pb_correction, par1, dd) * lensing_power_spectrum_inv(l1, type11, type21) \
         * lensing_power_spectrum_inv(l2, type12, type22) * lensing_power_spectrum_inv(l3, type13, type23) * lbs_der(l1, l2, l3, type21, type22, type23, num_samples, pb_correction, par2, dd) / Delta(l1, l2, l3)
 
 cpdef double Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores):
+    # print(f'Post-Born corrections: {pb_correction}')
+
     if lmax > k_max:
         raise Exception('lmax should be less than upper bound for interpolation (k_max)')
 

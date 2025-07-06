@@ -1,4 +1,4 @@
-from Fisher_calc import Fisher_mat_single, Fisher_mat_full
+from Fisher_calc import Fisher_mat_single, Fisher_mat_full, set_pb_correction
 from Fisher_calc_python_imp import Fisher_powersp_single, Fisher_powersp
 
 import numpy as np
@@ -6,6 +6,7 @@ import numpy as np
 num_cores = 64
 stepsize = 49
 num_samples = 50
+print(f'Stepsize: {stepsize}')
 
 # ls = [0] + ls
 ls = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000]
@@ -67,6 +68,8 @@ def all_bs_SNR2():
 
     pass
 
-#ps_SNR2()
+set_pb_correction(False)
 single_bs_SNR2()
-# all_bs_SNR2()
+
+set_pb_correction(True)
+single_bs_SNR2()

@@ -1,4 +1,3 @@
-print('wahoo!')
 import json
 cimport interpolation as interp
 import math
@@ -23,8 +22,10 @@ cdef double z_max = exp_par['z_max']
 cdef int z_num = exp_par['z_num'] # * 2 # for finer data option
 cdef int z_num_fine = z_num * 25
 
+
 def get_k_max():
     return k_max
+
 
 # specifies the noise that will be used for cmb lensing
 cdef int cmb_noise_type = 2
@@ -46,7 +47,6 @@ cdef str folder_file_path = '/scratch/p319950/data/'
 # cdef str filepath_convergence_noise_file_path = '/scratch/p319950/data_rough/' + 'conv_noise.dat'
 # conv_noise_data_array = np.loadtxt(filepath_convergence_noise_file_path)
 # cdef double[:, :] conv_noise_data = conv_noise_data_array
-print('wahoo2')
 # conv noise from quadratic estimator
 cdef double[:] ls_cmbn = np.loadtxt('cmb_noise_files/ls_1_3000_64.txt')
 ls_cmbn_np_array = np.loadtxt('cmb_noise_files/ls_1_3000_64.txt') # need to also have a np array version to easily convert noise values from convergence to lens potential below
@@ -65,7 +65,6 @@ toshiya_derivatives = True
 def data_import_func(folder_name):
     cdef str filepath
     if toshiya_derivatives:# and (folder_name[-1] == '0' or folder_name == 'data_fiducial'):
-        print(folder_name, 'toshiya')
         filepath = '/scratch/p319950/data_toshiya_like/' + folder_name
 
     else:
@@ -174,18 +173,23 @@ cpdef double mbs(double k1, double k2, double k3, double z, double[:, :] mps_dat
 
 # post born corrections, based on https://arxiv.org/pdf/1605.05662
 
-# from cosm_setup:
-# # galaxy density dist as a function of redshift
+# from cosm_setup.py:
+
 # f = lambda z : float(z)**2
 # z0 = 0.64
 # beta = 1.5
 # normalization = scipy.integrate.quad(lambda z : f(z) * np.exp(float(-(z / z0)**beta)), 1e-8, self.results.get_derived_params()['zstar'])[0]
 
+# self.galaxy_density_z = lambda z : f(z) * np.exp(-(max(1e-12, z / z0))**beta) / normalization # normalizes integral of func to 1
+# self.galaxy_density_chi = lambda chi : self.galaxy_density_z(self.results.redshift_at_comoving_radial_distance(chi)) * np.abs((self.results.redshift_at_comoving_radial_distance(chi + 0.1) - self.results.redshift_at_comoving_radial_distance(chi)) / 0.1)
 # self.galaxy_density = lambda z : f(z) * np.exp(-(max(1e-12, z / z0))**beta) / normalization # normalizes integral of func to 1
 
 cdef double galaxy_density(double chi, double[:] z_at_chi_data) noexcept nogil:
     cdef double z = z_at_chi(chi, z_at_chi_data)
-    return pow(z, 2) * 0.64 * exp(-pow(z/0.64, 1.5)) / 0.111848  # TODO: check that exp here works, last factor is for normalization
+    # because p(z) is a probability distribution, if you want it in chi coordinates instead of z coordinates, you
+    # need to take p(z(chi)) * dz/dchi. I have checked that the following simple approximation for the derivative works quite well
+    cdef double dzdchi = (z_at_chi(chi + 0.1, z_at_chi_data) - z_at_chi(chi, z_at_chi_data)) / 0.1
+    return dzdchi * pow(z, 2) * 0.64 * exp(-pow(z/0.64, 1.5)) / 0.111848  # TODO: check that exp here works, last factor is for normalization
 
 cdef double pb_window_func(
     double chi,
@@ -577,6 +581,14 @@ cpdef double lbs_pb_flat_f(double l1, double l2, double l3, char* type1, char* t
 cdef double lps_f(int l, char* type1, char* type2) noexcept nogil:
     return lps(l, type1, type2, lps_cc_data_f, lps_cs_data_f, lps_ss_data_f, cmbps_f)
 
+cdef bint pink_noise = False
+cdef double l_knee = 50
+cdef int alpha = 2
+print(f'Using pink noise: {pink_noise}')
+if pink_noise:
+    print(f'l_knee, alpha: {l_knee}, {alpha}')
+
+
 cdef double cmbps_noise(double l, double sigma, double Delta_X) noexcept nogil:
     # units to input:
     # sigma: arcmin
@@ -587,8 +599,14 @@ cdef double cmbps_noise(double l, double sigma, double Delta_X) noexcept nogil:
     cdef double arcmintorad = 3.14 / 10800
     sigma = sigma * arcmintorad # in radians
     Delta_X = Delta_X * arcmintorad
+    cdef double white_noise = (Delta_X / Tcmb)**2 * exp(l * (l + 1) * sigma**2 / (8 * log(2)))
     
-    return (Delta_X / Tcmb)**2 * exp(l * (l + 1) * sigma**2 / (8 * log(2)))
+    if pink_noise:
+        return white_noise * (1 + (l_knee / l) ** alpha)
+    else:
+        return white_noise
+
+cdef double ARCMIN2TOSTERRADIAN = (3.1415 / (180 * 60)) ** 2
 
 cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
     cdef float noise = 0.
@@ -607,11 +625,11 @@ cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
 
     if type1[0] == b's' and type2[0] == b's':
         if galaxy_noise_type == 1:
-            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 5
+            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 5 * ARCMIN2TOSTERRADIAN
         if galaxy_noise_type == 2:
-            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30 # 8 * 10.0 ** (-10) # this should actually be in sterradain, but that gives wrong results so for now we have it like this
+            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30 * ARCMIN2TOSTERRADIAN
         if galaxy_noise_type == 3:
-            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.4**2 / 100 # noise from https://arxiv.org/pdf/astro-ph/0310125
+            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.4**2 / 100 * ARCMIN2TOSTERRADIAN # noise from https://arxiv.org/pdf/astro-ph/0310125
 
     cdef double sigma
     cdef double Delta_X
@@ -624,7 +642,7 @@ cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
         elif cmb_noise_type == 2:
             # stage 4 toshiya
             sigma = 3
-            Delta_X = 0.71
+            Delta_X = 1 # 0.71
         elif cmb_noise_type == 3:
             sigma = 5
             Delta_X = 30
@@ -1176,11 +1194,14 @@ def lbs_integrand_test(chi, l1, l2, l3, type1, type2, type3):
 def lps_f_obs_test(l, type1, type2):
     return lps_f_obs(l, type1, type2)
 
-def lps_der_test(k, type1, type2, par, deltadelta):
-    return lps_der(k, type1, type2, par, deltadelta)
+def lps_der_test(k, type1, type2, par):
+    return lps_der(k, type1, type2, par, 0)
 
 def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, par, deltadelta):
     return lbs_der(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, par, deltadelta)
+
+def cmbps_noise_test(l, sigma, Delta_X):
+    return cmbps_noise(l, sigma, Delta_X)
 
 
 # some code to get shapes of all arrays for debugging purposes

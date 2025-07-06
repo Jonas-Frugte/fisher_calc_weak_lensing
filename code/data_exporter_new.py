@@ -13,7 +13,7 @@ import multiprocessing
 import interp_settings
 exp_par = interp_settings.exp_par
 
-def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True, window_func_pb = True):
+def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True):
     cosm_data = cosm_setup.lensing_spectra(*cosm_par)
 
     filepath = '/scratch/p319950/data_toshiya_like/' + folder_name
@@ -41,11 +41,7 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
             'mnu': cosm_par[6],
             'w0' : cosm_par[7]
             }
-
-    if window_func_pb:
-        np.save(filepath + '/window_func_pb', [[cosm_data.window_func_pbs(chi, chi_s) for chi_s in chis_log_pb] for chi in chis_log_pb])
-        print(f'window_func_pb created to {folder_name}')
-
+    
     if rest:
         np.save(filepath + '/cosm_par', cosm_par)
         print(cosm_par)
@@ -170,7 +166,7 @@ delta_delta = 0.05
 # data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = True, c_create = True, mps = True, rest = True, exp_par = exp_par)
 
 # allows control over which data to create
-which_to_create = [[False, False, False, False, False, False, True]]
+which_to_create = [[True, False, False, False, False, True]]
 
 exports = [['data_fiducial', fiducial_cosm_par, *create_settings] for create_settings in which_to_create]
 
