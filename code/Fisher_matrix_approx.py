@@ -4,7 +4,7 @@ import Fisher_calc as vis
 from itertools import *
 lmin = 2
 lmax = 2000
-stepsizes = [33, 133, 166]
+stepsizes = [11, 44, 55]
 
 print(f'Stepsizes are: {stepsizes}')
 
@@ -41,7 +41,7 @@ def fisher_calc_wrapper_takada_jain(args, tracers):
         return vis.Fisher_mat_single(50, 0, 200, stepsizes[0], num_bispec_samples, pars[i], pars[j], num_cores, b's') + vis.Fisher_mat_single(50, 200, 1000, stepsizes[1], num_bispec_samples, pars[i], pars[j], num_cores, b's') + vis.Fisher_mat_single(50, 1000, 2000, stepsizes[2], num_bispec_samples, pars[i], pars[j], num_cores, b's')
 num_pars = len(pars)
 
-pb_corrections = True
+pb_corrections = False
 
 def main():
     for tracer in ['both', 's', 'c']:
