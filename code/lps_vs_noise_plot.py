@@ -87,7 +87,6 @@ axs[1].set_ylabel(r'$l^4 C_l^{\psi_c\psi_c}$')
 axs[1].legend()
 axs[1].grid(True, which='both', linestyle='--', linewidth=0.5)
 axs[1].set_xlim(2, 2000)
-fig.suptitle('CMB and galaxy lensing potential powerspectra with noise')
 fig.tight_layout()
 
 # Save the figure as a vector-based format for inclusion in papers

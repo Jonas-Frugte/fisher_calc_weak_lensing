@@ -91,6 +91,9 @@ axs[1].text(x_max + offset, np.sqrt(snrb_c_s4_pb)[-1], f'{np.sqrt(snrb_c_s4_pb)[
 axs[0].legend(fontsize=10, loc='upper left')
 axs[1].legend(fontsize=10, loc='upper left')
 
+axs[0].grid(True, which='both', linestyle='--', linewidth=0.5)
+axs[1].grid(True, which='both', linestyle='--', linewidth=0.5)
+
 plt.tight_layout()
 
 # Save the figure
