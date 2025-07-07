@@ -177,9 +177,9 @@ sigmaomm_ders = [
     (0.25 * sigma8 * omm**(-0.75))]
 
 
-#keep_indices = [4, 7, 8, 10]
+keep_indices = [4, 7, 8, 10]
 #keep_indices=[10]
-keep_indices = [0, 1, 2, 3, 5, 6] # lcdm pars
+#keep_indices = [0, 1, 2, 3, 5, 6] # lcdm pars
 #keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
@@ -209,7 +209,7 @@ def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_de
 
 ######### PLOTS #########
 
-plt_scale = 1
+plt_scale = 1.5
 
 # new version that returns flipped version which I think is correct
 def confidence_ellipse(ax, mean, cov, color='blue', nstd=1.0, isbig=False, **kwargs):
@@ -468,7 +468,7 @@ if __name__ == "__main__":
     # ]
 
     # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
-    fish_pond_number = 7
+    fish_pond_number = 4
     f_sky = 0.5
     if fish_pond_number == 0:
         fish_matrices = [
