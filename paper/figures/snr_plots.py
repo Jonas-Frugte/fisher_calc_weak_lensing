@@ -63,9 +63,9 @@ axs[1].plot([ls[-1]], [plot_datas[6][-1]], marker='o', color='blue', label='_nol
 axs[0].minorticks_on()
 axs[1].minorticks_on()
 
-axs[0].set_xlabel(r'$l_{\max}$', fontsize=12)
-axs[0].set_ylabel(r'$S/N$', fontsize=12)
-axs[1].set_xlabel(r'$l_{\max}$', fontsize=12)
+axs[0].set_xlabel(r'$l_{\max}$', fontsize=10)
+axs[0].set_ylabel(r'$S/N$', fontsize=10)
+axs[1].set_xlabel(r'$l_{\max}$', fontsize=10)
 # axs[1].set_ylabel(r'$S/N$', fontsize=12)
 
 # Increase the x-axis limit to add extra space on the right

@@ -23,6 +23,12 @@ visb_s = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_s.txt')
 
 visb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_both.txt')
 
+visb_c_pb = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_c_pb.txt')
+
+visb_s_pb = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_s_pb.txt')
+
+visb_f_pb = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_both_pb.txt')
+
 ########################
 # Powerspectra Matrices
 ########################
@@ -177,9 +183,9 @@ sigmaomm_ders = [
     (0.25 * sigma8 * omm**(-0.75))]
 
 
-keep_indices = [4, 7, 8, 10]
+# keep_indices = [4, 7, 8, 10]
 #keep_indices=[10]
-#keep_indices = [0, 1, 2, 3, 5, 6] # lcdm pars
+keep_indices = [0, 1, 2, 3, 5, 6] # lcdm pars
 #keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
@@ -441,34 +447,15 @@ if __name__ == "__main__":
     param_names_latex_kept = [param_names_latex[i] for i in keep_indices]
     param_values_kept      = [param_values[i] for i in keep_indices]
 
-    # cov_matrices = [
-    #     inv(visb_c_reduced + visp_c_reduced),
-    #     inv(visb_s_reduced + visp_s_reduced),
-    #     inv(visb_f_reduced + visp_f_reduced)
-    # ]
+    # fish pond numbers correspond to:
+    # 0: for the table, strong prior
+    # 1: for the table, weak prior
+    # 2, 3, 4, 5: for plots, tight parameters
+    # 6, 7, 8, 9: for plots, lcdm parameters
+    # 0.5: for the table, strong prior, with pb corrections
+    # 1.5: for the table, weak prior, with pb corrections
 
-    # labels = ["CMB", "Galaxy", "CMB + Galaxy"]
-
-    # fish_matrices = [
-    #     0.5 * viscmb_f,
-    #     0.5 * (viscmb_f + 1.5 * visp_c),
-    #     0.5 * (viscmb_f + 1.5 * visb_c),
-    #     0.5 * (viscmb_f + 1.5 * visb_c + 1.5 * visp_c)
-    # ]
-
-    # labels = ['cmb T+E', 'cmb powersp', 'cmb bisp', 'cmb powersp + bisp']
-
-
-    # fish_matrices = [
-    #     planck_prior + visp_c + visb_c,
-    #     planck_prior + visp_s + visb_s,
-    #     planck_prior + visp_f,
-    #     planck_prior + visb_f,
-    #     planck_prior + visb_f + visp_f
-    # ]
-
-    # labels = ['CMB + Gal Powersp', 'CMB + Gal Bisp', 'CMB Power- + Bisp', 'Gal Power- + Bisp', 'CMB + Gal Power- + Bisp']
-    fish_pond_number = 4
+    fish_pond_number = 1
     f_sky = 0.5
     if fish_pond_number == 0:
         fish_matrices = [
@@ -485,14 +472,6 @@ if __name__ == "__main__":
         ]
 
         labels = ['prior', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$']
-
-    if fish_pond_number == -1:
-        fish_matrices = [
-            f_sky * viscmb_f,
-            f_sky * viscmb_f_lmin30
-        ]
-
-        labels = ['cmb prior lmin 2', 'cmb prior lmin 30']
     
 
     if fish_pond_number == 1:
@@ -507,6 +486,39 @@ if __name__ == "__main__":
             planck_prior + f_sky * (visp_f),
             planck_prior + f_sky * (visb_f),
             planck_prior + f_sky * (visp_f + visb_f),
+        ]
+
+        labels = ['prior', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$']
+
+    if fish_pond_number == 0.5:
+        fish_matrices = [
+            f_sky * viscmb_f,
+            f_sky * (viscmb_f + visp_c),
+            f_sky * (viscmb_f + visb_c_pb),
+            f_sky * (viscmb_f + visp_c + visb_c_pb),
+            f_sky * (viscmb_f + visp_s),
+            f_sky * (viscmb_f + visb_s_pb),
+            f_sky * (viscmb_f + visp_s + visb_s_pb),
+            f_sky * (viscmb_f + visp_f),
+            f_sky * (viscmb_f + visb_f_pb),
+            f_sky * (viscmb_f + visp_f + visb_f_pb)
+        ]
+
+        labels = ['prior', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$']
+    
+
+    if fish_pond_number == 1.5:
+        fish_matrices = [
+            planck_prior,
+            planck_prior + f_sky * (visp_c),
+            planck_prior + f_sky * (visb_c_pb),
+            planck_prior + f_sky * (visp_c + visb_c_pb),
+            planck_prior + f_sky * (visp_s),
+            planck_prior + f_sky * (visb_s_pb),
+            planck_prior + f_sky * (visp_s + visb_s_pb),
+            planck_prior + f_sky * (visp_f),
+            planck_prior + f_sky * (visb_f_pb),
+            planck_prior + f_sky * (visp_f + visb_f_pb),
         ]
 
         labels = ['prior', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$']
@@ -628,7 +640,7 @@ if __name__ == "__main__":
         labels=labels,
         colors=["tab:blue", "tab:orange", 'tab:green', 'black'],
         nstd=1.0,
-        figsize=(10,10),
+        figsize=(8.3,8.3),
         dpi=100
     )
 
@@ -637,7 +649,8 @@ if __name__ == "__main__":
     #plt.show()
     print(f'Fish pond number: {fish_pond_number}')
     print(f'parameters used: {keep_indices}')
-    plt.savefig('paper/figures/' + plt_name, dpi = 300)
-    print('created:', plt_name)
+    
+    #plt.savefig('paper/figures/' + plt_name, dpi = 300)
+    #print('created:', plt_name)
 
-    #save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
+    save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)

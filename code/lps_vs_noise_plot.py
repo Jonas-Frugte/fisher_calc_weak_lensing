@@ -2,7 +2,7 @@ import cosm_setup as cs
 import matplotlib.pyplot as plt
 import numpy as np
 
-fig, axs = plt.subplots(1, 2, figsize = (10, 5))
+fig, axs = plt.subplots(1, 2, figsize = (8.3, 4))
 
 # LENSING SPECTRA
 l_values = np.logspace(np.log10(2), np.log10(3000), 100)
