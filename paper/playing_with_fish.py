@@ -455,7 +455,7 @@ if __name__ == "__main__":
     # 0.5: for the table, strong prior, with pb corrections
     # 1.5: for the table, weak prior, with pb corrections
 
-    fish_pond_number = 1
+    fish_pond_number = 9
     f_sky = 0.5
     if fish_pond_number == 0:
         fish_matrices = [
@@ -640,7 +640,7 @@ if __name__ == "__main__":
         labels=labels,
         colors=["tab:blue", "tab:orange", 'tab:green', 'black'],
         nstd=1.0,
-        figsize=(8.3,8.3),
+        figsize=(8,8),
         dpi=100
     )
 
@@ -650,7 +650,7 @@ if __name__ == "__main__":
     print(f'Fish pond number: {fish_pond_number}')
     print(f'parameters used: {keep_indices}')
     
-    #plt.savefig('paper/figures/' + plt_name, dpi = 300)
-    #print('created:', plt_name)
+    plt.savefig('paper/figures/' + plt_name, dpi = 300)
+    print('created:', plt_name)
 
-    save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
+    #save_table(param_names_latex_kept, param_values_kept, which_pars=keep_indices,constraints=cov_matrices, labels=labels)
