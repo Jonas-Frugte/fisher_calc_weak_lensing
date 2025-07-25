@@ -183,9 +183,9 @@ sigmaomm_ders = [
     (0.25 * sigma8 * omm**(-0.75))]
 
 
-# keep_indices = [4, 7, 8, 10]
+keep_indices = [4, 7, 8, 10]
 #keep_indices=[10]
-keep_indices = [0, 1, 2, 3, 5, 6] # lcdm pars
+# keep_indices = [0, 1, 2, 3, 5, 6] # lcdm pars
 #keep_indices = [4, 6]
 
 def process_fishes(fishes, keep_indices, derived_param_derivss = [s8_ders, S8_ders, omm_ders, sigmaomm_ders]):
@@ -455,7 +455,7 @@ if __name__ == "__main__":
     # 0.5: for the table, strong prior, with pb corrections
     # 1.5: for the table, weak prior, with pb corrections
 
-    fish_pond_number = 9
+    fish_pond_number = 5
     f_sky = 0.5
     if fish_pond_number == 0:
         fish_matrices = [
@@ -640,7 +640,7 @@ if __name__ == "__main__":
         labels=labels,
         colors=["tab:blue", "tab:orange", 'tab:green', 'black'],
         nstd=1.0,
-        figsize=(8,8),
+        figsize=(4.15, 4.15),
         dpi=100
     )
 
