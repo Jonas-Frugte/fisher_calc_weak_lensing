@@ -640,7 +640,7 @@ if __name__ == "__main__":
         labels=labels,
         colors=["tab:blue", "tab:orange", 'tab:green', 'black'],
         nstd=1.0,
-        figsize=(4.15, 4.15),
+        figsize=(6, 6),
         dpi=100
     )
 
