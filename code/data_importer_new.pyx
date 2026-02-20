@@ -76,22 +76,22 @@ def data_import_func(folder_name):
     cdef double[:, :] a_data = np.load(filepath + '/a.npy')
     cdef double[:, :] b_data = np.load(filepath + '/b.npy')
     cdef double[:, :] c_data = np.load(filepath + '/c.npy')
-    cdef double[:] lps_cc_data = np.load(filepath + '/lensing_power_spectrum_cc.npy')
-    cdef double[:] lps_cs_data = np.load(filepath + '/lensing_power_spectrum_cs.npy')
-    cdef double[:] lps_ss_data = np.load(filepath + '/lensing_power_spectrum_ss.npy')
-    cdef double[:] scale_factor_data = np.loadtxt(filepath + '/scale_factor')
-    cdef double[:] window_c_data = np.load(filepath + '/window_func_c.npy')
-    cdef double[:] window_s_data = np.load(filepath + '/window_func_s.npy')
+
+    cdef double[:, :] lps_data = np.load(filepath + '/lensing_power_spectrum.npy')
+
+    cdef double[:] scale_factor_data = np.load(filepath + '/scale_factor.npy')
+    cdef double[:, :] window_data = np.load(filepath + '/window_func.npy')
     cdef double[:, :] mps_data = np.load(filepath + '/matter_power_spectrum.npy')
     cdef double[:] z_at_chi_data = np.load(filepath + '/z_at_chi.npy')
     cdef double[:, :] cmbps = np.load(filepath + '/cmb_ps_with_ls.npy')
+    cdef double[:, :] galaxy_density_chi_bins = np.load(filepath + '/galaxy_density_chi_bins.npy')
 
     # all 2d funcs are made such that order of arguments is (k, z)
     C = 0.
     with open(filepath + '/rho_bar', 'r') as file:
         C = float(file.read())
 
-    return cosm_par, C, a_data, b_data, c_data, lps_cc_data, lps_cs_data, lps_ss_data, scale_factor_data, window_c_data, window_s_data, mps_data, z_at_chi_data, cmbps
+    return cosm_par, C, a_data, b_data, c_data, lps_data, scale_factor_data, window_data, mps_data, z_at_chi_data, cmbps, galaxy_density_chi_bins
 
 
 
@@ -104,36 +104,95 @@ cpdef double b(double k, double z, double[:, :] b_data) noexcept nogil:
 cpdef double c(double k, double z, double[:, :] c_data) noexcept nogil:
     return interp.logspace_linear_interp2d(k, z, k_min, k_max, k_num_fine, z_min, z_max, z_num_fine, c_data)
 
-# without gil cython doesn't like strings bc they are python objects, you can use char* C objects (C like strings)
+cdef int lps_tracer_pair_index(char* type1, char* type2) noexcept nogil: # TODO: test this
+    # tracer pair ordering:
+    # [('c', 'c'), ('c', 's1'), ('c', 's2'), ('c', 's3'), ('c', 's4'), ('s1', 's1'), ('s1', 's2'), ('s1', 's3'), ('s1', 's4'), ('s2', 's2'), ('s2', 's3'), ('s2', 's4'), ('s3', 's3'), ('s3', 's4'), ('s4', 's4')]
 
-cdef double lps(double l, char* type1, char* type2, double[:] lps_cc_data, double[:] lps_cs_data, double[:] lps_ss_data, double[:, :] cmbps) noexcept nogil:
+    cdef char t1 = type1[0]
+    cdef char t2 = type2[0]
+    cdef char i1, i2
+
+    # ---- canonical ordering ----
+    if t1 == b'c' and t2 != b'c':
+        pass
+    elif t2 == b'c' and t1 != b'c':
+        t1, t2 = t2, t1
+        type1, type2 = type2, type1
+    elif t1 == b's' and t2 == b's':
+        if type1[1] < type2[1]:
+            type1, type2 = type2, type1
+
+    # ---- mapping ----
+    if type1[0] == b'c' and type2[0] == b'c':
+        return 0
+
+    elif type1[0] == b'c':
+        if type2[1] == b'1': return 1
+        elif type2[1] == b'2': return 2
+        elif type2[1] == b'3': return 3
+        elif type2[1] == b'4': return 4
+        else:
+            printf("Error: invalid source type in lps_tracer_pair_index\n")
+
+    elif type1[0] == b's' and type2[0] == b's':
+        i1 = type1[1]
+        i2 = type2[1]
+
+        if i1 == b'1' and i2 == b'1': return 5
+        elif i1 == b'1' and i2 == b'2': return 6
+        elif i1 == b'1' and i2 == b'3': return 7
+        elif i1 == b'1' and i2 == b'4': return 8
+        elif i1 == b'2' and i2 == b'2': return 9
+        elif i1 == b'2' and i2 == b'3': return 10
+        elif i1 == b'2' and i2 == b'4': return 11
+        elif i1 == b'3' and i2 == b'3': return 12
+        elif i1 == b'3' and i2 == b'4': return 13
+        elif i1 == b'4' and i2 == b'4': return 14
+        else:
+            printf("Error: invalid source types in lps_tracer_pair_index\n")
+
+    return -1  # should never happen
+
+        
+# without gil cython doesn't like strings bc they are python objects, you can use char* C objects (C like strings)
+cdef double lps(double l, char* type1, char* type2, double[:, :] lps_data, double[:, :] cmbps) noexcept nogil:
     # CAUTION: this function doesn't throw error messages if type1 or type2 are not of type convergence or shear
     # for optimization purposes
-    if type1[0] == b'c' and type2[0] == b'c':
-        return interp.logspace_linear_interp(l, k_min, k_max, k_num_fine, lps_cc_data)
-    if (type1[0] == b'c' and type2[0] == b's') or (type1[0] == b's' and type2[0] == b'c'):
-        return interp.logspace_linear_interp(l, k_min, k_max, k_num_fine, lps_cs_data)
-    if type1[0] == b's' and type2[0] == b's':
-        return interp.logspace_linear_interp(l, k_min, k_max, k_num_fine, lps_ss_data)
+    cdef int index
+    # non lensing stuff
     if type1[0] == b't' and type2[0] == b't':
         return interp.linear_interp(l, cmbps[0, 0], lmax_cmbps, lmax_cmbps + 1, cmbps[:, 1])
-    if type1[0] == b'e' and type2[0] == b'e':
+    elif type1[0] == b'e' and type2[0] == b'e':
         return interp.linear_interp(l, cmbps[0, 0], lmax_cmbps, lmax_cmbps + 1, cmbps[:, 2])
-    if type1[0] == b'b' and type2[0] == b'b':
+    elif type1[0] == b'b' and type2[0] == b'b':
         return interp.linear_interp(l, cmbps[0, 0], lmax_cmbps, lmax_cmbps + 1, cmbps[:, 3])
-    if (type1[0] == b't' and type2[0] == b'e') or (type1[0] == b'e' and type2[0] == b't'):
-        return interp.linear_interp(l, cmbps[0, 0], lmax_cmbps, lmax_cmbps + 1, cmbps[:, 4])
+    elif (type1[0] == b't' and type2[0] == b'e') or (type1[0] == b'e' and type2[0] == b't'):
+        return interp.linear_interp(l, cmbps[0, 0], lmax_cmbps, lmax_cmbps + 1, cmbps[:, 4])    
     else:
-        return 0
+        index = lps_tracer_pair_index(type1, type2)
+        return interp.logspace_linear_interp(l, k_min, k_max, k_num_fine, lps_data[index, :])
 
 cdef double scale_factor(double chi, double[:] scale_factor_data) noexcept nogil:    
     return interp.linear_interp(chi, chi_min, chi_max, chi_num, scale_factor_data)
 
-cdef double window_func(double chi, char* type, double[:] window_c_data, double[:] window_s_data) noexcept nogil:
+cdef int window_func_index(char* type) noexcept nogil:
     if type[0] == b'c':
-        return fmax(0., interp.logspace_linear_interp(chi, chi_min, chi_max, chi_num, window_c_data))
+        return 0
     elif type[0] == b's':
-        return fmax(0., interp.logspace_linear_interp(chi, chi_min, chi_max, chi_num, window_s_data))
+        if type[1] == b'1':
+            return 1
+        elif type[1] == b'2':
+            return 2
+        elif type[1] == b'3':
+            return 3
+        elif type[1] == b'4':
+            return 4
+        else:
+            printf("Error: invalid source type in window_func\n")
+
+cdef double window_func(double chi, char* type, double[:, :] window_data) noexcept nogil:
+    cdef int index = window_func_index(type)
+    return fmax(0., interp.logspace_linear_interp(chi, chi_min, chi_max, chi_num, window_data[index, :]))
 
 # gives slightly different results than scipy RegularGridInterpolator for some obscure reason, however values on 
 # grid points seem to agree with the imported data
@@ -173,35 +232,29 @@ cpdef double mbs(double k1, double k2, double k3, double z, double[:, :] mps_dat
 
 # post born corrections, based on https://arxiv.org/pdf/1605.05662
 
-# from cosm_setup.py:
+# old version for total gal population, not split into bins
+# cdef double galaxy_density(double chi, double[:] z_at_chi_data) noexcept nogil: # TODO: adjust this for bin number
+#     cdef double z = z_at_chi(chi, z_at_chi_data)
+#     # because p(z) is a probability distribution, if you want it in chi coordinates instead of z coordinates, you
+#     # need to take p(z(chi)) * dz/dchi. I have checked that the following simple approximation for the derivative works quite well
+#     cdef double dzdchi = (z_at_chi(chi + 0.1, z_at_chi_data) - z_at_chi(chi, z_at_chi_data)) / 0.1
+#     return dzdchi * pow(z, 2) * 0.64 * exp(-pow(z/0.64, 1.5)) / 0.111848  # TODO: check that exp here works, last factor is for normalization
 
-# f = lambda z : float(z)**2
-# z0 = 0.64
-# beta = 1.5
-# normalization = scipy.integrate.quad(lambda z : f(z) * np.exp(float(-(z / z0)**beta)), 1e-8, self.results.get_derived_params()['zstar'])[0]
-
-# self.galaxy_density_z = lambda z : f(z) * np.exp(-(max(1e-12, z / z0))**beta) / normalization # normalizes integral of func to 1
-# self.galaxy_density_chi = lambda chi : self.galaxy_density_z(self.results.redshift_at_comoving_radial_distance(chi)) * np.abs((self.results.redshift_at_comoving_radial_distance(chi + 0.1) - self.results.redshift_at_comoving_radial_distance(chi)) / 0.1)
-# self.galaxy_density = lambda z : f(z) * np.exp(-(max(1e-12, z / z0))**beta) / normalization # normalizes integral of func to 1
-
-cdef double galaxy_density(double chi, double[:] z_at_chi_data) noexcept nogil:
-    cdef double z = z_at_chi(chi, z_at_chi_data)
-    # because p(z) is a probability distribution, if you want it in chi coordinates instead of z coordinates, you
-    # need to take p(z(chi)) * dz/dchi. I have checked that the following simple approximation for the derivative works quite well
-    cdef double dzdchi = (z_at_chi(chi + 0.1, z_at_chi_data) - z_at_chi(chi, z_at_chi_data)) / 0.1
-    return dzdchi * pow(z, 2) * 0.64 * exp(-pow(z/0.64, 1.5)) / 0.111848  # TODO: check that exp here works, last factor is for normalization
+cdef double galaxy_density(double chi, int bin_number, double[:, :] galaxy_density_chi_bins) noexcept nogil:
+    return interp.linear_interp(chi, chi_min, chi_max, chi_num, galaxy_density_chi_bins[bin_number - 1, :])
 
 cdef double pb_window_func(
     double chi,
     double chi_s,
     char* source_type,
-    double[:] z_at_chi_data
+    double[:, :] galaxy_density_chi_bins_data
 ) noexcept nogil:
     cdef int N = 20 # TODO: convergence check in window_func_convergence.png, N=20 seems to be fine to a percent or so
     cdef double dchi, chi_prime
     cdef double sum = 0.0
     cdef double weight, kernel
     cdef int i
+    cdef int bin_number
 
     if source_type[0] == b'c':
         if chi < chi_s:
@@ -212,13 +265,24 @@ cdef double pb_window_func(
     if source_type[0] == b's':
         if chi >= chi_s:
             return 0.
+        
+        if source_type[1] == b'1':
+            bin_number = 1
+        elif source_type[1] == b'2':
+            bin_number = 2
+        elif source_type[1] == b'3':
+            bin_number = 3
+        elif source_type[1] == b'4':
+            bin_number = 4
+        else:
+            printf("Error: invalid source type in pb_window_func\n")
 
         dchi = (chi_s - chi) / N
         for i in range(N + 1):
             chi_prime = chi + i * dchi
             weight = 0.5 if (i == 0 or i == N) else 1.0
             kernel = (chi_prime - chi) / (chi_prime * chi)
-            sum += weight * galaxy_density(chi_prime, z_at_chi_data) * kernel
+            sum += weight * galaxy_density(chi_prime, bin_number, galaxy_density_chi_bins_data) * kernel
 
         return dchi * sum
 
@@ -251,12 +315,13 @@ cdef double lbs_pb_lps_integrand(
     double [:,:] mps_data, 
     double [:] scale_factor_data,
     double [:] z_at_chi_data,
+    double [:, :] galaxy_density_chi_bins_data,
     char* source_type_2,
     char* source_type_3
     ) noexcept nogil:
     # C = 3 * self.omega_m * H0**2 / (2 * self.lightspeed_kms**2)
     if chi < chi_s and chi < chi_s_prime:
-        return 0.25 * 4 * C_data**2 * chi**2 * scale_factor(chi, scale_factor_data)**(-2) * pb_window_func(chi, chi_s, source_type_2, z_at_chi_data) * (chi_s_prime - chi) / (chi_s_prime * chi) * matter_power_spectrum(l / chi, z_at_chi(chi, z_at_chi_data), mps_data)
+        return 0.25 * 4 * C_data**2 * chi**2 * scale_factor(chi, scale_factor_data)**(-2) * pb_window_func(chi, chi_s, source_type_2, galaxy_density_chi_bins_data) * (chi_s_prime - chi) / (chi_s_prime * chi) * matter_power_spectrum(l / chi, z_at_chi(chi, z_at_chi_data), mps_data)
     else:
         return 0.
 
@@ -268,6 +333,7 @@ cpdef double lbs_pb_lps(
     double [:,:] mps_data, 
     double [:] scale_factor_data,
     double [:] z_at_chi_data,
+    double [:, :] galaxy_density_chi_bins_data,
     int num_samples,
     char* source_type_2, # starting from 2 is to follow notation in the paper
     char* source_type_3
@@ -276,11 +342,11 @@ cpdef double lbs_pb_lps(
     cdef double result = 0
     cdef int i
     for i in range(1, num_samples - 1):
-        result += lbs_pb_lps_integrand(chi_min + int_width * i, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data, source_type_2, source_type_3)
+        result += lbs_pb_lps_integrand(chi_min + int_width * i, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, source_type_2, source_type_3)
         # for boundary values use values that lie *just* inside the boundaries to prevent some nasty errors
     result += 0.5 * (
-        lbs_pb_lps_integrand(chi_min * 1.01, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data, source_type_2, source_type_3) 
-        + lbs_pb_lps_integrand(chi_max - 1.0, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data, source_type_2, source_type_3)
+        lbs_pb_lps_integrand(chi_min * 1.01, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, source_type_2, source_type_3) 
+        + lbs_pb_lps_integrand(chi_max - 1.0, chi_s, chi_s_prime, l, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, source_type_2, source_type_3)
         )
     result *= int_width
 
@@ -294,8 +360,8 @@ cdef double lbs_pb_ms_integrand(
     double [:,:] mps_data, 
     double [:] scale_factor_data,
     double [:] z_at_chi_data,
-    double [:] window_c_data,
-    double [:] window_s_data,
+    double [:, :] galaxy_density_chi_bins_data,
+    double [:, :] window_data,
     int num_samples,
     char* source_type_1,
     char* source_type_2,
@@ -306,7 +372,7 @@ cdef double lbs_pb_ms_integrand(
 
     cdef double chi_last_scatter = 13912 # according to fiducial model
 
-    return 0.25 * 4 * C_data**2 * chi**2 * scale_factor(chi, scale_factor_data)**(-2) * pb_window_func(chi, chi_last_scatter, source_type_1, z_at_chi_data) * pb_window_func(chi, chi_last_scatter, source_type_3, z_at_chi_data) * matter_power_spectrum(l / chi, z_at_chi(chi, z_at_chi_data), mps_data) * lbs_pb_lps(chi_last_scatter, chi, l_prime, C_data, mps_data, scale_factor_data,z_at_chi_data, num_samples, source_type_2, source_type_3)
+    return 0.25 * 4 * C_data**2 * chi**2 * scale_factor(chi, scale_factor_data)**(-2) * pb_window_func(chi, chi_last_scatter, source_type_1, galaxy_density_chi_bins_data) * pb_window_func(chi, chi_last_scatter, source_type_3, galaxy_density_chi_bins_data) * matter_power_spectrum(l / chi, z_at_chi(chi, z_at_chi_data), mps_data) * lbs_pb_lps(chi_last_scatter, chi, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, num_samples, source_type_2, source_type_3)
 
 cpdef double lbs_pb_ms(
     double l,
@@ -315,8 +381,8 @@ cpdef double lbs_pb_ms(
     double [:,:] mps_data, 
     double [:] scale_factor_data,
     double [:] z_at_chi_data,
-    double [:] window_c_data,
-    double [:] window_s_data,
+    double [:, :] galaxy_density_chi_bins_data,
+    double [:, :] window_data,
     int num_samples,
     char* type1,
     char* type2,
@@ -326,11 +392,11 @@ cpdef double lbs_pb_ms(
     cdef double result = 0
     cdef int i
     for i in range(1, num_samples - 1):
-        result += lbs_pb_ms_integrand(chi_min + int_width * i, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3)
+        result += lbs_pb_ms_integrand(chi_min + int_width * i, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type1, type2, type3)
         # for boundary values use values that lie *just* inside the boundaries to prevent some nasty errors
     result += 0.5 * (
-        lbs_pb_ms_integrand(chi_min * 1.01, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3)
-        + lbs_pb_ms_integrand(chi_max - 1.0, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3)
+        lbs_pb_ms_integrand(chi_min * 1.01, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type1, type2, type3)
+        + lbs_pb_ms_integrand(chi_max - 1.0, l, l_prime, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type1, type2, type3)
         )
     result *= int_width
 
@@ -344,8 +410,8 @@ cdef double lbs_pb_term(
     double [:,:] mps_data, 
     double [:] scale_factor_data,
     double [:] z_at_chi_data,
-    double [:] window_c_data,
-    double [:] window_s_data,
+    double [:, :] galaxy_density_chi_bins_data,
+    double [:, :] window_data,
     int num_samples,
     char* type1,
     char* type2,
@@ -355,7 +421,7 @@ cdef double lbs_pb_term(
     # gives cosine of angle between vector x and y, where we know the magnitudes of x, y, z and that x + y + z = 0 vector
     # return -1 * (x**2 + y**2 - z**2) / (2 * x * y)
 
-    return 2 * law_cosines(l1, l2, l3) * l1**(-1) * l2**(-1) * (law_cosines(l1, l3, l2) * l1 * l3 * lbs_pb_ms(l1, l2, C_data, mps_data,scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3) + law_cosines(l2, l3, l1) * l2 * l3 * lbs_pb_ms(l2, l1, C_data, mps_data,scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type2, type1, type3))
+    return 2 * law_cosines(l1, l2, l3) * l1**(-1) * l2**(-1) * (law_cosines(l1, l3, l2) * l1 * l3 * lbs_pb_ms(l1, l2, C_data, mps_data,scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type1, type2, type3) + law_cosines(l2, l3, l1) * l2 * l3 * lbs_pb_ms(l2, l1, C_data, mps_data,scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type2, type1, type3))
 
 cdef double lbs_pb_flat(
     double l1, 
@@ -365,23 +431,33 @@ cdef double lbs_pb_flat(
     double [:,:] mps_data, 
     double [:] scale_factor_data,
     double [:] z_at_chi_data,
-    double [:] window_c_data,
-    double [:] window_s_data,
+    double [:, :] galaxy_density_chi_bins_data,
+    double [:, :] window_data,
     int num_samples,
     char* type1,
     char* type2,
     char* type3
     ) noexcept nogil:
-    return lbs_pb_term(l1, l2, l3, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3) + lbs_pb_term(l2, l3, l1, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type2, type3, type1) + lbs_pb_term(l3, l1, l2, C_data, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type3, type1, type2)
+    return lbs_pb_term(l1, l2, l3, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type1, type2, type3) + lbs_pb_term(l2, l3, l1, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type2, type3, type1) + lbs_pb_term(l3, l1, l2, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type3, type1, type2)
 
 ############
 
 cdef inline double lbs_integrand(
-    double chi, double k1, double k2, double k3, 
-    char* type1, char* type2, char* type3,
-    double[:, :] a_data, double[:, :] b_data, double[:, :] c_data, 
-    double[:] scale_factor_data, double[:] window_c_data, double[:] window_s_data, 
-    double[:, :] mps_data, double[:] z_at_chi_data) noexcept nogil:
+    double chi, 
+    double k1, 
+    double k2, 
+    double k3, 
+    char* type1, 
+    char* type2, 
+    char* type3,
+    double[:, :] a_data, 
+    double[:, :] b_data, 
+    double[:, :] c_data, 
+    double[:] scale_factor_data, 
+    double[:, :] window_data, 
+    double[:, :] mps_data, 
+    double[:] z_at_chi_data
+    ) noexcept nogil:
 
     cdef double integrand_val
     cdef double factor1, factor2, factor3, factor4, factor5, factor6
@@ -389,9 +465,9 @@ cdef inline double lbs_integrand(
     # Compute individual factors
     factor1 = chi**2
     factor2 = scale_factor(chi, scale_factor_data)**(-3)
-    factor3 = window_func(chi, type1, window_c_data, window_s_data)
-    factor4 = window_func(chi, type2, window_c_data, window_s_data)
-    factor5 = window_func(chi, type3, window_c_data, window_s_data)
+    factor3 = window_func(chi, type1, window_data)
+    factor4 = window_func(chi, type2, window_data)
+    factor5 = window_func(chi, type3, window_data)
     factor6 = mbs(k1 / chi, k2 / chi, k3 / chi, z_at_chi(chi, z_at_chi_data), 
                   mps_data, a_data, b_data, c_data)
 
@@ -410,9 +486,9 @@ cdef inline double lbs_integrand(
 
     return integrand_val
 
-# cdef inline double lbs_integrand(double chi, double k1, double k2, double k3, char* type1, char* type2, char* type3, double[:, :] a_data, double[:, :] b_data, double[:, :] c_data, double[:] scale_factor_data, double[:] window_c_data, double[:] window_s_data, double[:, :] mps_data, double[:] z_at_chi_data) noexcept nogil:
+# cdef inline double lbs_integrand(double chi, double k1, double k2, double k3, char* type1, char* type2, char* type3, double[:, :] a_data, double[:, :] b_data, double[:, :] c_data, double[:] scale_factor_data, double[:, :] window_data, double[:, :] mps_data, double[:] z_at_chi_data) noexcept nogil:
 #     cdef double integrand_val
-#     integrand_val = chi**2 * scale_factor(chi, scale_factor_data)**(-3) * window_func(chi, type1, window_c_data, window_s_data) * window_func(chi, type2, window_c_data, window_s_data) * window_func(chi, type3, window_c_data, window_s_data) * mbs(k1 / chi, k2 / chi, k3 / chi, z_at_chi(chi, z_at_chi_data), mps_data, a_data, b_data, c_data)
+#     integrand_val = chi**2 * scale_factor(chi, scale_factor_data)**(-3) * window_func(chi, type1, window_data) * window_func(chi, type2, window_data) * window_func(chi, type3, window_data) * mbs(k1 / chi, k2 / chi, k3 / chi, z_at_chi(chi, z_at_chi_data), mps_data, a_data, b_data, c_data)
 #     if integrand_val < 0.:
 
 #     return integrand_val
@@ -431,10 +507,11 @@ cdef double lbs_flat(
     double[:, :] b_data,
     double[:, :] c_data,
     double[:] scale_factor_data,
-    double[:] window_c_data,
-    double[:] window_s_data,
+    double[:, :] window_data,
     double[:, :] mps_data,
-    double[:] z_at_chi_data) noexcept nogil:
+    double[:] z_at_chi_data,
+    double[:, :] galaxy_density_chi_bins_data
+    ) noexcept nogil:
 
     # flat bisp is meant for testing and as such does not check for triangle inequalities!
 
@@ -442,11 +519,11 @@ cdef double lbs_flat(
     cdef double result = 0
     cdef int i
     for i in range(1, num_samples - 1):
-        result += lbs_integrand(chi_min + int_width * i, k1, k2, k3, type1, type2, type3, a_data, b_data, c_data, scale_factor_data, window_c_data, window_s_data, mps_data, z_at_chi_data)
+        result += lbs_integrand(chi_min + int_width * i, k1, k2, k3, type1, type2, type3, a_data, b_data, c_data, scale_factor_data, window_data, mps_data, z_at_chi_data)
         # for boundary values use values that lie *just* inside the boundaries to prevent some nasty errors
     result += 0.5 * (
-        lbs_integrand(chi_min * 1.01, k1, k2, k3, type1, type2, type3, a_data, b_data, c_data, scale_factor_data, window_c_data, window_s_data, mps_data, z_at_chi_data) 
-        + lbs_integrand(chi_max - 1.0, k1, k2, k3, type1, type2, type3, a_data, b_data, c_data, scale_factor_data, window_c_data, window_s_data, mps_data, z_at_chi_data)
+        lbs_integrand(chi_min * 1.01, k1, k2, k3, type1, type2, type3, a_data, b_data, c_data, scale_factor_data, window_data, mps_data, z_at_chi_data) 
+        + lbs_integrand(chi_max - 1.0, k1, k2, k3, type1, type2, type3, a_data, b_data, c_data, scale_factor_data, window_data, mps_data, z_at_chi_data)
         )
     result *= int_width
 
@@ -457,7 +534,7 @@ cdef double lbs_flat(
     cdef double convergence_to_potential
     if pb_correction:
         convergence_to_potential = 1 / ((k1 * 1.)**2 * (k2 * 1.)**2 * (k3 * 1.)**2 / 8)
-        pb_correction_val = convergence_to_potential * lbs_pb_flat(k1, k2, k3, C, mps_data, scale_factor_data, z_at_chi_data, window_c_data, window_s_data, num_samples, type1, type2, type3)
+        pb_correction_val = convergence_to_potential * lbs_pb_flat(k1, k2, k3, C, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type1, type2, type3)
 
     return fraction_factor * const_factor * result + pb_correction_val
 
@@ -524,10 +601,10 @@ cpdef double lbs(
     double[:, :] b_data,
     double[:, :] c_data,
     double[:] scale_factor_data,
-    double[:] window_c_data,
-    double[:] window_s_data,
+    double[:, :] window_data,
     double[:, :] mps_data,
-    double[:] z_at_chi_data
+    double[:] z_at_chi_data,
+    double[:, :] galaxy_density_chi_bins_data,
     ) noexcept nogil:
     cdef double wigner_factor
     cdef double sqrt_factor
@@ -536,7 +613,7 @@ cpdef double lbs(
     cdef double integration_result
 
     if (k1 + k2 + k3) % 2 == 0 and k3 <= k1 + k2 and k1 - k2 <= k3 and k2 - k1 <= k3:
-        integration_result = lbs_flat(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C, a_data, b_data, c_data, scale_factor_data, window_c_data, window_s_data, mps_data, z_at_chi_data)
+        integration_result = lbs_flat(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C, a_data, b_data, c_data, scale_factor_data, window_data, mps_data, z_at_chi_data, galaxy_density_chi_bins_data)
 
         wigner_factor = fabs(wigner_3j_approx_nocheck(k1, k2, k3))
         sqrt_factor = sqrt((2.0*k1 + 1.0)*(2.0*k2 + 1.0)*(2.0*k3 + 1.0)/(4 * 3.14159))
@@ -552,34 +629,30 @@ cdef double C_f
 cdef double[:, :] a_data_f = np.zeros((z_num, k_num), dtype=np.float64)
 cdef double[:, :] b_data_f = np.zeros((z_num, k_num), dtype=np.float64)
 cdef double[:, :] c_data_f = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_f = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_f = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_f = np.zeros(k_num, dtype=np.float64)
+cdef double[:, :] lps_data_f = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_f = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_f = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_f = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_f = np.zeros((4, chi_num), dtype=np.float64)
 cdef double[:, :] mps_data_f = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
 cdef double[:] z_at_chi_data_f = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] cmbps_f = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_f = np.zeros((4, chi_num), dtype=np.float64)
 
-#cosm_par, C, a_data, b_data, c_data, lps_cc_data, lps_cs_data, lps_ss_data, scale_factor_data, window_c_data, window_s_data, mps_data, z_at_chi_data, cmbps_f
-
-cosm_par_f, C_f, a_data_f, b_data_f, c_data_f, lps_cc_data_f, lps_cs_data_f, lps_ss_data_f, scale_factor_data_f, window_c_data_f, window_s_data_f, mps_data_f, z_at_chi_data_f, cmbps_f = data_import_func('data_fiducial')
+cosm_par_f, C_f, a_data_f, b_data_f, c_data_f, lps_data_f, scale_factor_data_f, window_data_f, mps_data_f, z_at_chi_data_f, cmbps_f, galaxy_density_chi_bins_f = data_import_func('data_fiducial')
 
 cpdef double lbs_flat_f(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs_flat(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_f, a_data_f, b_data_f, c_data_f, scale_factor_data_f, window_c_data_f, window_s_data_f, mps_data_f, z_at_chi_data_f)
+    return lbs_flat(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_f, a_data_f, b_data_f, c_data_f, scale_factor_data_f, window_data_f, mps_data_f, z_at_chi_data_f, galaxy_density_chi_bins_f)
 
 cdef double lbs_f(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_f, a_data_f, b_data_f, c_data_f, scale_factor_data_f, window_c_data_f, window_s_data_f, mps_data_f, z_at_chi_data_f)
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_f, a_data_f, b_data_f, c_data_f, scale_factor_data_f, window_data_f, mps_data_f, z_at_chi_data_f, galaxy_density_chi_bins_f)
 
 cpdef double lbs_pb_lps_f(double chi_source, double chi_source_prime, char* type1, char* type2, double l, int num_samples) noexcept nogil:
-    return lbs_pb_lps(chi_source, chi_source_prime, l, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, num_samples, type1, type2)
+    return lbs_pb_lps(chi_source, chi_source_prime, l, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, galaxy_density_chi_bins_f, num_samples, type1, type2)
 
 cpdef double lbs_pb_flat_f(double l1, double l2, double l3, char* type1, char* type2, char* type3, int num_samples) noexcept nogil:
-    return lbs_pb_flat(l1, l2, l3, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, window_c_data_f, window_s_data_f, num_samples, type1, type2, type3)
-
+    return lbs_pb_flat(l1, l2, l3, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, galaxy_density_chi_bins_f, window_data_f, num_samples, type1, type2, type3)
+    
 cdef double lps_f(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_f, lps_cs_data_f, lps_ss_data_f, cmbps_f)
+    return lps(l, type1, type2, lps_data_f, cmbps_f)
 
 cdef bint pink_noise = False
 cdef double l_knee = 50
@@ -687,395 +760,405 @@ cdef double lps_f_obs(int l, char* type1, char* type2) noexcept nogil:
     # NOISE: ON
     #########################
 
-    return lps(l, type1, type2, lps_cc_data_f, lps_cs_data_f, lps_ss_data_f, cmbps_f) + lps_noise(l, type1, type2)
+    return lps(l, type1, type2, lps_data_f, cmbps_f) + lps_noise(l, type1, type2)
 
 ##########################################
 
+cdef double[:] cosm_par_H_p
+cdef double C_H_p
+cdef double[:, :] a_data_H_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_H_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_H_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_H_p = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_H_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_H_p = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_H_p = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_H_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_H_p = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_H_p = np.zeros((4, chi_num), dtype=np.float64)
 
-cdef double[:] cosm_par_H_p_0
-cdef double C_H_p_0
-cdef double[:, :] a_data_H_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_H_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_H_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_H_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_H_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_H_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_H_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_H_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_H_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_H_p_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_H_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_H_p_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cosm_par_H_p, C_H_p, a_data_H_p, b_data_H_p, c_data_H_p, lps_data_H_p, scale_factor_data_H_p, window_data_H_p, mps_data_H_p, z_at_chi_data_H_p, cmbps_H_p, galaxy_density_chi_bins_H_p = data_import_func('data_H_p')
 
-cosm_par_H_p_0, C_H_p_0, a_data_H_p_0, b_data_H_p_0, c_data_H_p_0, lps_cc_data_H_p_0, lps_cs_data_H_p_0, lps_ss_data_H_p_0, scale_factor_data_H_p_0, window_c_data_H_p_0, window_s_data_H_p_0, mps_data_H_p_0, z_at_chi_data_H_p_0, cmbps_H_p_0 = data_import_func('data_H_p_0')
+cdef double lbs_H_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_H_p, a_data_H_p, b_data_H_p, c_data_H_p, scale_factor_data_H_p, window_data_H_p, mps_data_H_p, z_at_chi_data_H_p, galaxy_density_chi_bins_H_p)
 
-cdef double lbs_H_p_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_H_p_0, a_data_H_p_0, b_data_H_p_0, c_data_H_p_0, scale_factor_data_H_p_0, window_c_data_H_p_0, window_s_data_H_p_0, mps_data_H_p_0, z_at_chi_data_H_p_0)
-
-cdef double lps_H_p_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_H_p_0, lps_cs_data_H_p_0, lps_ss_data_H_p_0, cmbps_H_p_0)
+cdef double lps_H_p(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_H_p, cmbps_H_p)
             
 
-cdef double[:] cosm_par_H_m_0
-cdef double C_H_m_0
-cdef double[:, :] a_data_H_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_H_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_H_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_H_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_H_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_H_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_H_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_H_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_H_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_H_m_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_H_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_H_m_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_H_m
+cdef double C_H_m
+cdef double[:, :] a_data_H_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_H_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_H_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_H_m = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_H_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_H_m = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_H_m = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_H_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_H_m = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_H_m = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_H_m_0, C_H_m_0, a_data_H_m_0, b_data_H_m_0, c_data_H_m_0, lps_cc_data_H_m_0, lps_cs_data_H_m_0, lps_ss_data_H_m_0, scale_factor_data_H_m_0, window_c_data_H_m_0, window_s_data_H_m_0, mps_data_H_m_0, z_at_chi_data_H_m_0, cmbps_H_m_0 = data_import_func('data_H_m_0')
+cosm_par_H_m, C_H_m, a_data_H_m, b_data_H_m, c_data_H_m, lps_data_H_m, scale_factor_data_H_m, window_data_H_m, mps_data_H_m, z_at_chi_data_H_m, cmbps_H_m, galaxy_density_chi_bins_H_m = data_import_func('data_H_m')
 
-cdef double lbs_H_m_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_H_m_0, a_data_H_m_0, b_data_H_m_0, c_data_H_m_0, scale_factor_data_H_m_0, window_c_data_H_m_0, window_s_data_H_m_0, mps_data_H_m_0, z_at_chi_data_H_m_0)
+cdef double lbs_H_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_H_m, a_data_H_m, b_data_H_m, c_data_H_m, scale_factor_data_H_m, window_data_H_m, mps_data_H_m, z_at_chi_data_H_m, galaxy_density_chi_bins_H_m)
 
-cdef double lps_H_m_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_H_m_0, lps_cs_data_H_m_0, lps_ss_data_H_m_0, cmbps_H_m_0)
+cdef double lps_H_m(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_H_m, cmbps_H_m)
             
 
-cdef double[:] cosm_par_ombh2_p_0
-cdef double C_ombh2_p_0
-cdef double[:, :] a_data_ombh2_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_ombh2_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_ombh2_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_ombh2_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_ombh2_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_ombh2_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_ombh2_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_ombh2_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_ombh2_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_ombh2_p_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_ombh2_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_ombh2_p_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_ombh2_p
+cdef double C_ombh2_p
+cdef double[:, :] a_data_ombh2_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_ombh2_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_ombh2_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_ombh2_p = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_ombh2_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_ombh2_p = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_ombh2_p = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_ombh2_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_ombh2_p = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_ombh2_p = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_ombh2_p_0, C_ombh2_p_0, a_data_ombh2_p_0, b_data_ombh2_p_0, c_data_ombh2_p_0, lps_cc_data_ombh2_p_0, lps_cs_data_ombh2_p_0, lps_ss_data_ombh2_p_0, scale_factor_data_ombh2_p_0, window_c_data_ombh2_p_0, window_s_data_ombh2_p_0, mps_data_ombh2_p_0, z_at_chi_data_ombh2_p_0, cmbps_ombh2_p_0 = data_import_func('data_ombh2_p_0')
+cosm_par_ombh2_p, C_ombh2_p, a_data_ombh2_p, b_data_ombh2_p, c_data_ombh2_p, lps_data_ombh2_p, scale_factor_data_ombh2_p, window_data_ombh2_p, mps_data_ombh2_p, z_at_chi_data_ombh2_p, cmbps_ombh2_p, galaxy_density_chi_bins_ombh2_p = data_import_func('data_ombh2_p')
 
-cdef double lbs_ombh2_p_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ombh2_p_0, a_data_ombh2_p_0, b_data_ombh2_p_0, c_data_ombh2_p_0, scale_factor_data_ombh2_p_0, window_c_data_ombh2_p_0, window_s_data_ombh2_p_0, mps_data_ombh2_p_0, z_at_chi_data_ombh2_p_0)
+cdef double lbs_ombh2_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ombh2_p, a_data_ombh2_p, b_data_ombh2_p, c_data_ombh2_p, scale_factor_data_ombh2_p, window_data_ombh2_p, mps_data_ombh2_p, z_at_chi_data_ombh2_p, galaxy_density_chi_bins_ombh2_p)
 
-cdef double lps_ombh2_p_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_ombh2_p_0, lps_cs_data_ombh2_p_0, lps_ss_data_ombh2_p_0, cmbps_ombh2_p_0)
+cdef double lps_ombh2_p(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_ombh2_p, cmbps_ombh2_p)
             
 
-cdef double[:] cosm_par_ombh2_m_0
-cdef double C_ombh2_m_0
-cdef double[:, :] a_data_ombh2_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_ombh2_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_ombh2_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_ombh2_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_ombh2_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_ombh2_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_ombh2_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_ombh2_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_ombh2_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_ombh2_m_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_ombh2_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_ombh2_m_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_ombh2_m
+cdef double C_ombh2_m
+cdef double[:, :] a_data_ombh2_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_ombh2_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_ombh2_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_ombh2_m = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_ombh2_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_ombh2_m = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_ombh2_m = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_ombh2_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_ombh2_m = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_ombh2_m = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_ombh2_m_0, C_ombh2_m_0, a_data_ombh2_m_0, b_data_ombh2_m_0, c_data_ombh2_m_0, lps_cc_data_ombh2_m_0, lps_cs_data_ombh2_m_0, lps_ss_data_ombh2_m_0, scale_factor_data_ombh2_m_0, window_c_data_ombh2_m_0, window_s_data_ombh2_m_0, mps_data_ombh2_m_0, z_at_chi_data_ombh2_m_0, cmbps_ombh2_m_0 = data_import_func('data_ombh2_m_0')
+cosm_par_ombh2_m, C_ombh2_m, a_data_ombh2_m, b_data_ombh2_m, c_data_ombh2_m, lps_data_ombh2_m, scale_factor_data_ombh2_m, window_data_ombh2_m, mps_data_ombh2_m, z_at_chi_data_ombh2_m, cmbps_ombh2_m, galaxy_density_chi_bins_ombh2_m = data_import_func('data_ombh2_m')
 
-cdef double lbs_ombh2_m_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ombh2_m_0, a_data_ombh2_m_0, b_data_ombh2_m_0, c_data_ombh2_m_0, scale_factor_data_ombh2_m_0, window_c_data_ombh2_m_0, window_s_data_ombh2_m_0, mps_data_ombh2_m_0, z_at_chi_data_ombh2_m_0)
+cdef double lbs_ombh2_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ombh2_m, a_data_ombh2_m, b_data_ombh2_m, c_data_ombh2_m, scale_factor_data_ombh2_m, window_data_ombh2_m, mps_data_ombh2_m, z_at_chi_data_ombh2_m, galaxy_density_chi_bins_ombh2_m)
 
-cdef double lps_ombh2_m_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_ombh2_m_0, lps_cs_data_ombh2_m_0, lps_ss_data_ombh2_m_0, cmbps_ombh2_m_0)
+cdef double lps_ombh2_m(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_ombh2_m, cmbps_ombh2_m)
             
 
-cdef double[:] cosm_par_omch2_p_0
-cdef double C_omch2_p_0
-cdef double[:, :] a_data_omch2_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_omch2_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_omch2_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_omch2_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_omch2_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_omch2_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_omch2_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_omch2_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_omch2_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_omch2_p_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_omch2_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_omch2_p_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_omch2_p
+cdef double C_omch2_p
+cdef double[:, :] a_data_omch2_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_omch2_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_omch2_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_omch2_p = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_omch2_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_omch2_p = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_omch2_p = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_omch2_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_omch2_p = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_omch2_p = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_omch2_p_0, C_omch2_p_0, a_data_omch2_p_0, b_data_omch2_p_0, c_data_omch2_p_0, lps_cc_data_omch2_p_0, lps_cs_data_omch2_p_0, lps_ss_data_omch2_p_0, scale_factor_data_omch2_p_0, window_c_data_omch2_p_0, window_s_data_omch2_p_0, mps_data_omch2_p_0, z_at_chi_data_omch2_p_0, cmbps_omch2_p_0 = data_import_func('data_omch2_p_0')
+cosm_par_omch2_p, C_omch2_p, a_data_omch2_p, b_data_omch2_p, c_data_omch2_p, lps_data_omch2_p, scale_factor_data_omch2_p, window_data_omch2_p, mps_data_omch2_p, z_at_chi_data_omch2_p, cmbps_omch2_p, galaxy_density_chi_bins_omch2_p = data_import_func('data_omch2_p')
 
-cdef double lbs_omch2_p_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_omch2_p_0, a_data_omch2_p_0, b_data_omch2_p_0, c_data_omch2_p_0, scale_factor_data_omch2_p_0, window_c_data_omch2_p_0, window_s_data_omch2_p_0, mps_data_omch2_p_0, z_at_chi_data_omch2_p_0)
+cdef double lbs_omch2_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_omch2_p, a_data_omch2_p, b_data_omch2_p, c_data_omch2_p, scale_factor_data_omch2_p, window_data_omch2_p, mps_data_omch2_p, z_at_chi_data_omch2_p, galaxy_density_chi_bins_omch2_p)
 
-cdef double lps_omch2_p_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_omch2_p_0, lps_cs_data_omch2_p_0, lps_ss_data_omch2_p_0, cmbps_omch2_p_0)
+cdef double lps_omch2_p(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_omch2_p, cmbps_omch2_p)
             
 
-cdef double[:] cosm_par_omch2_m_0
-cdef double C_omch2_m_0
-cdef double[:, :] a_data_omch2_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_omch2_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_omch2_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_omch2_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_omch2_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_omch2_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_omch2_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_omch2_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_omch2_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_omch2_m_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_omch2_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_omch2_m_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_omch2_m
+cdef double C_omch2_m
+cdef double[:, :] a_data_omch2_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_omch2_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_omch2_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_omch2_m = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_omch2_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_omch2_m = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_omch2_m = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_omch2_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_omch2_m = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_omch2_m = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_omch2_m_0, C_omch2_m_0, a_data_omch2_m_0, b_data_omch2_m_0, c_data_omch2_m_0, lps_cc_data_omch2_m_0, lps_cs_data_omch2_m_0, lps_ss_data_omch2_m_0, scale_factor_data_omch2_m_0, window_c_data_omch2_m_0, window_s_data_omch2_m_0, mps_data_omch2_m_0, z_at_chi_data_omch2_m_0, cmbps_omch2_m_0 = data_import_func('data_omch2_m_0')
+cosm_par_omch2_m, C_omch2_m, a_data_omch2_m, b_data_omch2_m, c_data_omch2_m, lps_data_omch2_m, scale_factor_data_omch2_m, window_data_omch2_m, mps_data_omch2_m, z_at_chi_data_omch2_m, cmbps_omch2_m, galaxy_density_chi_bins_omch2_m = data_import_func('data_omch2_m')
 
-cdef double lbs_omch2_m_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_omch2_m_0, a_data_omch2_m_0, b_data_omch2_m_0, c_data_omch2_m_0, scale_factor_data_omch2_m_0, window_c_data_omch2_m_0, window_s_data_omch2_m_0, mps_data_omch2_m_0, z_at_chi_data_omch2_m_0)
+cdef double lbs_omch2_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_omch2_m, a_data_omch2_m, b_data_omch2_m, c_data_omch2_m, scale_factor_data_omch2_m, window_data_omch2_m, mps_data_omch2_m, z_at_chi_data_omch2_m, galaxy_density_chi_bins_omch2_m)
 
-cdef double lps_omch2_m_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_omch2_m_0, lps_cs_data_omch2_m_0, lps_ss_data_omch2_m_0, cmbps_omch2_m_0)
+cdef double lps_omch2_m(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_omch2_m, cmbps_omch2_m)
             
 
-cdef double[:] cosm_par_ns_p_0
-cdef double C_ns_p_0
-cdef double[:, :] a_data_ns_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_ns_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_ns_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_ns_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_ns_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_ns_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_ns_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_ns_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_ns_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_ns_p_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_ns_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_ns_p_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_ns_p
+cdef double C_ns_p
+cdef double[:, :] a_data_ns_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_ns_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_ns_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_ns_p = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_ns_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_ns_p = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_ns_p = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_ns_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_ns_p = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_ns_p = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_ns_p_0, C_ns_p_0, a_data_ns_p_0, b_data_ns_p_0, c_data_ns_p_0, lps_cc_data_ns_p_0, lps_cs_data_ns_p_0, lps_ss_data_ns_p_0, scale_factor_data_ns_p_0, window_c_data_ns_p_0, window_s_data_ns_p_0, mps_data_ns_p_0, z_at_chi_data_ns_p_0, cmbps_ns_p_0 = data_import_func('data_ns_p_0')
+cosm_par_ns_p, C_ns_p, a_data_ns_p, b_data_ns_p, c_data_ns_p, lps_data_ns_p, scale_factor_data_ns_p, window_data_ns_p, mps_data_ns_p, z_at_chi_data_ns_p, cmbps_ns_p, galaxy_density_chi_bins_ns_p = data_import_func('data_ns_p')
 
-cdef double lbs_ns_p_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ns_p_0, a_data_ns_p_0, b_data_ns_p_0, c_data_ns_p_0, scale_factor_data_ns_p_0, window_c_data_ns_p_0, window_s_data_ns_p_0, mps_data_ns_p_0, z_at_chi_data_ns_p_0)
+cdef double lbs_ns_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ns_p, a_data_ns_p, b_data_ns_p, c_data_ns_p, scale_factor_data_ns_p, window_data_ns_p, mps_data_ns_p, z_at_chi_data_ns_p, galaxy_density_chi_bins_ns_p)
 
-cdef double lps_ns_p_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_ns_p_0, lps_cs_data_ns_p_0, lps_ss_data_ns_p_0, cmbps_ns_p_0)
+cdef double lps_ns_p(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_ns_p, cmbps_ns_p)
             
 
-cdef double[:] cosm_par_ns_m_0
-cdef double C_ns_m_0
-cdef double[:, :] a_data_ns_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_ns_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_ns_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_ns_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_ns_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_ns_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_ns_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_ns_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_ns_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_ns_m_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_ns_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_ns_m_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_ns_m
+cdef double C_ns_m
+cdef double[:, :] a_data_ns_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_ns_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_ns_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_ns_m = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_ns_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_ns_m = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_ns_m = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_ns_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_ns_m = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_ns_m = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_ns_m_0, C_ns_m_0, a_data_ns_m_0, b_data_ns_m_0, c_data_ns_m_0, lps_cc_data_ns_m_0, lps_cs_data_ns_m_0, lps_ss_data_ns_m_0, scale_factor_data_ns_m_0, window_c_data_ns_m_0, window_s_data_ns_m_0, mps_data_ns_m_0, z_at_chi_data_ns_m_0, cmbps_ns_m_0 = data_import_func('data_ns_m_0')
+cosm_par_ns_m, C_ns_m, a_data_ns_m, b_data_ns_m, c_data_ns_m, lps_data_ns_m, scale_factor_data_ns_m, window_data_ns_m, mps_data_ns_m, z_at_chi_data_ns_m, cmbps_ns_m, galaxy_density_chi_bins_ns_m = data_import_func('data_ns_m')
 
-cdef double lbs_ns_m_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ns_m_0, a_data_ns_m_0, b_data_ns_m_0, c_data_ns_m_0, scale_factor_data_ns_m_0, window_c_data_ns_m_0, window_s_data_ns_m_0, mps_data_ns_m_0, z_at_chi_data_ns_m_0)
+cdef double lbs_ns_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ns_m, a_data_ns_m, b_data_ns_m, c_data_ns_m, scale_factor_data_ns_m, window_data_ns_m, mps_data_ns_m, z_at_chi_data_ns_m, galaxy_density_chi_bins_ns_m)
 
-cdef double lps_ns_m_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_ns_m_0, lps_cs_data_ns_m_0, lps_ss_data_ns_m_0, cmbps_ns_m_0)
+cdef double lps_ns_m(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_ns_m, cmbps_ns_m)
             
 
-cdef double[:] cosm_par_As_p_0
-cdef double C_As_p_0
-cdef double[:, :] a_data_As_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_As_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_As_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_As_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_As_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_As_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_As_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_As_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_As_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_As_p_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_As_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_As_p_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_As_p
+cdef double C_As_p
+cdef double[:, :] a_data_As_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_As_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_As_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_As_p = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_As_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_As_p = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_As_p = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_As_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_As_p = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_As_p = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_As_p_0, C_As_p_0, a_data_As_p_0, b_data_As_p_0, c_data_As_p_0, lps_cc_data_As_p_0, lps_cs_data_As_p_0, lps_ss_data_As_p_0, scale_factor_data_As_p_0, window_c_data_As_p_0, window_s_data_As_p_0, mps_data_As_p_0, z_at_chi_data_As_p_0, cmbps_As_p_0 = data_import_func('data_As_p_0')
+cosm_par_As_p, C_As_p, a_data_As_p, b_data_As_p, c_data_As_p, lps_data_As_p, scale_factor_data_As_p, window_data_As_p, mps_data_As_p, z_at_chi_data_As_p, cmbps_As_p, galaxy_density_chi_bins_As_p = data_import_func('data_As_p')
 
-cdef double lbs_As_p_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_As_p_0, a_data_As_p_0, b_data_As_p_0, c_data_As_p_0, scale_factor_data_As_p_0, window_c_data_As_p_0, window_s_data_As_p_0, mps_data_As_p_0, z_at_chi_data_As_p_0)
+cdef double lbs_As_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_As_p, a_data_As_p, b_data_As_p, c_data_As_p, scale_factor_data_As_p, window_data_As_p, mps_data_As_p, z_at_chi_data_As_p, galaxy_density_chi_bins_As_p)
 
-cdef double lps_As_p_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_As_p_0, lps_cs_data_As_p_0, lps_ss_data_As_p_0, cmbps_As_p_0)
+cdef double lps_As_p(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_As_p, cmbps_As_p)
             
 
-cdef double[:] cosm_par_As_m_0
-cdef double C_As_m_0
-cdef double[:, :] a_data_As_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_As_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_As_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_As_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_As_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_As_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_As_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_As_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_As_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_As_m_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_As_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_As_m_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_As_m
+cdef double C_As_m
+cdef double[:, :] a_data_As_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_As_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_As_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_As_m = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_As_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_As_m = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_As_m = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_As_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_As_m = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_As_m = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_As_m_0, C_As_m_0, a_data_As_m_0, b_data_As_m_0, c_data_As_m_0, lps_cc_data_As_m_0, lps_cs_data_As_m_0, lps_ss_data_As_m_0, scale_factor_data_As_m_0, window_c_data_As_m_0, window_s_data_As_m_0, mps_data_As_m_0, z_at_chi_data_As_m_0, cmbps_As_m_0 = data_import_func('data_As_m_0')
+cosm_par_As_m, C_As_m, a_data_As_m, b_data_As_m, c_data_As_m, lps_data_As_m, scale_factor_data_As_m, window_data_As_m, mps_data_As_m, z_at_chi_data_As_m, cmbps_As_m, galaxy_density_chi_bins_As_m = data_import_func('data_As_m')
 
-cdef double lbs_As_m_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_As_m_0, a_data_As_m_0, b_data_As_m_0, c_data_As_m_0, scale_factor_data_As_m_0, window_c_data_As_m_0, window_s_data_As_m_0, mps_data_As_m_0, z_at_chi_data_As_m_0)
+cdef double lbs_As_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_As_m, a_data_As_m, b_data_As_m, c_data_As_m, scale_factor_data_As_m, window_data_As_m, mps_data_As_m, z_at_chi_data_As_m, galaxy_density_chi_bins_As_m)
 
-cdef double lps_As_m_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_As_m_0, lps_cs_data_As_m_0, lps_ss_data_As_m_0, cmbps_As_m_0)
+cdef double lps_As_m(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_As_m, cmbps_As_m)
             
 
-cdef double[:] cosm_par_tau_p_0
-cdef double C_tau_p_0
-cdef double[:, :] a_data_tau_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_tau_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_tau_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_tau_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_tau_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_tau_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_tau_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_tau_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_tau_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_tau_p_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_tau_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_tau_p_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_tau_p
+cdef double C_tau_p
+cdef double[:, :] a_data_tau_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_tau_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_tau_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_tau_p = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_tau_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_tau_p = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_tau_p = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_tau_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_tau_p = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_tau_p = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_tau_p_0, C_tau_p_0, a_data_tau_p_0, b_data_tau_p_0, c_data_tau_p_0, lps_cc_data_tau_p_0, lps_cs_data_tau_p_0, lps_ss_data_tau_p_0, scale_factor_data_tau_p_0, window_c_data_tau_p_0, window_s_data_tau_p_0, mps_data_tau_p_0, z_at_chi_data_tau_p_0, cmbps_tau_p_0 = data_import_func('data_tau_p_0')
+cosm_par_tau_p, C_tau_p, a_data_tau_p, b_data_tau_p, c_data_tau_p, lps_data_tau_p, scale_factor_data_tau_p, window_data_tau_p, mps_data_tau_p, z_at_chi_data_tau_p, cmbps_tau_p, galaxy_density_chi_bins_tau_p = data_import_func('data_tau_p')
 
-cdef double lbs_tau_p_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_tau_p_0, a_data_tau_p_0, b_data_tau_p_0, c_data_tau_p_0, scale_factor_data_tau_p_0, window_c_data_tau_p_0, window_s_data_tau_p_0, mps_data_tau_p_0, z_at_chi_data_tau_p_0)
+cdef double lbs_tau_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_tau_p, a_data_tau_p, b_data_tau_p, c_data_tau_p, scale_factor_data_tau_p, window_data_tau_p, mps_data_tau_p, z_at_chi_data_tau_p, galaxy_density_chi_bins_tau_p)
 
-cdef double lps_tau_p_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_tau_p_0, lps_cs_data_tau_p_0, lps_ss_data_tau_p_0, cmbps_tau_p_0)
+cdef double lps_tau_p(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_tau_p, cmbps_tau_p)
             
 
-cdef double[:] cosm_par_tau_m_0
-cdef double C_tau_m_0
-cdef double[:, :] a_data_tau_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_tau_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_tau_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_tau_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_tau_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_tau_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_tau_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_tau_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_tau_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_tau_m_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_tau_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_tau_m_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_tau_m
+cdef double C_tau_m
+cdef double[:, :] a_data_tau_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_tau_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_tau_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_tau_m = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_tau_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_tau_m = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_tau_m = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_tau_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_tau_m = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_tau_m = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_tau_m_0, C_tau_m_0, a_data_tau_m_0, b_data_tau_m_0, c_data_tau_m_0, lps_cc_data_tau_m_0, lps_cs_data_tau_m_0, lps_ss_data_tau_m_0, scale_factor_data_tau_m_0, window_c_data_tau_m_0, window_s_data_tau_m_0, mps_data_tau_m_0, z_at_chi_data_tau_m_0, cmbps_tau_m_0 = data_import_func('data_tau_m_0')
+cosm_par_tau_m, C_tau_m, a_data_tau_m, b_data_tau_m, c_data_tau_m, lps_data_tau_m, scale_factor_data_tau_m, window_data_tau_m, mps_data_tau_m, z_at_chi_data_tau_m, cmbps_tau_m, galaxy_density_chi_bins_tau_m = data_import_func('data_tau_m')
 
-cdef double lbs_tau_m_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_tau_m_0, a_data_tau_m_0, b_data_tau_m_0, c_data_tau_m_0, scale_factor_data_tau_m_0, window_c_data_tau_m_0, window_s_data_tau_m_0, mps_data_tau_m_0, z_at_chi_data_tau_m_0)
+cdef double lbs_tau_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_tau_m, a_data_tau_m, b_data_tau_m, c_data_tau_m, scale_factor_data_tau_m, window_data_tau_m, mps_data_tau_m, z_at_chi_data_tau_m, galaxy_density_chi_bins_tau_m)
 
-cdef double lps_tau_m_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_tau_m_0, lps_cs_data_tau_m_0, lps_ss_data_tau_m_0, cmbps_tau_m_0)
+cdef double lps_tau_m(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_tau_m, cmbps_tau_m)
             
 
-cdef double[:] cosm_par_mnu_p_0
-cdef double C_mnu_p_0
-cdef double[:, :] a_data_mnu_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_mnu_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_mnu_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_mnu_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_mnu_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_mnu_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_mnu_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_mnu_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_mnu_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_mnu_p_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_mnu_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_mnu_p_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_mnu_p
+cdef double C_mnu_p
+cdef double[:, :] a_data_mnu_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_mnu_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_mnu_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_mnu_p = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_mnu_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_mnu_p = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_mnu_p = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_mnu_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_mnu_p = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_mnu_p = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_mnu_p_0, C_mnu_p_0, a_data_mnu_p_0, b_data_mnu_p_0, c_data_mnu_p_0, lps_cc_data_mnu_p_0, lps_cs_data_mnu_p_0, lps_ss_data_mnu_p_0, scale_factor_data_mnu_p_0, window_c_data_mnu_p_0, window_s_data_mnu_p_0, mps_data_mnu_p_0, z_at_chi_data_mnu_p_0, cmbps_mnu_p_0 = data_import_func('data_mnu_p_0')
+cosm_par_mnu_p, C_mnu_p, a_data_mnu_p, b_data_mnu_p, c_data_mnu_p, lps_data_mnu_p, scale_factor_data_mnu_p, window_data_mnu_p, mps_data_mnu_p, z_at_chi_data_mnu_p, cmbps_mnu_p, galaxy_density_chi_bins_mnu_p = data_import_func('data_mnu_p')
 
-cdef double lbs_mnu_p_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_mnu_p_0, a_data_mnu_p_0, b_data_mnu_p_0, c_data_mnu_p_0, scale_factor_data_mnu_p_0, window_c_data_mnu_p_0, window_s_data_mnu_p_0, mps_data_mnu_p_0, z_at_chi_data_mnu_p_0)
+cdef double lbs_mnu_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_mnu_p, a_data_mnu_p, b_data_mnu_p, c_data_mnu_p, scale_factor_data_mnu_p, window_data_mnu_p, mps_data_mnu_p, z_at_chi_data_mnu_p, galaxy_density_chi_bins_mnu_p)
 
-cdef double lps_mnu_p_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_mnu_p_0, lps_cs_data_mnu_p_0, lps_ss_data_mnu_p_0, cmbps_mnu_p_0)
+cdef double lps_mnu_p(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_mnu_p, cmbps_mnu_p)
             
 
-cdef double[:] cosm_par_mnu_m_0
-cdef double C_mnu_m_0
-cdef double[:, :] a_data_mnu_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_mnu_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_mnu_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_mnu_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_mnu_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_mnu_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_mnu_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_mnu_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_mnu_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_mnu_m_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_mnu_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_mnu_m_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_mnu_m
+cdef double C_mnu_m
+cdef double[:, :] a_data_mnu_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_mnu_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_mnu_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_mnu_m = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_mnu_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_mnu_m = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_mnu_m = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_mnu_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_mnu_m = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_mnu_m = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_mnu_m_0, C_mnu_m_0, a_data_mnu_m_0, b_data_mnu_m_0, c_data_mnu_m_0, lps_cc_data_mnu_m_0, lps_cs_data_mnu_m_0, lps_ss_data_mnu_m_0, scale_factor_data_mnu_m_0, window_c_data_mnu_m_0, window_s_data_mnu_m_0, mps_data_mnu_m_0, z_at_chi_data_mnu_m_0, cmbps_mnu_m_0 = data_import_func('data_mnu_m_0')
+cosm_par_mnu_m, C_mnu_m, a_data_mnu_m, b_data_mnu_m, c_data_mnu_m, lps_data_mnu_m, scale_factor_data_mnu_m, window_data_mnu_m, mps_data_mnu_m, z_at_chi_data_mnu_m, cmbps_mnu_m, galaxy_density_chi_bins_mnu_m = data_import_func('data_mnu_m')
 
-cdef double lbs_mnu_m_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_mnu_m_0, a_data_mnu_m_0, b_data_mnu_m_0, c_data_mnu_m_0, scale_factor_data_mnu_m_0, window_c_data_mnu_m_0, window_s_data_mnu_m_0, mps_data_mnu_m_0, z_at_chi_data_mnu_m_0)
+cdef double lbs_mnu_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_mnu_m, a_data_mnu_m, b_data_mnu_m, c_data_mnu_m, scale_factor_data_mnu_m, window_data_mnu_m, mps_data_mnu_m, z_at_chi_data_mnu_m, galaxy_density_chi_bins_mnu_m)
 
-cdef double lps_mnu_m_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_mnu_m_0, lps_cs_data_mnu_m_0, lps_ss_data_mnu_m_0, cmbps_mnu_m_0)
+cdef double lps_mnu_m(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_mnu_m, cmbps_mnu_m)
             
 
-cdef double[:] cosm_par_w0_p_0
-cdef double C_w0_p_0
-cdef double[:, :] a_data_w0_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_w0_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_w0_p_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_w0_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_w0_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_w0_p_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_w0_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_w0_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_w0_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_w0_p_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_w0_p_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_w0_p_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_w0_p
+cdef double C_w0_p
+cdef double[:, :] a_data_w0_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_w0_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_w0_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_w0_p = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_w0_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_w0_p = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_w0_p = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_w0_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_w0_p = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_w0_p = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_w0_p_0, C_w0_p_0, a_data_w0_p_0, b_data_w0_p_0, c_data_w0_p_0, lps_cc_data_w0_p_0, lps_cs_data_w0_p_0, lps_ss_data_w0_p_0, scale_factor_data_w0_p_0, window_c_data_w0_p_0, window_s_data_w0_p_0, mps_data_w0_p_0, z_at_chi_data_w0_p_0, cmbps_w0_p_0 = data_import_func('data_w0_p_0')
+cosm_par_w0_p, C_w0_p, a_data_w0_p, b_data_w0_p, c_data_w0_p, lps_data_w0_p, scale_factor_data_w0_p, window_data_w0_p, mps_data_w0_p, z_at_chi_data_w0_p, cmbps_w0_p, galaxy_density_chi_bins_w0_p = data_import_func('data_w0_p')
 
-cdef double lbs_w0_p_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_w0_p_0, a_data_w0_p_0, b_data_w0_p_0, c_data_w0_p_0, scale_factor_data_w0_p_0, window_c_data_w0_p_0, window_s_data_w0_p_0, mps_data_w0_p_0, z_at_chi_data_w0_p_0)
+cdef double lbs_w0_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_w0_p, a_data_w0_p, b_data_w0_p, c_data_w0_p, scale_factor_data_w0_p, window_data_w0_p, mps_data_w0_p, z_at_chi_data_w0_p, galaxy_density_chi_bins_w0_p)
 
-cdef double lps_w0_p_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_w0_p_0, lps_cs_data_w0_p_0, lps_ss_data_w0_p_0, cmbps_w0_p_0)
+cdef double lps_w0_p(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_w0_p, cmbps_w0_p)
             
 
-cdef double[:] cosm_par_w0_m_0
-cdef double C_w0_m_0
-cdef double[:, :] a_data_w0_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_w0_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_w0_m_0 = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:] lps_cc_data_w0_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_cs_data_w0_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] lps_ss_data_w0_m_0 = np.zeros(k_num, dtype=np.float64)
-cdef double[:] scale_factor_data_w0_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_c_data_w0_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:] window_s_data_w0_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] mps_data_w0_m_0 = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
-cdef double[:] z_at_chi_data_w0_m_0 = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] cmbps_w0_m_0 = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:] cosm_par_w0_m
+cdef double C_w0_m
+cdef double[:, :] a_data_w0_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_w0_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_w0_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_w0_m = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_w0_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_w0_m = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_w0_m = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_w0_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_w0_m = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_w0_m = np.zeros((4, chi_num), dtype=np.float64)
 
-cosm_par_w0_m_0, C_w0_m_0, a_data_w0_m_0, b_data_w0_m_0, c_data_w0_m_0, lps_cc_data_w0_m_0, lps_cs_data_w0_m_0, lps_ss_data_w0_m_0, scale_factor_data_w0_m_0, window_c_data_w0_m_0, window_s_data_w0_m_0, mps_data_w0_m_0, z_at_chi_data_w0_m_0, cmbps_w0_m_0 = data_import_func('data_w0_m_0')
+cosm_par_w0_m, C_w0_m, a_data_w0_m, b_data_w0_m, c_data_w0_m, lps_data_w0_m, scale_factor_data_w0_m, window_data_w0_m, mps_data_w0_m, z_at_chi_data_w0_m, cmbps_w0_m, galaxy_density_chi_bins_w0_m = data_import_func('data_w0_m')
 
-cdef double lbs_w0_m_0(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
-    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_w0_m_0, a_data_w0_m_0, b_data_w0_m_0, c_data_w0_m_0, scale_factor_data_w0_m_0, window_c_data_w0_m_0, window_s_data_w0_m_0, mps_data_w0_m_0, z_at_chi_data_w0_m_0)
+cdef double lbs_w0_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_w0_m, a_data_w0_m, b_data_w0_m, c_data_w0_m, scale_factor_data_w0_m, window_data_w0_m, mps_data_w0_m, z_at_chi_data_w0_m, galaxy_density_chi_bins_w0_m)
 
-cdef double lps_w0_m_0(int l, char* type1, char* type2) noexcept nogil:
-    return lps(l, type1, type2, lps_cc_data_w0_m_0, lps_cs_data_w0_m_0, lps_ss_data_w0_m_0, cmbps_w0_m_0)
+cdef double lps_w0_m(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_w0_m, cmbps_w0_m)
             
-     
+
+cdef double[:] cosm_par_logT_AGN_p
+cdef double C_logT_AGN_p
+cdef double[:, :] a_data_logT_AGN_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_logT_AGN_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_logT_AGN_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_logT_AGN_p = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_logT_AGN_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_logT_AGN_p = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_logT_AGN_p = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_logT_AGN_p = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_logT_AGN_p = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_logT_AGN_p = np.zeros((4, chi_num), dtype=np.float64)
+
+cosm_par_logT_AGN_p, C_logT_AGN_p, a_data_logT_AGN_p, b_data_logT_AGN_p, c_data_logT_AGN_p, lps_data_logT_AGN_p, scale_factor_data_logT_AGN_p, window_data_logT_AGN_p, mps_data_logT_AGN_p, z_at_chi_data_logT_AGN_p, cmbps_logT_AGN_p, galaxy_density_chi_bins_logT_AGN_p = data_import_func('data_logT_AGN_p')
+
+cdef double lbs_logT_AGN_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_logT_AGN_p, a_data_logT_AGN_p, b_data_logT_AGN_p, c_data_logT_AGN_p, scale_factor_data_logT_AGN_p, window_data_logT_AGN_p, mps_data_logT_AGN_p, z_at_chi_data_logT_AGN_p, galaxy_density_chi_bins_logT_AGN_p)
+
+cdef double lps_logT_AGN_p(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_logT_AGN_p, cmbps_logT_AGN_p)
+            
+
+cdef double[:] cosm_par_logT_AGN_m
+cdef double C_logT_AGN_m
+cdef double[:, :] a_data_logT_AGN_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] b_data_logT_AGN_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] c_data_logT_AGN_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:, :] lps_data_logT_AGN_m = np.zeros((15, k_num), dtype=np.float64)
+cdef double[:] scale_factor_data_logT_AGN_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] window_data_logT_AGN_m = np.zeros((5, chi_num), dtype=np.float64)
+cdef double[:, :] mps_data_logT_AGN_m = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
+cdef double[:] z_at_chi_data_logT_AGN_m = np.zeros(chi_num, dtype=np.float64)
+cdef double[:, :] cmbps_logT_AGN_m = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
+cdef double[:, :] galaxy_density_chi_bins_logT_AGN_m = np.zeros((4, chi_num), dtype=np.float64)
+
+cosm_par_logT_AGN_m, C_logT_AGN_m, a_data_logT_AGN_m, b_data_logT_AGN_m, c_data_logT_AGN_m, lps_data_logT_AGN_m, scale_factor_data_logT_AGN_m, window_data_logT_AGN_m, mps_data_logT_AGN_m, z_at_chi_data_logT_AGN_m, cmbps_logT_AGN_m, galaxy_density_chi_bins_logT_AGN_m = data_import_func('data_logT_AGN_m')
+
+cdef double lbs_logT_AGN_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+    return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_logT_AGN_m, a_data_logT_AGN_m, b_data_logT_AGN_m, c_data_logT_AGN_m, scale_factor_data_logT_AGN_m, window_data_logT_AGN_m, mps_data_logT_AGN_m, z_at_chi_data_logT_AGN_m, galaxy_density_chi_bins_logT_AGN_m)
+
+cdef double lps_logT_AGN_m(int l, char* type1, char* type2) noexcept nogil:
+    return lps(l, type1, type2, lps_data_logT_AGN_m, cmbps_logT_AGN_m)
+
 ##########################################
 
 
@@ -1087,76 +1170,80 @@ cpdef double der(double fp, double fm, double dx) noexcept nogil:
 
 # cdef double[:] fiducial_cosm_par = np.array([67.4, 0.0224, 0.120, 0.965, 2.1e-9, 0.06])
 
-print((cosm_par_H_p_0[0] - cosm_par_f[0]) / cosm_par_f[0])
-print((cosm_par_ombh2_p_0[1] - cosm_par_f[1]) / cosm_par_f[1])
-print((cosm_par_omch2_p_0[2] - cosm_par_f[2]) / cosm_par_f[2])
-print((cosm_par_ns_p_0[3] - cosm_par_f[3]) / cosm_par_f[3])
-print((cosm_par_As_p_0[4] - cosm_par_f[4]) / cosm_par_f[4])
-print((cosm_par_tau_p_0[5] - cosm_par_f[5]) / cosm_par_f[5])
-print((cosm_par_mnu_p_0[6] - cosm_par_f[6]) / cosm_par_f[6])
-print((cosm_par_w0_p_0[7] - cosm_par_f[7]) / cosm_par_f[7])
+print((cosm_par_H_p[0] - cosm_par_f[0]) / cosm_par_f[0])
+print((cosm_par_ombh2_p[1] - cosm_par_f[1]) / cosm_par_f[1])
+print((cosm_par_omch2_p[2] - cosm_par_f[2]) / cosm_par_f[2])
+print((cosm_par_ns_p[3] - cosm_par_f[3]) / cosm_par_f[3])
+print((cosm_par_As_p[4] - cosm_par_f[4]) / cosm_par_f[4])
+print((cosm_par_tau_p[5] - cosm_par_f[5]) / cosm_par_f[5])
+print((cosm_par_mnu_p[6] - cosm_par_f[6]) / cosm_par_f[6])
+print((cosm_par_w0_p[7] - cosm_par_f[7]) / cosm_par_f[7])
+print((cosm_par_logT_AGN_p[8] - cosm_par_f[8]) / cosm_par_f[8])
 
 
+cdef double lps_der(int k, char* type1, char* type2, char* par) noexcept nogil:
+    # for b'snr' case, just returns the original function
+    if par[0] == b's':
+        return lps_f(k, type1, type2)
 
-cdef double lps_der(int k, char* type1, char* type2, char* par, int delta_delta) noexcept nogil:
-    if delta_delta == 0:
-        # for b'snr' case, just returns the original function
-        if par[0] == b's':
-            return lps_f(k, type1, type2)
+    if par[0] == b'H':
+        return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0])
+            
+    if par[0] == b'o' and par[2] == b'b':
+        return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1])
 
-        if par[0] == b'H':
-            return der(lps_H_p_0(k, type1, type2), lps_H_m_0(k, type1, type2), cosm_par_H_p_0[0] - cosm_par_f[0])
-                
-        if par[0] == b'o' and par[2] == b'b':
-            return der(lps_ombh2_p_0(k, type1, type2), lps_ombh2_m_0(k, type1, type2), cosm_par_ombh2_p_0[1] - cosm_par_f[1])
+    if par[0] == b'o' and par[2] == b'c':
+        return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2])
 
-        if par[0] == b'o' and par[2] == b'c':
-            return der(lps_omch2_p_0(k, type1, type2), lps_omch2_m_0(k, type1, type2), cosm_par_omch2_p_0[2] - cosm_par_f[2])
+    if par[0] == b'n':
+        return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3])
 
-        if par[0] == b'n':
-            return der(lps_ns_p_0(k, type1, type2), lps_ns_m_0(k, type1, type2), cosm_par_ns_p_0[3] - cosm_par_f[3])
+    if par[0] == b'A':
+        return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4])
+    
+    if par[0] == b't':
+        return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5])
 
-        if par[0] == b'A':
-            return der(lps_As_p_0(k, type1, type2), lps_As_m_0(k, type1, type2), cosm_par_As_p_0[4] - cosm_par_f[4])
-        
-        if par[0] == b't':
-            return der(lps_tau_p_0(k, type1, type2), lps_tau_m_0(k, type1, type2), cosm_par_tau_p_0[5] - cosm_par_f[5])
+    if par[0] == b'm':
+        return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6])
 
-        if par[0] == b'm':
-            return der(lps_mnu_p_0(k, type1, type2), lps_mnu_m_0(k, type1, type2), cosm_par_mnu_p_0[6] - cosm_par_f[6])
+    if par[0] == b'w':
+        return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7])
 
-        if par[0] == b'w':
-            return der(lps_w0_p_0(k, type1, type2), lps_w0_m_0(k, type1, type2), cosm_par_w0_p_0[7] - cosm_par_f[7])
+    if par[0] == b'l':
+        return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
 
-cdef double lbs_der(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction, char* par, int delta_delta) noexcept nogil:
-    if delta_delta == 0:
-        # for b'snr' case, just returns the original function
-        if par[0] == b's':
-            return lbs_f(k1, k2, k3, type1, type2, type3, num_samples, pb_correction)
+cdef double lbs_der(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction, char* par) noexcept nogil:
+    # for b'snr' case, just returns the original function
+    if par[0] == b's':
+        return lbs_f(k1, k2, k3, type1, type2, type3, num_samples, pb_correction)
 
-        if par[0] == b'H':
-            return der(lbs_H_p_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p_0[0] - cosm_par_f[0])
-                
-        if par[0] == b'o' and par[2] == b'b':
-            return der(lbs_ombh2_p_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p_0[1] - cosm_par_f[1])
+    if par[0] == b'H':
+        return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0])
+            
+    if par[0] == b'o' and par[2] == b'b':
+        return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1])
 
-        if par[0] == b'o' and par[2] == b'c':
-            return der(lbs_omch2_p_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p_0[2] - cosm_par_f[2])
+    if par[0] == b'o' and par[2] == b'c':
+        return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2])
 
-        if par[0] == b'n':
-            return der(lbs_ns_p_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p_0[3] - cosm_par_f[3])
+    if par[0] == b'n':
+        return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3])
 
-        if par[0] == b'A':
-            return der(lbs_As_p_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p_0[4] - cosm_par_f[4])
-        
-        if par[0] == b't':
-            return der(lbs_tau_p_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p_0[5] - cosm_par_f[5])
+    if par[0] == b'A':
+        return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4])
+    
+    if par[0] == b't':
+        return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5])
 
-        if par[0] == b'm':
-            return der(lbs_mnu_p_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p_0[6] - cosm_par_f[6])
+    if par[0] == b'm':
+        return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6])
 
-        if par[0] == b'w':
-            return der(lbs_w0_p_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m_0(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p_0[7] - cosm_par_f[7])
+    if par[0] == b'w':
+        return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7])
+
+    if par[0] == b'l':
+        return der(lbs_logT_AGN_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_logT_AGN_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
         
 #######################
 
@@ -1176,10 +1263,10 @@ def mbs_test(k1, k2, k3, z):
     return mbs(k1, k2, k3, z, mps_data_f, a_data_f, b_data_f, c_data_f)
 
 def window_func_test(chi, type):
-    return window_func(chi, type, window_c_data=window_c_data_f, window_s_data=window_s_data_f)
+    return window_func(chi, type, window_data=window_data_f)
 
 def window_func_pb_test(chi, chi_s, source_type):
-    return pb_window_func(chi, chi_s, source_type, z_at_chi_data_f)
+    return pb_window_func(chi, chi_s, source_type, galaxy_density_chi_bins_f)
 
 def scale_factor_test(chi):
     return scale_factor(chi, scale_factor_data=scale_factor_data_f)
@@ -1189,19 +1276,25 @@ def z_at_chi_test(chi):
 
 def lbs_integrand_test(chi, l1, l2, l3, type1, type2, type3):
     return lbs_integrand(chi, l1, l2, l3, type1, type2, type3, 
-    a_data_f, b_data_f, c_data_f, scale_factor_data_f, window_c_data_f, window_s_data_f, mps_data_f, z_at_chi_data_f)
+    a_data_f, b_data_f, c_data_f, scale_factor_data_f, window_data_f, mps_data_f, z_at_chi_data_f)
 
 def lps_f_obs_test(l, type1, type2):
     return lps_f_obs(l, type1, type2)
 
 def lps_der_test(k, type1, type2, par):
-    return lps_der(k, type1, type2, par, 0)
+    return lps_der(k, type1, type2, par)
 
-def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, par, deltadelta):
-    return lbs_der(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, par, deltadelta)
+def lbs_der_test(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, par):
+    return lbs_der(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, par)
 
 def cmbps_noise_test(l, sigma, Delta_X):
     return cmbps_noise(l, sigma, Delta_X)
+
+def lps_logT_AGN_p_test(l, type1, type2):
+    return lps_logT_AGN_p(l, type1, type2)
+
+def lps_logT_AGN_m_test(l, type1, type2):
+    return lps_logT_AGN_m(l, type1, type2)
 
 
 # some code to get shapes of all arrays for debugging purposes
@@ -1211,12 +1304,9 @@ def cmbps_noise_test(l, sigma, Delta_X):
 #     "a_data": a_data_f,
 #     "b_data": b_data_f,
 #     "c_data": c_data_f,
-#     "lps_cc_data": lps_cc_data_f,
-#     "lps_cs_data": lps_cs_data_f,
-#     "lps_ss_data": lps_ss_data_f,
+#     "lps_data": lps_data_f,
 #     "scale_factor_data": scale_factor_data_f,
-#     "window_c_data": window_c_data_f,
-#     "window_s_data": window_s_data_f,
+#     "window_data": window_data_f,
 #     "mps_data": mps_data_f,
 #     "z_at_chi_data": z_at_chi_data_f,
 # }

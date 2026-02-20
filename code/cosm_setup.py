@@ -12,7 +12,7 @@ class lensing_spectra:
   '''
   Calculates relevant features of a cosmology given input parameters and matter bispectrum fitting constants
   '''
-  def __init__(self, H0=67.4, ombh2=0.0223, omch2=0.119, ns=0.965, As=2.13e-9, tau=0.06, mnu=0.06, w0=-1, redshifts=np.linspace(1100, 0, 200), matter_bispec_fit_params = matter_bispec_fit_params):
+  def __init__(self, H0=67.4, ombh2=0.0223, omch2=0.119, ns=0.965, As=2.13e-9, tau=0.06, mnu=0.06, w0=-1, logT_AGN=7.8, redshifts=np.linspace(1100, 0, 200), matter_bispec_fit_params = matter_bispec_fit_params):
     '''
     Initialize instance of class, set results and some methods/attributes, default inputs are for fiducial cosmology
 
@@ -43,12 +43,13 @@ class lensing_spectra:
     self.As = As          # Scalar amplitude
     self.tau = tau        # reionization depth
     self.mnu = mnu        # Sum of neutrino masses
-    self.w0 = w0
+    self.w0 = w0          # Dark energy equation of state parameter
+    self.logT_AGN = logT_AGN # AGN feedback parameter for halofit, see Mead et al 2020
     self.matter_bispec_fit_params = matter_bispec_fit_params # params of matter bispectrum fitting function as (a_1, ..., a_9)
-    self.k_nl_max = 3000
+    self.kmax_mps = 20
 
     self.obtain_results()
-
+    self.i = 0
 
 
     self.z_at_chi = self.results.redshift_at_comoving_radial_distance
@@ -68,13 +69,41 @@ class lensing_spectra:
 
     self.galaxy_density_z = lambda z : f(z) * np.exp(-(max(1e-12, z / z0))**beta) / normalization # normalizes integral of func to 1
     self.galaxy_density_chi = lambda chi : self.galaxy_density_z(self.results.redshift_at_comoving_radial_distance(chi)) * np.abs((self.results.redshift_at_comoving_radial_distance(chi + 0.1) - self.results.redshift_at_comoving_radial_distance(chi)) / 0.1)
+    
+    self.galaxy_density_chi_cdf = lambda chi : scipy.integrate.quad(self.galaxy_density_chi, 0.0, chi)[0]
+    self.number_bins = 4
+    self.bin_edges = [0]
+    self.bin_normalization = self.number_bins
+    for bin_number in range(self.number_bins)[1:]: # skip first one since that's just zero
+      percentile = bin_number/self.number_bins
+      bin_edge = scipy.optimize.brentq(lambda chi : self.galaxy_density_chi_cdf(chi) - percentile, 0.0, 5000)
+      self.bin_edges.append(bin_edge)
+    self.bin_edges.append(9000) # TODO: this
 
-    # source redshift and comoving dist of galaxies using Luna's convention
-    self.z_galaxy_source = 5
-    self.chi_galaxy_source = self.results.comoving_radial_distance(self.z_galaxy_source)
+    self.photo_z_err = lambda z : 0.05 * (1+z) # TODO: change later
+    self.photo_chi_err = lambda chi : self.results.comoving_radial_distance((self.photo_z_err(self.z_at_chi(chi)) + self.z_at_chi(chi))) - chi
+    self.gaussian_photo_chi_err = lambda chi_err_true, chi_observed: np.exp(-0.5 * (chi_err_true / self.photo_chi_err(chi_observed))**2) / (self.photo_chi_err(chi_observed) * np.sqrt(2*np.pi))
+    self.galaxy_density_chi_bin = lambda chi, bin_number : self.bin_normalization * scipy.integrate.quad(
+      lambda chi_prime : self.galaxy_density_chi(chi_prime) * self.gaussian_photo_chi_err(chi - chi_prime, chi_prime),
+      self.bin_edges[bin_number - 1],
+      self.bin_edges[bin_number],
+      epsabs = 1e-10, epsrel = 5e-3
+      )[0]
+    
+    # TODO: bins seem reasonable, they integrate to 1 atleast. proper test should be done later
 
     self.k_nl = self.find_k_nl()
     print(f"k_nl = {self.k_nl}.")
+
+    # Precompute galaxy density per chi for each bin and build an interpolant
+    # to speed up repeated evaluations (used by window_func).
+    self._chi_grid = np.linspace(0.0, self.chi_last_scatter, 2000)
+    self._galaxy_density_chi_bin_vals = {}
+    for bin_number in range(1, self.number_bins + 1):
+      vals = [self.galaxy_density_chi_bin(chi, bin_number) for chi in self._chi_grid]
+      self._galaxy_density_chi_bin_vals[bin_number] = np.array(vals)
+    
+    print("done generating galaxy density chi bin vals")
 
 
   def obtain_results(self):
@@ -90,11 +119,14 @@ class lensing_spectra:
     pars.InitPower.set_params(As=self.As, ns=self.ns, r=0)
     pars.InitPower.pivot_scalar = 0.05
     pars.set_for_lmax(lmax, lens_potential_accuracy=0)
-    pars.set_matter_power(redshifts=self.redshifts, kmax=self.k_nl_max, nonlinear=True)
+    pars.set_matter_power(redshifts=self.redshifts, kmax=self.kmax_mps, nonlinear=True)
     pars.set_dark_energy(w=self.w0)
+    pars.NonLinear = camb.model.NonLinear_both
+    pars.NonLinearModel.set_params(
+      halofit_version = 'mead2020_feedback',
+      HMCode_logT_AGN=self.logT_AGN
+    )
     self.pars = pars
-
-    kmax_interp = 3000
 
     # power spectrum in units of Mpc^3, k in units of Mpc^-1, with input (z, k) on RHS 
     print('Creating linear mps')
@@ -105,8 +137,8 @@ class lensing_spectra:
       k_hunit=False,
       zmin = 0,
       zmax = 1100,
-      kmax = kmax_interp,
-      extrap_kmax=True).P
+      kmax = self.kmax_mps,
+      extrap_kmax=False).P
     
     print('Creating mps')
     mps_swapped = camb.get_matter_power_interpolator(
@@ -116,8 +148,8 @@ class lensing_spectra:
       k_hunit=False,
       zmin = 0,
       zmax = 1100,
-      kmax = kmax_interp,
-      extrap_kmax=True).P
+      kmax = self.kmax_mps,
+      extrap_kmax=False).P
     
     self.mps = lambda k, z : mps_swapped(z, k)
     self.linear_mps = lambda k, z : linear_mps_swapped(z, k)
@@ -236,7 +268,7 @@ class lensing_spectra:
       float
     '''
     integrand = lambda chi : chi**2 * self.scale_factor(chi)**(-2) * self.window_func(chi, types[0]) * self.window_func(chi, types[1]) * self.mps(l/chi, self.results.redshift_at_comoving_radial_distance(chi))
-    result =  9 * (1/l)**4 * self.omega_m**2 * self.H0**4 * self.lightspeed_kms**(-4) * scipy.integrate.quad(integrand, 1e-5, self.chi_last_scatter, epsabs=1e-30, epsrel=1e-3, limit = 50)[0]
+    result =  9 * (1/l)**4 * self.omega_m**2 * self.H0**4 * self.lightspeed_kms**(-4) * scipy.integrate.quad(integrand, 1e-5, self.chi_last_scatter, epsabs=1e-30, epsrel=5e-3, limit = 500)[0]
 
     return result
 
@@ -452,13 +484,27 @@ class lensing_spectra:
     if type[0] == 'c':
       return (self.chi_last_scatter - chi)/(self.chi_last_scatter * chi)
     elif type[0] == 's':
+      self.i+=1
+      bin_number = int(type[1])
       return scipy.integrate.quad(
-          lambda chi_prime : self.galaxy_density_chi(chi_prime) * (chi_prime - chi) / (chi_prime * chi),
-          chi, self.chi_galaxy_source, epsabs = 1e-3, epsrel = 1e-3)[0]
+          lambda chi_prime : self.galaxy_density_chi_bin_fast(chi_prime, bin_number) * (chi_prime - chi) / (chi_prime * chi),
+          chi, 9e3, epsabs = 1e-10, epsrel = 5e-3, limit = 500)[0] # TODO: check the 9e3 thing
     else:
       raise Exception('Unknown window function type, string needs to start with s or c')
+
+  def galaxy_density_chi_bin_fast(self, chi, bin_number):
+    """
+    Fast interpolant for `galaxy_density_chi_bin` constructed on a coarse chi grid.
+    Returns an interpolated value (0 beyond the last sampled chi).
+    """
+    try:
+      arr = self._galaxy_density_chi_bin_vals[bin_number]
+      return float(np.interp(chi, self._chi_grid, arr, right=0.0))
+    except Exception:
+      # Fallback to original (accurate) evaluation if interpolant is unavailable
+      return self.galaxy_density_chi_bin(chi, bin_number)
   
-  def window_func_pbs(self, chi, chi_s):
+  def window_func_pbs(self, chi, chi_s): # TODO: check if I can remove this, its not used anywhere in this file at least
     N = 50
     sum=0
     if chi >= chi_s:
@@ -476,4 +522,3 @@ class lensing_spectra:
 if __name__ == '__main__':
   # for testing purposes
   results = lensing_spectra()
-  print(results.window_func(200, 's'))

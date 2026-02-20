@@ -5,43 +5,38 @@ from itertools import *
 
 lmin = 2
 lmax = 2000
-stepsizes = [1 * 4 * 5, 5 * 4 * 5, 10 * 4 * 5]
-num_bispec_samples = 100
+stepsizes = [20, 5 * 20, 10 * 20]
+#stepsizes = [100, 400, 1000]
+num_bispec_samples = 100 # should be 100 or so
 num_cores = 64
 
-pars = [b'H', b'ombh2', b'omch2', b'ns', b'mnu', b'tau', b'As', b'w0']
-
 # Wrapper function for multiprocessing
-def fisher_calc_wrapper(args, tracers):
-    i, j = args
+def fisher_calc_wrapper(tracers):
     # Fisher_mat_full(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores)
     # Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type)
     if tracers == 'c':
-        return vis.Fisher_mat_single(lmin, 0, 200, stepsizes[0], num_bispec_samples, pars[i], pars[j], num_cores, b'c') + vis.Fisher_mat_single(lmin, 200, 1000, stepsizes[1], num_bispec_samples, pars[i], pars[j], num_cores, b'c') + vis.Fisher_mat_single(lmin, 1000, lmax, stepsizes[2], num_bispec_samples, pars[i], pars[j], num_cores, b'c')
+        return np.array(vis.Fisher_mat_single(lmin, 0, 200, stepsizes[0], num_bispec_samples, num_cores, b'c')) + np.array(vis.Fisher_mat_single(lmin, 200, 1000, stepsizes[1], num_bispec_samples, num_cores, b'c')) + np.array(vis.Fisher_mat_single(lmin, 1000, lmax, stepsizes[2], num_bispec_samples, num_cores, b'c'))
     if tracers == 's':
-        return vis.Fisher_mat_single(lmin, 0, 200, stepsizes[0], num_bispec_samples, pars[i], pars[j], num_cores, b's') + vis.Fisher_mat_single(lmin, 200, 1000, stepsizes[1], num_bispec_samples, pars[i], pars[j], num_cores, b's') + vis.Fisher_mat_single(lmin, 1000, lmax, stepsizes[2], num_bispec_samples, pars[i], pars[j], num_cores, b's')
+        return np.array(vis.Fisher_mat_single(lmin, 0, 200, stepsizes[0], num_bispec_samples, num_cores, b's')) + np.array(vis.Fisher_mat_single(lmin, 200, 1000, stepsizes[1], num_bispec_samples, num_cores, b's')) + np.array(vis.Fisher_mat_single(lmin, 1000, lmax, stepsizes[2], num_bispec_samples, num_cores, b's'))
     if tracers == 'both':
-        return vis.Fisher_mat_full(lmin, 0, 200, stepsizes[0], num_bispec_samples, pars[i], pars[j], num_cores) + vis.Fisher_mat_full(lmin, 200, 1000, stepsizes[1], num_bispec_samples, pars[i], pars[j], num_cores) + vis.Fisher_mat_full(lmin, 1000, lmax, stepsizes[2], num_bispec_samples, pars[i], pars[j], num_cores)
+        return np.array(vis.Fisher_mat_full(lmin, 0, 200, stepsizes[0], num_bispec_samples, num_cores)) + np.array(vis.Fisher_mat_full(lmin, 200, 1000, stepsizes[1], num_bispec_samples, num_cores)) + np.array(vis.Fisher_mat_full(lmin, 1000, lmax, stepsizes[2], num_bispec_samples, num_cores))
 
-num_pars = len(pars)
-def main():
+def main(pb_correction):
     for tracer in ['c', 's', 'both']:
-        mat = np.zeros((num_pars, num_pars))
-        counter = 1
-        for i in range(num_pars):
-            for j in range(i, num_pars):
-                result = fisher_calc_wrapper((i, j), tracer)
-                mat[i, j] = result
-                mat[j, i] = result  # Symmetric assignment
-                print(f'{tracer}:', counter, '/', num_pars * (num_pars + 1) / 2)
-                counter += 1
-        
-        np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}.txt', mat)
+        mat = fisher_calc_wrapper(tracer)
+        if pb_correction:
+            np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}_pb.txt', mat)
+        else:
+            np.savetxt(f'fisher_matrices/fish_mat_bisp_{tracer}.txt', mat)
         print(mat)
 
 if __name__ == '__main__':
-    vis.set_pb_correction(False)
-    main()
+    pb_correction = False
+    vis.set_pb_correction(pb_correction)
+    main(pb_correction)
+    pb_correction = True
+    vis.set_pb_correction(pb_correction)
+    main(pb_correction)
 
 
 # for python implementation

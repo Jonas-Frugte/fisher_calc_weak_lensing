@@ -5,20 +5,20 @@ from setuptools.extension import Extension
 
 # Define extensions with OpenMP flags
 extensions = [
-    Extension(
-        name="interpolation",
-        sources=["interpolation.pyx"],
-        extra_compile_args=["-fopenmp"],
-        extra_link_args=["-fopenmp"],
-        include_dirs=[np.get_include()],
-    ),
-    Extension(
-        name="data_importer",
-        sources=["data_importer.pyx"],
-        extra_compile_args=["-fopenmp"],
-        extra_link_args=["-fopenmp"],
-        include_dirs=[np.get_include()],
-    ),
+    # Extension(
+    #     name="interpolation",
+    #     sources=["interpolation.pyx"],
+    #     extra_compile_args=["-fopenmp"],
+    #     extra_link_args=["-fopenmp"],
+    #     include_dirs=[np.get_include()],
+    # ),
+    # Extension(
+    #     name="data_importer",
+    #     sources=["data_importer.pyx"],
+    #     extra_compile_args=["-fopenmp"],
+    #     extra_link_args=["-fopenmp"],
+    #     include_dirs=[np.get_include()],
+    # ),
         Extension(
         name="data_importer_new",
         sources=["data_importer_new.pyx"],
@@ -29,6 +29,13 @@ extensions = [
     Extension(
         name="Fisher_calc",
         sources=["Fisher_calc.pyx"],
+        extra_compile_args=["-fopenmp"],
+        extra_link_args=["-fopenmp"],
+        include_dirs=[np.get_include()],
+    ),
+    Extension(
+        name="bispec_cov_solver",
+        sources=["bispec_cov_solver.pyx"],
         extra_compile_args=["-fopenmp"],
         extra_link_args=["-fopenmp"],
         include_dirs=[np.get_include()],
@@ -54,11 +61,11 @@ extensions = [
         extra_link_args=["-fopenmp"],
         include_dirs=[np.get_include()],
     ),
-    Extension(
-    name="cmb_noise_fast",
-        sources=["cmb_noise_fast.pyx"],
-        include_dirs=[np.get_include()],
-    )
+    # Extension(
+    # name="cmb_noise_fast",
+    #     sources=["cmb_noise_fast.pyx"],
+    #     include_dirs=[np.get_include()],
+    # )
 ]
 
 # Setup
