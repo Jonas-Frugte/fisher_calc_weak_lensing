@@ -1,17 +1,14 @@
 from libc.stdio cimport printf
 
-# Generalized for variable number of tracers (n_tracers)
-cdef inline int index_3d(int X, int Y, int Z, int n_tracers) noexcept nogil:
-    return X * n_tracers * n_tracers + Y * n_tracers + Z
+# the whole point of this file is to calculate C^(-1)C^(-1)C^(-1)B, where C is the covariance matrix and B is the bispectrum vector. we want to do this for all combinations of l_i, i.e. for all XYZ. we want to do this in a way that minimizes the number of times we have to apply C^(-1), since that is the most expensive part. so we will first apply C^(-1) along X, then along Y, then along Z. this way we only have to apply C^(-1) 5*5 = 25 times along X, then 5*5 = 25 times along Y, then 5*5 = 25 times along Z, for a total of 75 applications of C^(-1). if we were to apply C^(-1) directly to B for each XYZ, we would have to apply it 125 times.
 
-cdef inline int index_2d(int X, int Y, int n_tracers) noexcept nogil:
-    return X * n_tracers + Y
+cdef inline int index_3d_5(int X, int Y, int Z) noexcept nogil:
+    return X * 25 + Y * 5 + Z
 
-cdef int soe_solver_5(
-    double* matrix, 
-    double* vec, 
-    double* sol
-    ) noexcept nogil:
+cdef inline int index_2d_5(int X, int Y) noexcept nogil:
+    return X * 5 + Y
+
+cdef int soe_solver_5(double* matrix, double* vec, double* sol) noexcept nogil:
     cdef int i = 0
     cdef int j = 0
     cdef int k

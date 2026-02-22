@@ -104,69 +104,65 @@ cpdef double b(double k, double z, double[:, :] b_data) noexcept nogil:
 cpdef double c(double k, double z, double[:, :] c_data) noexcept nogil:
     return interp.logspace_linear_interp2d(k, z, k_min, k_max, k_num_fine, z_min, z_max, z_num_fine, c_data)
 
-cdef int lps_tracer_pair_index(char* type1, char* type2) noexcept nogil: # TODO: test this
-    # tracer pair ordering:
-    # [('c', 'c'), ('c', 's1'), ('c', 's2'), ('c', 's3'), ('c', 's4'), ('s1', 's1'), ('s1', 's2'), ('s1', 's3'), ('s1', 's4'), ('s2', 's2'), ('s2', 's3'), ('s2', 's4'), ('s3', 's3'), ('s3', 's4'), ('s4', 's4')]
-
-    cdef char t1 = type1[0]
-    cdef char t2 = type2[0]
-    cdef char i1, i2
-
-    # ---- canonical ordering ----
-    if t1 == b'c' and t2 != b'c':
-        pass
-    elif t2 == b'c' and t1 != b'c':
-        t1, t2 = t2, t1
-        type1, type2 = type2, type1
-    elif t1 == b's' and t2 == b's':
-        if type1[1] < type2[1]:
-            type1, type2 = type2, type1
-
-    # ---- mapping ----
-    if type1[0] == b'c' and type2[0] == b'c':
+cdef int lps_tracer_pair_index(int idx1, int idx2) noexcept nogil:
+    # Integer-indexed version: (0,0) (0,1) etc., where 0=c, 1=s1, 2=s2, 3=s3, 4=s4
+    # Mapping: pairs ordered as [('c', 'c'), ('c', 's1'), ('c', 's2'), ('c', 's3'), ('c', 's4'), ('s1', 's1'), ('s1', 's2'), ('s1', 's3'), ('s1', 's4'), ('s2', 's2'), ('s2', 's3'), ('s2', 's4'), ('s3', 's3'), ('s3', 's4'), ('s4', 's4')]
+    
+    cdef int i1 = idx1
+    cdef int i2 = idx2
+    
+    # Canonical ordering: c comes first, then s1, s2, s3, s4 in increasing order
+    if i1 > i2:
+        i1, i2 = i2, i1
+    
+    # Map to index
+    if i1 == 0 and i2 == 0:
         return 0
+    elif i1 == 0 and i2 == 1:
+        return 1
+    elif i1 == 0 and i2 == 2:
+        return 2
+    elif i1 == 0 and i2 == 3:
+        return 3
+    elif i1 == 0 and i2 == 4:
+        return 4
+    elif i1 == 1 and i2 == 1:
+        return 5
+    elif i1 == 1 and i2 == 2:
+        return 6
+    elif i1 == 1 and i2 == 3:
+        return 7
+    elif i1 == 1 and i2 == 4:
+        return 8
+    elif i1 == 2 and i2 == 2:
+        return 9
+    elif i1 == 2 and i2 == 3:
+        return 10
+    elif i1 == 2 and i2 == 4:
+        return 11
+    elif i1 == 3 and i2 == 3:
+        return 12
+    elif i1 == 3 and i2 == 4:
+        return 13
+    elif i1 == 4 and i2 == 4:
+        return 14
+    else:
+        printf("Error: invalid indices in lps_tracer_pair_index\n")
+        return -1
 
-    elif type1[0] == b'c':
-        if type2[1] == b'1': return 1
-        elif type2[1] == b'2': return 2
-        elif type2[1] == b'3': return 3
-        elif type2[1] == b'4': return 4
-        else:
-            printf("Error: invalid source type in lps_tracer_pair_index\n")
-
-    elif type1[0] == b's' and type2[0] == b's':
-        i1 = type1[1]
-        i2 = type2[1]
-
-        if i1 == b'1' and i2 == b'1': return 5
-        elif i1 == b'1' and i2 == b'2': return 6
-        elif i1 == b'1' and i2 == b'3': return 7
-        elif i1 == b'1' and i2 == b'4': return 8
-        elif i1 == b'2' and i2 == b'2': return 9
-        elif i1 == b'2' and i2 == b'3': return 10
-        elif i1 == b'2' and i2 == b'4': return 11
-        elif i1 == b'3' and i2 == b'3': return 12
-        elif i1 == b'3' and i2 == b'4': return 13
-        elif i1 == b'4' and i2 == b'4': return 14
-        else:
-            printf("Error: invalid source types in lps_tracer_pair_index\n")
-
-    return -1  # should never happen
-
-        
 # without gil cython doesn't like strings bc they are python objects, you can use char* C objects (C like strings)
-cdef double lps(double l, char* type1, char* type2, double[:, :] lps_data, double[:, :] cmbps) noexcept nogil:
+cdef double lps(double l, int type1, int type2, double[:, :] lps_data, double[:, :] cmbps) noexcept nogil:
     # CAUTION: this function doesn't throw error messages if type1 or type2 are not of type convergence or shear
     # for optimization purposes
     cdef int index
     # non lensing stuff
-    if type1[0] == b't' and type2[0] == b't':
+    if type1 == 5 and type2 == 5:  # 't' (temperature)
         return interp.linear_interp(l, cmbps[0, 0], lmax_cmbps, lmax_cmbps + 1, cmbps[:, 1])
-    elif type1[0] == b'e' and type2[0] == b'e':
+    elif type1 == 6 and type2 == 6:  # 'e' (E-mode)
         return interp.linear_interp(l, cmbps[0, 0], lmax_cmbps, lmax_cmbps + 1, cmbps[:, 2])
-    elif type1[0] == b'b' and type2[0] == b'b':
+    elif type1 == 7 and type2 == 7:  # 'b' (B-mode)
         return interp.linear_interp(l, cmbps[0, 0], lmax_cmbps, lmax_cmbps + 1, cmbps[:, 3])
-    elif (type1[0] == b't' and type2[0] == b'e') or (type1[0] == b'e' and type2[0] == b't'):
+    elif (type1 == 5 and type2 == 6) or (type1 == 6 and type2 == 5):  # 't' and 'e'
         return interp.linear_interp(l, cmbps[0, 0], lmax_cmbps, lmax_cmbps + 1, cmbps[:, 4])    
     else:
         index = lps_tracer_pair_index(type1, type2)
@@ -175,24 +171,13 @@ cdef double lps(double l, char* type1, char* type2, double[:, :] lps_data, doubl
 cdef double scale_factor(double chi, double[:] scale_factor_data) noexcept nogil:    
     return interp.linear_interp(chi, chi_min, chi_max, chi_num, scale_factor_data)
 
-cdef int window_func_index(char* type) noexcept nogil:
-    if type[0] == b'c':
-        return 0
-    elif type[0] == b's':
-        if type[1] == b'1':
-            return 1
-        elif type[1] == b'2':
-            return 2
-        elif type[1] == b'3':
-            return 3
-        elif type[1] == b'4':
-            return 4
-        else:
-            printf("Error: invalid source type in window_func\n")
 
-cdef double window_func(double chi, char* type, double[:, :] window_data) noexcept nogil:
-    cdef int index = window_func_index(type)
-    return fmax(0., interp.logspace_linear_interp(chi, chi_min, chi_max, chi_num, window_data[index, :]))
+cdef double window_func(double chi, int type, double[:, :] window_data) noexcept nogil:
+    if type == 0 or type == 1 or type == 2 or type == 3 or type == 4:
+        return fmax(0., interp.logspace_linear_interp(chi, chi_min, chi_max, chi_num, window_data[type, :]))
+    else:
+        printf("Error: invalid type in window_func\n")
+        return -1.
 
 # gives slightly different results than scipy RegularGridInterpolator for some obscure reason, however values on 
 # grid points seem to agree with the imported data
@@ -246,7 +231,7 @@ cdef double galaxy_density(double chi, int bin_number, double[:, :] galaxy_densi
 cdef double pb_window_func(
     double chi,
     double chi_s,
-    char* source_type,
+    int source_type,
     double[:, :] galaxy_density_chi_bins_data
 ) noexcept nogil:
     cdef int N = 20 # TODO: convergence check in window_func_convergence.png, N=20 seems to be fine to a percent or so
@@ -254,35 +239,23 @@ cdef double pb_window_func(
     cdef double sum = 0.0
     cdef double weight, kernel
     cdef int i
-    cdef int bin_number
 
-    if source_type[0] == b'c':
+    if source_type == 0: # source_type is 0 (convergence)
         if chi < chi_s:
             return (chi_s - chi) / (chi * chi_s)
         else:
             return 0.
 
-    if source_type[0] == b's':
+    else: # TODO: make warning signal for if source type is not recognized
         if chi >= chi_s:
             return 0.
-        
-        if source_type[1] == b'1':
-            bin_number = 1
-        elif source_type[1] == b'2':
-            bin_number = 2
-        elif source_type[1] == b'3':
-            bin_number = 3
-        elif source_type[1] == b'4':
-            bin_number = 4
-        else:
-            printf("Error: invalid source type in pb_window_func\n")
 
         dchi = (chi_s - chi) / N
         for i in range(N + 1):
             chi_prime = chi + i * dchi
             weight = 0.5 if (i == 0 or i == N) else 1.0
             kernel = (chi_prime - chi) / (chi_prime * chi)
-            sum += weight * galaxy_density(chi_prime, bin_number, galaxy_density_chi_bins_data) * kernel
+            sum += weight * galaxy_density(chi_prime, source_type, galaxy_density_chi_bins_data) * kernel
 
         return dchi * sum
 
@@ -316,8 +289,8 @@ cdef double lbs_pb_lps_integrand(
     double [:] scale_factor_data,
     double [:] z_at_chi_data,
     double [:, :] galaxy_density_chi_bins_data,
-    char* source_type_2,
-    char* source_type_3
+    int source_type_2,
+    int source_type_3
     ) noexcept nogil:
     # C = 3 * self.omega_m * H0**2 / (2 * self.lightspeed_kms**2)
     if chi < chi_s and chi < chi_s_prime:
@@ -335,8 +308,8 @@ cpdef double lbs_pb_lps(
     double [:] z_at_chi_data,
     double [:, :] galaxy_density_chi_bins_data,
     int num_samples,
-    char* source_type_2, # starting from 2 is to follow notation in the paper
-    char* source_type_3
+    int source_type_2, # starting from 2 is to follow notation in the paper
+    int source_type_3
     ) noexcept nogil:
     cdef double int_width = (chi_max - chi_min) / (num_samples - 1)
     cdef double result = 0
@@ -363,9 +336,9 @@ cdef double lbs_pb_ms_integrand(
     double [:, :] galaxy_density_chi_bins_data,
     double [:, :] window_data,
     int num_samples,
-    char* source_type_1,
-    char* source_type_2,
-    char* source_type_3
+    int source_type_1,
+    int source_type_2,
+    int source_type_3
     ) noexcept nogil:
 
     # here l is l_1, l_prime is l_2, l_3 is not used (explicitly, at least)
@@ -384,9 +357,9 @@ cpdef double lbs_pb_ms(
     double [:, :] galaxy_density_chi_bins_data,
     double [:, :] window_data,
     int num_samples,
-    char* type1,
-    char* type2,
-    char* type3
+    int type1,
+    int type2,
+    int type3
     ) noexcept nogil:
     cdef double int_width = (chi_max - chi_min) / (num_samples - 1)
     cdef double result = 0
@@ -413,9 +386,9 @@ cdef double lbs_pb_term(
     double [:, :] galaxy_density_chi_bins_data,
     double [:, :] window_data,
     int num_samples,
-    char* type1,
-    char* type2,
-    char* type3
+    int type1,
+    int type2,
+    int type3
     ) noexcept nogil:
     # cdef double law_cosines(double x, double y, double z) noexcept nogil:
     # gives cosine of angle between vector x and y, where we know the magnitudes of x, y, z and that x + y + z = 0 vector
@@ -434,9 +407,9 @@ cdef double lbs_pb_flat(
     double [:, :] galaxy_density_chi_bins_data,
     double [:, :] window_data,
     int num_samples,
-    char* type1,
-    char* type2,
-    char* type3
+    int type1,
+    int type2,
+    int type3
     ) noexcept nogil:
     return lbs_pb_term(l1, l2, l3, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type1, type2, type3) + lbs_pb_term(l2, l3, l1, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type2, type3, type1) + lbs_pb_term(l3, l1, l2, C_data, mps_data, scale_factor_data, z_at_chi_data, galaxy_density_chi_bins_data, window_data, num_samples, type3, type1, type2)
 
@@ -447,9 +420,9 @@ cdef inline double lbs_integrand(
     double k1, 
     double k2, 
     double k3, 
-    char* type1, 
-    char* type2, 
-    char* type3,
+    int type1, 
+    int type2, 
+    int type3,
     double[:, :] a_data, 
     double[:, :] b_data, 
     double[:, :] c_data, 
@@ -497,9 +470,9 @@ cdef double lbs_flat(
     double k1,
     double k2,
     double k3,
-    char* type1,
-    char* type2,
-    char* type3,
+    int type1,
+    int type2,
+    int type3,
     int num_samples,
     bint pb_correction,
     double C,
@@ -591,9 +564,9 @@ cpdef double lbs(
     int k1,
     int k2,
     int k3,
-    char* type1,
-    char* type2,
-    char* type3,
+    int type1,
+    int type2,
+    int type3,
     int num_samples,
     bint pb_correction,
     double C,
@@ -639,19 +612,19 @@ cdef double[:, :] galaxy_density_chi_bins_f = np.zeros((4, chi_num), dtype=np.fl
 
 cosm_par_f, C_f, a_data_f, b_data_f, c_data_f, lps_data_f, scale_factor_data_f, window_data_f, mps_data_f, z_at_chi_data_f, cmbps_f, galaxy_density_chi_bins_f = data_import_func('data_fiducial')
 
-cpdef double lbs_flat_f(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cpdef double lbs_flat_f(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs_flat(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_f, a_data_f, b_data_f, c_data_f, scale_factor_data_f, window_data_f, mps_data_f, z_at_chi_data_f, galaxy_density_chi_bins_f)
 
-cdef double lbs_f(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_f(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_f, a_data_f, b_data_f, c_data_f, scale_factor_data_f, window_data_f, mps_data_f, z_at_chi_data_f, galaxy_density_chi_bins_f)
 
-cpdef double lbs_pb_lps_f(double chi_source, double chi_source_prime, char* type1, char* type2, double l, int num_samples) noexcept nogil:
+cpdef double lbs_pb_lps_f(double chi_source, double chi_source_prime, int type1, int type2, double l, int num_samples) noexcept nogil:
     return lbs_pb_lps(chi_source, chi_source_prime, l, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, galaxy_density_chi_bins_f, num_samples, type1, type2)
 
-cpdef double lbs_pb_flat_f(double l1, double l2, double l3, char* type1, char* type2, char* type3, int num_samples) noexcept nogil:
+cpdef double lbs_pb_flat_f(double l1, double l2, double l3, int type1, int type2, int type3, int num_samples) noexcept nogil:
     return lbs_pb_flat(l1, l2, l3, C_f, mps_data_f, scale_factor_data_f, z_at_chi_data_f, galaxy_density_chi_bins_f, window_data_f, num_samples, type1, type2, type3)
     
-cdef double lps_f(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_f(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_f, cmbps_f)
 
 cdef bint pink_noise = False
@@ -681,10 +654,10 @@ cdef double cmbps_noise(double l, double sigma, double Delta_X) noexcept nogil:
 
 cdef double ARCMIN2TOSTERRADIAN = (3.1415 / (180 * 60)) ** 2
 
-cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
+cpdef double lps_noise(int l, int type1, int type2) noexcept nogil:
     cdef float noise = 0.
 
-    if type1[0] == b'c' and type2[0] == b'c':
+    if type1 == 0 and type2 == 0:  # 0 = 'c' (convergence)
         # if cmb_noise_type == 0:
         #     noise = 4. * (l * 1.0)**(-2) * (l + 1.0)**(-2) * conv_noise_data[l-2, 7]
         if cmb_noise_type == 1:
@@ -696,7 +669,7 @@ cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
         elif cmb_noise_type == 3:
             noise = interp.logspace_linear_interp(l, lmin_cmbn, lmax_cmbn, lnum_cmbn, planck_noise)
 
-    if type1[0] == b's' and type2[0] == b's':
+    if type1 >= 1 and type2 >= 1:  # >= 1 means shear (s1, s2, s3, s4)
         if galaxy_noise_type == 1:
             noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 5 * ARCMIN2TOSTERRADIAN
         if galaxy_noise_type == 2:
@@ -707,7 +680,7 @@ cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
     cdef double sigma
     cdef double Delta_X
 
-    if type1[0] == b't' and type2[0] == b't':
+    if type1 == 5 and type2 == 5:  # 5 = 't' (temperature)
         if cmb_noise_type == 1:
             # stage 3 wide toshiya
             sigma = 1
@@ -722,7 +695,7 @@ cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
         
         noise = cmbps_noise(l, sigma, Delta_X)
 
-    if type1[0] == b'e' and type2[0] == b'e':
+    if type1 == 6 and type2 == 6:  # 6 = 'e' (E-mode)
         if cmb_noise_type == 1:
             # stage 3 wide toshiya
             sigma = 1
@@ -737,7 +710,7 @@ cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
         
         noise = cmbps_noise(l, sigma, Delta_X)
 
-    if type1[0] == b'b' and type2[0] == b'b':
+    if type1 == 7 and type2 == 7:  # 7 = 'b' (B-mode)
         if cmb_noise_type == 1:
             # stage 3 wide toshiya
             sigma = 1
@@ -754,7 +727,7 @@ cpdef double lps_noise(int l, char* type1, char* type2) noexcept nogil:
 
     return noise
 
-cdef double lps_f_obs(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_f_obs(int l, int type1, int type2) noexcept nogil:
 
     #########################
     # NOISE: ON
@@ -779,10 +752,10 @@ cdef double[:, :] galaxy_density_chi_bins_H_p = np.zeros((4, chi_num), dtype=np.
 
 cosm_par_H_p, C_H_p, a_data_H_p, b_data_H_p, c_data_H_p, lps_data_H_p, scale_factor_data_H_p, window_data_H_p, mps_data_H_p, z_at_chi_data_H_p, cmbps_H_p, galaxy_density_chi_bins_H_p = data_import_func('data_H_p')
 
-cdef double lbs_H_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_H_p(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_H_p, a_data_H_p, b_data_H_p, c_data_H_p, scale_factor_data_H_p, window_data_H_p, mps_data_H_p, z_at_chi_data_H_p, galaxy_density_chi_bins_H_p)
 
-cdef double lps_H_p(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_H_p(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_H_p, cmbps_H_p)
             
 
@@ -801,10 +774,10 @@ cdef double[:, :] galaxy_density_chi_bins_H_m = np.zeros((4, chi_num), dtype=np.
 
 cosm_par_H_m, C_H_m, a_data_H_m, b_data_H_m, c_data_H_m, lps_data_H_m, scale_factor_data_H_m, window_data_H_m, mps_data_H_m, z_at_chi_data_H_m, cmbps_H_m, galaxy_density_chi_bins_H_m = data_import_func('data_H_m')
 
-cdef double lbs_H_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_H_m(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_H_m, a_data_H_m, b_data_H_m, c_data_H_m, scale_factor_data_H_m, window_data_H_m, mps_data_H_m, z_at_chi_data_H_m, galaxy_density_chi_bins_H_m)
 
-cdef double lps_H_m(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_H_m(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_H_m, cmbps_H_m)
             
 
@@ -823,10 +796,10 @@ cdef double[:, :] galaxy_density_chi_bins_ombh2_p = np.zeros((4, chi_num), dtype
 
 cosm_par_ombh2_p, C_ombh2_p, a_data_ombh2_p, b_data_ombh2_p, c_data_ombh2_p, lps_data_ombh2_p, scale_factor_data_ombh2_p, window_data_ombh2_p, mps_data_ombh2_p, z_at_chi_data_ombh2_p, cmbps_ombh2_p, galaxy_density_chi_bins_ombh2_p = data_import_func('data_ombh2_p')
 
-cdef double lbs_ombh2_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_ombh2_p(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ombh2_p, a_data_ombh2_p, b_data_ombh2_p, c_data_ombh2_p, scale_factor_data_ombh2_p, window_data_ombh2_p, mps_data_ombh2_p, z_at_chi_data_ombh2_p, galaxy_density_chi_bins_ombh2_p)
 
-cdef double lps_ombh2_p(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_ombh2_p(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_ombh2_p, cmbps_ombh2_p)
             
 
@@ -845,10 +818,10 @@ cdef double[:, :] galaxy_density_chi_bins_ombh2_m = np.zeros((4, chi_num), dtype
 
 cosm_par_ombh2_m, C_ombh2_m, a_data_ombh2_m, b_data_ombh2_m, c_data_ombh2_m, lps_data_ombh2_m, scale_factor_data_ombh2_m, window_data_ombh2_m, mps_data_ombh2_m, z_at_chi_data_ombh2_m, cmbps_ombh2_m, galaxy_density_chi_bins_ombh2_m = data_import_func('data_ombh2_m')
 
-cdef double lbs_ombh2_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_ombh2_m(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ombh2_m, a_data_ombh2_m, b_data_ombh2_m, c_data_ombh2_m, scale_factor_data_ombh2_m, window_data_ombh2_m, mps_data_ombh2_m, z_at_chi_data_ombh2_m, galaxy_density_chi_bins_ombh2_m)
 
-cdef double lps_ombh2_m(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_ombh2_m(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_ombh2_m, cmbps_ombh2_m)
             
 
@@ -867,10 +840,10 @@ cdef double[:, :] galaxy_density_chi_bins_omch2_p = np.zeros((4, chi_num), dtype
 
 cosm_par_omch2_p, C_omch2_p, a_data_omch2_p, b_data_omch2_p, c_data_omch2_p, lps_data_omch2_p, scale_factor_data_omch2_p, window_data_omch2_p, mps_data_omch2_p, z_at_chi_data_omch2_p, cmbps_omch2_p, galaxy_density_chi_bins_omch2_p = data_import_func('data_omch2_p')
 
-cdef double lbs_omch2_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_omch2_p(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_omch2_p, a_data_omch2_p, b_data_omch2_p, c_data_omch2_p, scale_factor_data_omch2_p, window_data_omch2_p, mps_data_omch2_p, z_at_chi_data_omch2_p, galaxy_density_chi_bins_omch2_p)
 
-cdef double lps_omch2_p(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_omch2_p(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_omch2_p, cmbps_omch2_p)
             
 
@@ -889,10 +862,10 @@ cdef double[:, :] galaxy_density_chi_bins_omch2_m = np.zeros((4, chi_num), dtype
 
 cosm_par_omch2_m, C_omch2_m, a_data_omch2_m, b_data_omch2_m, c_data_omch2_m, lps_data_omch2_m, scale_factor_data_omch2_m, window_data_omch2_m, mps_data_omch2_m, z_at_chi_data_omch2_m, cmbps_omch2_m, galaxy_density_chi_bins_omch2_m = data_import_func('data_omch2_m')
 
-cdef double lbs_omch2_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_omch2_m(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_omch2_m, a_data_omch2_m, b_data_omch2_m, c_data_omch2_m, scale_factor_data_omch2_m, window_data_omch2_m, mps_data_omch2_m, z_at_chi_data_omch2_m, galaxy_density_chi_bins_omch2_m)
 
-cdef double lps_omch2_m(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_omch2_m(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_omch2_m, cmbps_omch2_m)
             
 
@@ -911,10 +884,10 @@ cdef double[:, :] galaxy_density_chi_bins_ns_p = np.zeros((4, chi_num), dtype=np
 
 cosm_par_ns_p, C_ns_p, a_data_ns_p, b_data_ns_p, c_data_ns_p, lps_data_ns_p, scale_factor_data_ns_p, window_data_ns_p, mps_data_ns_p, z_at_chi_data_ns_p, cmbps_ns_p, galaxy_density_chi_bins_ns_p = data_import_func('data_ns_p')
 
-cdef double lbs_ns_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_ns_p(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ns_p, a_data_ns_p, b_data_ns_p, c_data_ns_p, scale_factor_data_ns_p, window_data_ns_p, mps_data_ns_p, z_at_chi_data_ns_p, galaxy_density_chi_bins_ns_p)
 
-cdef double lps_ns_p(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_ns_p(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_ns_p, cmbps_ns_p)
             
 
@@ -933,10 +906,10 @@ cdef double[:, :] galaxy_density_chi_bins_ns_m = np.zeros((4, chi_num), dtype=np
 
 cosm_par_ns_m, C_ns_m, a_data_ns_m, b_data_ns_m, c_data_ns_m, lps_data_ns_m, scale_factor_data_ns_m, window_data_ns_m, mps_data_ns_m, z_at_chi_data_ns_m, cmbps_ns_m, galaxy_density_chi_bins_ns_m = data_import_func('data_ns_m')
 
-cdef double lbs_ns_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_ns_m(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_ns_m, a_data_ns_m, b_data_ns_m, c_data_ns_m, scale_factor_data_ns_m, window_data_ns_m, mps_data_ns_m, z_at_chi_data_ns_m, galaxy_density_chi_bins_ns_m)
 
-cdef double lps_ns_m(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_ns_m(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_ns_m, cmbps_ns_m)
             
 
@@ -955,10 +928,10 @@ cdef double[:, :] galaxy_density_chi_bins_As_p = np.zeros((4, chi_num), dtype=np
 
 cosm_par_As_p, C_As_p, a_data_As_p, b_data_As_p, c_data_As_p, lps_data_As_p, scale_factor_data_As_p, window_data_As_p, mps_data_As_p, z_at_chi_data_As_p, cmbps_As_p, galaxy_density_chi_bins_As_p = data_import_func('data_As_p')
 
-cdef double lbs_As_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_As_p(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_As_p, a_data_As_p, b_data_As_p, c_data_As_p, scale_factor_data_As_p, window_data_As_p, mps_data_As_p, z_at_chi_data_As_p, galaxy_density_chi_bins_As_p)
 
-cdef double lps_As_p(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_As_p(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_As_p, cmbps_As_p)
             
 
@@ -977,10 +950,10 @@ cdef double[:, :] galaxy_density_chi_bins_As_m = np.zeros((4, chi_num), dtype=np
 
 cosm_par_As_m, C_As_m, a_data_As_m, b_data_As_m, c_data_As_m, lps_data_As_m, scale_factor_data_As_m, window_data_As_m, mps_data_As_m, z_at_chi_data_As_m, cmbps_As_m, galaxy_density_chi_bins_As_m = data_import_func('data_As_m')
 
-cdef double lbs_As_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_As_m(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_As_m, a_data_As_m, b_data_As_m, c_data_As_m, scale_factor_data_As_m, window_data_As_m, mps_data_As_m, z_at_chi_data_As_m, galaxy_density_chi_bins_As_m)
 
-cdef double lps_As_m(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_As_m(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_As_m, cmbps_As_m)
             
 
@@ -999,10 +972,10 @@ cdef double[:, :] galaxy_density_chi_bins_tau_p = np.zeros((4, chi_num), dtype=n
 
 cosm_par_tau_p, C_tau_p, a_data_tau_p, b_data_tau_p, c_data_tau_p, lps_data_tau_p, scale_factor_data_tau_p, window_data_tau_p, mps_data_tau_p, z_at_chi_data_tau_p, cmbps_tau_p, galaxy_density_chi_bins_tau_p = data_import_func('data_tau_p')
 
-cdef double lbs_tau_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_tau_p(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_tau_p, a_data_tau_p, b_data_tau_p, c_data_tau_p, scale_factor_data_tau_p, window_data_tau_p, mps_data_tau_p, z_at_chi_data_tau_p, galaxy_density_chi_bins_tau_p)
 
-cdef double lps_tau_p(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_tau_p(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_tau_p, cmbps_tau_p)
             
 
@@ -1021,10 +994,10 @@ cdef double[:, :] galaxy_density_chi_bins_tau_m = np.zeros((4, chi_num), dtype=n
 
 cosm_par_tau_m, C_tau_m, a_data_tau_m, b_data_tau_m, c_data_tau_m, lps_data_tau_m, scale_factor_data_tau_m, window_data_tau_m, mps_data_tau_m, z_at_chi_data_tau_m, cmbps_tau_m, galaxy_density_chi_bins_tau_m = data_import_func('data_tau_m')
 
-cdef double lbs_tau_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_tau_m(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_tau_m, a_data_tau_m, b_data_tau_m, c_data_tau_m, scale_factor_data_tau_m, window_data_tau_m, mps_data_tau_m, z_at_chi_data_tau_m, galaxy_density_chi_bins_tau_m)
 
-cdef double lps_tau_m(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_tau_m(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_tau_m, cmbps_tau_m)
             
 
@@ -1043,10 +1016,10 @@ cdef double[:, :] galaxy_density_chi_bins_mnu_p = np.zeros((4, chi_num), dtype=n
 
 cosm_par_mnu_p, C_mnu_p, a_data_mnu_p, b_data_mnu_p, c_data_mnu_p, lps_data_mnu_p, scale_factor_data_mnu_p, window_data_mnu_p, mps_data_mnu_p, z_at_chi_data_mnu_p, cmbps_mnu_p, galaxy_density_chi_bins_mnu_p = data_import_func('data_mnu_p')
 
-cdef double lbs_mnu_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_mnu_p(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_mnu_p, a_data_mnu_p, b_data_mnu_p, c_data_mnu_p, scale_factor_data_mnu_p, window_data_mnu_p, mps_data_mnu_p, z_at_chi_data_mnu_p, galaxy_density_chi_bins_mnu_p)
 
-cdef double lps_mnu_p(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_mnu_p(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_mnu_p, cmbps_mnu_p)
             
 
@@ -1065,10 +1038,10 @@ cdef double[:, :] galaxy_density_chi_bins_mnu_m = np.zeros((4, chi_num), dtype=n
 
 cosm_par_mnu_m, C_mnu_m, a_data_mnu_m, b_data_mnu_m, c_data_mnu_m, lps_data_mnu_m, scale_factor_data_mnu_m, window_data_mnu_m, mps_data_mnu_m, z_at_chi_data_mnu_m, cmbps_mnu_m, galaxy_density_chi_bins_mnu_m = data_import_func('data_mnu_m')
 
-cdef double lbs_mnu_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_mnu_m(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_mnu_m, a_data_mnu_m, b_data_mnu_m, c_data_mnu_m, scale_factor_data_mnu_m, window_data_mnu_m, mps_data_mnu_m, z_at_chi_data_mnu_m, galaxy_density_chi_bins_mnu_m)
 
-cdef double lps_mnu_m(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_mnu_m(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_mnu_m, cmbps_mnu_m)
             
 
@@ -1087,10 +1060,10 @@ cdef double[:, :] galaxy_density_chi_bins_w0_p = np.zeros((4, chi_num), dtype=np
 
 cosm_par_w0_p, C_w0_p, a_data_w0_p, b_data_w0_p, c_data_w0_p, lps_data_w0_p, scale_factor_data_w0_p, window_data_w0_p, mps_data_w0_p, z_at_chi_data_w0_p, cmbps_w0_p, galaxy_density_chi_bins_w0_p = data_import_func('data_w0_p')
 
-cdef double lbs_w0_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_w0_p(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_w0_p, a_data_w0_p, b_data_w0_p, c_data_w0_p, scale_factor_data_w0_p, window_data_w0_p, mps_data_w0_p, z_at_chi_data_w0_p, galaxy_density_chi_bins_w0_p)
 
-cdef double lps_w0_p(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_w0_p(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_w0_p, cmbps_w0_p)
             
 
@@ -1109,10 +1082,10 @@ cdef double[:, :] galaxy_density_chi_bins_w0_m = np.zeros((4, chi_num), dtype=np
 
 cosm_par_w0_m, C_w0_m, a_data_w0_m, b_data_w0_m, c_data_w0_m, lps_data_w0_m, scale_factor_data_w0_m, window_data_w0_m, mps_data_w0_m, z_at_chi_data_w0_m, cmbps_w0_m, galaxy_density_chi_bins_w0_m = data_import_func('data_w0_m')
 
-cdef double lbs_w0_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_w0_m(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_w0_m, a_data_w0_m, b_data_w0_m, c_data_w0_m, scale_factor_data_w0_m, window_data_w0_m, mps_data_w0_m, z_at_chi_data_w0_m, galaxy_density_chi_bins_w0_m)
 
-cdef double lps_w0_m(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_w0_m(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_w0_m, cmbps_w0_m)
             
 
@@ -1131,10 +1104,10 @@ cdef double[:, :] galaxy_density_chi_bins_logT_AGN_p = np.zeros((4, chi_num), dt
 
 cosm_par_logT_AGN_p, C_logT_AGN_p, a_data_logT_AGN_p, b_data_logT_AGN_p, c_data_logT_AGN_p, lps_data_logT_AGN_p, scale_factor_data_logT_AGN_p, window_data_logT_AGN_p, mps_data_logT_AGN_p, z_at_chi_data_logT_AGN_p, cmbps_logT_AGN_p, galaxy_density_chi_bins_logT_AGN_p = data_import_func('data_logT_AGN_p')
 
-cdef double lbs_logT_AGN_p(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_logT_AGN_p(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_logT_AGN_p, a_data_logT_AGN_p, b_data_logT_AGN_p, c_data_logT_AGN_p, scale_factor_data_logT_AGN_p, window_data_logT_AGN_p, mps_data_logT_AGN_p, z_at_chi_data_logT_AGN_p, galaxy_density_chi_bins_logT_AGN_p)
 
-cdef double lps_logT_AGN_p(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_logT_AGN_p(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_logT_AGN_p, cmbps_logT_AGN_p)
             
 
@@ -1153,10 +1126,10 @@ cdef double[:, :] galaxy_density_chi_bins_logT_AGN_m = np.zeros((4, chi_num), dt
 
 cosm_par_logT_AGN_m, C_logT_AGN_m, a_data_logT_AGN_m, b_data_logT_AGN_m, c_data_logT_AGN_m, lps_data_logT_AGN_m, scale_factor_data_logT_AGN_m, window_data_logT_AGN_m, mps_data_logT_AGN_m, z_at_chi_data_logT_AGN_m, cmbps_logT_AGN_m, galaxy_density_chi_bins_logT_AGN_m = data_import_func('data_logT_AGN_m')
 
-cdef double lbs_logT_AGN_m(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction) noexcept nogil:
+cdef double lbs_logT_AGN_m(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction) noexcept nogil:
     return lbs(k1, k2, k3, type1, type2, type3, num_samples, pb_correction, C_logT_AGN_m, a_data_logT_AGN_m, b_data_logT_AGN_m, c_data_logT_AGN_m, scale_factor_data_logT_AGN_m, window_data_logT_AGN_m, mps_data_logT_AGN_m, z_at_chi_data_logT_AGN_m, galaxy_density_chi_bins_logT_AGN_m)
 
-cdef double lps_logT_AGN_m(int l, char* type1, char* type2) noexcept nogil:
+cdef double lps_logT_AGN_m(int l, int type1, int type2) noexcept nogil:
     return lps(l, type1, type2, lps_data_logT_AGN_m, cmbps_logT_AGN_m)
 
 ##########################################
@@ -1181,7 +1154,7 @@ print((cosm_par_w0_p[7] - cosm_par_f[7]) / cosm_par_f[7])
 print((cosm_par_logT_AGN_p[8] - cosm_par_f[8]) / cosm_par_f[8])
 
 
-cdef double lps_der(int k, char* type1, char* type2, char* par) noexcept nogil:
+cdef double lps_der(int k, int type1, int type2, char* par) noexcept nogil:
     # for b'snr' case, just returns the original function
     if par[0] == b's':
         return lps_f(k, type1, type2)
@@ -1213,7 +1186,7 @@ cdef double lps_der(int k, char* type1, char* type2, char* par) noexcept nogil:
     if par[0] == b'l':
         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
 
-cdef double lbs_der(int k1, int k2, int k3, char* type1, char* type2, char* type3, int num_samples, bint pb_correction, char* par) noexcept nogil:
+cdef double lbs_der(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction, char* par) noexcept nogil:
     # for b'snr' case, just returns the original function
     if par[0] == b's':
         return lbs_f(k1, k2, k3, type1, type2, type3, num_samples, pb_correction)
