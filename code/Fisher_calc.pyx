@@ -68,11 +68,11 @@ cdef int Delta(int l1, int l2, int l3) noexcept nogil:
     else:
         return 1
 
-cdef double Fisher_mat_single_term(int l1, int l2, int l3, char* type, char* par1, char* par2, int num_samples) noexcept nogil:
+cdef double Fisher_mat_single_term(int l1, int l2, int l3, int type, char* par1, char* par2, int num_samples) noexcept nogil:
         return lbs_der(l1, l2, l3, type, type, type, num_samples, pb_correction, par1) * lps_f_obs(l1, type, type)**(-1) \
         * lps_f_obs(l2, type, type)**(-1) * lps_f_obs(l3, type, type)**(-1) * lbs_der(l1, l2, l3, type, type, type, num_samples, pb_correction, par2) / Delta(l1, l2, l3)
 
-cpdef double Fisher_mat_single_alpha_beta(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type):
+cpdef double Fisher_mat_single_alpha_beta(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, int type):
     # print(f'Post-Born corrections: {pb_correction}')
 
     if lmax > k_max:
@@ -95,7 +95,7 @@ cpdef double Fisher_mat_single_alpha_beta(int lmin, int lminbin, int lmax, int t
 
     return result * prop_calc
 
-cpdef double[:, :] Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, int num_cores, char* type):
+cpdef double[:, :] Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, int num_cores, int type):
     pars = [b'H', b'omb', b'omc', b'n', b'A', b't', b'm', b'w', b'l']
     mat = np.zeros((len(pars), len(pars)))
 
@@ -130,7 +130,7 @@ cpdef double[:, :] Fisher_mat_single(int lmin, int lminbin, int lmax, int triang
 #         return lbs_der(l1, l2, l3, type11, type12, type13, num_samples, pb_correction, par1) * lensing_power_spectrum_inv(l1, type11, type21) \
 #         * lensing_power_spectrum_inv(l2, type12, type22) * lensing_power_spectrum_inv(l3, type13, type23) * lbs_der(l1, l2, l3, type21, type22, type23, num_samples, pb_correction, par2) / Delta(l1, l2, l3)
 
-cdef inline int index_xyzalpha(int X, int Y, int Z, int alpha, int n_tracers, n_tracers) noexcept nogil:
+cdef inline int index_xyzalpha(int X, int Y, int Z, int alpha, int n_tracers) noexcept nogil:
     return index_3d(X, Y, Z, n_tracers) + 125 * alpha
 
 cdef inline int fish_index(int alpha, int beta) noexcept nogil:
@@ -161,7 +161,7 @@ cdef void index_to_par(int par_num, char* par_name) noexcept nogil:
         par_name[0] = b'l'  # logT_AGN
 
 cdef int Fisher_mat_full_term_new(
-    double* tracers,
+    int* tracers,
     int l1, 
     int l2, 
     int l3, 
@@ -314,7 +314,7 @@ cdef int Fisher_mat_full_term_new(
 
     return 0
 
-cpdef double[:, :] Fisher_mat_full(double[:] tracers, int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, int num_cores, int n_tracers):
+cpdef double[:, :] Fisher_mat_full(int[:] tracers, int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, int num_cores, int n_tracers):
     # print(f'Post-Born corrections: {pb_correction}')
 
     if lmax > k_max:

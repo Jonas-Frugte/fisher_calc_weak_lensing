@@ -26,18 +26,18 @@ extensions = [
         extra_link_args=["-fopenmp"],
         include_dirs=[np.get_include()],
     ),
-    # Extension(
-    #     name="Fisher_calc",
-    #     sources=["Fisher_calc.pyx"],
-    #     extra_compile_args=["-fopenmp"],
-    #     extra_link_args=["-fopenmp"],
-    #     include_dirs=[np.get_include()],
-    # ),
+    Extension(
+        name="Fisher_calc",
+        sources=["Fisher_calc.pyx"],
+        extra_compile_args=["-fopenmp"],
+        extra_link_args=["-fopenmp"],
+        include_dirs=[np.get_include()],
+    ),
     Extension(
         name="bispec_cov_solver",
         sources=["bispec_cov_solver.pyx"],
-        # extra_compile_args=["-fopenmp"],
-        # extra_link_args=["-fopenmp"],
+        extra_compile_args=["-fopenmp"],
+        extra_link_args=["-fopenmp"],
         include_dirs=[np.get_include()],
     ),
     # Extension(
@@ -57,8 +57,8 @@ extensions = [
     Extension(
     name="Fisher_calc_python_imp",
         sources=["Fisher_calc_python_imp.pyx"],
-        # extra_compile_args=["-fopenmp"],
-        # extra_link_args=["-fopenmp"],
+        extra_compile_args=["-fopenmp"],
+        extra_link_args=["-fopenmp"],
         include_dirs=[np.get_include()],
     ),
     # Extension(
