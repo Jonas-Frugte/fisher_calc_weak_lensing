@@ -1,75 +1,71 @@
-from Fisher_calc import Fisher_mat_single, Fisher_mat_full, set_pb_correction
-from Fisher_calc_python_imp import Fisher_powersp_single, Fisher_powersp
+from Fisher_calc import Fisher_mat_single, set_pb_correction
+from data_importer_new import set_noise_types
 
 import numpy as np
 
+# Configuration
 num_cores = 64
-stepsize = 49
+stepsize = 100
 num_samples = 50
 print(f'Stepsize: {stepsize}')
 
-# ls = [0] + ls
+# l-bins
 ls = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000]
 lmin = 2
 
-print('Starting computation')
+# Stage configurations: (cmb_noise_type, galaxy_noise_type)
+# CMB types: 1=Stage 3, 2=Stage 4, 3=Planck
+# Galaxy types: 1=Stage 3-like, 2=Stage 4-like, 3=optimistic
+stages = {
+    'Stage 3': (1, 1),
+    'Stage 4': (2, 2)
+}
 
-def ps_SNR2():
-    # Fisher_powersp_single(lmin, lmax, tracer, par1 = b'snr', par2 = b'snr')
-    print("Convergence powerpectrum SNR^2:")
-   
-    data = [Fisher_powersp_single(lmin, ls[1], b'c')]
-    for i in range(2, len(ls)):
-        data.append(data[-1] + Fisher_powersp_single(ls[i - 1], ls[i], b'c'))
-    print(data)
+print('Starting computation\n')
 
-    print("Shear powerpectrum SNR^2:")
 
-    data = [Fisher_powersp_single(lmin, ls[1], b's')]
-    for i in range(2, len(ls)):
-        data.append(data[-1] + Fisher_powersp_single(ls[i - 1], ls[i], b's'))
-    print(data)
+def compute_snr2_for_stage(stage_name, cmb_type, galaxy_type, post_born=False):
+    """Compute cumulative bispectrum SNR^2 for convergence and galaxy bins.
 
-    # print("Shear + conv powerpectrum SNR^2:")
-
-    # data = [Fisher_powersp(50, ls[1])]
-    # for i in range(2, len(ls)):
-    #     data.append(data[-1] + Fisher_powersp(ls[i - 1], ls[i]))
-    # print(data)
-
-    pass
-
-def single_bs_SNR2():
-    # Fisher_mat_single(int lmin, int lminbin, int lmax, int triangle_step_size, int num_bispec_samples, char* par1, char* par2, int num_cores, char* type)
+    Uses `pars_list=[0]` to request the `snr` parameter only (returns 1x1 matrix).
+    For tracer types: 0 = convergence, 1..4 = galaxy redshift bins.
+    """
+    set_noise_types(cmb_type, galaxy_type)
+    set_pb_correction(post_born)
+    
+    pb_str = "with Post-Born" if post_born else "without Post-Born"
+    print(f"\n{'='*60}")
+    print(f"{stage_name} - {pb_str}")
+    print(f"CMB noise type: {cmb_type}, Galaxy noise type: {galaxy_type}")
+    print(f"{'='*60}\n")
+    
+    # convergence
     print("Convergence bispectrum SNR^2:")
-   
-    data = [Fisher_mat_single(lmin, ls[1-1], ls[1], stepsize, num_samples, b'snr', b'snr', num_cores, b'c')]
+    val = Fisher_mat_single(lmin, ls[0], ls[1], stepsize, num_samples, num_cores, 0, pars_list=[0])
+    # extract scalar from 1x1 matrix
+    data = [float(val[0, 0])]
     for i in range(2, len(ls)):
-        data.append(data[-1] + Fisher_mat_single(lmin, ls[i-1], ls[i], stepsize, num_samples, b'snr', b'snr', num_cores, b'c'))
+        v = Fisher_mat_single(lmin, ls[i-1], ls[i], stepsize, num_samples, num_cores, 0, pars_list=[0])
+        data.append(data[-1] + float(v[0, 0]))
     print(data)
 
-    print("Shear bispectrum SNR^2:")
+    # galaxy redshift bins (closest and furthest)
+    for galaxy_bin in [1, 4]:
+        bin_label = "closest" if galaxy_bin == 1 else "furthest"
+        print(f"\nGalaxy bin {galaxy_bin} ({bin_label}) bispectrum SNR^2:")
+        val = Fisher_mat_single(lmin, ls[0], ls[1], stepsize, num_samples, num_cores, galaxy_bin, pars_list=[0])
+        data = [float(val[0, 0])]
+        for i in range(2, len(ls)):
+            v = Fisher_mat_single(lmin, ls[i-1], ls[i], stepsize, num_samples, num_cores, galaxy_bin, pars_list=[0])
+            data.append(data[-1] + float(v[0, 0]))
+        print(data)
 
-    data = [Fisher_mat_single(lmin, ls[1-1], ls[1], stepsize, num_samples, b'snr', b'snr', num_cores, b's')]
-    for i in range(2, len(ls)):
-        data.append(data[-1] + Fisher_mat_single(lmin, ls[i-1], ls[i], stepsize, num_samples, b'snr', b'snr', num_cores, b's'))
-    print(data)
 
-    pass
+# Compute for all stages with and without post-Born
+for stage_name, (cmb_type, galaxy_type) in stages.items():
+    compute_snr2_for_stage(stage_name, cmb_type, galaxy_type, post_born=False)
+    compute_snr2_for_stage(stage_name, cmb_type, galaxy_type, post_born=True)
 
-def all_bs_SNR2():
-    # Fisher_mat_full(50, ls[1-1], ls[1], stepsize, 100, b'snr', b'snr', num_cores)
-    print("Auto and cross bispectra SNR^2:")
-
-    data = [Fisher_mat_full(lmin, ls[1-1], ls[1], stepsize, 100, b'snr', b'snr', num_cores)]
-    for i in range(2, len(ls)):
-        data.append(data[-1] + Fisher_mat_full(lmin, ls[1-1], ls[1], stepsize, 100, b'snr', b'snr', num_cores))
-    print(data)
-
-    pass
-
-set_pb_correction(False)
-single_bs_SNR2()
-
-set_pb_correction(True)
-single_bs_SNR2()
+print("\n" + "="*60)
+print("Computation complete!")
+print("="*60)

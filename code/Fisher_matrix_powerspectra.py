@@ -1,7 +1,8 @@
-import Fisher_calc_python_imp as vispy
+import Fisher_calc as vispy
 
 import numpy as np
 from itertools import *
+np.printoptions(precision=1, suppress=False)
 
 lmin = 2
 lmax = 2000
@@ -26,14 +27,16 @@ def fisher_calc_wrapper_takada_jain(args, tracers):
 
 def main():
     for tracer in ['c', 's', 'both', 't', 'e', 'bothCMB']:
-        mat = np.zeros((len(pars), len(pars)))
-        for i, j in product(range(len(pars)), repeat = 2):
-            result = vispy.Fisher_powersp(lmin, lmax, par1 = pars[i], par2 = pars[j], tracer_name = tracer)
-            mat[i, j] = result
-            mat[j, i] = result  # Symmetric assignment
+        if tracer in ['t', 'e', 'bothCMB']:
+            lmin = 30
+        else:
+            lmin = 2
 
-        filepath = f'fisher_matrices/fish_mat_powersp_{tracer}.txt'
+        mat = vispy.Fisher_powersp(lmin, lmax, tracer = tracer, snr_or_constraints = 'constraints')
+
+        filepath = '/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/fisher_matrices' + f'/fish_mat_powersp_{tracer}.txt'
         np.savetxt(filepath, mat)
+        print(mat)
         print(f'Created Fisher matrix at {filepath}')
         #print(mat)
     pass

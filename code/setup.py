@@ -54,13 +54,6 @@ extensions = [
     #     extra_link_args=["-fopenmp"],
     #     include_dirs=[np.get_include()],
     # ),
-    Extension(
-    name="Fisher_calc_python_imp",
-        sources=["Fisher_calc_python_imp.pyx"],
-        extra_compile_args=["-fopenmp"],
-        extra_link_args=["-fopenmp"],
-        include_dirs=[np.get_include()],
-    ),
     # Extension(
     # name="cmb_noise_fast",
     #     sources=["cmb_noise_fast.pyx"],
@@ -72,10 +65,11 @@ extensions = [
 setup(
     ext_modules=cythonize(
         extensions,
+        quiet=True,
         compiler_directives={
             "nonecheck": False,
             "boundscheck": False,
-            "wraparound": True,
+            "wraparound": False,
             "initializedcheck": False,
             "cdivision": True,
         },

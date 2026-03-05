@@ -26,15 +26,27 @@ cdef int z_num_fine = z_num * 25
 def get_k_max():
     return k_max
 
-
 # specifies the noise that will be used for cmb lensing
 cdef int cmb_noise_type = 2
 cdef int galaxy_noise_type = 2
-# CMB type values correspond to:
-# 0: S0 noise curves (old, remove)
-# 1: sigma = 1, Delta_P = 6 (stage 3 toshiya)
-# 2: sigma = 3, Delta_P = 1 (stage 4 toshiya)
-# 3: sigma = 5, Delta_T = 30, Delta_P = 52 (planck (double check))
+
+def set_noise_types(cmb_type, galaxy_type):
+    '''
+    CMB type values correspond to:
+    0: S0 noise curves (old, remove)
+    1: sigma = 1, Delta_P = 6 (stage 3 toshiya)
+    2: sigma = 3, Delta_P = 1 (stage 4 toshiya)
+    3: sigma = 5, Delta_T = 30, Delta_P = 52 (planck (double check))
+    Galaxy type values correspond to:
+    1: 5 arcmin^-2 galaxy density, eccentricity 0.3 (stage 3 like)
+    2: 30 arcmin^-2 galaxy density, eccentricity 0.3 (stage 4 like)
+    3: 100 arcmin^-2 galaxy density, eccentricity 0.4 (optimistic, from https://arxiv.org/pdf/astro-ph/0310125)
+    '''
+    global cmb_noise_type, galaxy_noise_type
+    cmb_noise_type = cmb_type
+    galaxy_noise_type = galaxy_type
+    print(f'CMB noise type: {cmb_noise_type}\nGalaxy noise type: {galaxy_noise_type}')
+    pass
 
 print(f'CMB noise type: {cmb_noise_type}\nGalaxy noise type: {galaxy_noise_type}')
 
@@ -604,7 +616,7 @@ cdef double[:, :] b_data_f = np.zeros((z_num, k_num), dtype=np.float64)
 cdef double[:, :] c_data_f = np.zeros((z_num, k_num), dtype=np.float64)
 cdef double[:, :] lps_data_f = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_f = np.zeros(chi_num, dtype=np.float64)
-cdef double[:, :] window_data_f = np.zeros((4, chi_num), dtype=np.float64)
+cdef double[:, :] window_data_f = np.zeros((5, chi_num), dtype=np.float64)
 cdef double[:, :] mps_data_f = np.zeros((k_num_fine, z_num_fine), dtype=np.float64)
 cdef double[:] z_at_chi_data_f = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] cmbps_f = np.zeros((lmax_cmbps+1, 5), dtype=np.float64)
@@ -643,9 +655,9 @@ cdef double cmbps_noise(double l, double sigma, double Delta_X) noexcept nogil:
     # constant time!
     cdef double Tcmb = 2.728e6 # in micro kelvin
     cdef double arcmintorad = 3.14 / 10800
-    sigma = sigma * arcmintorad # in radians
-    Delta_X = Delta_X * arcmintorad
-    cdef double white_noise = (Delta_X / Tcmb)**2 * exp(l * (l + 1) * sigma**2 / (8 * log(2)))
+    cdef double sigma_rad = sigma * arcmintorad # in radians
+    cdef double Delta_X_rad = Delta_X * arcmintorad
+    cdef double white_noise = (Delta_X_rad / Tcmb)**2 * exp(l * (l + 1) * sigma_rad**2 / (8 * log(2)))
     
     if pink_noise:
         return white_noise * (1 + (l_knee / l) ** alpha)
@@ -656,6 +668,9 @@ cdef double ARCMIN2TOSTERRADIAN = (3.1415 / (180 * 60)) ** 2
 
 cpdef double lps_noise(int l, int type1, int type2) noexcept nogil:
     cdef float noise = 0.
+
+    cdef double sigma
+    cdef double Delta_X
 
     if type1 == 0 and type2 == 0:  # 0 = 'c' (convergence)
         # if cmb_noise_type == 0:
@@ -669,16 +684,15 @@ cpdef double lps_noise(int l, int type1, int type2) noexcept nogil:
         elif cmb_noise_type == 3:
             noise = interp.logspace_linear_interp(l, lmin_cmbn, lmax_cmbn, lnum_cmbn, planck_noise)
 
-    if type1 >= 1 and type2 >= 1:  # >= 1 means shear (s1, s2, s3, s4)
-        if galaxy_noise_type == 1:
-            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 5 * ARCMIN2TOSTERRADIAN
-        if galaxy_noise_type == 2:
-            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30 * ARCMIN2TOSTERRADIAN
-        if galaxy_noise_type == 3:
-            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.4**2 / 100 * ARCMIN2TOSTERRADIAN # noise from https://arxiv.org/pdf/astro-ph/0310125
+    cdef int num_galaxy_bins = 4
 
-    cdef double sigma
-    cdef double Delta_X
+    if (type1 == 1 and type2 == 1) or (type1 == 2 and type2 == 2) or (type1 == 3 and type2 == 3) or (type1 == 4 and type2 == 4):
+        if galaxy_noise_type == 1:
+            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 5 * ARCMIN2TOSTERRADIAN * num_galaxy_bins
+        if galaxy_noise_type == 2:
+            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.3**2 / 30 * ARCMIN2TOSTERRADIAN * num_galaxy_bins
+        if galaxy_noise_type == 3:
+            noise = 4. * ((l - 1.) * l * (l + 1.) * (l + 2.))**(-1) * 0.4**2 / 100 * ARCMIN2TOSTERRADIAN * num_galaxy_bins # noise from https://arxiv.org/pdf/astro-ph/0310125
 
     if type1 == 5 and type2 == 5:  # 5 = 't' (temperature)
         if cmb_noise_type == 1:
@@ -1135,8 +1149,8 @@ cdef double lps_logT_AGN_m(int l, int type1, int type2) noexcept nogil:
 ##########################################
 
 
-cdef double der_2o(double f2p, double f1p, double f1m, double f2m, double dx) noexcept nogil:
-    return (-1 * f2p + 8 * f1p - 8 * f1m + f2m) / (12 * dx)
+# cdef double der_2o(double f2p, double f1p, double f1m, double f2m, double dx) noexcept nogil:
+#     return (-1 * f2p + 8 * f1p - 8 * f1m + f2m) / (12 * dx)
 
 cpdef double der(double fp, double fm, double dx) noexcept nogil:
     return (fp - fm) / (2 * dx)

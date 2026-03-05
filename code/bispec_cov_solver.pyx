@@ -1,10 +1,10 @@
 from libc.stdio cimport printf
 
 # Generalized for variable number of tracers (n_tracers)
-cdef inline int index_3d(int X, int Y, int Z, int n_tracers) noexcept nogil:
+cdef int index_3d(int X, int Y, int Z, int n_tracers) noexcept nogil:
     return X * n_tracers * n_tracers + Y * n_tracers + Z
 
-cdef inline int index_2d(int X, int Y, int n_tracers) noexcept nogil:
+cdef int index_2d(int X, int Y, int n_tracers) noexcept nogil:
     return X * n_tracers + Y
 
 cdef int soe_solver(
@@ -238,19 +238,3 @@ cdef int solve_3(
         Xp += 1
 
     return 0
-
-# def soe_solver_wrap(double[::1] matrix, double[::1] vec, double[::1] sol, int n_tracers):
-#     soe_solver(&matrix[0], &vec[0], &sol[0], n_tracers)
-#     return None
-
-# def solve_1_wrap(double[::1] CXp, int Yp, int Zp, double[::1] bispec_vec, double[::1] out5):
-#     solve_1(&CXp[0], Yp, Zp, &bispec_vec[0], &out5[0])
-#     return None
-
-# def solve_2_wrap(double[::1] CXp, double[::1] CYp, int Zp, double[::1] bispec_vec, double[::1] out25):
-#     solve_2(&CXp[0], &CYp[0], Zp, &bispec_vec[0], &out25[0])
-#     return None
-
-# def solve_3_wrap(double[::1] CXp, double[::1] CYp, double[::1] CZp, double[::1] bispec_vec, double[::1] out125):
-#     solve_3(&CXp[0], &CYp[0], &CZp[0], &bispec_vec[0], &out125[0])
-#     return None

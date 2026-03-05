@@ -1760,8 +1760,8 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 /* Module declarations from "libc.stdio" */
 
 /* Module declarations from "bispec_cov_solver" */
-static CYTHON_INLINE int __pyx_f_17bispec_cov_solver_index_3d(int, int, int, int); /*proto*/
-static CYTHON_INLINE int __pyx_f_17bispec_cov_solver_index_2d(int, int, int); /*proto*/
+static int __pyx_f_17bispec_cov_solver_index_3d(int, int, int, int); /*proto*/
+static int __pyx_f_17bispec_cov_solver_index_2d(int, int, int); /*proto*/
 static int __pyx_f_17bispec_cov_solver_soe_solver(double *, double *, double *, double *, double *, double *, int); /*proto*/
 static int __pyx_f_17bispec_cov_solver_solve_1(double *, int, int, double *, double *, double *, double *, double *, double *, int); /*proto*/
 static int __pyx_f_17bispec_cov_solver_solve_2(double *, double *, int, double *, double *, double *, double *, double *, double *, double *, double *, double *, int); /*proto*/
@@ -1934,20 +1934,20 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 /* "bispec_cov_solver.pyx":4
  * 
  * # Generalized for variable number of tracers (n_tracers)
- * cdef inline int index_3d(int X, int Y, int Z, int n_tracers) noexcept nogil:             # <<<<<<<<<<<<<<
+ * cdef int index_3d(int X, int Y, int Z, int n_tracers) noexcept nogil:             # <<<<<<<<<<<<<<
  *     return X * n_tracers * n_tracers + Y * n_tracers + Z
  * 
  */
 
-static CYTHON_INLINE int __pyx_f_17bispec_cov_solver_index_3d(int __pyx_v_X, int __pyx_v_Y, int __pyx_v_Z, int __pyx_v_n_tracers) {
+static int __pyx_f_17bispec_cov_solver_index_3d(int __pyx_v_X, int __pyx_v_Y, int __pyx_v_Z, int __pyx_v_n_tracers) {
   int __pyx_r;
 
   /* "bispec_cov_solver.pyx":5
  * # Generalized for variable number of tracers (n_tracers)
- * cdef inline int index_3d(int X, int Y, int Z, int n_tracers) noexcept nogil:
+ * cdef int index_3d(int X, int Y, int Z, int n_tracers) noexcept nogil:
  *     return X * n_tracers * n_tracers + Y * n_tracers + Z             # <<<<<<<<<<<<<<
  * 
- * cdef inline int index_2d(int X, int Y, int n_tracers) noexcept nogil:
+ * cdef int index_2d(int X, int Y, int n_tracers) noexcept nogil:
  */
   __pyx_r = ((((__pyx_v_X * __pyx_v_n_tracers) * __pyx_v_n_tracers) + (__pyx_v_Y * __pyx_v_n_tracers)) + __pyx_v_Z);
   goto __pyx_L0;
@@ -1955,7 +1955,7 @@ static CYTHON_INLINE int __pyx_f_17bispec_cov_solver_index_3d(int __pyx_v_X, int
   /* "bispec_cov_solver.pyx":4
  * 
  * # Generalized for variable number of tracers (n_tracers)
- * cdef inline int index_3d(int X, int Y, int Z, int n_tracers) noexcept nogil:             # <<<<<<<<<<<<<<
+ * cdef int index_3d(int X, int Y, int Z, int n_tracers) noexcept nogil:             # <<<<<<<<<<<<<<
  *     return X * n_tracers * n_tracers + Y * n_tracers + Z
  * 
  */
@@ -1968,17 +1968,17 @@ static CYTHON_INLINE int __pyx_f_17bispec_cov_solver_index_3d(int __pyx_v_X, int
 /* "bispec_cov_solver.pyx":7
  *     return X * n_tracers * n_tracers + Y * n_tracers + Z
  * 
- * cdef inline int index_2d(int X, int Y, int n_tracers) noexcept nogil:             # <<<<<<<<<<<<<<
+ * cdef int index_2d(int X, int Y, int n_tracers) noexcept nogil:             # <<<<<<<<<<<<<<
  *     return X * n_tracers + Y
  * 
  */
 
-static CYTHON_INLINE int __pyx_f_17bispec_cov_solver_index_2d(int __pyx_v_X, int __pyx_v_Y, int __pyx_v_n_tracers) {
+static int __pyx_f_17bispec_cov_solver_index_2d(int __pyx_v_X, int __pyx_v_Y, int __pyx_v_n_tracers) {
   int __pyx_r;
 
   /* "bispec_cov_solver.pyx":8
  * 
- * cdef inline int index_2d(int X, int Y, int n_tracers) noexcept nogil:
+ * cdef int index_2d(int X, int Y, int n_tracers) noexcept nogil:
  *     return X * n_tracers + Y             # <<<<<<<<<<<<<<
  * 
  * cdef int soe_solver(
@@ -1989,7 +1989,7 @@ static CYTHON_INLINE int __pyx_f_17bispec_cov_solver_index_2d(int __pyx_v_X, int
   /* "bispec_cov_solver.pyx":7
  *     return X * n_tracers * n_tracers + Y * n_tracers + Z
  * 
- * cdef inline int index_2d(int X, int Y, int n_tracers) noexcept nogil:             # <<<<<<<<<<<<<<
+ * cdef int index_2d(int X, int Y, int n_tracers) noexcept nogil:             # <<<<<<<<<<<<<<
  *     return X * n_tracers + Y
  * 
  */
@@ -3373,8 +3373,6 @@ static int __pyx_f_17bispec_cov_solver_solve_3(double *__pyx_v_CXp, double *__py
  *         Xp += 1
  * 
  *     return 0             # <<<<<<<<<<<<<<
- * 
- * # def soe_solver_wrap(double[::1] matrix, double[::1] vec, double[::1] sol, int n_tracers):
  */
   __pyx_r = 0;
   goto __pyx_L0;
