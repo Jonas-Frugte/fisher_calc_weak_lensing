@@ -144,7 +144,7 @@ All code used to derive the results in this paper is publicly available on GitHu
 \section{Background}
 \label{sec:theory}
 \subsection{Weak lensing spectra}
-Radiation from cosmological objects is distorted due to gravitational lensing. Due to the low density of the cosmic web, the average deflection of a photon as it propagates through the universe is relatively weak. We thus work under the assumption that all deflection angles are small, this is referred to as the weak lensing regime. Weak lensing is quantified through the deflection field $\mathbf d(\hat {\mathbf n})$ which equals the difference between the observed angle of a point in the sky and the true (unlensed) angle. This field is the gradient of the lensing potential, $\psi(\hat {\mathbf n})$, which is expressed as a weighted integral of the mass distribution along the line-of-sight from the observer to the source.
+Radiation from cosmological objects is distorted due to gravitational lensing. Due to the low density of the cosmic web, the average deflection of a photon as it propagates through the universe is relatively weak. We thus work under the assumption that all deflection angles are small, this is referred to as the weak lensing regime. Weak lensing is quantified through the deflection field $\mathbf d(\hat {\mathbf n})$ which equals the difference between the observed angle of a point in the sky and the true (unlensed) angle. This field is the gradient of the lensing potential, $\psi(\hat {\mathbf n})$, which is expressed as a weighted integral of gravitational potential along the line-of-sight from the observer to the source.
 
 In the case of CMB surveys, lensing alters the statistical properties of the temperature and polarization fields and can thus be calculated by comparing the observed signal to the expected unlensed signal (see e.g. \cite{Maniyar2021_QE_CMBLensing, Hirata_2003}). In galaxy surveys, lensing alters the ellipticities of observed galaxies. If a large enough number of galaxies are observed, this effect can be separated from the intrinsic ellipticities of the galaxies which allows us to estimate the lensing potential.
 
@@ -152,7 +152,7 @@ To constrain cosmological parameters we can then look at the lensing potential o
 \begin{align}%[box=\fbox]{align*}
     C^{\psi_X\psi_Y}_\ell
     & = \frac{9}{\ell^4}\Omega_m^2H_0^4\int_0^{\chi_*} \chi^2 \d\chi a(\eta_0-\chi)^{-2}W_X(\chi)W_Y(\chi)P^\delta(\ell/\chi,\eta_0-\chi), \label{eq:lensingpower spectrum}\\
-    B^{\psi_X\psi_Y\psi_Z}_{\ell\ell_1\ell\ell_2\ell\ell_3} &= \sqrt{\frac{(2\ell_1 + 1)(2\ell_2 + 1)(2\ell_3 + 1)}{4\pi}} \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{\ell_1^2\ell_2^2\ell_3^2}\Omega_m^3H_0^6 \notag\\
+    B^{\psi_X\psi_Y\psi_Z}_{\ell_1\ell_2\ell_3} &= \sqrt{\frac{(2\ell_1 + 1)(2\ell_2 + 1)(2\ell_3 + 1)}{4\pi}} \begin{pmatrix} \ell_1 & \ell_2 & \ell_3 \\ 0 & 0 & 0 \end{pmatrix} \frac{27}{\ell_1^2\ell_2^2\ell_3^2}\Omega_m^3H_0^6 \notag\\
     & \quad \times \int \chi^2\d \chi a(\eta_0-\chi)^{-3}W_X(\chi)W_Y(\chi)W_Z(\chi)  B^\delta(\{\ell_i/\chi\}, \eta_0-\chi), \label{eq:lensingbispectrum}
 \end{align}
 with $X, Y, Z \in \{\CMB, \gal\}$. A derivation can be found in appendices \ref{sec:weaklensing} and \ref{sec:weaklensstats}, or in the literature; see, e.g. \cite{Bartelmann2001}. Here, $\Omega_m$ is the present day matter density parameter, $H_0$ is the present-day Hubble constant, $a(\eta)$ is the scale factor, $\eta_0$ is the conformal time today and $\chi$ is the comoving radial distance. $\chi_*$ presents the distance to surface of last scattering. $P^\delta(k, \eta)$ is the matter power spectrum. $B^\delta(k_1, k_2, k_3, \eta)$ is the matter bispectrum. $W_X(\chi)$ is the window function. Finally,
@@ -182,7 +182,7 @@ with $\delta$ the fractional matter density perturbation field and $\delta_D$ th
 
 An approximate form of nonlinear matter power spectrum can be obtained using numerical codes such as CAMB \cite{Lewis2000}. The nonlinear matter bispectrum was calculated from the power spectrum using a fitting formula based on perturbation theory in \cite{bispfit}. It is given by
 \begin{equation}
-    B^\delta(k_1, k_2, k_3, \chi) = 2 F_2(k_1, k_2, z) P^\delta(k_1, z) P^\delta(k_2, z) + \text{2 perm},
+    B^\delta(k_1, k_2, k_3, \chi) = 2 F_2(k_1, k_2, z) P^\delta(k_1, z) P^\delta(k_2, z) + \text{2 perm}, \label{eq:matterbispectrum}
 \end{equation}
 where \( P^\delta \) is the nonlinear matter power spectrum\footnote{Compare to the tree level bispectrum where we instead use the linear power spectrum.}, and the kernel \( F_2 \) is modified from the tree level result with factors \( a(k, z) \), \( b(k, z) \), and \( c(k, z) \):
 \begin{equation}
@@ -232,9 +232,9 @@ Here $\left(\psi_{cb}^{(p.s.)}\right)^{(1)}(\chi)$ is the deformation for a poin
 \begin{equation}
 \delta x_a^{(1)} = -2 \int^{\chi}_0 d \chi^{\prime} \, \frac{\chi-\chi'}{\chi\chi'} \, \chi \chi' \, \Psi_{,a} (\chi').
 \end{equation}
-To adapt the above to a source with radial distribution $p(\chi)$ (which in our case will be a population of galaxies) we integrate over $\chi_s$ as follows:
+To adapt the above to a source with radial distribution $p(\chi)$ (which in our case will be a population of galaxies) we integrate with respect to $\chi_s$ and over the result from \eqref{eq:pbcorrectionpointsorce} as follows:
 \begin{equation}
-    (\psi_{ab}^{\text{gal}})^{(i)} = \int_0^\infty d \chi_s p(\chi_s)\left(\psi_{cb}^{(p.s.)}\right)^{(i)}(\chi_s).
+    (\psi_{ab}^{\text{gal}})^{(i)} = \int_0^\infty d \chi_s p(\chi_s)\left(\psi_{ab}^{(p.s.)}\right)^{(i)}(\chi_s).
 \end{equation}
 This step essentially just changes $(\chi_s - \chi)/(\chi_s\chi)\Theta(\chi_s-\chi)$ in equation \eqref{eq:pbcorrectionpointsorce} to the window function $W(\chi)$ defined in equation \eqref{eq:windowfuncdef}.
 
@@ -251,19 +251,39 @@ and
 \begin{equation}
     C_{L_2}^{\kappa_{(2)}\kappa_{(3)}}(\chi,\chi_s) := \int_0^{\infty}d \chi' W^{(2)}(\chi')\frac{\chi_s-\chi}{\chi_s\chi}\Theta(\chi_s-\chi)P_{\Psi\Psi}(\frac{L_2}{\chi'},\chi').
 \end{equation}
+
+\subsection{Redshift tomography}
+TODO: explain what it is, give some references, then explain the advantages.
+
+More information can be extracted from galaxy weak lensing surveys by binning the galaxy population, see figure \ref{fig:galaxyredshiftbinning}. This gives additional lensing power spectra and bispectra. We get auto spectra such as $C^{11}_{\ell}$ and cross spectra such as $C^{12}_{\ell}$. The same is true for the bispectra. The corresponding noise spectra are larger because the population in each bin is of course smaller. Nevertheless, the overall constraining power is usually significantly improved by using such "redshift tomography" (TODO: ADD SOME REFS). The constraining power is especially improved if the different bins are lensed differently, i.e. if the cross-bin spectra are small. One can also take into account the significant uncertainty in galaxy redshift. This is done by convolving the galaxy distribution function with the distribution function of a galaxy's true redshift given its observed redshift. See again figure \ref{fig:galaxyredshiftbinning}.
+
+The obvious question when analyzing (simulated) data is how many bins to use and where their boundaries should be. There is no easy answer for this and different options should be tested for different bin configurations. Using more bins generally leads to increasingly tight constraints but with diminishing returns. For example, in https://arxiv.org/pdf/1306.6870 they find little improvement beyond 4 bins when considering galaxy shear power spectra TODO: CHECK WHAT THEY ARE SPECIFICALLY LOOKING AT AND ADD PROPER REF. Some considerations are:
+\begin{enumerate}
+    \item If the noise starts to be bigger than the signal for each bin, further improvements in constraints will be minimal. (TODO ADD REF https://arxiv.org/pdf/astro-ph/9904153)
+    \item The bigger the redshift uncertainty, the more overlap between bins, the more their signals are correlated. With higher redshift uncertainty it thus pays less to have a larger number of bins.
+    \item In the case of this paper we compute Fisher matrices also taking into account cross and auto bispectra, leading to a large amount of terms that need to be calculated and summed over. Using a large amount of bins will further extend this computational time. It is thus practical to stay on the lower end with the amount of bins used.
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{paper/figures/redshift_binning.pdf}
+    \caption{Our galaxy redshift distribution (TODO: REF) split up into 3 bins. The dashed lines correspond to the actual distributions of the bins after taking into account galaxy redshift uncertainty. We assumed no galaxy bias in the redshift estimation and a gaussian error given by $\sigma_z = 0.05 (1+z)$. This is representative of Euclid level of redshift uncertainty TODO: CONFIRM THIS AND ADD REF.}
+    \label{fig:galaxyredshiftbinning}
+\end{figure}
  
 \subsection{Fisher matrix analysis}
 The signal-to-noise (SNR) and parameter constraints are obtained through a Fisher matrix analysis as is standard in cosmology \cite{dodelson2020modern, Knox1995, Tegmark1997}. A full derivation of the equations used below can be found in appendix \ref{sec:fisher}. The auto- and cross- power spectrum Fisher matrix is given as
 \begin{equation*}
     F_{\alpha\beta} = \sum_{\ell} \sum_{XY}\sum_{X'Y'}(2\ell+1)\partial_\alpha C_\ell^{XY} (C^{-1})_\ell^{XX'}(C^{-1})_\ell^{YY'} \partial_\beta C^{X'Y'}_\ell,
 \end{equation*}
-where
+where $X$, $Y$, etc. are the tracers (TODO IS THIS THE CORRECT WORD?) that we correlate. Without redshift tomography we get $X,Y,\cdots\in\{\text{CMB}, \text{gal}\}$ and
 \begin{equation*}
     C_{\ell} := \begin{pmatrix}
         C^{\psi_{\text{CMB}}\psi_{\text{CMB}}}_\ell & C^{\psi_{\text{CMB}}\psi_{\text{gal}}}_\ell \\
         C^{\psi_{\text{CMB}}\psi_{\text{gal}}}_\ell & C^{\psi_{\text{gal}}\psi_{\text{gal}}}_\ell
-    \end{pmatrix}.
+    \end{pmatrix},
 \end{equation*}
+whereas with redshift tomography we get $X,Y,\cdots\in\{\text{CMB}, \text{gal 1}, \text{gal 2}, \cdots\}$ and a corresponding larger $C_\ell$ matrix.
 For the bispectra we instead have 
 \begin{equation*}
     F_{\alpha\beta} = \sum_{\ell_1 \leq \ell_2 \leq \ell_3} \frac{\mathcal P _{\ell_1\ell_2\ell_3}}{6}
@@ -290,7 +310,7 @@ If only some fraction of the sky, $f_{\text{sky}}$, is measured, all Fisher matr
 \section{Experimental parameters and priors}\label{sec:calcdetails}
 % TODO: find proper references for stage 3 and stage 4 names as well as experimental parameters and real life surveys
 \subsection{Fiducial cosmology}
-Our fiducial cosmology is based on the \textit{Planck} results \cite{planckresults} (see table \ref{tab:fiducialpars}). We choose to constrain the standard parameters of the $\Lambda$CDM model as well as neutrino mass, $m_\nu$, and dark energy equation of state parameter, $w_0$. The reason to include these extra degrees of freedom is to explore the potential of future surveys on these extensions of $\Lambda$CDM. For example, the DESI collaboration \cite{Roy2024DESI} recently showed that measurements of baryon acoustic oscillations give a 2.5 - 4 $\sigma$ tension with a non-evolving dark energy equation of state model, so it is worth considering if future weak lensing experiments could tell us more about this tension and if higher order statistics would benefit the constraints on these tensions. Regarding neutrinos, depending on how tightly stage 4 surveys will be able to constrain neutrino mass, the results could tell us more about their mass hierarchy and serve as a test for neutrino mass constraints obtained from other probes, such as baryon acoustic oscillations.
+Our fiducial cosmology is based on the \textit{Planck} results \cite{planckresults} (see table \ref{tab:fiducialpars}). We choose to constrain the standard parameters of the $\Lambda$CDM model as well as neutrino mass, $m_\nu$, and dark energy equation of state parameter, $w_0$. The reason to include these extra degrees of freedom is to explore the potential of future surveys on these extensions of $\Lambda$CDM. For example, the DESI collaboration \cite{Roy2024DESI} recently showed that measurements of baryon acoustic oscillations give a 2.5 - 4 $\sigma$ tension with a non-evolving dark energy equation of state model, so it is worth considering if future weak lensing experiments could tell us more about this tension and if higher order statistics would benefit the constraints on these tensions. Regarding neutrinos, depending on how tightly stage 4 surveys will be able to constrain neutrino mass, the results could tell us more about their mass hierarchy and serve as a test for neutrino mass constraints obtained from other probes, such as baryon acoustic oscillations. Finally, we also account for baryonic feedback by including $\log T_{\text{AGN}}$. It was shown in CITE: HMCODE2020 that this one parameter allows models of the nonlinear power spectrum to incorporate baryonic feedback at a high level of accuracy (compared to models with more degrees of freedom for baryonic feedback). In this way we are able to make our considerably more realistic with minimal extra computational cost. 
 
 \subsection{Choice of priors}
 Throughout this paper we consider two priors. The first we refer to as our ``weak prior'' and is based on the one used in \cite{Planck2018Lensing} (see table \ref{tab:fiducialpars}). This prior only restricts $\Omega_b h^2$ and $n_s$ significantly, as those are not well constrained by lensing spectra alone. Our differences with \cite{Planck2018Lensing} are that (i) we do not fix $\tau$, but instead take it to have a SNR of 1 and added a weak $A_s$ prior as well, (ii) instead of a flat prior for the Hubble constant ($40 < H_0 < 100$) we use a Gaussian distribution with the same standard deviation, (iii) we added a weak constraint on $\Omega_c h^2$, and (iv) we also vary neutrino mass and $w_0$ but do not assume any constraints on them in our priors. The purpose of the weak prior is as follows. The weak lensing power spectra, in particular, exhibit complete insensitivity to certain parameters. Consequently, relying solely on them to constrain the entire cosmological model results in very poor constraints. Future lensing surveys will of course use information from surveys measuring other statistics such as those derived from galaxy clustering and the primary CMB anisotropies. By adding a prior based on these (primary) statistics our results become more representative of what we should expect is possible. Additionally, by considering a conservative prior, it remains clear how the different lensing spectra complement each other. The other prior we consider is based on the CMB temperature and $E$-mode polarization cross- and auto-power spectra from $\ell=30$ to $\ell = 2000$ assuming the same noise properties as used for the CMB weak lensing reconstruction noise. Adopting these priors  serves to test how weak lensing statistics are able to further tighten constraints beyond measuring primary statistics. It is worth noting that the constraint for $\tau$ and $w_0$ are tighter than in other literature (see \cite{cmbs4sciencebook} and \cite{Namikawa_2016} for comparable $\tau$ and $w_0$ constraints, respectively). Based on a number of internal tests\footnote{
@@ -319,6 +339,8 @@ This included looking at the accuracy of numerical derivatives w.r.t. cosmologic
         Sum of neutrino masses & $\sum m_\nu$ & $0.06$ & $\infty$ & 0.22\\
         \hline
         Dark energy equation of state parameter & $w_0$ & -1 & $\infty$ & 0.058 \\ 
+        \hline
+        Baryonic feedback strength & $\log T_{\text{AGN}}$ & 7.8 & $\infty$ & TODO \\
         \hline
     \end{tabular}
     \caption{Cosmological parameters varied ($\Lambda \text{CDM} + w_0 + m_\nu$). We use a prior similar to the one used by the \textit{Planck} weak lensing results \cite{Planck2018Lensing} which essentially only restricts $\Omega_bh^2$ and $n_s$ significantly.}
@@ -364,6 +386,9 @@ For parameter constraints, we will consider only stage 4 noise levels.
     \caption{ CMB (right) and galaxy (left) lensing potential power spectra compared to associated experimental noise. Current (stage 3) noise values are displayed as well as near future (some of the stage 4 experiments are already in operation, but expected noise levels are only achieved after several years of integration) (stage 4) noise values. The CMB lensing experiment uses only polarization. CMB noise values are chosen in accordance with \cite{Namikawa_2016}. For comparison we also show the reconstruction noise for the Simons Observatory \cite{Ade2019}. Shear noise values are chosen to be similar to e.g. \textit{Euclid} measurements \cite{laureijs2009} for stage 4 and e.g. KiDS \cite{kuijken2021} for stage 3.}
     \label{fig:lpsplusnoise}
 \end{figure}
+
+\subsection{Choice for tomography and redshift uncertainty}
+Redshift binning / tomography has long been known to improve constraint from galaxy shape surveys (TODO: provide good refs). We expect this to be used in future surveys as well and thus choose to model it in our calculations. The number and width of bins is not an exact science. In theory, the larger the number of bins, the better our constraints. In practice these improvements drop off rapidly after about 5 bins (depending also on the amount of redshift uncertainty). We thus choose to take 4 bins, each with borders placed so that they contain an equal number of galaxies. In order to model redshift uncertainty, we convolve each bin distribution with a redshift dependent gaussian uncertainty $\sigma_z = 0.05 (1+z)$. This is representative of the type of uncertainty we expect from surveys such as EUCLID. (TODO: check formula TODO: add ref) See figure \ref{fig:galaxyredshiftbinning} for the resulting true distributions of each bin.
 
 \subsection{Other details}
 The redshift distribution of the observed galaxies is commonly parameterized as \cite{Bartelmann2001}
@@ -520,6 +545,8 @@ There are a number of limitations to the results presented in this paper. The li
     \item In addition to the general limitations of the Fisher matrix formalism, our implementation also introduces numerical errors due to the use of finite-difference derivatives and interpolation of spectra, leading to inaccuracies at the few percent level (see appendix \ref{sec:derivatives}). These are not expected to qualitatively affect our conclusions.
 
     \item We did not model foreground contamination such as the cosmic infrared background (CIB), thermal Sunyaev-Zel'dovich (tSZ) effect, or point sources. These foregrounds can bias lensing reconstructions and bispectra, particularly in CMB–galaxy cross-correlations, and should be accounted for in future analyses. Baryonic feedback was also not accounted for. Given that future surveys will probe the matter distribution on smaller scales, this will become increasingly relevant \cite{McCarthy_2022}, particularly for estimating neutrino mass \cite{PhysRevD.101.063534}. Bias due to baryonic feedback can be mitigated, e.g. by using the Principal Component Analysis method \cite{s2024impactcosmologydependencebaryonic}, discarding small scale $T$-modes, or fitting additional parameters that capture the effects of baryonic feedback \cite{McCarthy_2022}. Some of these methods may be able to mitigate baryonic feedback effects without increasing the uncertainty of parameter constraints \cite{McCarthy_2021}. Finally, there are still other well-known sources of uncertainty that we did not take into account, such as photometric redshift errors for galaxies or instrumental systematics.
+
+    \item Although HMCODE2020 models baryonic feedback on the nonlinear matter power spectrum well, it is not guaranteed that we get the same accuracy for modelling feedback effects on the matter bispectrum. This is because it was only tested on the nonlinear matter powerspectrum CITE: HMCODE2020. Clearly, there is good reason to think that an accurate model of the matter powerspectrum will lead to an accurate model of the matter bispectrum due to the fitting equation we use \eqref{eq:matterbispectrum}, but this should be checked in future work.
     
 \end{itemize}
 
@@ -777,7 +804,6 @@ The definition for the bispectrum of any set of randomly distributed spherical h
 Note the independence on $m_i$, this necessarily follows from statistical isotropy. % TODO: add a short explanation here
 If $m_1+m_2+m_3\neq 0$, the associated Wigner-3j symbol vanishes and the bispectrum is set to zero.
 Also note that in this definition we have immediately generalized to include cross correlation between different fields $X_1$, $X_2$, $X_3$. This is relevant when we look at cross-correlations between CMB and galaxy lensing.
-6758
 Using the above definition and the symmetry property
 \begin{equation*}
     \begin{pmatrix}
