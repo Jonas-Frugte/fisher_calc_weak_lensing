@@ -9,7 +9,7 @@ import getdist
 from getdist import plots, MCSamples
 
 # Enable LaTeX rendering for proper display of parameter names
-matplotlib.rcParams['text.usetex'] = True
+# matplotlib.rcParams['text.usetex'] = True
 # matplotlib.rcParams['font.family'] = 'serif'
 
 np.set_printoptions(
@@ -19,7 +19,7 @@ np.set_printoptions(
 )
 
 fisher_matrices_dir = '/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/fisher_matrices'
-
+fisher_matrices_dir = '/Users/Frugt001/Desktop/fisher_calc_weak_lensing/code/fisher_matrices'
 ######################
 # Bispectra Matrices
 ######################
@@ -106,14 +106,14 @@ fiducial_param_vals = np.array([
 
 param_names_latex = [
         r"$H_0$",         
-        r"$\Omega_{b} h^2$",
-        r"$\Omega_{c} h^2$",
+        r"$\Omega_{b}h^{2}$",
+        r"$\Omega_{c}h^{2}$",
         r"$n_s$",         
         r"$A_s$",         
         r"$\tau$",      
         r"$m_\nu$", 
         r"$w_0$",
-        r"$\log T_{\mathrm{AGN}}$"
+        r"$\log_{10}(T_{\mathrm{AGN}})$"
     ]
 
 # after loading the Fisher matrices we will want to rescale them by the
@@ -503,7 +503,7 @@ def create_plots(plot_type_numbers):
     for fish_pond_number in plot_type_numbers:
         fish_matrices, labels, plt_name, which_indices_to_keep = select_plot_type(fish_pond_number)
         g = plot_confidence_ellipses(fish_matrices, labels, which_indices_to_keep)
-        plt.savefig('/home3/p319950/ResearchProject/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300, bbox_inches="tight")
+        plt.savefig('/Users/Frugt001/Desktop/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300, bbox_inches="tight")
         print('created: ', plt_name)
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-% !TEX root = ../paper/paper_draft.tex
+% !TEX root = /Users/Frugt001/Desktop/fisher_calc_weak_lensing/paper/paper_draft.tex
 \documentclass[11pt]{article} % Choose a document class, like 'article', 'report', or 'revtex4-2' for scientific papers
 
 \usepackage{jcappub}
@@ -134,7 +134,7 @@ All code used to derive the results in this paper is publicly available on GitHu
 
 
 
-% \begin{figure}[h!]
+% \begin{figure}[!]
 %     \centering
 %     \input{figures/calc_flowchart.tikz}
 %     \caption{Flowchart of steps involved in calculating the minimum error/uncertainty in cosmological parameter estimates using convergence and shear power- and bi-spectra.}
@@ -266,8 +266,8 @@ The obvious question when analyzing (simulated) data is how many bins to use and
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{paper/figures/redshift_binning.pdf}
-    \caption{Our galaxy redshift distribution (TODO: REF) split up into 3 bins. The dashed lines correspond to the actual distributions of the bins after taking into account galaxy redshift uncertainty. We assumed no galaxy bias in the redshift estimation and a gaussian error given by $\sigma_z = 0.05 (1+z)$. This is representative of Euclid level of redshift uncertainty TODO: CONFIRM THIS AND ADD REF.}
+    \includegraphics[width=\textwidth]{figures/galaxy_bins.pdf}
+    \caption{Our galaxy redshift distribution (TODO: REF) split up into 4 bins. The dashed lines correspond to the actual distributions of the bins after taking into account galaxy redshift uncertainty. We assumed no galaxy bias in the redshift estimation and a gaussian error given by $\sigma_z = 0.05 (1+z)$. This is representative of Euclid level of redshift uncertainty TODO: CONFIRM THIS AND ADD REF.}
     \label{fig:galaxyredshiftbinning}
 \end{figure}
  
@@ -317,7 +317,7 @@ Throughout this paper we consider two priors. The first we refer to as our ``wea
 This included looking at the accuracy of numerical derivatives w.r.t. cosmological parameters, testing the numerical stability of Fisher matrices w.r.t. matrix inversion, and varying our values for detector noise and beam width.
 } we suspect that this is partly due to us not taking into account foregrounds in our noise models.
 
-\begin{table}[h!]
+\begin{table}[!]
     \centering
     \scriptsize
     \begin{tabular}{|c|c|c|c|c|}
@@ -350,7 +350,7 @@ This included looking at the accuracy of numerical derivatives w.r.t. cosmologic
 \subsection{Noise Modeling}
 This paper considers noise levels for ``stage 3'' and ``stage 4'' (weak lensing) surveys. Noise properties considered for this analysis can be found in table \ref{tab:noiselevels}, including a list of experiments with comparable noise properties. A comparison of the noise power spectra to the lensing power spectra are shown     in figure \ref{fig:lpsplusnoise}. Effectively, for galaxy lensing, the power spectrum is signal-dominated up until $\ell \sim 200$ (stage 3) and $\ell \sim 700$ (stage 4). For CMB lensing, the power spectrum is signal-dominated for $\ell \sim 300$ (stage 3) and $\ell \sim 1000$ (stage 4). 
 
-\begin{table}[h!]
+\begin{table}[!]
     \centering
     \begin{tabular}{|c|c|c|c|}
     \hline
@@ -403,11 +403,11 @@ Derivatives are calculated with a central difference formula (see appendix \ref{
 \section{Results}\label{sec:results}
 \subsection{Detectability}
 As expected, lensing power spectra should be detectable at high signal-to-noise. 
-The signal-to-noise of the CMB and galaxy lensing bispectra versus the maximum multipole moment measured is shown in figure \ref{fig:snrplots}. In the absence of systematics, shear bispectra can be detected at high signal-to-noise with both stage 3 and stage 4 experiments. CMB lensing bispectra could be  detectable by a stage 3 experiment (see e.g. ref. \cite{Kalaja_2023} for the effect of noise biases) and with high signal-to-noise with a stage 4 experiment. Our results for CMB weak lensing $S/N$ match those of reference \cite{Namikawa_2016}. They also fall in line with e.g. ref. \cite{Schiavonne_2024}, where they found detectable skewness of the distance-redshift relation in $\Lambda$CDM due to post-Born effects and non-linear matter formation.
+The signal-to-noise of the CMB and galaxy lensing bispectra versus the maximum multipole moment measured is shown in figure \ref{fig:snrplots}. In the absence of systematics, shear bispectra can be detected at high signal-to-noise with both stage 3 and stage 4 experiments. CMB lensing bispectra could be  detectable by a stage 3 experiment (see e.g. ref. \cite{Kalaja_2023} for the effect of noise biases) and with high signal-to-noise with a stage 4 experiment. Our results for CMB weak lensing $S/N$ match those of reference \cite{Namikawa_2016}. They also fall in line with e.g. ref. \cite{Schiavone_2024}, where they found detectable skewness of the distance-redshift relation in $\Lambda$CDM due to post-Born effects and non-linear matter formation.
 
 Regarding post-Born corrections, we found that the effect on the galaxy lensing bispectrum $S/N$ is a few percent at most, in agreement with \cite{galpostbornlbscorr}. We thus did not include additional plots for these corrections. For the CMB the $S/N$ is reduced significantly (in agreement with \cite{postborn_pratten_lewis}) but not so severely that they are no longer detectable. Our conclusions thus remain the same: the CMB bispectrum is possibly detectable with stage 3 surveys and definitely detectable with stage 4 surveys in the absence of any further systematics.
 
-\begin{figure}[h!]
+\begin{figure}[!]
     \includegraphics[width=\textwidth]{figures/snrplots.pdf}
     \caption{Signal-to-noise ratios for galaxy lensing (left) and CMB lensing (right) bispectra for stage 3 (dashed) and stage 4 (not dashed) surveys as a function of maximum multipole measured. The minimum multipole is always $l_{\text{min}}=2$. The multipole range used for CMB lensing reconstruction is $2\leq \ell \leq 10^4$. Using a more conservative range such as $30\leq \ell \leq 5000$ used to calculate Simons Observatory noise curves don't significantly affect the results.}
     \label{fig:snrplots}
@@ -1031,7 +1031,7 @@ To compute the Fisher matrix of an experiment measuring both lensing power and b
 
 Consider a point on $S^2$, $(r_0, \theta_0, \phi_0)$, at which we observe some cosmological object. We can then define a set of cartesian coordinates $(\tilde r, \tilde y, \tilde x)$ as shown in figure \ref{fig:tildecoords}.
 
-\begin{figure}[h!]
+\begin{figure}[!]
     \centering
     \input{figures/lensing_coords.tikz}
     \caption{
@@ -1077,7 +1077,7 @@ The derivatives with respect to cosmological parameters were taken with a centra
 \end{equation*}
 Each change of the cosmological parameters requires a recalculation of the entire cosmology, making it computationally expensive. For the approximation to be accurate, a balance needs to be found between numerical errors for small $h$ and a larger $\mathcal O(h^2)$ error for larger $h$. The $h$ values chosen for each parameter are shown in table \ref{tab:cosmo-params-diff} and are similar to the values used in \cite{Namikawa_2016}\footnote{As confirmed during a conversation with the author.}.
 
-\begin{table}[h!]
+\begin{table}[!]
     \centering
     \begin{tabular}{|l|c|c|}
     \hline
@@ -1102,11 +1102,11 @@ Each change of the cosmological parameters requires a recalculation of the entir
 To test the accuracy, we varied $h$ by $\pm 5\%$ and $\pm 10\%$ and compared the relative change in the derivative of the equilateral lensing bispectra and the lensing power spectra. As long as numerical noise doesn't dominate, it can be shown that the relative error in our approximation is approximately 5 times the relative difference that taking $h \rightarrow h(1 \pm 0.1)$ leads to. We thus conclude that, based on the tests conducted, the derivatives are almost always computed with up to one percent error. The exception is the derivative with respect to neutrino masses, which introduces a larger error of around 10 percent.
 
 \pagebreak
-\section{$\Lambda$CDM constraints}
+\section{LCDM constraints}
 \label{sec:lambdacdmconstraints}
 
 We do not expect to use weak lensing surveys to competitively constrain the main $\Lambda$CDM parameters. Despite this, we include these constraints for completeness in figures \ref{fig:paramconstraintsallcmb}, \ref{fig:paramconstraintsallcmbcmbprior}, \ref{fig:paramconstraintsallgal}, \ref{fig:paramconstraintsallgalcmbprior}, and in table \ref{tab:paramconstraintsall}. All survey parameters are the same as in section \ref{sec:results}.
-\begin{table}[h!]
+\begin{table}[!]
     \centering
     \tiny
 \begin{tabular}{|l|r|rrr|rrr|rrr|}
@@ -1142,30 +1142,30 @@ $10^9 A_s$         & 0.055 & 0.044 & 0.049 & 0.043 & 0.045 & 0.041 & 0.037 & 0.0
         \label{tab:paramconstraintsall}
 \end{table}
 
-\begin{figure}[h!]
+\begin{figure}[!]
     \centering
-    \includegraphics[width=\textwidth]{paper/figures/param_constraints_lcdm_cmb_weak_prior.pdf}
+    \includegraphics[width=\textwidth]{figures/param_constraints_lcdm_cmb_weak_prior.pdf}
     \caption{Same as figure \ref{fig:paramconstraintstightcmb}, except for the standard $\Lambda$CDM parameters.}
     \label{fig:paramconstraintsallcmb}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!]
     \centering
-    \includegraphics[width=\textwidth]{paper/figures/param_constraints_lcdm_cmb_cmb_prior.pdf}
+    \includegraphics[width=\textwidth]{figures/param_constraints_lcdm_cmb_cmb_prior.pdf}
     \caption{Same as figure \ref{fig:paramconstraintstightcmbcmbprior}, except for the standard $\Lambda$CDM parameters.}
     \label{fig:paramconstraintsallcmbcmbprior}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!]
     \centering
-    \includegraphics[width=\textwidth]{paper/figures/param_constraints_lcdm_gal_weak_prior.pdf}
+    \includegraphics[width=\textwidth]{figures/param_constraints_lcdm_gal_weak_prior.pdf}
     \caption{Same as figure \ref{fig:paramconstraintstightgal}, except for the standard $\Lambda$CDM parameters.}
     \label{fig:paramconstraintsallgal}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!]
     \centering
-    \includegraphics[width=\textwidth]{paper/figures/param_constraints_lcdm_gal_cmb_prior.pdf}
+    \includegraphics[width=\textwidth]{figures/param_constraints_lcdm_gal_cmb_prior.pdf}
     \caption{Same as figure \ref{fig:paramconstraintstightgalcmbprior}, except for the standard $\Lambda$CDM parameters.}
     \label{fig:paramconstraintsallgalcmbprior}
 \end{figure}
