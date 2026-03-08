@@ -28313,7 +28313,8 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
   int __pyx_t_1;
   Py_ssize_t __pyx_t_2;
   Py_ssize_t __pyx_t_3;
-  int __pyx_t_4;
+  Py_ssize_t __pyx_t_4;
+  int __pyx_t_5;
 
   /* "data_importer_new.pyx":1173
  * cdef double lps_der(int k, int type1, int type2, char* par) noexcept nogil:
@@ -28348,7 +28349,7 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
  *         return lps_f(k, type1, type2)
  * 
  *     if par[0] == b'H':             # <<<<<<<<<<<<<<
- *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0])
+ *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'H');
@@ -28357,107 +28358,110 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
     /* "data_importer_new.pyx":1177
  * 
  *     if par[0] == b'H':
- *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0])             # <<<<<<<<<<<<<<
+ *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'o' and par[2] == b'b':
  */
     __pyx_t_2 = 0;
     __pyx_t_3 = 0;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_H_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_H_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_H_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_H_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 0;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_H_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_H_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_H_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_H_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1176
  *         return lps_f(k, type1, type2)
  * 
  *     if par[0] == b'H':             # <<<<<<<<<<<<<<
- *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0])
+ *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1179
- *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0])
+ *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
  * 
  *     if par[0] == b'o' and par[2] == b'b':             # <<<<<<<<<<<<<<
- *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1])
+ *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
  * 
  */
-  __pyx_t_4 = ((__pyx_v_par[0]) == 'o');
-  if (__pyx_t_4) {
+  __pyx_t_5 = ((__pyx_v_par[0]) == 'o');
+  if (__pyx_t_5) {
   } else {
-    __pyx_t_1 = __pyx_t_4;
+    __pyx_t_1 = __pyx_t_5;
     goto __pyx_L6_bool_binop_done;
   }
-  __pyx_t_4 = ((__pyx_v_par[2]) == 'b');
-  __pyx_t_1 = __pyx_t_4;
+  __pyx_t_5 = ((__pyx_v_par[2]) == 'b');
+  __pyx_t_1 = __pyx_t_5;
   __pyx_L6_bool_binop_done:;
   if (__pyx_t_1) {
 
     /* "data_importer_new.pyx":1180
  * 
  *     if par[0] == b'o' and par[2] == b'b':
- *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1])             # <<<<<<<<<<<<<<
+ *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'o' and par[2] == b'c':
  */
+    __pyx_t_4 = 1;
     __pyx_t_3 = 1;
     __pyx_t_2 = 1;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_ombh2_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_ombh2_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_ombh2_p.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_ombh2_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_ombh2_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_ombh2_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_ombh2_p.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_ombh2_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1179
- *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0])
+ *         return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
  * 
  *     if par[0] == b'o' and par[2] == b'b':             # <<<<<<<<<<<<<<
- *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1])
+ *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1182
- *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1])
+ *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
  * 
  *     if par[0] == b'o' and par[2] == b'c':             # <<<<<<<<<<<<<<
- *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2])
+ *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
  * 
  */
-  __pyx_t_4 = ((__pyx_v_par[0]) == 'o');
-  if (__pyx_t_4) {
+  __pyx_t_5 = ((__pyx_v_par[0]) == 'o');
+  if (__pyx_t_5) {
   } else {
-    __pyx_t_1 = __pyx_t_4;
+    __pyx_t_1 = __pyx_t_5;
     goto __pyx_L9_bool_binop_done;
   }
-  __pyx_t_4 = ((__pyx_v_par[2]) == 'c');
-  __pyx_t_1 = __pyx_t_4;
+  __pyx_t_5 = ((__pyx_v_par[2]) == 'c');
+  __pyx_t_1 = __pyx_t_5;
   __pyx_L9_bool_binop_done:;
   if (__pyx_t_1) {
 
     /* "data_importer_new.pyx":1183
  * 
  *     if par[0] == b'o' and par[2] == b'c':
- *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2])             # <<<<<<<<<<<<<<
+ *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'n':
  */
     __pyx_t_2 = 2;
     __pyx_t_3 = 2;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_omch2_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_omch2_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_omch2_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_omch2_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 2;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_omch2_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_omch2_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_omch2_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_omch2_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1182
- *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1])
+ *         return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
  * 
  *     if par[0] == b'o' and par[2] == b'c':             # <<<<<<<<<<<<<<
- *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2])
+ *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1185
- *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2])
+ *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
  * 
  *     if par[0] == b'n':             # <<<<<<<<<<<<<<
- *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3])
+ *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'n');
@@ -28466,29 +28470,30 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
     /* "data_importer_new.pyx":1186
  * 
  *     if par[0] == b'n':
- *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3])             # <<<<<<<<<<<<<<
+ *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'A':
  */
+    __pyx_t_4 = 3;
     __pyx_t_3 = 3;
     __pyx_t_2 = 3;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_ns_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_ns_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_ns_p.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_ns_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_ns_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_ns_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_ns_p.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_ns_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1185
- *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2])
+ *         return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
  * 
  *     if par[0] == b'n':             # <<<<<<<<<<<<<<
- *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3])
+ *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1188
- *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3])
+ *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
  * 
  *     if par[0] == b'A':             # <<<<<<<<<<<<<<
- *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4])
+ *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'A');
@@ -28497,29 +28502,30 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
     /* "data_importer_new.pyx":1189
  * 
  *     if par[0] == b'A':
- *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4])             # <<<<<<<<<<<<<<
+ *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b't':
  */
     __pyx_t_2 = 4;
     __pyx_t_3 = 4;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_As_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_As_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_As_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_As_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 4;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_As_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_As_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_As_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_As_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1188
- *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3])
+ *         return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
  * 
  *     if par[0] == b'A':             # <<<<<<<<<<<<<<
- *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4])
+ *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1191
- *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4])
+ *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
  * 
  *     if par[0] == b't':             # <<<<<<<<<<<<<<
- *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5])
+ *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 't');
@@ -28528,29 +28534,30 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
     /* "data_importer_new.pyx":1192
  * 
  *     if par[0] == b't':
- *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5])             # <<<<<<<<<<<<<<
+ *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'm':
  */
+    __pyx_t_4 = 5;
     __pyx_t_3 = 5;
     __pyx_t_2 = 5;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_tau_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_tau_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_tau_p.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_tau_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_tau_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_tau_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_tau_p.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_tau_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1191
- *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4])
+ *         return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
  * 
  *     if par[0] == b't':             # <<<<<<<<<<<<<<
- *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5])
+ *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1194
- *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5])
+ *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
  * 
  *     if par[0] == b'm':             # <<<<<<<<<<<<<<
- *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6])
+ *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'm');
@@ -28559,29 +28566,30 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
     /* "data_importer_new.pyx":1195
  * 
  *     if par[0] == b'm':
- *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6])             # <<<<<<<<<<<<<<
+ *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'w':
  */
     __pyx_t_2 = 6;
     __pyx_t_3 = 6;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_mnu_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_mnu_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_mnu_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_mnu_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 6;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_mnu_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_mnu_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_mnu_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_mnu_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1194
- *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5])
+ *         return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
  * 
  *     if par[0] == b'm':             # <<<<<<<<<<<<<<
- *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6])
+ *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1197
- *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6])
+ *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
  * 
  *     if par[0] == b'w':             # <<<<<<<<<<<<<<
- *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7])
+ *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'w');
@@ -28590,29 +28598,30 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
     /* "data_importer_new.pyx":1198
  * 
  *     if par[0] == b'w':
- *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7])             # <<<<<<<<<<<<<<
+ *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'l':
  */
+    __pyx_t_4 = 7;
     __pyx_t_3 = 7;
     __pyx_t_2 = 7;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_w0_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_w0_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_w0_p.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_w0_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_w0_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_w0_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_w0_p.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_w0_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1197
- *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6])
+ *         return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
  * 
  *     if par[0] == b'w':             # <<<<<<<<<<<<<<
- *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7])
+ *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1200
- *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7])
+ *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
  * 
  *     if par[0] == b'l':             # <<<<<<<<<<<<<<
- *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
+ *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'l');
@@ -28621,20 +28630,21 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
     /* "data_importer_new.pyx":1201
  * 
  *     if par[0] == b'l':
- *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8])             # <<<<<<<<<<<<<<
+ *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]             # <<<<<<<<<<<<<<
  * 
  * cdef double lbs_der(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction, char* par) noexcept nogil:
  */
     __pyx_t_2 = 8;
     __pyx_t_3 = 8;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_logT_AGN_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_logT_AGN_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_logT_AGN_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_logT_AGN_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 8;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lps_logT_AGN_p(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), __pyx_f_17data_importer_new_lps_logT_AGN_m(__pyx_v_k, __pyx_v_type1, __pyx_v_type2), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_logT_AGN_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_logT_AGN_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1200
- *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7])
+ *         return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
  * 
  *     if par[0] == b'l':             # <<<<<<<<<<<<<<
- *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
+ *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]
  * 
  */
   }
@@ -28654,7 +28664,7 @@ static double __pyx_f_17data_importer_new_lps_der(int __pyx_v_k, int __pyx_v_typ
 }
 
 /* "data_importer_new.pyx":1203
- *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
+ *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]
  * 
  * cdef double lbs_der(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction, char* par) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # for b'snr' case, just returns the original function
@@ -28666,7 +28676,8 @@ static double __pyx_f_17data_importer_new_lbs_der(int __pyx_v_k1, int __pyx_v_k2
   int __pyx_t_1;
   Py_ssize_t __pyx_t_2;
   Py_ssize_t __pyx_t_3;
-  int __pyx_t_4;
+  Py_ssize_t __pyx_t_4;
+  int __pyx_t_5;
 
   /* "data_importer_new.pyx":1205
  * cdef double lbs_der(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction, char* par) noexcept nogil:
@@ -28701,7 +28712,7 @@ static double __pyx_f_17data_importer_new_lbs_der(int __pyx_v_k1, int __pyx_v_k2
  *         return lbs_f(k1, k2, k3, type1, type2, type3, num_samples, pb_correction)
  * 
  *     if par[0] == b'H':             # <<<<<<<<<<<<<<
- *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0])
+ *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'H');
@@ -28710,107 +28721,110 @@ static double __pyx_f_17data_importer_new_lbs_der(int __pyx_v_k1, int __pyx_v_k2
     /* "data_importer_new.pyx":1209
  * 
  *     if par[0] == b'H':
- *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0])             # <<<<<<<<<<<<<<
+ *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'o' and par[2] == b'b':
  */
     __pyx_t_2 = 0;
     __pyx_t_3 = 0;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_H_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_H_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_H_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_H_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 0;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_H_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_H_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_H_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_H_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1208
  *         return lbs_f(k1, k2, k3, type1, type2, type3, num_samples, pb_correction)
  * 
  *     if par[0] == b'H':             # <<<<<<<<<<<<<<
- *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0])
+ *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1211
- *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0])
+ *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
  * 
  *     if par[0] == b'o' and par[2] == b'b':             # <<<<<<<<<<<<<<
- *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1])
+ *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
  * 
  */
-  __pyx_t_4 = ((__pyx_v_par[0]) == 'o');
-  if (__pyx_t_4) {
+  __pyx_t_5 = ((__pyx_v_par[0]) == 'o');
+  if (__pyx_t_5) {
   } else {
-    __pyx_t_1 = __pyx_t_4;
+    __pyx_t_1 = __pyx_t_5;
     goto __pyx_L6_bool_binop_done;
   }
-  __pyx_t_4 = ((__pyx_v_par[2]) == 'b');
-  __pyx_t_1 = __pyx_t_4;
+  __pyx_t_5 = ((__pyx_v_par[2]) == 'b');
+  __pyx_t_1 = __pyx_t_5;
   __pyx_L6_bool_binop_done:;
   if (__pyx_t_1) {
 
     /* "data_importer_new.pyx":1212
  * 
  *     if par[0] == b'o' and par[2] == b'b':
- *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1])             # <<<<<<<<<<<<<<
+ *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'o' and par[2] == b'c':
  */
+    __pyx_t_4 = 1;
     __pyx_t_3 = 1;
     __pyx_t_2 = 1;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_ombh2_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_ombh2_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_ombh2_p.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_ombh2_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_ombh2_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_ombh2_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_ombh2_p.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_ombh2_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1211
- *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0])
+ *         return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
  * 
  *     if par[0] == b'o' and par[2] == b'b':             # <<<<<<<<<<<<<<
- *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1])
+ *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1214
- *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1])
+ *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
  * 
  *     if par[0] == b'o' and par[2] == b'c':             # <<<<<<<<<<<<<<
- *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2])
+ *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
  * 
  */
-  __pyx_t_4 = ((__pyx_v_par[0]) == 'o');
-  if (__pyx_t_4) {
+  __pyx_t_5 = ((__pyx_v_par[0]) == 'o');
+  if (__pyx_t_5) {
   } else {
-    __pyx_t_1 = __pyx_t_4;
+    __pyx_t_1 = __pyx_t_5;
     goto __pyx_L9_bool_binop_done;
   }
-  __pyx_t_4 = ((__pyx_v_par[2]) == 'c');
-  __pyx_t_1 = __pyx_t_4;
+  __pyx_t_5 = ((__pyx_v_par[2]) == 'c');
+  __pyx_t_1 = __pyx_t_5;
   __pyx_L9_bool_binop_done:;
   if (__pyx_t_1) {
 
     /* "data_importer_new.pyx":1215
  * 
  *     if par[0] == b'o' and par[2] == b'c':
- *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2])             # <<<<<<<<<<<<<<
+ *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'n':
  */
     __pyx_t_2 = 2;
     __pyx_t_3 = 2;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_omch2_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_omch2_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_omch2_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_omch2_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 2;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_omch2_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_omch2_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_omch2_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_omch2_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1214
- *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1])
+ *         return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
  * 
  *     if par[0] == b'o' and par[2] == b'c':             # <<<<<<<<<<<<<<
- *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2])
+ *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1217
- *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2])
+ *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
  * 
  *     if par[0] == b'n':             # <<<<<<<<<<<<<<
- *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3])
+ *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'n');
@@ -28819,29 +28833,30 @@ static double __pyx_f_17data_importer_new_lbs_der(int __pyx_v_k1, int __pyx_v_k2
     /* "data_importer_new.pyx":1218
  * 
  *     if par[0] == b'n':
- *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3])             # <<<<<<<<<<<<<<
+ *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'A':
  */
+    __pyx_t_4 = 3;
     __pyx_t_3 = 3;
     __pyx_t_2 = 3;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_ns_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_ns_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_ns_p.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_ns_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_ns_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_ns_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_ns_p.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_ns_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1217
- *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2])
+ *         return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
  * 
  *     if par[0] == b'n':             # <<<<<<<<<<<<<<
- *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3])
+ *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1220
- *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3])
+ *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
  * 
  *     if par[0] == b'A':             # <<<<<<<<<<<<<<
- *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4])
+ *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'A');
@@ -28850,29 +28865,30 @@ static double __pyx_f_17data_importer_new_lbs_der(int __pyx_v_k1, int __pyx_v_k2
     /* "data_importer_new.pyx":1221
  * 
  *     if par[0] == b'A':
- *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4])             # <<<<<<<<<<<<<<
+ *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b't':
  */
     __pyx_t_2 = 4;
     __pyx_t_3 = 4;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_As_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_As_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_As_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_As_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 4;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_As_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_As_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_As_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_As_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1220
- *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3])
+ *         return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
  * 
  *     if par[0] == b'A':             # <<<<<<<<<<<<<<
- *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4])
+ *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1223
- *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4])
+ *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
  * 
  *     if par[0] == b't':             # <<<<<<<<<<<<<<
- *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5])
+ *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 't');
@@ -28881,29 +28897,30 @@ static double __pyx_f_17data_importer_new_lbs_der(int __pyx_v_k1, int __pyx_v_k2
     /* "data_importer_new.pyx":1224
  * 
  *     if par[0] == b't':
- *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5])             # <<<<<<<<<<<<<<
+ *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'm':
  */
+    __pyx_t_4 = 5;
     __pyx_t_3 = 5;
     __pyx_t_2 = 5;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_tau_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_tau_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_tau_p.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_tau_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_tau_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_tau_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_tau_p.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_tau_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1223
- *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4])
+ *         return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
  * 
  *     if par[0] == b't':             # <<<<<<<<<<<<<<
- *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5])
+ *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1226
- *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5])
+ *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
  * 
  *     if par[0] == b'm':             # <<<<<<<<<<<<<<
- *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6])
+ *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'm');
@@ -28912,29 +28929,30 @@ static double __pyx_f_17data_importer_new_lbs_der(int __pyx_v_k1, int __pyx_v_k2
     /* "data_importer_new.pyx":1227
  * 
  *     if par[0] == b'm':
- *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6])             # <<<<<<<<<<<<<<
+ *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'w':
  */
     __pyx_t_2 = 6;
     __pyx_t_3 = 6;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_mnu_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_mnu_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_mnu_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_mnu_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 6;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_mnu_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_mnu_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_mnu_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_mnu_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1226
- *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5])
+ *         return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
  * 
  *     if par[0] == b'm':             # <<<<<<<<<<<<<<
- *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6])
+ *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1229
- *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6])
+ *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
  * 
  *     if par[0] == b'w':             # <<<<<<<<<<<<<<
- *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7])
+ *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'w');
@@ -28943,29 +28961,30 @@ static double __pyx_f_17data_importer_new_lbs_der(int __pyx_v_k1, int __pyx_v_k2
     /* "data_importer_new.pyx":1230
  * 
  *     if par[0] == b'w':
- *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7])             # <<<<<<<<<<<<<<
+ *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]             # <<<<<<<<<<<<<<
  * 
  *     if par[0] == b'l':
  */
+    __pyx_t_4 = 7;
     __pyx_t_3 = 7;
     __pyx_t_2 = 7;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_w0_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_w0_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_w0_p.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_w0_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_w0_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_w0_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_w0_p.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_w0_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1229
- *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6])
+ *         return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
  * 
  *     if par[0] == b'w':             # <<<<<<<<<<<<<<
- *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7])
+ *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1232
- *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7])
+ *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
  * 
  *     if par[0] == b'l':             # <<<<<<<<<<<<<<
- *         return der(lbs_logT_AGN_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_logT_AGN_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
+ *         return der(lbs_logT_AGN_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_logT_AGN_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]
  * 
  */
   __pyx_t_1 = ((__pyx_v_par[0]) == 'l');
@@ -28974,26 +28993,27 @@ static double __pyx_f_17data_importer_new_lbs_der(int __pyx_v_k1, int __pyx_v_k2
     /* "data_importer_new.pyx":1233
  * 
  *     if par[0] == b'l':
- *         return der(lbs_logT_AGN_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_logT_AGN_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_logT_AGN_p[8] - cosm_par_f[8])             # <<<<<<<<<<<<<<
+ *         return der(lbs_logT_AGN_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_logT_AGN_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]             # <<<<<<<<<<<<<<
  * 
  * #######################
  */
     __pyx_t_2 = 8;
     __pyx_t_3 = 8;
-    __pyx_r = __pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_logT_AGN_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_logT_AGN_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_logT_AGN_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_logT_AGN_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0);
+    __pyx_t_4 = 8;
+    __pyx_r = (__pyx_f_17data_importer_new_der(__pyx_f_17data_importer_new_lbs_logT_AGN_p(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), __pyx_f_17data_importer_new_lbs_logT_AGN_m(__pyx_v_k1, __pyx_v_k2, __pyx_v_k3, __pyx_v_type1, __pyx_v_type2, __pyx_v_type3, __pyx_v_num_samples, __pyx_v_pb_correction), ((*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_logT_AGN_p.data + __pyx_t_2 * __pyx_v_17data_importer_new_cosm_par_logT_AGN_p.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_3 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) )))), 0) * (*((double *) ( /* dim=0 */ (__pyx_v_17data_importer_new_cosm_par_f.data + __pyx_t_4 * __pyx_v_17data_importer_new_cosm_par_f.strides[0]) ))));
     goto __pyx_L0;
 
     /* "data_importer_new.pyx":1232
- *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7])
+ *         return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
  * 
  *     if par[0] == b'l':             # <<<<<<<<<<<<<<
- *         return der(lbs_logT_AGN_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_logT_AGN_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
+ *         return der(lbs_logT_AGN_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_logT_AGN_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]
  * 
  */
   }
 
   /* "data_importer_new.pyx":1203
- *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
+ *         return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]
  * 
  * cdef double lbs_der(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction, char* par) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # for b'snr' case, just returns the original function

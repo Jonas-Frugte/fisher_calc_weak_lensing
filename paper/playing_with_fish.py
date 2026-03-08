@@ -8,6 +8,10 @@ import matplotlib.lines as mlines
 import getdist
 from getdist import plots, MCSamples
 
+# Enable LaTeX rendering for proper display of parameter names
+matplotlib.rcParams['text.usetex'] = True
+# matplotlib.rcParams['font.family'] = 'serif'
+
 np.set_printoptions(
     precision=1,
     suppress=False, 
@@ -35,6 +39,8 @@ visb_f_pb = np.loadtxt(fisher_matrices_dir + '/fish_mat_bisp_both_pb.txt')
 ########################
 # Powerspectra Matrices
 ########################
+
+# CMB anisotropy powerspectra computed with lmin = 30
 
 visp_c = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_c.txt')
 
@@ -66,11 +72,7 @@ planck_prior = np.diag([
 # CMB Stage 4
 ######################
 
-#viscmb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_both_cmb_lmin30.txt')
-
 viscmb_f = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_bothCMB.txt')
-
-# these still have lmin = 2
 
 viscmb_t = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_t.txt')
 
@@ -88,6 +90,8 @@ viscmb_e = np.loadtxt(fisher_matrices_dir + '/fish_mat_powersp_e.txt')
 
 ########### Fiducial Vals and latex names ###########
 
+# fiducial values for each cosmological parameter (used to undo derivative
+# normalization applied during Fisher computation)
 fiducial_param_vals = np.array([
     67.4,         # H_0
     0.0224,       # Omega_b h^2
@@ -102,8 +106,8 @@ fiducial_param_vals = np.array([
 
 param_names_latex = [
         r"$H_0$",         
-        r"$\Omega_b h^2$",
-        r"$\Omega_c h^2$",
+        r"$\Omega_{b} h^2$",
+        r"$\Omega_{c} h^2$",
         r"$n_s$",         
         r"$A_s$",         
         r"$\tau$",      
@@ -111,6 +115,15 @@ param_names_latex = [
         r"$w_0$",
         r"$\log T_{\mathrm{AGN}}$"
     ]
+
+# after loading the Fisher matrices we will want to rescale them by the
+# fiducial parameter values (undo the normalization applied in
+# data_importer_new).  The matrices are loaded above; we perform the
+# rescaling just below once the fiducial vector is defined.
+
+def _unnormalize_matrix(mat):
+    """Return mat_{ij} = mat_{ij}^{normalized} / (fid[i]*fid[j])."""
+    return mat / np.outer(fiducial_param_vals, fiducial_param_vals)
 
 ########### SIGMA8 ################
 
@@ -154,6 +167,17 @@ def add_parameter(mats, vec):
     return matsnew
 
 # These were last updated 15 feb 2026
+
+# Apply undo-scaling to all imported Fisher matrices so that further
+# manipulations operate on un-normalized objects.
+for _name in [
+        'visb_c', 'visb_s', 'visb_f',
+        'visb_c_pb', 'visb_s_pb', 'visb_f_pb',
+        'visp_c', 'visp_s', 'visp_f',
+        'viscmb_f', 'viscmb_t', 'viscmb_e'
+    ]:
+    if _name in globals():
+        globals()[_name] = _unnormalize_matrix(globals()[_name])
 
 s8_ders = np.array([
     2.80598548e-03, # H_0
@@ -479,7 +503,7 @@ def create_plots(plot_type_numbers):
     for fish_pond_number in plot_type_numbers:
         fish_matrices, labels, plt_name, which_indices_to_keep = select_plot_type(fish_pond_number)
         g = plot_confidence_ellipses(fish_matrices, labels, which_indices_to_keep)
-        plt.savefig('paper/figures/' + plt_name, dpi = 300)
+        plt.savefig('/home3/p319950/ResearchProject/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300, bbox_inches="tight")
         print('created: ', plt_name)
 
 if __name__ == "__main__":

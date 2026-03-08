@@ -5,7 +5,7 @@ from itertools import *
 np.printoptions(precision=1, suppress=False)
 
 lmin = 2
-lmax = 2000
+lmax = 1900
 
 pars = [b'H', b'ombh2', b'omch2', b'ns', b'As', b'tau', b'mnu', b'w0', b'logT_AGN']
 
@@ -36,7 +36,6 @@ def main():
 
         filepath = '/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/fisher_matrices' + f'/fish_mat_powersp_{tracer}.txt'
         np.savetxt(filepath, mat)
-        print(mat)
         print(f'Created Fisher matrix at {filepath}')
         #print(mat)
     pass

@@ -1174,31 +1174,31 @@ cdef double lps_der(int k, int type1, int type2, char* par) noexcept nogil:
         return lps_f(k, type1, type2)
 
     if par[0] == b'H':
-        return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0])
+        return der(lps_H_p(k, type1, type2), lps_H_m(k, type1, type2), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
             
     if par[0] == b'o' and par[2] == b'b':
-        return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1])
+        return der(lps_ombh2_p(k, type1, type2), lps_ombh2_m(k, type1, type2), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
 
     if par[0] == b'o' and par[2] == b'c':
-        return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2])
+        return der(lps_omch2_p(k, type1, type2), lps_omch2_m(k, type1, type2), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
 
     if par[0] == b'n':
-        return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3])
+        return der(lps_ns_p(k, type1, type2), lps_ns_m(k, type1, type2), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
 
     if par[0] == b'A':
-        return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4])
+        return der(lps_As_p(k, type1, type2), lps_As_m(k, type1, type2), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
     
     if par[0] == b't':
-        return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5])
+        return der(lps_tau_p(k, type1, type2), lps_tau_m(k, type1, type2), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
 
     if par[0] == b'm':
-        return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6])
+        return der(lps_mnu_p(k, type1, type2), lps_mnu_m(k, type1, type2), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
 
     if par[0] == b'w':
-        return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7])
+        return der(lps_w0_p(k, type1, type2), lps_w0_m(k, type1, type2), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
 
     if par[0] == b'l':
-        return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
+        return der(lps_logT_AGN_p(k, type1, type2), lps_logT_AGN_m(k, type1, type2), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]
 
 cdef double lbs_der(int k1, int k2, int k3, int type1, int type2, int type3, int num_samples, bint pb_correction, char* par) noexcept nogil:
     # for b'snr' case, just returns the original function
@@ -1206,31 +1206,31 @@ cdef double lbs_der(int k1, int k2, int k3, int type1, int type2, int type3, int
         return lbs_f(k1, k2, k3, type1, type2, type3, num_samples, pb_correction)
 
     if par[0] == b'H':
-        return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0])
+        return der(lbs_H_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_H_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_H_p[0] - cosm_par_f[0]) * cosm_par_f[0]
             
     if par[0] == b'o' and par[2] == b'b':
-        return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1])
+        return der(lbs_ombh2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ombh2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ombh2_p[1] - cosm_par_f[1]) * cosm_par_f[1]
 
     if par[0] == b'o' and par[2] == b'c':
-        return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2])
+        return der(lbs_omch2_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_omch2_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_omch2_p[2] - cosm_par_f[2]) * cosm_par_f[2]
 
     if par[0] == b'n':
-        return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3])
+        return der(lbs_ns_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_ns_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_ns_p[3] - cosm_par_f[3]) * cosm_par_f[3]
 
     if par[0] == b'A':
-        return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4])
+        return der(lbs_As_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_As_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_As_p[4] - cosm_par_f[4]) * cosm_par_f[4]
     
     if par[0] == b't':
-        return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5])
+        return der(lbs_tau_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_tau_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_tau_p[5] - cosm_par_f[5]) * cosm_par_f[5]
 
     if par[0] == b'm':
-        return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6])
+        return der(lbs_mnu_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_mnu_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_mnu_p[6] - cosm_par_f[6]) * cosm_par_f[6]
 
     if par[0] == b'w':
-        return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7])
+        return der(lbs_w0_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_w0_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_w0_p[7] - cosm_par_f[7]) * cosm_par_f[7]
 
     if par[0] == b'l':
-        return der(lbs_logT_AGN_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_logT_AGN_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_logT_AGN_p[8] - cosm_par_f[8])
+        return der(lbs_logT_AGN_p(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), lbs_logT_AGN_m(k1, k2, k3, type1, type2, type3, num_samples, pb_correction), cosm_par_logT_AGN_p[8] - cosm_par_f[8]) * cosm_par_f[8]
         
 #######################
 

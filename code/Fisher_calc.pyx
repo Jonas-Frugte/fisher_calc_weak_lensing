@@ -341,7 +341,8 @@ def Fisher_mat_full(
     int num_bispec_samples, 
     int num_cores, 
     int n_tracers,
-    pars_list=None
+    pars_list=None,
+    serial=False
     ):
     # print(f'Post-Born corrections: {pb_correction}')
 
@@ -367,7 +368,7 @@ def Fisher_mat_full(
     cdef int n_pars = int(len(pars_py))
 
     # Thread-local storage for each thread's partial Fisher matrix
-    cdef int nthreads = num_cores
+    cdef int nthreads = num_cores if not serial else 1
     cdef double[:] local_fish_mats = np.zeros(nthreads * n_pars * n_pars, dtype = np.float64)
 
     cdef double[:] tensor = np.zeros(nthreads * n_tracers**3, dtype = np.float64) # n_tracer^3
@@ -390,43 +391,87 @@ def Fisher_mat_full(
     cdef double[:] b_solve = np.zeros(nthreads * n_tracers, dtype = np.float64) # n_tracer
     cdef double[:] y_solve = np.zeros(nthreads * n_tracers, dtype = np.float64) # n_tracer
     # Parallel loop: each thread accumulates into its own local array
-    for index in prange(0, num_samples, schedule='static', num_threads=num_cores, nogil=True):
-        l1 = triangles[index, 0]
-        l2 = triangles[index, 1]
-        l3 = triangles[index, 2]
-        tid = threadid()
-        # printf('Thread %d processing triangle (%d, %d, %d)\n', tid, l1, l2, l3)
-        # Use the thread's own row as the local array
-        Fisher_mat_full_term(
-            &tracers[0],
-            l1, 
-            l2, 
-            l3, 
-            &local_fish_mats[tid * n_pars * n_pars], 
-            num_bispec_samples,
-            &tensor[tid * n_tracers**3],
-            &lps_mat_1[tid * n_tracers**2],   
-            &lps_mat_2[tid * n_tracers**2],  
-            &lps_mat_3[tid * n_tracers**2],   
-            &bispec_vecs[tid * n_tracers**3 * n_pars],   
-            &bispec_vecs_solved[tid * n_tracers**3 * n_pars],   
-            &bispec_vec_temp[tid * n_tracers**3],  
-            &bispec_vec_solved_temp[tid * n_tracers**3],   
-            &vecss_solve3[tid * n_tracers**3],   
-            &b_solve3[tid * n_tracers],   
-            &x_solve3[tid * n_tracers],   
-            &x2_solve3[tid * n_tracers],   
-            &vecs_solve2[tid * n_tracers**2],
-            &b_solve2[tid * n_tracers],   
-            &x_solve2[tid * n_tracers],   
-            &vec_solve1[tid * n_tracers],   
-            &A_solve[tid * n_tracers**2],  
-            &b_solve[tid * n_tracers],   
-            &y_solve[tid * n_tracers],
-            &pars_ints[0],
-            n_tracers,
-            n_pars
-        )
+
+    if serial:
+        for index in range(0, num_samples):
+            l1 = triangles[index, 0]
+            l2 = triangles[index, 1]
+            l3 = triangles[index, 2]
+            tid = 0
+            Fisher_mat_full_term(
+                &tracers[0],
+                l1, 
+                l2, 
+                l3, 
+                &local_fish_mats[tid * n_pars * n_pars], 
+                num_bispec_samples,
+                &tensor[tid * n_tracers**3],
+                &lps_mat_1[tid * n_tracers**2],   
+                &lps_mat_2[tid * n_tracers**2],  
+                &lps_mat_3[tid * n_tracers**2],   
+                &bispec_vecs[tid * n_tracers**3 * n_pars],   
+                &bispec_vecs_solved[tid * n_tracers**3 * n_pars],   
+                &bispec_vec_temp[tid * n_tracers**3],  
+                &bispec_vec_solved_temp[tid * n_tracers**3],   
+                &vecss_solve3[tid * n_tracers**3],   
+                &b_solve3[tid * n_tracers],   
+                &x_solve3[tid * n_tracers],   
+                &x2_solve3[tid * n_tracers**2],   
+                &vecs_solve2[tid * n_tracers**2],
+                &b_solve2[tid * n_tracers],   
+                &x_solve2[tid * n_tracers],   
+                &vec_solve1[tid * n_tracers],   
+                &A_solve[tid * n_tracers**2],  
+                &b_solve[tid * n_tracers],   
+                &y_solve[tid * n_tracers],
+                &pars_ints[0],
+                n_tracers,
+                n_pars
+            )
+            # Check PSD after each triangle
+            current_flat = local_fish_mats[tid * n_pars * n_pars : (tid + 1) * n_pars * n_pars]
+            current_mat = np.array([[current_flat[fish_index(alpha, beta, n_pars)] for alpha in range(n_pars)] for beta in range(n_pars)])
+            eigs = np.linalg.eigvals(current_mat)
+            if np.any(eigs < -1e-12):
+                print(f'Negative eigenvalues after triangle ({l1},{l2},{l3}): {eigs}')
+    else:
+        for index in prange(0, num_samples, schedule='static', num_threads=num_cores, nogil=True):
+            l1 = triangles[index, 0]
+            l2 = triangles[index, 1]
+            l3 = triangles[index, 2]
+            tid = threadid()
+            # printf('Thread %d processing triangle (%d, %d, %d)\n', tid, l1, l2, l3)
+            # Use the thread's own row as the local array
+            Fisher_mat_full_term(
+                &tracers[0],
+                l1, 
+                l2, 
+                l3, 
+                &local_fish_mats[tid * n_pars * n_pars], 
+                num_bispec_samples,
+                &tensor[tid * n_tracers**3],
+                &lps_mat_1[tid * n_tracers**2],   
+                &lps_mat_2[tid * n_tracers**2],  
+                &lps_mat_3[tid * n_tracers**2],   
+                &bispec_vecs[tid * n_tracers**3 * n_pars],   
+                &bispec_vecs_solved[tid * n_tracers**3 * n_pars],   
+                &bispec_vec_temp[tid * n_tracers**3],  
+                &bispec_vec_solved_temp[tid * n_tracers**3],   
+                &vecss_solve3[tid * n_tracers**3],   
+                &b_solve3[tid * n_tracers],   
+                &x_solve3[tid * n_tracers],   
+                &x2_solve3[tid * n_tracers**2],   
+                &vecs_solve2[tid * n_tracers**2],
+                &b_solve2[tid * n_tracers],   
+                &x_solve2[tid * n_tracers],   
+                &vec_solve1[tid * n_tracers],   
+                &A_solve[tid * n_tracers**2],  
+                &b_solve[tid * n_tracers],   
+                &y_solve[tid * n_tracers],
+                &pars_ints[0],
+                n_tracers,
+                n_pars
+            )
 
 
     # Sum over threads
@@ -447,7 +492,8 @@ def Fisher_mat(
     triangle_step_size: int,
     num_bispec_samples: int,
     num_cores: int,
-    pars=None
+    pars=None,
+    serial=False,
     ):
 
     n_tracers = len(tracers)
@@ -455,37 +501,65 @@ def Fisher_mat(
         mat = Fisher_mat_single(lmin, lminbin, lmax, triangle_step_size, num_bispec_samples, num_cores, tracers[0], pars_list=pars)
     else:
         tracers_int = np.array(tracers, dtype=np.int32) # if you don't do this it will pass array of longs instead of ints and give error
-        mat = Fisher_mat_full(tracers_int, lmin, lminbin, lmax, triangle_step_size, num_bispec_samples, num_cores, n_tracers, pars_list=pars)
-    
+        mat = Fisher_mat_full(tracers_int, lmin, lminbin, lmax, triangle_step_size, num_bispec_samples, num_cores, n_tracers, pars_list=pars, serial=serial)
+
     # check for symmetry of Fisher_matrix
     rtol = 1e-05
-    if np.allclose(mat, mat.T, rtol=rtol, atol=1e-30):
-        return mat
-    else:
+    if not np.allclose(mat, mat.T, rtol=rtol, atol=1e-30):
         print(f'Fisher matrix not symmetric to withing relative tolerance of {rtol}.')
-        #print(f'Relative difference is {}') #TODO: this?
-        print('returnng symmetrized version of matrix (F + F^T) / 2')
-        return (mat + mat.T) / 2
+
+    # check for positive semi-definiteness
+    # allow a small negative tolerance to account for numerical noise
+    eigs = np.linalg.eigvals(mat)
+    cdef double tol = 1e-12
+    if np.any(eigs < -tol):
+        print(f'Warning: Fisher matrix not positive semidefinite, eigenvalues are {eigs}')
+        print(f'Condition number: {np.linalg.cond(mat)}')
+        print(f'Min eigenvalue: {np.min(eigs)}, Max eigenvalue: {np.max(eigs)}')
+
+    return mat
 
 # Below is some code to test Fisher_mat_full_term by comparing to a simple Python implementation. The test was passed on 26 feb 2026
 
-def Fisher_term_test(l1, l2, l3, tracers, pars=None):
+def Fisher_term_test(l1, l2, l3, tracers, pars=None, identity_ps_matrices = False):
     pars_names = [b's', b'H', b'ombh', b'omch', b'n', b'A', b't', b'm', b'w']
     if pars is None:
         pars = [1,2,3,4,5,6,7,8,9]
     num_samples = 100
 
     bispec_vecs = np.array(
-        [[[[lbs_der(l1, l2, l3, x, y, z, num_samples, pb_correction, pars_names[par]) for x in tracers] for y in tracers] for z in tracers] for par in pars]
+        [[[[lbs_der(l1, l2, l3, x, y, z, num_samples, pb_correction, pars_names[par]) for x in tracers] for y in tracers] for z in tracers] for par in range(len(pars))]
         )
 
-    lps_mat_1 = np.array([[lps_f_obs(l1, x, y) for x in tracers] for y in tracers])
-    lps_mat_2 = np.array([[lps_f_obs(l2, x, y) for x in tracers] for y in tracers])
-    lps_mat_3 = np.array([[lps_f_obs(l3, x, y) for x in tracers] for y in tracers])
+    if identity_ps_matrices:
+        lps_mat_1 = np.eye(len(tracers))
+        lps_mat_2 = np.eye(len(tracers))
+        lps_mat_3 = np.eye(len(tracers))
+    else:
+        lps_mat_1 = np.array([[lps_f_obs(l1, x, y) for x in tracers] for y in tracers])
+        lps_mat_2 = np.array([[lps_f_obs(l2, x, y) for x in tracers] for y in tracers])
+        lps_mat_3 = np.array([[lps_f_obs(l3, x, y) for x in tracers] for y in tracers])
+
+    for mat in [lps_mat_1, lps_mat_2, lps_mat_3]:
+        if np.any(np.linalg.eigvals(np.linalg.inv(mat)) <= 0):
+            print(f'Warning: powerspectrum matrix is not positive definite, eigenvalues are {np.linalg.eigvals(np.linalg.inv(mat))}')
+            print(f'l = {l1 if np.array_equal(mat, lps_mat_1) else (l2 if np.array_equal(mat, lps_mat_2) else l3)}')
 
     fish_mat_py = np.einsum('ixyz,xa,yb,zc,jabc->ij', bispec_vecs, np.linalg.inv(lps_mat_1), np.linalg.inv(lps_mat_2), np.linalg.inv(lps_mat_3), bispec_vecs) / Delta(l1, l2, l3)
 
-    return np.array(fish_mat_py)
+    if np.any(np.linalg.eigvals(fish_mat_py) <= 0):
+        print(f'Warning: Fisher matrix is not positive definite, eigenvalues are {np.linalg.eigvals(fish_mat_py)}')
+
+    return fish_mat_py
+
+def Test_lps_psd(lmin, lmax, tracers):
+    for l in range(lmin, lmax + 1):
+        lps_mat = np.array([[lps_f_obs(l, x, y) for x in tracers] for y in tracers])
+        if np.any(np.linalg.eigvals(lps_mat) <= 0):
+            print(f'Warning: lps matrix at l={l} is not positive definite, eigenvalues are {np.linalg.eigvals(lps_mat)}')
+    pass
+    
+
 
 def Fisher_term_pyx_wrap(l1, l2, l3, tracers, pars=None):
     cdef int n_tracers = len(tracers)
@@ -615,5 +689,14 @@ def Fisher_powersp(lmin, lmax, tracer, snr_or_constraints = 'snr'):
     if snr_or_constraints == 'snr':
         return Fisher_powersp_el(lmin, lmax, tracers_tuple, par1 = b'snr', par2 = b'snr')
     elif snr_or_constraints == 'constraints':
-        mat = [[Fisher_powersp_el(lmin, lmax, tracers_tuple, par1 = pars[i], par2 = pars[j]) for i in range(9)] for j in range(9)]
+        mat = np.array([[Fisher_powersp_el(lmin, lmax, tracers_tuple, par1 = pars[i], par2 = pars[j]) for i in range(9)] for j in range(9)])
+        # warn if asymmetry
+        if not np.allclose(mat, mat.T, rtol=1e-5, atol=1e-30):
+            print('Fisher powerspectra constraints matrix not symmetric within tolerance.')
+        # check PSD
+        eigs = np.linalg.eigvals(mat)
+        if np.any(eigs < -1e-12):
+            print(f'Warning: powerspectra Fisher matrix not positive semidefinite, eigenvalues are {eigs}')
+            print(f'Condition number: {np.linalg.cond(mat)}')
+            print(f'Min eigenvalue: {np.min(eigs)}, Max eigenvalue: {np.max(eigs)}')
         return mat

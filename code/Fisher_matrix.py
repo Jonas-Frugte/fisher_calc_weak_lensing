@@ -10,8 +10,9 @@ from data_importer_new import set_noise_types
 np.set_printoptions(precision=1, suppress=False)
 
 lmin = 2
-lmax = 2000
+lmax = 1900
 stepsizes = [60, 200, 400]
+# stepsizes = [70, 300, 600]
 #stepsizes = [20 * 5, 5 * 20 * 5, 10 * 20 * 5] # for testing
 num_bispec_samples = 100 # should be 100 or so
 num_cores = 128
@@ -37,7 +38,10 @@ def fisher_calc_wrapper(tracers):
 
 def main(pb_correction):
     vis.set_pb_correction(pb_correction)
-    for tracer in ['c', 's', 'both']:
+    tracers = ['c', 's', 'both']
+    print(f"Computing Fisher matrices for tracers: {tracers}.\n")
+    for tracer in tracers:
+
         mat = fisher_calc_wrapper(tracer)
         
         if pb_correction:
