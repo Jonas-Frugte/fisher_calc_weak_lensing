@@ -310,12 +310,25 @@ If only some fraction of the sky, $f_{\text{sky}}$, is measured, all Fisher matr
 \section{Experimental parameters and priors}\label{sec:calcdetails}
 % TODO: find proper references for stage 3 and stage 4 names as well as experimental parameters and real life surveys
 \subsection{Fiducial cosmology}
-Our fiducial cosmology is based on the \textit{Planck} results \cite{planckresults} (see table \ref{tab:fiducialpars}). We choose to constrain the standard parameters of the $\Lambda$CDM model as well as neutrino mass, $m_\nu$, and dark energy equation of state parameter, $w_0$. The reason to include these extra degrees of freedom is to explore the potential of future surveys on these extensions of $\Lambda$CDM. For example, the DESI collaboration \cite{Roy2024DESI} recently showed that measurements of baryon acoustic oscillations give a 2.5 - 4 $\sigma$ tension with a non-evolving dark energy equation of state model, so it is worth considering if future weak lensing experiments could tell us more about this tension and if higher order statistics would benefit the constraints on these tensions. Regarding neutrinos, depending on how tightly stage 4 surveys will be able to constrain neutrino mass, the results could tell us more about their mass hierarchy and serve as a test for neutrino mass constraints obtained from other probes, such as baryon acoustic oscillations. Finally, we also account for baryonic feedback by including $\log T_{\text{AGN}}$. It was shown in CITE: HMCODE2020 that this one parameter allows models of the nonlinear power spectrum to incorporate baryonic feedback at a high level of accuracy (compared to models with more degrees of freedom for baryonic feedback). In this way we are able to make our considerably more realistic with minimal extra computational cost. 
+Our fiducial cosmology is based on the \textit{Planck} results \cite{planckresults} (see table \ref{tab:fiducialpars}). We choose to constrain the standard parameters of the $\Lambda$CDM model as well as neutrino mass, $m_\nu$, and dark energy equation of state parameter, $w_0$. The reason to include these extra degrees of freedom is to explore the potential of future surveys on these extensions of $\Lambda$CDM. For example, the DESI collaboration \cite{Roy2024DESI} recently showed that measurements of baryon acoustic oscillations give a 2.5 - 4 $\sigma$ tension with a non-evolving dark energy equation of state model, so it is worth considering if future weak lensing experiments could tell us more about this tension and if higher order statistics would benefit the constraints on these tensions. Regarding neutrinos, depending on how tightly stage 4 surveys will be able to constrain neutrino mass, the results could tell us more about their mass hierarchy and serve as a test for neutrino mass constraints obtained from other probes, such as baryon acoustic oscillations. 
+
+Finally, we also need to take into account baryonic feedback. It has been shown that not taking into account baryonic feedback will lead to a bias of multiple sigma in, for example, $S_8$, $\Omega_m$, $\Omega_b$ when analyzing 2 and 3 point correlations of Euclid mock data (TODO: https://arxiv.org/pdf/2506.18974). We model the effects by using HMCODE2020 and marginalizing over $\log T_{\text{AGN}}$ in addition to the parameters described above. It was shown in CITE: HMCODE2020 that this one parameter allows models of the nonlinear power spectrum to incorporate baryonic feedback at a high level of accuracy (compared to models with more degrees of freedom for baryonic feedback). In this way we are able to make our considerably more realistic with minimal extra computational cost. 
 
 \subsection{Choice of priors}
 Throughout this paper we consider two priors. The first we refer to as our ``weak prior'' and is based on the one used in \cite{Planck2018Lensing} (see table \ref{tab:fiducialpars}). This prior only restricts $\Omega_b h^2$ and $n_s$ significantly, as those are not well constrained by lensing spectra alone. Our differences with \cite{Planck2018Lensing} are that (i) we do not fix $\tau$, but instead take it to have a SNR of 1 and added a weak $A_s$ prior as well, (ii) instead of a flat prior for the Hubble constant ($40 < H_0 < 100$) we use a Gaussian distribution with the same standard deviation, (iii) we added a weak constraint on $\Omega_c h^2$, and (iv) we also vary neutrino mass and $w_0$ but do not assume any constraints on them in our priors. The purpose of the weak prior is as follows. The weak lensing power spectra, in particular, exhibit complete insensitivity to certain parameters. Consequently, relying solely on them to constrain the entire cosmological model results in very poor constraints. Future lensing surveys will of course use information from surveys measuring other statistics such as those derived from galaxy clustering and the primary CMB anisotropies. By adding a prior based on these (primary) statistics our results become more representative of what we should expect is possible. Additionally, by considering a conservative prior, it remains clear how the different lensing spectra complement each other. The other prior we consider is based on the CMB temperature and $E$-mode polarization cross- and auto-power spectra from $\ell=30$ to $\ell = 2000$ assuming the same noise properties as used for the CMB weak lensing reconstruction noise. Adopting these priors  serves to test how weak lensing statistics are able to further tighten constraints beyond measuring primary statistics. It is worth noting that the constraint for $\tau$ and $w_0$ are tighter than in other literature (see \cite{cmbs4sciencebook} and \cite{Namikawa_2016} for comparable $\tau$ and $w_0$ constraints, respectively). Based on a number of internal tests\footnote{
 This included looking at the accuracy of numerical derivatives w.r.t. cosmological parameters, testing the numerical stability of Fisher matrices w.r.t. matrix inversion, and varying our values for detector noise and beam width.
 } we suspect that this is partly due to us not taking into account foregrounds in our noise models.
+
+% [1.42e+00, 6.51e-05, 8.68e-04, 2.59e-03, 8.36e-11, 2.05e-02, 2.17e-01, 6.17e-02, 1.60e+01]
+        % r"$H_0$",         
+        % r"$\Omega_{b}h^{2}$",
+        % r"$\Omega_{c}h^{2}$",
+        % r"$n_s$",         
+        % r"$A_s$",         
+        % r"$\tau$",      
+        % r"$m_\nu$", 
+        % r"$w_0$",
+        % r"$\log_{10}(T_{\mathrm{AGN}})$"
 
 \begin{table}[!]
     \centering
@@ -324,23 +337,23 @@ This included looking at the accuracy of numerical derivatives w.r.t. cosmologic
         \hline
         \textbf{parameter} & \textbf{notation} & \textbf{fiducial value} & \textbf{$\sigma$ of weak prior} & \textbf{$\sigma$ of $T + E$ prior}\\
         \hline
-        Hubble constant & $H_0$ & $67.4 \, \text{km/s/Mpc}$ & 17.3 & 1.21\\
+        Hubble constant & $H_0$ & $67.4 \, \text{km/s/Mpc}$ & 17.3 & 1.4\\
         \hline
-        Physical baryon density parameter & $\Omega_b h^2$ & $0.0223$ & 0.0005 & 0.000057\\
+        Physical baryon density parameter & $\Omega_b h^2$ & $0.0223$ & 0.0005 & 0.000065\\
         \hline
-        Physical cold dark matter density parameter & $\Omega_c h^2$ & $0.119$ & $0.288$ & 0.00083\\
+        Physical cold dark matter density parameter & $\Omega_c h^2$ & $0.119$ & $0.288$ & 0.00087\\
         \hline
-        Scalar spectral index & $n_s$ & 0.965 & 0.02 & 0.0025 \\
+        Scalar spectral index & $n_s$ & 0.965 & 0.02 & 0.0026 \\
         \hline
-        Reionization depth & $\tau$ & 0.063 & 0.063 & 0.0013 \\
+        Reionization depth & $\tau$ & 0.063 & 0.063 & 0.021 \\
         \hline
-        Amplitude of primordial scalar fluctuations & $A_s$ & $2.13 \times 10^{-9}$ & $1\times 10^{-9}$ & $5.5\times 10^{-11}$\\
+        Amplitude of primordial scalar fluctuations & $A_s$ & $2.13 \times 10^{-9}$ & $1\times 10^{-9}$ & $8.4\times 10^{-11}$\\
         \hline
         Sum of neutrino masses & $\sum m_\nu$ & $0.06$ & $\infty$ & 0.22\\
         \hline
-        Dark energy equation of state parameter & $w_0$ & -1 & $\infty$ & 0.058 \\ 
+        Dark energy equation of state parameter & $w_0$ & -1 & $\infty$ & 0.062 \\ 
         \hline
-        Baryonic feedback strength & $\log T_{\text{AGN}}$ & 7.8 & $\infty$ & TODO \\
+        Baryonic feedback strength & $\log T_{\text{AGN}}$ & 7.8 & $\infty$ & $\infty$ \\
         \hline
     \end{tabular}
     \caption{Cosmological parameters varied ($\Lambda \text{CDM} + w_0 + m_\nu$). We use a prior similar to the one used by the \textit{Planck} weak lensing results \cite{Planck2018Lensing} which essentially only restricts $\Omega_bh^2$ and $n_s$ significantly.}
@@ -403,7 +416,7 @@ Derivatives are calculated with a central difference formula (see appendix \ref{
 \section{Results}\label{sec:results}
 \subsection{Detectability}
 As expected, lensing power spectra should be detectable at high signal-to-noise. 
-The signal-to-noise of the CMB and galaxy lensing bispectra versus the maximum multipole moment measured is shown in figure \ref{fig:snrplots}. In the absence of systematics, shear bispectra can be detected at high signal-to-noise with both stage 3 and stage 4 experiments. CMB lensing bispectra could be  detectable by a stage 3 experiment (see e.g. ref. \cite{Kalaja_2023} for the effect of noise biases) and with high signal-to-noise with a stage 4 experiment. Our results for CMB weak lensing $S/N$ match those of reference \cite{Namikawa_2016}. They also fall in line with e.g. ref. \cite{Schiavone_2024}, where they found detectable skewness of the distance-redshift relation in $\Lambda$CDM due to post-Born effects and non-linear matter formation.
+The signal-to-noise of the CMB and galaxy lensing bispectra versus the maximum multipole moment measured is shown in figure \ref{fig:snrplots}. In the absence of systematics, shear bispectra can be detected at high signal-to-noise with both stage 3 and stage 4 experiments. We chose to plot the SNR of the bispectra of the individual bins and find that this is also detectable for all bins. CMB lensing bispectra could be  detectable by a stage 3 experiment (see e.g. ref. \cite{Kalaja_2023} for the effect of noise biases) and with high signal-to-noise with a stage 4 experiment. Our results for CMB weak lensing $S/N$ match those of reference \cite{Namikawa_2016}. They also fall in line with e.g. ref. \cite{Schiavone_2024}, where they found detectable skewness of the distance-redshift relation in $\Lambda$CDM due to post-Born effects and non-linear matter formation.
 
 Regarding post-Born corrections, we found that the effect on the galaxy lensing bispectrum $S/N$ is a few percent at most, in agreement with \cite{galpostbornlbscorr}. We thus did not include additional plots for these corrections. For the CMB the $S/N$ is reduced significantly (in agreement with \cite{postborn_pratten_lewis}) but not so severely that they are no longer detectable. Our conclusions thus remain the same: the CMB bispectrum is possibly detectable with stage 3 surveys and definitely detectable with stage 4 surveys in the absence of any further systematics.
 
@@ -422,6 +435,24 @@ Furthermore, it is clear that, in general, combining CMB and galaxy lensing surv
 
 Besides these obvious findings, we make several other conclusions:
 \begin{itemize}
+    \item Constraints from all the lensing spectra with weak priors are better than or at least competitive with current constraints from real survey data, see table \ref{tab:currenttoforecastcompare}. Obviously our forecast is optimistic, so it would not be appropriate to say our constraints are a definite improvement. This is also not necessarily expected for constraints coming from essentially only lensing data.
+    
+    \begin{table}[]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            Par & Data & Current Constraint & Our Constraint \\
+            \hline
+            $m_\nu$ & DES Y6 \cite{descollaboration2026darkenergysurveyyear} & $\sum m_\nu < 0.14\,\mathrm{eV}$ (95\% CL) & $0.026\,\mathrm{eV}$ \\
+            $w_0$ & DES Y6 \cite{descollaboration2026darkenergysurveyyear}& $\sigma(w_0)\simeq 0.021$ & $0.011$ \\
+            $\sigma_8$ & Planck 2018 \cite{planckresults}& $\sigma(\sigma_8)\simeq 0.006$ & $0.0033$ \\
+            $\Omega_m$ & DES Y6 \cite{descollaboration2026darkenergysurveyyear}& $\sigma(\Omega_m)\simeq 0.003$ & $0.0041$ \\
+            \hline
+        \end{tabular}
+        \caption{Comparison between some of the best current cosmological constraints and the forecasted constraints obtained from combining all weak lensing data (power spectra, bispectra, galaxy lensing, CMB lensing) with weak external priors.}
+        \label{tab:currenttoforecastcompare}
+    \end{table}
+
     \item For lower noise values (in particular for stage 4 noise), the bispectra become increasingly important compared to the power spectra. The lensing bispectra are directly related to the amount of non-Gaussianity in the matter distribution. As noise levels become lower, we are able to measure the matter distribution on small enough scales where nonlinear matter evolution becomes important. Additionally, for galaxy lensing, the window function peaks at later redshifts compared to CMB lensing. The bispectrum is largest at late times, and thus the galaxy lensing bispectrum is significantly easier to detect and is better at constraining parameters than the CMB lensing bispectrum.
 
     \item The information from bispectra is sensitive to cosmology in a different way than that of the power spectra. The main parameter combinations where approximate degeneracies are broken are $(n_s,\Omega_b h^2),\;(\Omega_b h^2,H_0),\;(\Omega_c h^2,H_0),\;(\Omega_c h^2,\Omega_b h^2)\;(n_s,\Omega_c h^2),\;(m_\nu,H_0),\;(m_\nu,n_s),$ $(A_s,\Omega_b h^2)$ (see also appendix \ref{sec:lambdacdmconstraints}). This means that even if stage 4 surveys are not able to reach the noise levels assumed in this paper, the bispectra will likely still lead to significantly tighter constraints.
@@ -445,18 +476,22 @@ Besides these obvious findings, we make several other conclusions:
         \hline
         Par & prior & $C_\ell$ & $B$ & $C_\ell + B$ & $C_\ell$ & $B$ & $C_\ell + B$ & $C_\ell$ & $B$ & $C_\ell + B$ \\
         \hline
-$m_\nu$    & 10 & 0.28 & 1.1 & 0.23 (\greenfactor{1.22}) & 1.0 & 0.26 & 0.16 (\greenfactor{6.25}) & 0.10 & 0.13 & 0.065 (\greenfactor{1.54}) \\
+$m_\nu$ & 10 & 0.62 & 2.36 & 0.50 (\greenfactor{1.25}) & 0.033 & 0.155 & 0.031 (\greenfactor{1.06}) & 0.028 & 0.145 & 0.026 (\greenfactor{1.05}) \\
 \rowcolor{blue!10}
-           &    &  & 1.2 & 0.18 (\greenfactor{1.56}) & & 0.33 & 0.21 (\greenfactor{4.76}) & & 0.18 & 0.063 (\greenfactor{1.59}) \\
-$w_0$      & 10 & 0.54 & 1.4 & 0.37 (\greenfactor{1.46}) & 0.26 & 0.078 & 0.025 (\greenfactor{10.4}) & 0.059 & 0.066 & 0.019 (\greenfactor{3.11}) \\
+       &    &      & 2.19 & 0.52 (\greenfactor{1.21}) &       & 0.157 & 0.031 (\greenfactor{1.06}) &      & 0.148 & 0.026 (\greenfactor{1.06}) \\
+
+$w_0$  & 10 & 0.60 & 1.61 & 0.46 (\greenfactor{1.32}) & 0.048 & 0.107 & 0.019 (\greenfactor{2.55}) & 0.015 & 0.056 & 0.011 (\greenfactor{1.36}) \\
 \rowcolor{blue!10}
-           &    &  & 0.82 & 0.31 (\greenfactor{1.74}) &  & 0.083 & 0.028 (\greenfactor{9.29}) & & 0.063 & 0.020 (\greenfactor{2.95}) \\
-$\sigma_8$ & 2.5 & 0.12 & 0.19 & 0.055 (\greenfactor{2.18}) & 0.081 & 0.037 & 0.013 (\greenfactor{6.23}) & 0.014 & 0.016 & 0.0080 (\greenfactor{1.75}) \\
+       &    &      & 0.99 & 0.37 (\greenfactor{1.63}) &      & 0.105 & 0.019 (\greenfactor{2.55}) &      & 0.058 & 0.011 (\greenfactor{1.35}) \\
+
+$\sigma_8$ & 2.5 & 0.13 & 0.24 & 0.084 (\greenfactor{1.56}) & 0.0053 & 0.0090 & 0.0039 (\greenfactor{1.35}) & 0.0041 & 0.0084 & 0.0033 (\greenfactor{1.24}) \\
 \rowcolor{blue!10}
-           &     &  & 0.18 & 0.057 (\greenfactor{2.11}) & & 0.040 & 0.013 (\greenfactor{6.23}) & & 0.018 & 0.0084 (\greenfactor{1.67}) \\
-$\Omega_m$ & 0.67 & 0.19 & 0.18 & 0.073 (\greenfactor{2.60}) & 0.14 & 0.048 & 0.017 (\greenfactor{8.24}) & 0.016 & 0.016 & 0.0072 (\greenfactor{2.22}) \\
+       &     &      & 0.22 & 0.084 (\greenfactor{1.56}) &      & 0.0091 & 0.0039 (\greenfactor{1.35}) &      & 0.0084 & 0.0033 (\greenfactor{1.23}) \\
+
+$\Omega_m$ & 0.67 & 0.19 & 0.19 & 0.091 (\greenfactor{2.11}) & 0.0056 & 0.0086 & 0.0042 (\greenfactor{1.31}) & 0.0052 & 0.0082 & 0.0041 (\greenfactor{1.27}) \\
 \rowcolor{blue!10}
-           &     &  & 0.18 & 0.071 (\greenfactor{2.68}) & & 0.055 & 0.018 (\greenfactor{7.78}) & & 0.018 & 0.0073 (\greenfactor{2.19}) \\
+       &      &      & 0.19 & 0.085 (\greenfactor{2.26}) &      & 0.0087 & 0.0043 (\greenfactor{1.31}) &      & 0.0081 & 0.0041 (\greenfactor{1.28}) \\
+
         \hline
         \multicolumn{11}{|c|}{CMB $T + E$ priors (with and without post-Born corrections)} \\
         \hline
@@ -464,21 +499,24 @@ $\Omega_m$ & 0.67 & 0.19 & 0.18 & 0.073 (\greenfactor{2.60}) & 0.14 & 0.048 & 0.
         \hline
         Par & prior & $C_\ell$ & $B$ & $C_\ell + B$ & $C_\ell$ & $B$ & $C_\ell + B$ & $C_\ell$ & $B$ & $C_\ell + B$ \\
         \hline
-$m_\nu$    & 0.22 & 0.074 & 0.12 & 0.073 (\greenfactor{1.01}) & 0.14 & 0.10 & 0.086 (\greenfactor{1.63}) & 0.043 & 0.090 & 0.037 (\greenfactor{1.16}) \\
+$m_\nu$ & 0.22 & 0.083 & 0.165 & 0.082 (\greenfactor{1.01}) & 0.029 & 0.106 & 0.028 (\greenfactor{1.04}) & 0.023 & 0.093 & 0.022 (\greenfactor{1.05}) \\
 \rowcolor{blue!10}
-           &      & & 0.13 & 0.073 (\greenfactor{1.01}) & & 0.12 & 0.099 (\greenfactor{1.41}) & & 0.10 & 0.038 (\greenfactor{1.13}) \\
-$w_0$      & 0.058 & 0.046 & 0.053 & 0.046 (\greenfactor{1.00}) & 0.048 & 0.039 & 0.021 (\greenfactor{2.29}) & 0.032 & 0.037 & 0.017 (\greenfactor{1.88}) \\
+       &      &       & 0.164 & 0.082 (\greenfactor{1.00}) &      & 0.107 & 0.028 (\greenfactor{1.03}) &      & 0.095 & 0.022 (\greenfactor{1.05}) \\
+
+$w_0$ & 0.062 & 0.054 & 0.059 & 0.054 (\greenfactor{1.00}) & 0.017 & 0.032 & 0.013 (\greenfactor{1.30}) & 0.013 & 0.029 & 0.010 (\greenfactor{1.30}) \\
 \rowcolor{blue!10}
-           &       & & 0.053 & 0.046 (\greenfactor{1.00}) & & 0.042 & 0.022 (\greenfactor{2.18}) &  & 0.039 & 0.018 (\greenfactor{1.78}) \\
-$\sigma_8$ & 0.015 & 0.014 & 0.015 & 0.013 (\greenfactor{1.08}) & 0.013 & 0.011 & 0.0079 (\greenfactor{1.65}) & 0.0097 & 0.010 & 0.0061 (\greenfactor{1.59}) \\
+      &       &       & 0.059 & 0.054 (\greenfactor{1.00}) &      & 0.032 & 0.013 (\greenfactor{1.30}) &      & 0.030 & 0.010 (\greenfactor{1.29}) \\
+
+$\sigma_8$ & 0.021 & 0.016 & 0.017 & 0.016 (\greenfactor{1.00}) & 0.0042 & 0.0067 & 0.0034 (\greenfactor{1.24}) & 0.0039 & 0.0064 & 0.0032 (\greenfactor{1.23}) \\
 \rowcolor{blue!10}
-           &       & & 0.015 & 0.014 (\greenfactor{1.00}) &  & 0.012 & 0.0077 (\greenfactor{1.69}) & & 0.011 & 0.0063 (\greenfactor{1.54}) \\
-$\Omega_m$ & 0.015 & 0.014 & 0.015 & 0.014 (\greenfactor{1.00}) & 0.013 & 0.011 & 0.0087 (\greenfactor{1.49}) & 0.010 & 0.0096 & 0.0055 (\greenfactor{1.82}) \\
+       &       &      & 0.017 & 0.016 (\greenfactor{1.00}) &      & 0.0067 & 0.0034 (\greenfactor{1.24}) &      & 0.0065 & 0.0032 (\greenfactor{1.23}) \\
+
+$\Omega_m$ & 0.018 & 0.016 & 0.017 & 0.016 (\greenfactor{1.00}) & 0.0049 & 0.0069 & 0.0039 (\greenfactor{1.25}) & 0.0048 & 0.0067 & 0.0038 (\greenfactor{1.25}) \\
 \rowcolor{blue!10}
-           &       & & 0.015 & 0.014 (\greenfactor{1.00}) & & 0.011 & 0.0085 (\greenfactor{1.53}) & & 0.010 & 0.0057 (\greenfactor{1.75}) \\
+       &       &      & 0.017 & 0.016 (\greenfactor{1.00}) &      & 0.0070 & 0.0039 (\greenfactor{1.25}) &      & 0.0068 & 0.0038 (\greenfactor{1.25}) \\
+
         \hline
     \end{tabular}
-
 \caption{Parameter constraints for different combinations of weak lensing information. $C$ stands for power spectra, and $B$ for bispectra. All surveys are assumed to be stage 4 surveys with multipole range $2 \leq \ell \leq 2000$. We use the weak and CMB priors described in table \ref{tab:fiducialpars}. The blue colored rows show constraints from bispectra with post-Born corrections. Post-Born corrections are not taken into account for the lensing power spectra as mentioned earlier, so these values are omitted in the blue rows. The values between brackets indicate the fractional improvement in constraining power when combining the power- and bispectra compared to only using the power spectrum. They are color-coded such that greener values indicate stronger improvements.}
 \label{tab:paramconstraintstight}
 \end{table}
@@ -528,7 +566,7 @@ There are a number of limitations to the results presented in this paper. The li
 \begin{itemize}
      \item The fitting formula used for the nonlinear matter bispectrum (from \cite{bispfit}) has an estimated accuracy of only up to about 10 percent. This intrinsic inaccuracy in the model for $B^{\delta}$ will propagate to the lensing bispectra. A correct modeling using e.g. effective field theory would be preferred, and would also allow us to marginalize over bias parameters. 
      
-     \item Certain cosmological parameters that affect nonlinear large-scale structure, such as neutrino masses or the dark energy equation of state, likely alter the fitting parameters of the matter bispectrum formula when varied. In the literature, this is currently not considered, which can make the derivatives of the bispectrum with respect to these cosmological parameters less accurate.
+     \item Certain cosmological parameters that affect nonlinear large-scale structure, such as neutrino masses or the dark energy equation of state, likely alter the fitting parameters of the matter bispectrum formula when varied. In the literature, this is currently not considered, which can make the derivatives of the bispectrum with respect to these cosmological parameters less accurate. Matter / lensing bispectrum emulators exist that allow one to vary at least some of the cosmological parameters that we consider, providing a possible solution that should be investigated in future work. An example is the emulator used in https://arxiv.org/pdf/1810.02374 (TODO), which is based on the Cosmological Massive Neutrino Simulations (TODO https://arxiv.org/abs/1711.10524) and varies $\sum m_{\nu}$, $A_s$, and $\Omega_m$.
      
      \item We assumed throughout this paper that lensing surveys would use data from multipoles as low as $\ell = 2$.  However, our analytical formulas to calculate lensing spectra utilize the Limber approximation, which is only robust for $\ell \gtrsim 50$. Avoiding the Limber approximation would complicate calculations, requiring knowledge of unequal-time matter power and bispectra\footnote{Technically, this would be computationally much more demanding due to the need to evaluate double integrals instead of single integrals}. Moving beyond the Limber approximation can be achieved using methods such as those explored in reference \cite{Chen:2021vba} and might offer a path to address this. It is also worth mentioning that including foregrounds and other systematics will especially raise the noise for lower multipoles (see e.g. \cite{de_Oliveira_Costa_2006}).
 
@@ -546,7 +584,7 @@ There are a number of limitations to the results presented in this paper. The li
 
     \item We did not model foreground contamination such as the cosmic infrared background (CIB), thermal Sunyaev-Zel'dovich (tSZ) effect, or point sources. These foregrounds can bias lensing reconstructions and bispectra, particularly in CMB–galaxy cross-correlations, and should be accounted for in future analyses. Baryonic feedback was also not accounted for. Given that future surveys will probe the matter distribution on smaller scales, this will become increasingly relevant \cite{McCarthy_2022}, particularly for estimating neutrino mass \cite{PhysRevD.101.063534}. Bias due to baryonic feedback can be mitigated, e.g. by using the Principal Component Analysis method \cite{s2024impactcosmologydependencebaryonic}, discarding small scale $T$-modes, or fitting additional parameters that capture the effects of baryonic feedback \cite{McCarthy_2022}. Some of these methods may be able to mitigate baryonic feedback effects without increasing the uncertainty of parameter constraints \cite{McCarthy_2021}. Finally, there are still other well-known sources of uncertainty that we did not take into account, such as photometric redshift errors for galaxies or instrumental systematics.
 
-    \item Although HMCODE2020 models baryonic feedback on the nonlinear matter power spectrum well, it is not guaranteed that we get the same accuracy for modelling feedback effects on the matter bispectrum. This is because it was only tested on the nonlinear matter powerspectrum CITE: HMCODE2020. Clearly, there is good reason to think that an accurate model of the matter powerspectrum will lead to an accurate model of the matter bispectrum due to the fitting equation we use \eqref{eq:matterbispectrum}, but this should be checked in future work.
+    \item Although HMCODE2020 models baryonic feedback on the nonlinear matter power spectrum well, it is not guaranteed that we get the same accuracy for modelling feedback effects on the matter bispectrum. This is because it was only tested on the nonlinear matter powerspectrum CITE: HMCODE2020. Clearly, there is good reason to think that an accurate model of the matter powerspectrum will lead to an accurate model of the matter bispectrum due to the fitting equation we use \eqref{eq:matterbispectrum}, but this should be checked in future work. Alternatively, one could use the matter bispectrum emulator from (TODO: CITE https://arxiv.org/pdf/2506.18974), which is specifically made to accurately model baryonic feedback for the scales we expect to probe in a EUCLID-like survey.
     
 \end{itemize}
 
@@ -1102,10 +1140,10 @@ Each change of the cosmological parameters requires a recalculation of the entir
 To test the accuracy, we varied $h$ by $\pm 5\%$ and $\pm 10\%$ and compared the relative change in the derivative of the equilateral lensing bispectra and the lensing power spectra. As long as numerical noise doesn't dominate, it can be shown that the relative error in our approximation is approximately 5 times the relative difference that taking $h \rightarrow h(1 \pm 0.1)$ leads to. We thus conclude that, based on the tests conducted, the derivatives are almost always computed with up to one percent error. The exception is the derivative with respect to neutrino masses, which introduces a larger error of around 10 percent.
 
 \pagebreak
-\section{LCDM constraints}
+\section{Additional plots}
 \label{sec:lambdacdmconstraints}
 
-We do not expect to use weak lensing surveys to competitively constrain the main $\Lambda$CDM parameters. Despite this, we include these constraints for completeness in figures \ref{fig:paramconstraintsallcmb}, \ref{fig:paramconstraintsallcmbcmbprior}, \ref{fig:paramconstraintsallgal}, \ref{fig:paramconstraintsallgalcmbprior}, and in table \ref{tab:paramconstraintsall}. All survey parameters are the same as in section \ref{sec:results}.
+We do not expect to use weak lensing surveys to competitively constrain the main $\Lambda$CDM parameters. Despite this, we include these constraints for completeness in figures \ref{fig:paramconstraintsallcmb}, \ref{fig:paramconstraintsallcmbcmbprior}, \ref{fig:paramconstraintsallgal}, \ref{fig:paramconstraintsallgalcmbprior}, and in table \ref{tab:paramconstraintsall}. All survey parameters are the same as in section \ref{sec:results}. We also include a plot similar to those found in section \ref{sec:results} but comparing (for weak priors) the constraints from all powerspectra, all powerspectra + galaxy bispectra, all powerspectra + CMB bispectra, and all powerspectra + all bispectra. This makes it clearer which bispectra add the most information.
 \begin{table}[!]
     \centering
     \tiny
