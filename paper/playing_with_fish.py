@@ -7,10 +7,7 @@ from numpy.linalg import inv
 import matplotlib.lines as mlines
 import getdist
 from getdist import plots, MCSamples
-
-# Enable LaTeX rendering for proper display of parameter names
-# matplotlib.rcParams['text.usetex'] = True
-# matplotlib.rcParams['font.family'] = 'serif'
+from tabulate import tabulate
 
 np.set_printoptions(
     precision=1,
@@ -19,7 +16,7 @@ np.set_printoptions(
 )
 
 fisher_matrices_dir = '/home3/p319950/ResearchProject/fisher_calc_weak_lensing/code/fisher_matrices'
-fisher_matrices_dir = '/Users/Frugt001/Desktop/fisher_calc_weak_lensing/code/fisher_matrices'
+# fisher_matrices_dir = '/Users/Frugt001/Desktop/fisher_calc_weak_lensing/code/fisher_matrices'
 ######################
 # Bispectra Matrices
 ######################
@@ -336,7 +333,8 @@ def select_plot_type(fish_pond_number):
             f_sky * (viscmb_f + visp_f + visb_f)
         ]
 
-        labels = ['prior', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$']
+        labels = ['prior', r'$C_\ell$ (CMB)', r'$B_{\ell_1\ell_2\ell_3}$ (CMB)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (CMB)', r'$C_\ell$ (gal)', r'$B_{\ell_1\ell_2\ell_3}$ (gal)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (gal)', r'$C_\ell$ (CMB + gal)', r'$B_{\ell_1\ell_2\ell_3}$ (CMB + gal)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (CMB + gal)']
+        plt_name = 'T+E prior, no post-Born corrections'
 
 
     if fish_pond_number == 1:
@@ -353,7 +351,8 @@ def select_plot_type(fish_pond_number):
             planck_prior + f_sky * (visp_f + visb_f),
         ]
 
-        labels = ['prior', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$']
+        labels = ['prior', r'$C_\ell$ (CMB)', r'$B_{\ell_1\ell_2\ell_3}$ (CMB)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (CMB)', r'$C_\ell$ (gal)', r'$B_{\ell_1\ell_2\ell_3}$ (gal)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (gal)', r'$C_\ell$ (CMB + gal)', r'$B_{\ell_1\ell_2\ell_3}$ (CMB + gal)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (CMB + gal)']
+        plt_name = 'weak prior, no post-Born corrections'
 
     if fish_pond_number == 0.5:
         fish_matrices = [
@@ -369,7 +368,8 @@ def select_plot_type(fish_pond_number):
             f_sky * (viscmb_f + visp_f + visb_f_pb)
         ]
 
-        labels = ['prior', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$']
+        labels = ['prior', r'$C_\ell$ (CMB)', r'$B_{\ell_1\ell_2\ell_3}$ (CMB)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (CMB)', r'$C_\ell$ (gal)', r'$B_{\ell_1\ell_2\ell_3}$ (gal)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (gal)', r'$C_\ell$ (CMB + gal)', r'$B_{\ell_1\ell_2\ell_3}$ (CMB + gal)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (CMB + gal)']
+        plt_name = 'T+E prior, with post-Born corrections'
 
 
     if fish_pond_number == 1.5:
@@ -386,7 +386,8 @@ def select_plot_type(fish_pond_number):
             planck_prior + f_sky * (visp_f + visb_f_pb),
         ]
 
-        labels = ['prior', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$', r'$C_\ell$', r'$B_{\ell_1\ell_2\ell_3}$', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$']
+        labels = ['prior', r'$C_\ell$ (CMB)', r'$B_{\ell_1\ell_2\ell_3}$ (CMB)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (CMB)', r'$C_\ell$ (gal)', r'$B_{\ell_1\ell_2\ell_3}$ (gal)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (gal)', r'$C_\ell$ (CMB + gal)', r'$B_{\ell_1\ell_2\ell_3}$ (CMB + gal)', r'$C_\ell + B_{\ell_1\ell_2\ell_3}$ (CMB + gal)']
+        plt_name = 'weak prior, with post-Born corrections'
 
     if fish_pond_number == 2:
         fish_matrices = [
@@ -496,6 +497,19 @@ def select_plot_type(fish_pond_number):
 
         plt_name = 'param_constraints_lcdm_gal_cmb_prior.pdf'
         which_indices_to_keep = 2
+
+    if fish_pond_number == 10:
+        fish_matrices = [
+            planck_prior + f_sky * (visp_f),
+            planck_prior + f_sky * (visp_f + visb_c),
+            planck_prior + f_sky * (visp_f + visb_s),
+            planck_prior + f_sky * (visp_f + visb_f)
+        ]
+
+        labels = [r'CMB $T+E$ prior + $C_\ell^{\psi_{\text{gal}}}$', r'CMB $T+E$ prior + $B_{\ell_1\ell_2\ell_3}^{\psi_{\text{gal}}}$', r'CMB $T+E$ prior + $C_\ell^{\psi_{\text{gal}}} + B_{\ell_1\ell_2\ell_3}^{\psi_{\text{gal}}}$', 'CMB $T+E$ prior + All lensing spec.']
+
+        plt_name = 'param_constraints_tight_lps_prior.pdf'
+        which_indices_to_keep = 1
     
     return fish_matrices, labels, plt_name, which_indices_to_keep
 
@@ -503,27 +517,35 @@ def create_plots(plot_type_numbers):
     for fish_pond_number in plot_type_numbers:
         fish_matrices, labels, plt_name, which_indices_to_keep = select_plot_type(fish_pond_number)
         g = plot_confidence_ellipses(fish_matrices, labels, which_indices_to_keep)
-        plt.savefig('/Users/Frugt001/Desktop/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300, bbox_inches="tight")
+        plt.savefig('/home3/p319950/ResearchProject/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300, bbox_inches="tight")
         print('created: ', plt_name)
 
+def create_tables(table_type_numbers):
+    for fish_pond_number in table_type_numbers:
+            fish_matrices, labels, plt_name, which_indices_to_keep = select_plot_type(fish_pond_number)
+            fishes_inv, fiducial_param_vals_kept, param_names_latex_kept = process_fishes(fish_matrices, which_indices_to_keep)
+            save_table(param_names_latex_kept, fiducial_param_vals_kept, list(range(len(param_names_latex_kept))), fishes_inv, labels, plt_name)
+
+def save_table(param_names, param_vals, which_pars, constraints, labels, plt_name):
+    table = [[0 for i in range(len(constraints) + 1)] for j in range(len(which_pars))]
+    for i in range(len(which_pars)):
+        # param names and fiducial values
+        table[i][0] = param_names[i]
+        #table[i][1] = param_vals[i]
+        #constraints
+        for j in range(len(constraints)):
+            table[i][j+1] = np.abs(np.sqrt(constraints[j][i][i]))
+    labels = ['Par'] + labels
+    print('\n' + plt_name)
+    print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.3e'))
+
 if __name__ == "__main__":
-    plots_to_make = [2, 3, 4, 5, 6, 7, 8, 9]
+    # plots_to_make = [2, 3, 4, 5, 6, 7, 8, 9]
+    # create_plots(plots_to_make)
+    plots_to_make = [10,]
     create_plots(plots_to_make)
-
-# from tabulate import tabulate
-
-# def save_table(param_names, param_vals, which_pars, constraints, labels):
-#     table = [[0 for i in range(len(constraints) + 1)] for j in range(len(which_pars))]
-#     for i in range(len(which_pars)):
-#         # param names and fiducial values
-#         table[i][0] = param_names[i]
-#         #table[i][1] = param_vals[i]
-#         #constraints
-#         for j in range(len(constraints)):
-#             table[i][j+1] = np.abs(np.sqrt(constraints[j][i][i]))
-#     labels = ['Par'] + labels
-#     print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.3e'))
-        
+    # tables_to_make = [0, 0.5, 1, 1.5]
+    # create_tables(tables_to_make)
     
 
 # if __name__ == "__main__":
