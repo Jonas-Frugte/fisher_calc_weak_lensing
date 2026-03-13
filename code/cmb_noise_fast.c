@@ -18631,7 +18631,7 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
  * 
  *     if type1 == 1 and type2 == 1:             # <<<<<<<<<<<<<<
  *         return cmbps_ul(l1, 1, 1) * Ll1 + cmbps_ul(l2, 1, 1) * Ll2
- *     if (type1 == 1 and type2 == 2) or (type1 == 2 and type2 == 1):
+ * 
  */
   __pyx_t_2 = (__pyx_v_type1 == 1);
   if (__pyx_t_2) {
@@ -18648,8 +18648,8 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
  * 
  *     if type1 == 1 and type2 == 1:
  *         return cmbps_ul(l1, 1, 1) * Ll1 + cmbps_ul(l2, 1, 1) * Ll2             # <<<<<<<<<<<<<<
- *     if (type1 == 1 and type2 == 2) or (type1 == 2 and type2 == 1):
- *         # used to be cmbps_ul(l1, 1, 2) * Ll1 * cos(angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ * 
+ *     if type1 == 1 and type2 == 2:   # TE
  */
     __pyx_r = ((__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l1, 1, 1) * __pyx_v_Ll1) + (__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l2, 1, 1) * __pyx_v_Ll2));
     goto __pyx_L0;
@@ -18659,91 +18659,116 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
  * 
  *     if type1 == 1 and type2 == 1:             # <<<<<<<<<<<<<<
  *         return cmbps_ul(l1, 1, 1) * Ll1 + cmbps_ul(l2, 1, 1) * Ll2
- *     if (type1 == 1 and type2 == 2) or (type1 == 2 and type2 == 1):
+ * 
  */
   }
 
-  /* "cmb_noise_fast.pyx":112
- *     if type1 == 1 and type2 == 1:
+  /* "cmb_noise_fast.pyx":113
  *         return cmbps_ul(l1, 1, 1) * Ll1 + cmbps_ul(l2, 1, 1) * Ll2
- *     if (type1 == 1 and type2 == 2) or (type1 == 2 and type2 == 1):             # <<<<<<<<<<<<<<
- *         # used to be cmbps_ul(l1, 1, 2) * Ll1 * cos(angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ * 
+ *     if type1 == 1 and type2 == 2:   # TE             # <<<<<<<<<<<<<<
  *         return cmbps_ul(l1, 1, 2) * Ll1 * cos(2 * angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ *     if type1 == 2 and type2 == 1:   # ET
  */
   __pyx_t_2 = (__pyx_v_type1 == 1);
-  if (!__pyx_t_2) {
-    goto __pyx_L8_next_or;
-  } else {
-  }
-  __pyx_t_2 = (__pyx_v_type2 == 2);
-  if (!__pyx_t_2) {
-  } else {
-    __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L7_bool_binop_done;
-  }
-  __pyx_L8_next_or:;
-  __pyx_t_2 = (__pyx_v_type1 == 2);
   if (__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
     goto __pyx_L7_bool_binop_done;
   }
-  __pyx_t_2 = (__pyx_v_type2 == 1);
+  __pyx_t_2 = (__pyx_v_type2 == 2);
   __pyx_t_1 = __pyx_t_2;
   __pyx_L7_bool_binop_done:;
   if (__pyx_t_1) {
 
     /* "cmb_noise_fast.pyx":114
- *     if (type1 == 1 and type2 == 2) or (type1 == 2 and type2 == 1):
- *         # used to be cmbps_ul(l1, 1, 2) * Ll1 * cos(angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ * 
+ *     if type1 == 1 and type2 == 2:   # TE
  *         return cmbps_ul(l1, 1, 2) * Ll1 * cos(2 * angle12) + cmbps_ul(l2, 1, 2) * Ll2             # <<<<<<<<<<<<<<
- *     if (type1 == 1 and type2 == 3) or (type1 == 3 and type2 == 1):
- *         return cmbps_ul(l1, 1, 2) * sin(2 * angle12) * Ll1
+ *     if type1 == 2 and type2 == 1:   # ET
+ *         return cmbps_ul(l1, 1, 2) * Ll1 + cmbps_ul(l2, 1, 2) * Ll2 * cos(2 * angle12)
  */
     __pyx_r = (((__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l1, 1, 2) * __pyx_v_Ll1) * cos((2.0 * __pyx_v_angle12))) + (__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l2, 1, 2) * __pyx_v_Ll2));
     goto __pyx_L0;
 
-    /* "cmb_noise_fast.pyx":112
- *     if type1 == 1 and type2 == 1:
+    /* "cmb_noise_fast.pyx":113
  *         return cmbps_ul(l1, 1, 1) * Ll1 + cmbps_ul(l2, 1, 1) * Ll2
- *     if (type1 == 1 and type2 == 2) or (type1 == 2 and type2 == 1):             # <<<<<<<<<<<<<<
- *         # used to be cmbps_ul(l1, 1, 2) * Ll1 * cos(angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ * 
+ *     if type1 == 1 and type2 == 2:   # TE             # <<<<<<<<<<<<<<
  *         return cmbps_ul(l1, 1, 2) * Ll1 * cos(2 * angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ *     if type1 == 2 and type2 == 1:   # ET
  */
   }
 
   /* "cmb_noise_fast.pyx":115
- *         # used to be cmbps_ul(l1, 1, 2) * Ll1 * cos(angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ *     if type1 == 1 and type2 == 2:   # TE
  *         return cmbps_ul(l1, 1, 2) * Ll1 * cos(2 * angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ *     if type1 == 2 and type2 == 1:   # ET             # <<<<<<<<<<<<<<
+ *         return cmbps_ul(l1, 1, 2) * Ll1 + cmbps_ul(l2, 1, 2) * Ll2 * cos(2 * angle12)
+ * 
+ */
+  __pyx_t_2 = (__pyx_v_type1 == 2);
+  if (__pyx_t_2) {
+  } else {
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L10_bool_binop_done;
+  }
+  __pyx_t_2 = (__pyx_v_type2 == 1);
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L10_bool_binop_done:;
+  if (__pyx_t_1) {
+
+    /* "cmb_noise_fast.pyx":116
+ *         return cmbps_ul(l1, 1, 2) * Ll1 * cos(2 * angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ *     if type1 == 2 and type2 == 1:   # ET
+ *         return cmbps_ul(l1, 1, 2) * Ll1 + cmbps_ul(l2, 1, 2) * Ll2 * cos(2 * angle12)             # <<<<<<<<<<<<<<
+ * 
+ *     if (type1 == 1 and type2 == 3) or (type1 == 3 and type2 == 1):
+ */
+    __pyx_r = ((__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l1, 1, 2) * __pyx_v_Ll1) + ((__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l2, 1, 2) * __pyx_v_Ll2) * cos((2.0 * __pyx_v_angle12))));
+    goto __pyx_L0;
+
+    /* "cmb_noise_fast.pyx":115
+ *     if type1 == 1 and type2 == 2:   # TE
+ *         return cmbps_ul(l1, 1, 2) * Ll1 * cos(2 * angle12) + cmbps_ul(l2, 1, 2) * Ll2
+ *     if type1 == 2 and type2 == 1:   # ET             # <<<<<<<<<<<<<<
+ *         return cmbps_ul(l1, 1, 2) * Ll1 + cmbps_ul(l2, 1, 2) * Ll2 * cos(2 * angle12)
+ * 
+ */
+  }
+
+  /* "cmb_noise_fast.pyx":118
+ *         return cmbps_ul(l1, 1, 2) * Ll1 + cmbps_ul(l2, 1, 2) * Ll2 * cos(2 * angle12)
+ * 
  *     if (type1 == 1 and type2 == 3) or (type1 == 3 and type2 == 1):             # <<<<<<<<<<<<<<
  *         return cmbps_ul(l1, 1, 2) * sin(2 * angle12) * Ll1
  *     if type1 == 2 and type2 == 2:
  */
   __pyx_t_2 = (__pyx_v_type1 == 1);
   if (!__pyx_t_2) {
-    goto __pyx_L13_next_or;
+    goto __pyx_L14_next_or;
   } else {
   }
   __pyx_t_2 = (__pyx_v_type2 == 3);
   if (!__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L12_bool_binop_done;
+    goto __pyx_L13_bool_binop_done;
   }
-  __pyx_L13_next_or:;
+  __pyx_L14_next_or:;
   __pyx_t_2 = (__pyx_v_type1 == 3);
   if (__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L12_bool_binop_done;
+    goto __pyx_L13_bool_binop_done;
   }
   __pyx_t_2 = (__pyx_v_type2 == 1);
   __pyx_t_1 = __pyx_t_2;
-  __pyx_L12_bool_binop_done:;
+  __pyx_L13_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "cmb_noise_fast.pyx":116
- *         return cmbps_ul(l1, 1, 2) * Ll1 * cos(2 * angle12) + cmbps_ul(l2, 1, 2) * Ll2
+    /* "cmb_noise_fast.pyx":119
+ * 
  *     if (type1 == 1 and type2 == 3) or (type1 == 3 and type2 == 1):
  *         return cmbps_ul(l1, 1, 2) * sin(2 * angle12) * Ll1             # <<<<<<<<<<<<<<
  *     if type1 == 2 and type2 == 2:
@@ -18752,16 +18777,16 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
     __pyx_r = ((__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l1, 1, 2) * sin((2.0 * __pyx_v_angle12))) * __pyx_v_Ll1);
     goto __pyx_L0;
 
-    /* "cmb_noise_fast.pyx":115
- *         # used to be cmbps_ul(l1, 1, 2) * Ll1 * cos(angle12) + cmbps_ul(l2, 1, 2) * Ll2
- *         return cmbps_ul(l1, 1, 2) * Ll1 * cos(2 * angle12) + cmbps_ul(l2, 1, 2) * Ll2
+    /* "cmb_noise_fast.pyx":118
+ *         return cmbps_ul(l1, 1, 2) * Ll1 + cmbps_ul(l2, 1, 2) * Ll2 * cos(2 * angle12)
+ * 
  *     if (type1 == 1 and type2 == 3) or (type1 == 3 and type2 == 1):             # <<<<<<<<<<<<<<
  *         return cmbps_ul(l1, 1, 2) * sin(2 * angle12) * Ll1
  *     if type1 == 2 and type2 == 2:
  */
   }
 
-  /* "cmb_noise_fast.pyx":117
+  /* "cmb_noise_fast.pyx":120
  *     if (type1 == 1 and type2 == 3) or (type1 == 3 and type2 == 1):
  *         return cmbps_ul(l1, 1, 2) * sin(2 * angle12) * Ll1
  *     if type1 == 2 and type2 == 2:             # <<<<<<<<<<<<<<
@@ -18772,14 +18797,14 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
   if (__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L17_bool_binop_done;
+    goto __pyx_L18_bool_binop_done;
   }
   __pyx_t_2 = (__pyx_v_type2 == 2);
   __pyx_t_1 = __pyx_t_2;
-  __pyx_L17_bool_binop_done:;
+  __pyx_L18_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "cmb_noise_fast.pyx":118
+    /* "cmb_noise_fast.pyx":121
  *         return cmbps_ul(l1, 1, 2) * sin(2 * angle12) * Ll1
  *     if type1 == 2 and type2 == 2:
  *         return (cmbps_ul(l1, 2, 2) * Ll1 + cmbps_ul(l2, 2, 2) * Ll2 ) * cos(2 * angle12)             # <<<<<<<<<<<<<<
@@ -18789,7 +18814,7 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
     __pyx_r = (((__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l1, 2, 2) * __pyx_v_Ll1) + (__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l2, 2, 2) * __pyx_v_Ll2)) * cos((2.0 * __pyx_v_angle12)));
     goto __pyx_L0;
 
-    /* "cmb_noise_fast.pyx":117
+    /* "cmb_noise_fast.pyx":120
  *     if (type1 == 1 and type2 == 3) or (type1 == 3 and type2 == 1):
  *         return cmbps_ul(l1, 1, 2) * sin(2 * angle12) * Ll1
  *     if type1 == 2 and type2 == 2:             # <<<<<<<<<<<<<<
@@ -18798,7 +18823,7 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
  */
   }
 
-  /* "cmb_noise_fast.pyx":119
+  /* "cmb_noise_fast.pyx":122
  *     if type1 == 2 and type2 == 2:
  *         return (cmbps_ul(l1, 2, 2) * Ll1 + cmbps_ul(l2, 2, 2) * Ll2 ) * cos(2 * angle12)
  *     if (type1 == 2 and type2 == 3) or (type1 == 3 and type2 == 2):             # <<<<<<<<<<<<<<
@@ -18807,28 +18832,28 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
  */
   __pyx_t_2 = (__pyx_v_type1 == 2);
   if (!__pyx_t_2) {
-    goto __pyx_L21_next_or;
+    goto __pyx_L22_next_or;
   } else {
   }
   __pyx_t_2 = (__pyx_v_type2 == 3);
   if (!__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L20_bool_binop_done;
+    goto __pyx_L21_bool_binop_done;
   }
-  __pyx_L21_next_or:;
+  __pyx_L22_next_or:;
   __pyx_t_2 = (__pyx_v_type1 == 3);
   if (__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L20_bool_binop_done;
+    goto __pyx_L21_bool_binop_done;
   }
   __pyx_t_2 = (__pyx_v_type2 == 2);
   __pyx_t_1 = __pyx_t_2;
-  __pyx_L20_bool_binop_done:;
+  __pyx_L21_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "cmb_noise_fast.pyx":120
+    /* "cmb_noise_fast.pyx":123
  *         return (cmbps_ul(l1, 2, 2) * Ll1 + cmbps_ul(l2, 2, 2) * Ll2 ) * cos(2 * angle12)
  *     if (type1 == 2 and type2 == 3) or (type1 == 3 and type2 == 2):
  *         return (cmbps_ul(l1, 2, 2) * Ll1 - cmbps_ul(l2, 3, 3) * Ll2 ) * sin(2 * angle12)             # <<<<<<<<<<<<<<
@@ -18838,7 +18863,7 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
     __pyx_r = (((__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l1, 2, 2) * __pyx_v_Ll1) - (__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l2, 3, 3) * __pyx_v_Ll2)) * sin((2.0 * __pyx_v_angle12)));
     goto __pyx_L0;
 
-    /* "cmb_noise_fast.pyx":119
+    /* "cmb_noise_fast.pyx":122
  *     if type1 == 2 and type2 == 2:
  *         return (cmbps_ul(l1, 2, 2) * Ll1 + cmbps_ul(l2, 2, 2) * Ll2 ) * cos(2 * angle12)
  *     if (type1 == 2 and type2 == 3) or (type1 == 3 and type2 == 2):             # <<<<<<<<<<<<<<
@@ -18847,7 +18872,7 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
  */
   }
 
-  /* "cmb_noise_fast.pyx":121
+  /* "cmb_noise_fast.pyx":124
  *     if (type1 == 2 and type2 == 3) or (type1 == 3 and type2 == 2):
  *         return (cmbps_ul(l1, 2, 2) * Ll1 - cmbps_ul(l2, 3, 3) * Ll2 ) * sin(2 * angle12)
  *     if type1 == 3 and type2 == 3:             # <<<<<<<<<<<<<<
@@ -18858,14 +18883,14 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
   if (__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
-    goto __pyx_L25_bool_binop_done;
+    goto __pyx_L26_bool_binop_done;
   }
   __pyx_t_2 = (__pyx_v_type2 == 3);
   __pyx_t_1 = __pyx_t_2;
-  __pyx_L25_bool_binop_done:;
+  __pyx_L26_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "cmb_noise_fast.pyx":122
+    /* "cmb_noise_fast.pyx":125
  *         return (cmbps_ul(l1, 2, 2) * Ll1 - cmbps_ul(l2, 3, 3) * Ll2 ) * sin(2 * angle12)
  *     if type1 == 3 and type2 == 3:
  *         return (cmbps_ul(l1, 3, 3) * Ll1 + cmbps_ul(l2, 3, 3) * Ll2 ) * cos(2 * angle12)             # <<<<<<<<<<<<<<
@@ -18875,7 +18900,7 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
     __pyx_r = (((__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l1, 3, 3) * __pyx_v_Ll1) + (__pyx_f_14cmb_noise_fast_cmbps_ul(__pyx_v_l2, 3, 3) * __pyx_v_Ll2)) * cos((2.0 * __pyx_v_angle12)));
     goto __pyx_L0;
 
-    /* "cmb_noise_fast.pyx":121
+    /* "cmb_noise_fast.pyx":124
  *     if (type1 == 2 and type2 == 3) or (type1 == 3 and type2 == 2):
  *         return (cmbps_ul(l1, 2, 2) * Ll1 - cmbps_ul(l2, 3, 3) * Ll2 ) * sin(2 * angle12)
  *     if type1 == 3 and type2 == 3:             # <<<<<<<<<<<<<<
@@ -18884,7 +18909,7 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
  */
   }
 
-  /* "cmb_noise_fast.pyx":124
+  /* "cmb_noise_fast.pyx":127
  *         return (cmbps_ul(l1, 3, 3) * Ll1 + cmbps_ul(l2, 3, 3) * Ll2 ) * cos(2 * angle12)
  *     else:
  *         pass             # <<<<<<<<<<<<<<
@@ -18908,7 +18933,7 @@ static double __pyx_f_14cmb_noise_fast_f(double __pyx_v_l1x, double __pyx_v_l1y,
   return __pyx_r;
 }
 
-/* "cmb_noise_fast.pyx":126
+/* "cmb_noise_fast.pyx":129
  *         pass
  * 
  * cdef double F(double l1x, double l1y, double l2x, double l2y, int type1, int type2, double sigma, double Delta_T, double Delta_P) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -18926,7 +18951,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
   int __pyx_t_1;
   int __pyx_t_2;
 
-  /* "cmb_noise_fast.pyx":127
+  /* "cmb_noise_fast.pyx":130
  * 
  * cdef double F(double l1x, double l1y, double l2x, double l2y, int type1, int type2, double sigma, double Delta_T, double Delta_P) noexcept nogil:
  *     cdef double l1 = sqrt(l1x**2 + l1y**2)             # <<<<<<<<<<<<<<
@@ -18935,7 +18960,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
  */
   __pyx_v_l1 = sqrt((pow(__pyx_v_l1x, 2.0) + pow(__pyx_v_l1y, 2.0)));
 
-  /* "cmb_noise_fast.pyx":128
+  /* "cmb_noise_fast.pyx":131
  * cdef double F(double l1x, double l1y, double l2x, double l2y, int type1, int type2, double sigma, double Delta_T, double Delta_P) noexcept nogil:
  *     cdef double l1 = sqrt(l1x**2 + l1y**2)
  *     cdef double l2 = sqrt(l2x**2 + l2y**2)             # <<<<<<<<<<<<<<
@@ -18944,7 +18969,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
  */
   __pyx_v_l2 = sqrt((pow(__pyx_v_l2x, 2.0) + pow(__pyx_v_l2y, 2.0)));
 
-  /* "cmb_noise_fast.pyx":131
+  /* "cmb_noise_fast.pyx":134
  *     cdef double result, numerator, denominator
  *     # angle is defined as: angle of l1 vec - angle of l2 vec
  *     if type1 == type2:             # <<<<<<<<<<<<<<
@@ -18954,7 +18979,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
   __pyx_t_1 = (__pyx_v_type1 == __pyx_v_type2);
   if (__pyx_t_1) {
 
-    /* "cmb_noise_fast.pyx":132
+    /* "cmb_noise_fast.pyx":135
  *     # angle is defined as: angle of l1 vec - angle of l2 vec
  *     if type1 == type2:
  *         numerator = f(l1x, l1y, l2x, l2y, type1, type2)             # <<<<<<<<<<<<<<
@@ -18963,7 +18988,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
  */
     __pyx_v_numerator = __pyx_f_14cmb_noise_fast_f(__pyx_v_l1x, __pyx_v_l1y, __pyx_v_l2x, __pyx_v_l2y, __pyx_v_type1, __pyx_v_type2);
 
-    /* "cmb_noise_fast.pyx":133
+    /* "cmb_noise_fast.pyx":136
  *     if type1 == type2:
  *         numerator = f(l1x, l1y, l2x, l2y, type1, type2)
  *         denominator = 2 * cmbps_obs(l1, type1, type1, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type1, sigma, Delta_T, Delta_P)             # <<<<<<<<<<<<<<
@@ -18972,7 +18997,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
  */
     __pyx_v_denominator = ((2.0 * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l1, __pyx_v_type1, __pyx_v_type1, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l2, __pyx_v_type1, __pyx_v_type1, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P));
 
-    /* "cmb_noise_fast.pyx":131
+    /* "cmb_noise_fast.pyx":134
  *     cdef double result, numerator, denominator
  *     # angle is defined as: angle of l1 vec - angle of l2 vec
  *     if type1 == type2:             # <<<<<<<<<<<<<<
@@ -18982,7 +19007,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
     goto __pyx_L3;
   }
 
-  /* "cmb_noise_fast.pyx":134
+  /* "cmb_noise_fast.pyx":137
  *         numerator = f(l1x, l1y, l2x, l2y, type1, type2)
  *         denominator = 2 * cmbps_obs(l1, type1, type1, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type1, sigma, Delta_T, Delta_P)
  *     elif (type1 == 1 and type2 == 3) or (type1 == 2 and type2 == 3):             # <<<<<<<<<<<<<<
@@ -19012,7 +19037,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "cmb_noise_fast.pyx":135
+    /* "cmb_noise_fast.pyx":138
  *         denominator = 2 * cmbps_obs(l1, type1, type1, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type1, sigma, Delta_T, Delta_P)
  *     elif (type1 == 1 and type2 == 3) or (type1 == 2 and type2 == 3):
  *         numerator = f(l1x, l1y, l2x, l2y, type1, type2)             # <<<<<<<<<<<<<<
@@ -19021,7 +19046,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
  */
     __pyx_v_numerator = __pyx_f_14cmb_noise_fast_f(__pyx_v_l1x, __pyx_v_l1y, __pyx_v_l2x, __pyx_v_l2y, __pyx_v_type1, __pyx_v_type2);
 
-    /* "cmb_noise_fast.pyx":136
+    /* "cmb_noise_fast.pyx":139
  *     elif (type1 == 1 and type2 == 3) or (type1 == 2 and type2 == 3):
  *         numerator = f(l1x, l1y, l2x, l2y, type1, type2)
  *         denominator = cmbps_obs(l1, type1, type1, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type2, type2, sigma, Delta_T, Delta_P)             # <<<<<<<<<<<<<<
@@ -19030,7 +19055,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
  */
     __pyx_v_denominator = (__pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l1, __pyx_v_type1, __pyx_v_type1, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l2, __pyx_v_type2, __pyx_v_type2, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P));
 
-    /* "cmb_noise_fast.pyx":134
+    /* "cmb_noise_fast.pyx":137
  *         numerator = f(l1x, l1y, l2x, l2y, type1, type2)
  *         denominator = 2 * cmbps_obs(l1, type1, type1, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type1, sigma, Delta_T, Delta_P)
  *     elif (type1 == 1 and type2 == 3) or (type1 == 2 and type2 == 3):             # <<<<<<<<<<<<<<
@@ -19040,7 +19065,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
     goto __pyx_L3;
   }
 
-  /* "cmb_noise_fast.pyx":138
+  /* "cmb_noise_fast.pyx":141
  *         denominator = cmbps_obs(l1, type1, type1, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type2, type2, sigma, Delta_T, Delta_P)
  *     else:
  *         numerator = cmbps_obs(l1, type2, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type1, sigma, Delta_T, Delta_P) * f(l1x, l1y, l2x, l2y, type1, type2) - cmbps_obs(l1, type1, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type2, sigma, Delta_T, Delta_P) * f(l2x, l2y, l1x, l1y, type1, type2)             # <<<<<<<<<<<<<<
@@ -19050,7 +19075,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
   /*else*/ {
     __pyx_v_numerator = (((__pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l1, __pyx_v_type2, __pyx_v_type2, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l2, __pyx_v_type1, __pyx_v_type1, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_f(__pyx_v_l1x, __pyx_v_l1y, __pyx_v_l2x, __pyx_v_l2y, __pyx_v_type1, __pyx_v_type2)) - ((__pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l1, __pyx_v_type1, __pyx_v_type2, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l2, __pyx_v_type1, __pyx_v_type2, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_f(__pyx_v_l2x, __pyx_v_l2y, __pyx_v_l1x, __pyx_v_l1y, __pyx_v_type1, __pyx_v_type2)));
 
-    /* "cmb_noise_fast.pyx":140
+    /* "cmb_noise_fast.pyx":143
  *         numerator = cmbps_obs(l1, type2, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type1, sigma, Delta_T, Delta_P) * f(l1x, l1y, l2x, l2y, type1, type2) - cmbps_obs(l1, type1, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type2, sigma, Delta_T, Delta_P) * f(l2x, l2y, l1x, l1y, type1, type2)
  * 
  *         denominator = cmbps_obs(l1, type1, type1, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type2, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l1, type2, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type1, sigma, Delta_T, Delta_P) - (cmbps_obs(l1, type1, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type2, sigma, Delta_T, Delta_P))**2             # <<<<<<<<<<<<<<
@@ -19061,7 +19086,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
   }
   __pyx_L3:;
 
-  /* "cmb_noise_fast.pyx":142
+  /* "cmb_noise_fast.pyx":145
  *         denominator = cmbps_obs(l1, type1, type1, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type2, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l1, type2, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type1, sigma, Delta_T, Delta_P) - (cmbps_obs(l1, type1, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type2, sigma, Delta_T, Delta_P))**2
  * 
  *     result = numerator / denominator             # <<<<<<<<<<<<<<
@@ -19070,7 +19095,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
  */
   __pyx_v_result = (__pyx_v_numerator / __pyx_v_denominator);
 
-  /* "cmb_noise_fast.pyx":144
+  /* "cmb_noise_fast.pyx":147
  *     result = numerator / denominator
  * 
  *     return result             # <<<<<<<<<<<<<<
@@ -19080,7 +19105,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
   __pyx_r = __pyx_v_result;
   goto __pyx_L0;
 
-  /* "cmb_noise_fast.pyx":126
+  /* "cmb_noise_fast.pyx":129
  *         pass
  * 
  * cdef double F(double l1x, double l1y, double l2x, double l2y, int type1, int type2, double sigma, double Delta_T, double Delta_P) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19093,7 +19118,7 @@ static double __pyx_f_14cmb_noise_fast_F(double __pyx_v_l1x, double __pyx_v_l1y,
   return __pyx_r;
 }
 
-/* "cmb_noise_fast.pyx":146
+/* "cmb_noise_fast.pyx":149
  *     return result
  * 
  * cdef double simp(double[:] data, int n, double xrange) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19113,7 +19138,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
   int __pyx_t_5;
   int __pyx_t_6;
 
-  /* "cmb_noise_fast.pyx":151
+  /* "cmb_noise_fast.pyx":154
  *     assuming the total range length is 'xrange', so dx = xrange / (n - 1).
  *     """
  *     cdef double dx = xrange / (n - 1)             # <<<<<<<<<<<<<<
@@ -19122,7 +19147,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
  */
   __pyx_v_dx = (__pyx_v_xrange / ((double)(__pyx_v_n - 1)));
 
-  /* "cmb_noise_fast.pyx":152
+  /* "cmb_noise_fast.pyx":155
  *     """
  *     cdef double dx = xrange / (n - 1)
  *     cdef double total = data[0] + data[n-1]             # <<<<<<<<<<<<<<
@@ -19133,7 +19158,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
   __pyx_t_2 = (__pyx_v_n - 1);
   __pyx_v_total = ((*((double *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_1 * __pyx_v_data.strides[0]) ))) + (*((double *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_2 * __pyx_v_data.strides[0]) ))));
 
-  /* "cmb_noise_fast.pyx":155
+  /* "cmb_noise_fast.pyx":158
  *     cdef int i
  * 
  *     for i in range(1, n - 1):             # <<<<<<<<<<<<<<
@@ -19145,7 +19170,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
   for (__pyx_t_5 = 1; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_i = __pyx_t_5;
 
-    /* "cmb_noise_fast.pyx":156
+    /* "cmb_noise_fast.pyx":159
  * 
  *     for i in range(1, n - 1):
  *         if (i & 1) == 1:   # i odd             # <<<<<<<<<<<<<<
@@ -19155,7 +19180,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
     __pyx_t_6 = ((__pyx_v_i & 1) == 1);
     if (__pyx_t_6) {
 
-      /* "cmb_noise_fast.pyx":157
+      /* "cmb_noise_fast.pyx":160
  *     for i in range(1, n - 1):
  *         if (i & 1) == 1:   # i odd
  *             total += 4.0 * data[i]             # <<<<<<<<<<<<<<
@@ -19165,7 +19190,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
       __pyx_t_2 = __pyx_v_i;
       __pyx_v_total = (__pyx_v_total + (4.0 * (*((double *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_2 * __pyx_v_data.strides[0]) )))));
 
-      /* "cmb_noise_fast.pyx":156
+      /* "cmb_noise_fast.pyx":159
  * 
  *     for i in range(1, n - 1):
  *         if (i & 1) == 1:   # i odd             # <<<<<<<<<<<<<<
@@ -19175,7 +19200,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
       goto __pyx_L5;
     }
 
-    /* "cmb_noise_fast.pyx":159
+    /* "cmb_noise_fast.pyx":162
  *             total += 4.0 * data[i]
  *         else:              # i even
  *             total += 2.0 * data[i]             # <<<<<<<<<<<<<<
@@ -19189,7 +19214,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
     __pyx_L5:;
   }
 
-  /* "cmb_noise_fast.pyx":161
+  /* "cmb_noise_fast.pyx":164
  *             total += 2.0 * data[i]
  * 
  *     return dx * total / 3.0             # <<<<<<<<<<<<<<
@@ -19199,7 +19224,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
   __pyx_r = ((__pyx_v_dx * __pyx_v_total) / 3.0);
   goto __pyx_L0;
 
-  /* "cmb_noise_fast.pyx":146
+  /* "cmb_noise_fast.pyx":149
  *     return result
  * 
  * cdef double simp(double[:] data, int n, double xrange) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19212,7 +19237,7 @@ static double __pyx_f_14cmb_noise_fast_simp(__Pyx_memviewslice __pyx_v_data, int
   return __pyx_r;
 }
 
-/* "cmb_noise_fast.pyx":163
+/* "cmb_noise_fast.pyx":166
  *     return dx * total / 3.0
  * 
  * cdef double simp2d(double[:, :] data, int n, double xrange) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19232,7 +19257,7 @@ static double __pyx_f_14cmb_noise_fast_simp2d(__Pyx_memviewslice __pyx_v_data, i
   int __pyx_t_5;
   int __pyx_t_6;
 
-  /* "cmb_noise_fast.pyx":166
+  /* "cmb_noise_fast.pyx":169
  *     # integral for square with length xrange
  * 
  *     cdef double dx = xrange / (n - 1)             # <<<<<<<<<<<<<<
@@ -19241,7 +19266,7 @@ static double __pyx_f_14cmb_noise_fast_simp2d(__Pyx_memviewslice __pyx_v_data, i
  */
   __pyx_v_dx = (__pyx_v_xrange / ((double)(__pyx_v_n - 1)));
 
-  /* "cmb_noise_fast.pyx":167
+  /* "cmb_noise_fast.pyx":170
  * 
  *     cdef double dx = xrange / (n - 1)
  *     cdef double total = simp(data[0, :], n, xrange)  + simp(data[n-1, :], n, xrange)             # <<<<<<<<<<<<<<
@@ -19280,7 +19305,7 @@ __pyx_v_total = (__pyx_f_14cmb_noise_fast_simp(__pyx_t_1, __pyx_v_n, __pyx_v_xra
   __PYX_XCLEAR_MEMVIEW(&__pyx_t_2, 0);
   __pyx_t_2.memview = NULL; __pyx_t_2.data = NULL;
 
-  /* "cmb_noise_fast.pyx":170
+  /* "cmb_noise_fast.pyx":173
  *     cdef int i
  * 
  *     for i in range(1, n - 1):             # <<<<<<<<<<<<<<
@@ -19292,7 +19317,7 @@ __pyx_v_total = (__pyx_f_14cmb_noise_fast_simp(__pyx_t_1, __pyx_v_n, __pyx_v_xra
   for (__pyx_t_5 = 1; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_i = __pyx_t_5;
 
-    /* "cmb_noise_fast.pyx":171
+    /* "cmb_noise_fast.pyx":174
  * 
  *     for i in range(1, n - 1):
  *         if (i & 1) == 1:   # i odd             # <<<<<<<<<<<<<<
@@ -19302,7 +19327,7 @@ __pyx_v_total = (__pyx_f_14cmb_noise_fast_simp(__pyx_t_1, __pyx_v_n, __pyx_v_xra
     __pyx_t_6 = ((__pyx_v_i & 1) == 1);
     if (__pyx_t_6) {
 
-      /* "cmb_noise_fast.pyx":172
+      /* "cmb_noise_fast.pyx":175
  *     for i in range(1, n - 1):
  *         if (i & 1) == 1:   # i odd
  *             total += 4.0 * simp(data[i, :], n, xrange)             # <<<<<<<<<<<<<<
@@ -19326,7 +19351,7 @@ __pyx_v_total = (__pyx_v_total + (4.0 * __pyx_f_14cmb_noise_fast_simp(__pyx_t_2,
       __PYX_XCLEAR_MEMVIEW(&__pyx_t_2, 0);
       __pyx_t_2.memview = NULL; __pyx_t_2.data = NULL;
 
-      /* "cmb_noise_fast.pyx":171
+      /* "cmb_noise_fast.pyx":174
  * 
  *     for i in range(1, n - 1):
  *         if (i & 1) == 1:   # i odd             # <<<<<<<<<<<<<<
@@ -19336,7 +19361,7 @@ __pyx_v_total = (__pyx_v_total + (4.0 * __pyx_f_14cmb_noise_fast_simp(__pyx_t_2,
       goto __pyx_L5;
     }
 
-    /* "cmb_noise_fast.pyx":174
+    /* "cmb_noise_fast.pyx":177
  *             total += 4.0 * simp(data[i, :], n, xrange)
  *         else:              # i even
  *             total += 2.0 * simp(data[i, :], n, xrange)             # <<<<<<<<<<<<<<
@@ -19364,7 +19389,7 @@ __pyx_v_total = (__pyx_v_total + (2.0 * __pyx_f_14cmb_noise_fast_simp(__pyx_t_2,
     __pyx_L5:;
   }
 
-  /* "cmb_noise_fast.pyx":176
+  /* "cmb_noise_fast.pyx":179
  *             total += 2.0 * simp(data[i, :], n, xrange)
  * 
  *     return dx * total / 3.0             # <<<<<<<<<<<<<<
@@ -19374,7 +19399,7 @@ __pyx_v_total = (__pyx_v_total + (2.0 * __pyx_f_14cmb_noise_fast_simp(__pyx_t_2,
   __pyx_r = ((__pyx_v_dx * __pyx_v_total) / 3.0);
   goto __pyx_L0;
 
-  /* "cmb_noise_fast.pyx":163
+  /* "cmb_noise_fast.pyx":166
  *     return dx * total / 3.0
  * 
  * cdef double simp2d(double[:, :] data, int n, double xrange) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19387,7 +19412,7 @@ __pyx_v_total = (__pyx_v_total + (2.0 * __pyx_f_14cmb_noise_fast_simp(__pyx_t_2,
   return __pyx_r;
 }
 
-/* "cmb_noise_fast.pyx":178
+/* "cmb_noise_fast.pyx":181
  *     return dx * total / 3.0
  * 
  * cpdef double simp2dp(double[:, :] data, int n, double xrange) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19414,7 +19439,7 @@ static double __pyx_f_14cmb_noise_fast_simp2dp(__Pyx_memviewslice __pyx_v_data, 
   int __pyx_t_5;
   int __pyx_t_6;
 
-  /* "cmb_noise_fast.pyx":181
+  /* "cmb_noise_fast.pyx":184
  *     # integral for square with length xrange
  * 
  *     cdef double dx = xrange / (n - 1)             # <<<<<<<<<<<<<<
@@ -19423,7 +19448,7 @@ static double __pyx_f_14cmb_noise_fast_simp2dp(__Pyx_memviewslice __pyx_v_data, 
  */
   __pyx_v_dx = (__pyx_v_xrange / ((double)(__pyx_v_n - 1)));
 
-  /* "cmb_noise_fast.pyx":182
+  /* "cmb_noise_fast.pyx":185
  * 
  *     cdef double dx = xrange / (n - 1)
  *     cdef double total = simp(data[0, :], n, xrange)  + simp(data[n-1, :], n, xrange)             # <<<<<<<<<<<<<<
@@ -19462,7 +19487,7 @@ __pyx_v_total = (__pyx_f_14cmb_noise_fast_simp(__pyx_t_1, __pyx_v_n, __pyx_v_xra
   __PYX_XCLEAR_MEMVIEW(&__pyx_t_2, 0);
   __pyx_t_2.memview = NULL; __pyx_t_2.data = NULL;
 
-  /* "cmb_noise_fast.pyx":185
+  /* "cmb_noise_fast.pyx":188
  *     cdef int i
  * 
  *     for i in range(1, n - 1):             # <<<<<<<<<<<<<<
@@ -19474,7 +19499,7 @@ __pyx_v_total = (__pyx_f_14cmb_noise_fast_simp(__pyx_t_1, __pyx_v_n, __pyx_v_xra
   for (__pyx_t_5 = 1; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_i = __pyx_t_5;
 
-    /* "cmb_noise_fast.pyx":186
+    /* "cmb_noise_fast.pyx":189
  * 
  *     for i in range(1, n - 1):
  *         if (i & 1) == 1:   # i odd             # <<<<<<<<<<<<<<
@@ -19484,7 +19509,7 @@ __pyx_v_total = (__pyx_f_14cmb_noise_fast_simp(__pyx_t_1, __pyx_v_n, __pyx_v_xra
     __pyx_t_6 = ((__pyx_v_i & 1) == 1);
     if (__pyx_t_6) {
 
-      /* "cmb_noise_fast.pyx":187
+      /* "cmb_noise_fast.pyx":190
  *     for i in range(1, n - 1):
  *         if (i & 1) == 1:   # i odd
  *             total += 4.0 * simp(data[i, :], n, xrange)             # <<<<<<<<<<<<<<
@@ -19508,7 +19533,7 @@ __pyx_v_total = (__pyx_v_total + (4.0 * __pyx_f_14cmb_noise_fast_simp(__pyx_t_2,
       __PYX_XCLEAR_MEMVIEW(&__pyx_t_2, 0);
       __pyx_t_2.memview = NULL; __pyx_t_2.data = NULL;
 
-      /* "cmb_noise_fast.pyx":186
+      /* "cmb_noise_fast.pyx":189
  * 
  *     for i in range(1, n - 1):
  *         if (i & 1) == 1:   # i odd             # <<<<<<<<<<<<<<
@@ -19518,7 +19543,7 @@ __pyx_v_total = (__pyx_v_total + (4.0 * __pyx_f_14cmb_noise_fast_simp(__pyx_t_2,
       goto __pyx_L5;
     }
 
-    /* "cmb_noise_fast.pyx":189
+    /* "cmb_noise_fast.pyx":192
  *             total += 4.0 * simp(data[i, :], n, xrange)
  *         else:              # i even
  *             total += 2.0 * simp(data[i, :], n, xrange)             # <<<<<<<<<<<<<<
@@ -19546,7 +19571,7 @@ __pyx_v_total = (__pyx_v_total + (2.0 * __pyx_f_14cmb_noise_fast_simp(__pyx_t_2,
     __pyx_L5:;
   }
 
-  /* "cmb_noise_fast.pyx":191
+  /* "cmb_noise_fast.pyx":194
  *             total += 2.0 * simp(data[i, :], n, xrange)
  * 
  *     return dx * total / 3.0             # <<<<<<<<<<<<<<
@@ -19556,7 +19581,7 @@ __pyx_v_total = (__pyx_v_total + (2.0 * __pyx_f_14cmb_noise_fast_simp(__pyx_t_2,
   __pyx_r = ((__pyx_v_dx * __pyx_v_total) / 3.0);
   goto __pyx_L0;
 
-  /* "cmb_noise_fast.pyx":178
+  /* "cmb_noise_fast.pyx":181
  *     return dx * total / 3.0
  * 
  * cpdef double simp2dp(double[:, :] data, int n, double xrange) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19628,7 +19653,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 178, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 181, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -19636,9 +19661,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 178, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 181, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("simp2dp", 1, 3, 3, 1); __PYX_ERR(0, 178, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("simp2dp", 1, 3, 3, 1); __PYX_ERR(0, 181, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -19646,14 +19671,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 178, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 181, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("simp2dp", 1, 3, 3, 2); __PYX_ERR(0, 178, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("simp2dp", 1, 3, 3, 2); __PYX_ERR(0, 181, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "simp2dp") < 0)) __PYX_ERR(0, 178, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "simp2dp") < 0)) __PYX_ERR(0, 181, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 3)) {
       goto __pyx_L5_argtuple_error;
@@ -19662,13 +19687,13 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[1] = __Pyx_Arg_FASTCALL(__pyx_args, 1);
       values[2] = __Pyx_Arg_FASTCALL(__pyx_args, 2);
     }
-    __pyx_v_data = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_data.memview)) __PYX_ERR(0, 178, __pyx_L3_error)
-    __pyx_v_n = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 178, __pyx_L3_error)
-    __pyx_v_xrange = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_xrange == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 178, __pyx_L3_error)
+    __pyx_v_data = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_data.memview)) __PYX_ERR(0, 181, __pyx_L3_error)
+    __pyx_v_n = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 181, __pyx_L3_error)
+    __pyx_v_xrange = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_xrange == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 181, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("simp2dp", 1, 3, 3, __pyx_nargs); __PYX_ERR(0, 178, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("simp2dp", 1, 3, 3, __pyx_nargs); __PYX_ERR(0, 181, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19706,7 +19731,7 @@ static PyObject *__pyx_pf_14cmb_noise_fast_simp2dp(CYTHON_UNUSED PyObject *__pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("simp2dp", 1);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_14cmb_noise_fast_simp2dp(__pyx_v_data, __pyx_v_n, __pyx_v_xrange, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 178, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_14cmb_noise_fast_simp2dp(__pyx_v_data, __pyx_v_n, __pyx_v_xrange, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 181, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -19723,7 +19748,7 @@ static PyObject *__pyx_pf_14cmb_noise_fast_simp2dp(CYTHON_UNUSED PyObject *__pyx
   return __pyx_r;
 }
 
-/* "cmb_noise_fast.pyx":193
+/* "cmb_noise_fast.pyx":196
  *     return dx * total / 3.0
  * 
  * cdef double A_integrand(double l1x, double l1y, double L, int type1, int type2, double sigma, double Delta_T, double Delta_P) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19740,7 +19765,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
   int __pyx_t_1;
   int __pyx_t_2;
 
-  /* "cmb_noise_fast.pyx":198
+  /* "cmb_noise_fast.pyx":201
  *     #     return 0
  *     # l2 = L - l1, we take L to be in x direction wlog
  *     cdef double l2x = L - l1x             # <<<<<<<<<<<<<<
@@ -19749,7 +19774,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
  */
   __pyx_v_l2x = (__pyx_v_L - __pyx_v_l1x);
 
-  /* "cmb_noise_fast.pyx":199
+  /* "cmb_noise_fast.pyx":202
  *     # l2 = L - l1, we take L to be in x direction wlog
  *     cdef double l2x = L - l1x
  *     cdef double l2y = 0. - l1y             # <<<<<<<<<<<<<<
@@ -19758,7 +19783,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
  */
   __pyx_v_l2y = (0. - __pyx_v_l1y);
 
-  /* "cmb_noise_fast.pyx":200
+  /* "cmb_noise_fast.pyx":203
  *     cdef double l2x = L - l1x
  *     cdef double l2y = 0. - l1y
  *     cdef double l1 = sqrt(l1x**2 + l1y**2)             # <<<<<<<<<<<<<<
@@ -19767,7 +19792,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
  */
   __pyx_v_l1 = sqrt((pow(__pyx_v_l1x, 2.0) + pow(__pyx_v_l1y, 2.0)));
 
-  /* "cmb_noise_fast.pyx":201
+  /* "cmb_noise_fast.pyx":204
  *     cdef double l2y = 0. - l1y
  *     cdef double l1 = sqrt(l1x**2 + l1y**2)
  *     cdef double l2 = sqrt(l2x**2 + l2y**2)             # <<<<<<<<<<<<<<
@@ -19776,7 +19801,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
  */
   __pyx_v_l2 = sqrt((pow(__pyx_v_l2x, 2.0) + pow(__pyx_v_l2y, 2.0)));
 
-  /* "cmb_noise_fast.pyx":202
+  /* "cmb_noise_fast.pyx":205
  *     cdef double l1 = sqrt(l1x**2 + l1y**2)
  *     cdef double l2 = sqrt(l2x**2 + l2y**2)
  *     if l1 < 2 or l2 < 2 or l1 > 10000 or l2 > 10000:             # <<<<<<<<<<<<<<
@@ -19806,7 +19831,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "cmb_noise_fast.pyx":203
+    /* "cmb_noise_fast.pyx":206
  *     cdef double l2 = sqrt(l2x**2 + l2y**2)
  *     if l1 < 2 or l2 < 2 or l1 > 10000 or l2 > 10000:
  *         return 0.             # <<<<<<<<<<<<<<
@@ -19816,7 +19841,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
     __pyx_r = 0.;
     goto __pyx_L0;
 
-    /* "cmb_noise_fast.pyx":202
+    /* "cmb_noise_fast.pyx":205
  *     cdef double l1 = sqrt(l1x**2 + l1y**2)
  *     cdef double l2 = sqrt(l2x**2 + l2y**2)
  *     if l1 < 2 or l2 < 2 or l1 > 10000 or l2 > 10000:             # <<<<<<<<<<<<<<
@@ -19825,7 +19850,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
  */
   }
 
-  /* "cmb_noise_fast.pyx":206
+  /* "cmb_noise_fast.pyx":209
  * 
  *     else:
  *         return f(l1x, l1y, l2x, l2y, type1, type2) * F(l1x, l1y, l2x, l2y, type1, type2, sigma, Delta_T, Delta_P)             # <<<<<<<<<<<<<<
@@ -19837,7 +19862,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
     goto __pyx_L0;
   }
 
-  /* "cmb_noise_fast.pyx":193
+  /* "cmb_noise_fast.pyx":196
  *     return dx * total / 3.0
  * 
  * cdef double A_integrand(double l1x, double l1y, double L, int type1, int type2, double sigma, double Delta_T, double Delta_P) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -19850,7 +19875,7 @@ static double __pyx_f_14cmb_noise_fast_A_integrand(double __pyx_v_l1x, double __
   return __pyx_r;
 }
 
-/* "cmb_noise_fast.pyx":208
+/* "cmb_noise_fast.pyx":211
  *         return f(l1x, l1y, l2x, l2y, type1, type2) * F(l1x, l1y, l2x, l2y, type1, type2, sigma, Delta_T, Delta_P)
  * 
  * def A_integrand_p(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P):             # <<<<<<<<<<<<<<
@@ -19932,7 +19957,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -19940,9 +19965,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 1); __PYX_ERR(0, 208, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 1); __PYX_ERR(0, 211, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -19950,9 +19975,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 2); __PYX_ERR(0, 208, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 2); __PYX_ERR(0, 211, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -19960,9 +19985,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 3); __PYX_ERR(0, 208, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 3); __PYX_ERR(0, 211, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -19970,9 +19995,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 4); __PYX_ERR(0, 208, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 4); __PYX_ERR(0, 211, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -19980,9 +20005,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 5); __PYX_ERR(0, 208, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 5); __PYX_ERR(0, 211, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -19990,9 +20015,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 6); __PYX_ERR(0, 208, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 6); __PYX_ERR(0, 211, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -20000,14 +20025,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 211, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 7); __PYX_ERR(0, 208, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, 7); __PYX_ERR(0, 211, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "A_integrand_p") < 0)) __PYX_ERR(0, 208, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "A_integrand_p") < 0)) __PYX_ERR(0, 211, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 8)) {
       goto __pyx_L5_argtuple_error;
@@ -20032,7 +20057,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, __pyx_nargs); __PYX_ERR(0, 208, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("A_integrand_p", 1, 8, 8, __pyx_nargs); __PYX_ERR(0, 211, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -20076,7 +20101,7 @@ static PyObject *__pyx_pf_14cmb_noise_fast_2A_integrand_p(CYTHON_UNUSED PyObject
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("A_integrand_p", 1);
 
-  /* "cmb_noise_fast.pyx":209
+  /* "cmb_noise_fast.pyx":212
  * 
  * def A_integrand_p(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P):
  *     return A_integrand(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P)             # <<<<<<<<<<<<<<
@@ -20084,21 +20109,21 @@ static PyObject *__pyx_pf_14cmb_noise_fast_2A_integrand_p(CYTHON_UNUSED PyObject
  * cdef double A(double L, int type1, int type2, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_l1x); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_l1y); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
-  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_L); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_v_type1); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_type2); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
-  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_v_sigma); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
-  __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_Delta_T); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
-  __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_Delta_P); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
-  __pyx_t_9 = PyFloat_FromDouble(__pyx_f_14cmb_noise_fast_A_integrand(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 209, __pyx_L1_error)
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_l1x); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_l1y); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_L); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_v_type1); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_type2); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_v_sigma); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_Delta_T); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_Delta_P); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_9 = PyFloat_FromDouble(__pyx_f_14cmb_noise_fast_A_integrand(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 212, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __pyx_r = __pyx_t_9;
   __pyx_t_9 = 0;
   goto __pyx_L0;
 
-  /* "cmb_noise_fast.pyx":208
+  /* "cmb_noise_fast.pyx":211
  *         return f(l1x, l1y, l2x, l2y, type1, type2) * F(l1x, l1y, l2x, l2y, type1, type2, sigma, Delta_T, Delta_P)
  * 
  * def A_integrand_p(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P):             # <<<<<<<<<<<<<<
@@ -20117,7 +20142,7 @@ static PyObject *__pyx_pf_14cmb_noise_fast_2A_integrand_p(CYTHON_UNUSED PyObject
   return __pyx_r;
 }
 
-/* "cmb_noise_fast.pyx":211
+/* "cmb_noise_fast.pyx":214
  *     return A_integrand(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P)
  * 
  * cdef double A(double L, int type1, int type2, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):             # <<<<<<<<<<<<<<
@@ -20157,28 +20182,28 @@ static double __pyx_f_14cmb_noise_fast_A(double __pyx_v_L, int __pyx_v_type1, in
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("A", 1);
 
-  /* "cmb_noise_fast.pyx":213
+  /* "cmb_noise_fast.pyx":216
  * cdef double A(double L, int type1, int type2, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):
  * 
  *     cdef double[:, :] int_data = np.zeros((num_samples, num_samples))             # <<<<<<<<<<<<<<
  *     cdef double[:] ls = np.linspace(-1*lmaxint, lmaxint, num_samples)
  *     cdef int i, j
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2)) __PYX_ERR(0, 213, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_4);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4)) __PYX_ERR(0, 213, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4)) __PYX_ERR(0, 216, __pyx_L1_error);
   __pyx_t_2 = 0;
   __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -20200,33 +20225,33 @@ static double __pyx_f_14cmb_noise_fast_A(double __pyx_v_L, int __pyx_v_type1, in
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 216, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_int_data = __pyx_t_7;
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
 
-  /* "cmb_noise_fast.pyx":214
+  /* "cmb_noise_fast.pyx":217
  * 
  *     cdef double[:, :] int_data = np.zeros((num_samples, num_samples))
  *     cdef double[:] ls = np.linspace(-1*lmaxint, lmaxint, num_samples)             # <<<<<<<<<<<<<<
  *     cdef int i, j
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 214, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_linspace); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 214, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_linspace); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyFloat_FromDouble((-1.0 * __pyx_v_lmaxint)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 214, __pyx_L1_error)
+  __pyx_t_3 = PyFloat_FromDouble((-1.0 * __pyx_v_lmaxint)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_lmaxint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 214, __pyx_L1_error)
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_lmaxint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 214, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_8 = NULL;
   __pyx_t_6 = 0;
@@ -20249,17 +20274,17 @@ static double __pyx_f_14cmb_noise_fast_A(double __pyx_v_L, int __pyx_v_type1, in
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 214, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
-  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 214, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_ls = __pyx_t_9;
   __pyx_t_9.memview = NULL;
   __pyx_t_9.data = NULL;
 
-  /* "cmb_noise_fast.pyx":217
+  /* "cmb_noise_fast.pyx":220
  *     cdef int i, j
  * 
  *     for i in range(num_samples):             # <<<<<<<<<<<<<<
@@ -20271,7 +20296,7 @@ static double __pyx_f_14cmb_noise_fast_A(double __pyx_v_L, int __pyx_v_type1, in
   for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
     __pyx_v_i = __pyx_t_12;
 
-    /* "cmb_noise_fast.pyx":218
+    /* "cmb_noise_fast.pyx":221
  * 
  *     for i in range(num_samples):
  *         for j in range(num_samples):             # <<<<<<<<<<<<<<
@@ -20283,7 +20308,7 @@ static double __pyx_f_14cmb_noise_fast_A(double __pyx_v_L, int __pyx_v_type1, in
     for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
       __pyx_v_j = __pyx_t_15;
 
-      /* "cmb_noise_fast.pyx":219
+      /* "cmb_noise_fast.pyx":222
  *     for i in range(num_samples):
  *         for j in range(num_samples):
  *             int_data[i, j] = A_integrand(ls[i], ls[j], L, type1, type2, sigma, Delta_T, Delta_P)             # <<<<<<<<<<<<<<
@@ -20298,42 +20323,42 @@ static double __pyx_f_14cmb_noise_fast_A(double __pyx_v_L, int __pyx_v_type1, in
     }
   }
 
-  /* "cmb_noise_fast.pyx":221
+  /* "cmb_noise_fast.pyx":224
  *             int_data[i, j] = A_integrand(ls[i], ls[j], L, type1, type2, sigma, Delta_T, Delta_P)
  * 
  *     return L**2 * (2 * np.pi)**2 / simp2d(int_data, num_samples, 2 * lmaxint)             # <<<<<<<<<<<<<<
  * 
  * cdef double N_integrand(double l1x, double l1y, double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P) noexcept nogil:
  */
-  __pyx_t_1 = PyFloat_FromDouble(pow(__pyx_v_L, 2.0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(pow(__pyx_v_L, 2.0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_pi); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_pi); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyInt_MultiplyCObj(__pyx_int_2, __pyx_t_2, 2, 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_MultiplyCObj(__pyx_int_2, __pyx_t_2, 2, 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Power(__pyx_t_5, __pyx_int_2, Py_None); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Power(__pyx_t_5, __pyx_int_2, Py_None); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_5 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_f_14cmb_noise_fast_simp2d(__pyx_v_int_data, __pyx_v_num_samples, (2.0 * __pyx_v_lmaxint))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_f_14cmb_noise_fast_simp2d(__pyx_v_int_data, __pyx_v_num_samples, (2.0 * __pyx_v_lmaxint))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_20 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_20 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 221, __pyx_L1_error)
+  __pyx_t_20 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_20 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 224, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_r = __pyx_t_20;
   goto __pyx_L0;
 
-  /* "cmb_noise_fast.pyx":211
+  /* "cmb_noise_fast.pyx":214
  *     return A_integrand(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P)
  * 
  * cdef double A(double L, int type1, int type2, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):             # <<<<<<<<<<<<<<
@@ -20360,7 +20385,7 @@ static double __pyx_f_14cmb_noise_fast_A(double __pyx_v_L, int __pyx_v_type1, in
   return __pyx_r;
 }
 
-/* "cmb_noise_fast.pyx":223
+/* "cmb_noise_fast.pyx":226
  *     return L**2 * (2 * np.pi)**2 / simp2d(int_data, num_samples, 2 * lmaxint)
  * 
  * cdef double N_integrand(double l1x, double l1y, double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -20379,7 +20404,7 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
   int __pyx_t_1;
   int __pyx_t_2;
 
-  /* "cmb_noise_fast.pyx":224
+  /* "cmb_noise_fast.pyx":227
  * 
  * cdef double N_integrand(double l1x, double l1y, double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P) noexcept nogil:
  *     cdef double l2x = L - l1x             # <<<<<<<<<<<<<<
@@ -20388,7 +20413,7 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
  */
   __pyx_v_l2x = (__pyx_v_L - __pyx_v_l1x);
 
-  /* "cmb_noise_fast.pyx":225
+  /* "cmb_noise_fast.pyx":228
  * cdef double N_integrand(double l1x, double l1y, double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P) noexcept nogil:
  *     cdef double l2x = L - l1x
  *     cdef double l2y = 0. - l1y             # <<<<<<<<<<<<<<
@@ -20397,7 +20422,7 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
  */
   __pyx_v_l2y = (0. - __pyx_v_l1y);
 
-  /* "cmb_noise_fast.pyx":227
+  /* "cmb_noise_fast.pyx":230
  *     cdef double l2y = 0. - l1y
  * 
  *     cdef double l1 = sqrt(l1x**2 + l1y**2)             # <<<<<<<<<<<<<<
@@ -20406,7 +20431,7 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
  */
   __pyx_v_l1 = sqrt((pow(__pyx_v_l1x, 2.0) + pow(__pyx_v_l1y, 2.0)));
 
-  /* "cmb_noise_fast.pyx":228
+  /* "cmb_noise_fast.pyx":231
  * 
  *     cdef double l1 = sqrt(l1x**2 + l1y**2)
  *     cdef double l2 = sqrt(l2x**2 + l2y**2)             # <<<<<<<<<<<<<<
@@ -20415,7 +20440,7 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
  */
   __pyx_v_l2 = sqrt((pow(__pyx_v_l2x, 2.0) + pow(__pyx_v_l2y, 2.0)));
 
-  /* "cmb_noise_fast.pyx":232
+  /* "cmb_noise_fast.pyx":235
  *     cdef double term1, term2
  * 
  *     if l1 < 2 or l2 < 2 or l1 > 10000 or l2 > 10000:             # <<<<<<<<<<<<<<
@@ -20445,7 +20470,7 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "cmb_noise_fast.pyx":233
+    /* "cmb_noise_fast.pyx":236
  * 
  *     if l1 < 2 or l2 < 2 or l1 > 10000 or l2 > 10000:
  *         return 0.             # <<<<<<<<<<<<<<
@@ -20455,7 +20480,7 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
     __pyx_r = 0.;
     goto __pyx_L0;
 
-    /* "cmb_noise_fast.pyx":232
+    /* "cmb_noise_fast.pyx":235
  *     cdef double term1, term2
  * 
  *     if l1 < 2 or l2 < 2 or l1 > 10000 or l2 > 10000:             # <<<<<<<<<<<<<<
@@ -20464,35 +20489,35 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
  */
   }
 
-  /* "cmb_noise_fast.pyx":235
+  /* "cmb_noise_fast.pyx":238
  *         return 0.
  *     else:
  *         term1 = (F(l1x, l1y, l2x, l2y, type11, type12, sigma, Delta_T, Delta_P) *             # <<<<<<<<<<<<<<
  *                 F(l1x, l1y, l2x, l2y, type21, type22, sigma, Delta_T, Delta_P) *
- *                 cmbps_obs(l1, type11, type12, sigma, Delta_T, Delta_P) *
+ *                 cmbps_obs(l1, type11, type21, sigma, Delta_T, Delta_P) *
  */
   /*else*/ {
 
-    /* "cmb_noise_fast.pyx":237
+    /* "cmb_noise_fast.pyx":240
  *         term1 = (F(l1x, l1y, l2x, l2y, type11, type12, sigma, Delta_T, Delta_P) *
  *                 F(l1x, l1y, l2x, l2y, type21, type22, sigma, Delta_T, Delta_P) *
- *                 cmbps_obs(l1, type11, type12, sigma, Delta_T, Delta_P) *             # <<<<<<<<<<<<<<
- *                 cmbps_obs(l2, type21, type22, sigma, Delta_T, Delta_P))
+ *                 cmbps_obs(l1, type11, type21, sigma, Delta_T, Delta_P) *             # <<<<<<<<<<<<<<
+ *                 cmbps_obs(l2, type12, type22, sigma, Delta_T, Delta_P))
  *         term2 = (F(l1x, l1y, l2x, l2y, type11, type12, sigma, Delta_T, Delta_P) *
  */
-    __pyx_v_term1 = (((__pyx_f_14cmb_noise_fast_F(__pyx_v_l1x, __pyx_v_l1y, __pyx_v_l2x, __pyx_v_l2y, __pyx_v_type11, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P) * __pyx_f_14cmb_noise_fast_F(__pyx_v_l1x, __pyx_v_l1y, __pyx_v_l2x, __pyx_v_l2y, __pyx_v_type21, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l1, __pyx_v_type11, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l2, __pyx_v_type21, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P));
+    __pyx_v_term1 = (((__pyx_f_14cmb_noise_fast_F(__pyx_v_l1x, __pyx_v_l1y, __pyx_v_l2x, __pyx_v_l2y, __pyx_v_type11, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P) * __pyx_f_14cmb_noise_fast_F(__pyx_v_l1x, __pyx_v_l1y, __pyx_v_l2x, __pyx_v_l2y, __pyx_v_type21, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l1, __pyx_v_type11, __pyx_v_type21, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l2, __pyx_v_type12, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P));
 
-    /* "cmb_noise_fast.pyx":241
+    /* "cmb_noise_fast.pyx":244
  *         term2 = (F(l1x, l1y, l2x, l2y, type11, type12, sigma, Delta_T, Delta_P) *
  *                 F(l2x, l2y, l1x, l1y, type21, type22, sigma, Delta_T, Delta_P) *
  *                 cmbps_obs(l1, type11, type22, sigma, Delta_T, Delta_P) *             # <<<<<<<<<<<<<<
- *                 cmbps_obs(l2, type21, type12, sigma, Delta_T, Delta_P))
+ *                 cmbps_obs(l2, type12, type21, sigma, Delta_T, Delta_P))
  * 
  */
-    __pyx_v_term2 = (((__pyx_f_14cmb_noise_fast_F(__pyx_v_l1x, __pyx_v_l1y, __pyx_v_l2x, __pyx_v_l2y, __pyx_v_type11, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P) * __pyx_f_14cmb_noise_fast_F(__pyx_v_l2x, __pyx_v_l2y, __pyx_v_l1x, __pyx_v_l1y, __pyx_v_type21, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l1, __pyx_v_type11, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l2, __pyx_v_type21, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P));
+    __pyx_v_term2 = (((__pyx_f_14cmb_noise_fast_F(__pyx_v_l1x, __pyx_v_l1y, __pyx_v_l2x, __pyx_v_l2y, __pyx_v_type11, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P) * __pyx_f_14cmb_noise_fast_F(__pyx_v_l2x, __pyx_v_l2y, __pyx_v_l1x, __pyx_v_l1y, __pyx_v_type21, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l1, __pyx_v_type11, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P)) * __pyx_f_14cmb_noise_fast_cmbps_obs(__pyx_v_l2, __pyx_v_type12, __pyx_v_type21, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P));
 
-    /* "cmb_noise_fast.pyx":244
- *                 cmbps_obs(l2, type21, type12, sigma, Delta_T, Delta_P))
+    /* "cmb_noise_fast.pyx":247
+ *                 cmbps_obs(l2, type12, type21, sigma, Delta_T, Delta_P))
  * 
  *         return term1 + term2             # <<<<<<<<<<<<<<
  * 
@@ -20502,7 +20527,7 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
     goto __pyx_L0;
   }
 
-  /* "cmb_noise_fast.pyx":223
+  /* "cmb_noise_fast.pyx":226
  *     return L**2 * (2 * np.pi)**2 / simp2d(int_data, num_samples, 2 * lmaxint)
  * 
  * cdef double N_integrand(double l1x, double l1y, double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -20515,7 +20540,7 @@ static double __pyx_f_14cmb_noise_fast_N_integrand(double __pyx_v_l1x, double __
   return __pyx_r;
 }
 
-/* "cmb_noise_fast.pyx":246
+/* "cmb_noise_fast.pyx":249
  *         return term1 + term2
  * 
  * cpdef N(double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):             # <<<<<<<<<<<<<<
@@ -20565,28 +20590,28 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("N", 1);
 
-  /* "cmb_noise_fast.pyx":247
+  /* "cmb_noise_fast.pyx":250
  * 
  * cpdef N(double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):
  *     cdef double[:, :] int_data = np.zeros((num_samples, num_samples))             # <<<<<<<<<<<<<<
  *     cdef double[:] ls = np.linspace(-1*lmaxint, lmaxint, num_samples)
  *     cdef int i, j
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2)) __PYX_ERR(0, 247, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2)) __PYX_ERR(0, 250, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_4);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4)) __PYX_ERR(0, 247, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4)) __PYX_ERR(0, 250, __pyx_L1_error);
   __pyx_t_2 = 0;
   __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -20608,33 +20633,33 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 247, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 250, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_int_data = __pyx_t_7;
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
 
-  /* "cmb_noise_fast.pyx":248
+  /* "cmb_noise_fast.pyx":251
  * cpdef N(double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):
  *     cdef double[:, :] int_data = np.zeros((num_samples, num_samples))
  *     cdef double[:] ls = np.linspace(-1*lmaxint, lmaxint, num_samples)             # <<<<<<<<<<<<<<
  *     cdef int i, j
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 248, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_linspace); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 248, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_linspace); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyFloat_FromDouble((-1.0 * __pyx_v_lmaxint)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 248, __pyx_L1_error)
+  __pyx_t_3 = PyFloat_FromDouble((-1.0 * __pyx_v_lmaxint)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_lmaxint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 248, __pyx_L1_error)
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_lmaxint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 248, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_num_samples); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_8 = NULL;
   __pyx_t_6 = 0;
@@ -20657,17 +20682,17 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 248, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 251, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
-  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 248, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 251, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_ls = __pyx_t_9;
   __pyx_t_9.memview = NULL;
   __pyx_t_9.data = NULL;
 
-  /* "cmb_noise_fast.pyx":252
+  /* "cmb_noise_fast.pyx":255
  * 
  *     # print(L, type11, type12, type21, type22)
  *     if type11 == type21 and type12 == type22:             # <<<<<<<<<<<<<<
@@ -20685,7 +20710,7 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_10) {
 
-    /* "cmb_noise_fast.pyx":253
+    /* "cmb_noise_fast.pyx":256
  *     # print(L, type11, type12, type21, type22)
  *     if type11 == type21 and type12 == type22:
  *         return A(L, type11, type12, sigma, Delta_T, Delta_P, lmaxint, num_samples)             # <<<<<<<<<<<<<<
@@ -20693,14 +20718,14 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
  *     else:
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_12 = __pyx_f_14cmb_noise_fast_A(__pyx_v_L, __pyx_v_type11, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P, __pyx_v_lmaxint, __pyx_v_num_samples); if (unlikely(__pyx_t_12 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 253, __pyx_L1_error)
-    __pyx_t_1 = PyFloat_FromDouble(__pyx_t_12); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
+    __pyx_t_12 = __pyx_f_14cmb_noise_fast_A(__pyx_v_L, __pyx_v_type11, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P, __pyx_v_lmaxint, __pyx_v_num_samples); if (unlikely(__pyx_t_12 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 256, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_t_12); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "cmb_noise_fast.pyx":252
+    /* "cmb_noise_fast.pyx":255
  * 
  *     # print(L, type11, type12, type21, type22)
  *     if type11 == type21 and type12 == type22:             # <<<<<<<<<<<<<<
@@ -20709,7 +20734,7 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
  */
   }
 
-  /* "cmb_noise_fast.pyx":256
+  /* "cmb_noise_fast.pyx":259
  * 
  *     else:
  *         for i in range(num_samples):             # <<<<<<<<<<<<<<
@@ -20722,7 +20747,7 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
     for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
       __pyx_v_i = __pyx_t_15;
 
-      /* "cmb_noise_fast.pyx":257
+      /* "cmb_noise_fast.pyx":260
  *     else:
  *         for i in range(num_samples):
  *             for j in range(num_samples):             # <<<<<<<<<<<<<<
@@ -20734,7 +20759,7 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
       for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_17; __pyx_t_18+=1) {
         __pyx_v_j = __pyx_t_18;
 
-        /* "cmb_noise_fast.pyx":258
+        /* "cmb_noise_fast.pyx":261
  *         for i in range(num_samples):
  *             for j in range(num_samples):
  *                 int_data[i, j] = N_integrand(ls[i], ls[j], L, type11, type12, type21, type22, sigma, Delta_T, Delta_P)             # <<<<<<<<<<<<<<
@@ -20749,34 +20774,34 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
       }
     }
 
-    /* "cmb_noise_fast.pyx":260
+    /* "cmb_noise_fast.pyx":263
  *                 int_data[i, j] = N_integrand(ls[i], ls[j], L, type11, type12, type21, type22, sigma, Delta_T, Delta_P)
  * 
  *         return L**(-2) * A(L, type11, type12, sigma, Delta_T, Delta_P, lmaxint, num_samples) * A(L, type21, type22, sigma, Delta_T, Delta_P, lmaxint, num_samples) * (2 * np.pi)**(-2) * simp2d(int_data, num_samples, 2 * lmaxint)             # <<<<<<<<<<<<<<
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_12 = __pyx_f_14cmb_noise_fast_A(__pyx_v_L, __pyx_v_type11, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P, __pyx_v_lmaxint, __pyx_v_num_samples); if (unlikely(__pyx_t_12 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 260, __pyx_L1_error)
-    __pyx_t_23 = __pyx_f_14cmb_noise_fast_A(__pyx_v_L, __pyx_v_type21, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P, __pyx_v_lmaxint, __pyx_v_num_samples); if (unlikely(__pyx_t_23 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 260, __pyx_L1_error)
-    __pyx_t_1 = PyFloat_FromDouble(((pow(__pyx_v_L, -2.0) * __pyx_t_12) * __pyx_t_23)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __pyx_t_12 = __pyx_f_14cmb_noise_fast_A(__pyx_v_L, __pyx_v_type11, __pyx_v_type12, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P, __pyx_v_lmaxint, __pyx_v_num_samples); if (unlikely(__pyx_t_12 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 263, __pyx_L1_error)
+    __pyx_t_23 = __pyx_f_14cmb_noise_fast_A(__pyx_v_L, __pyx_v_type21, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P, __pyx_v_lmaxint, __pyx_v_num_samples); if (unlikely(__pyx_t_23 == ((double)-1) && PyErr_Occurred())) __PYX_ERR(0, 263, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(((pow(__pyx_v_L, -2.0) * __pyx_t_12) * __pyx_t_23)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 263, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_pi); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_pi); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 263, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyInt_MultiplyCObj(__pyx_int_2, __pyx_t_2, 2, 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_MultiplyCObj(__pyx_int_2, __pyx_t_2, 2, 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 263, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyNumber_Power(__pyx_t_5, __pyx_int_neg_2, Py_None); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __pyx_t_2 = PyNumber_Power(__pyx_t_5, __pyx_int_neg_2, Py_None); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 263, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 263, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyFloat_FromDouble(__pyx_f_14cmb_noise_fast_simp2d(__pyx_v_int_data, __pyx_v_num_samples, (2.0 * __pyx_v_lmaxint))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_f_14cmb_noise_fast_simp2d(__pyx_v_int_data, __pyx_v_num_samples, (2.0 * __pyx_v_lmaxint))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 263, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = PyNumber_Multiply(__pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 260, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Multiply(__pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -20785,7 +20810,7 @@ static PyObject *__pyx_f_14cmb_noise_fast_N(double __pyx_v_L, int __pyx_v_type11
     goto __pyx_L0;
   }
 
-  /* "cmb_noise_fast.pyx":246
+  /* "cmb_noise_fast.pyx":249
  *         return term1 + term2
  * 
  * cpdef N(double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):             # <<<<<<<<<<<<<<
@@ -20893,7 +20918,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -20901,9 +20926,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 1); __PYX_ERR(0, 246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 1); __PYX_ERR(0, 249, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -20911,9 +20936,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 2); __PYX_ERR(0, 246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 2); __PYX_ERR(0, 249, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -20921,9 +20946,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 3); __PYX_ERR(0, 246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 3); __PYX_ERR(0, 249, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -20931,9 +20956,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 4); __PYX_ERR(0, 246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 4); __PYX_ERR(0, 249, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -20941,9 +20966,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 5); __PYX_ERR(0, 246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 5); __PYX_ERR(0, 249, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -20951,9 +20976,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 6); __PYX_ERR(0, 246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 6); __PYX_ERR(0, 249, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -20961,9 +20986,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 7); __PYX_ERR(0, 246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 7); __PYX_ERR(0, 249, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
@@ -20971,9 +20996,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[8]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 8); __PYX_ERR(0, 246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 8); __PYX_ERR(0, 249, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  9:
@@ -20981,14 +21006,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[9]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 9); __PYX_ERR(0, 246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, 9); __PYX_ERR(0, 249, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "N") < 0)) __PYX_ERR(0, 246, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "N") < 0)) __PYX_ERR(0, 249, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 10)) {
       goto __pyx_L5_argtuple_error;
@@ -21004,20 +21029,20 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[8] = __Pyx_Arg_FASTCALL(__pyx_args, 8);
       values[9] = __Pyx_Arg_FASTCALL(__pyx_args, 9);
     }
-    __pyx_v_L = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_L == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
-    __pyx_v_type11 = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_type11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
-    __pyx_v_type12 = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_type12 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
-    __pyx_v_type21 = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_type21 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
-    __pyx_v_type22 = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_type22 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
-    __pyx_v_sigma = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_sigma == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
-    __pyx_v_Delta_T = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_Delta_T == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
-    __pyx_v_Delta_P = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_Delta_P == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
-    __pyx_v_lmaxint = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_lmaxint == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
-    __pyx_v_num_samples = __Pyx_PyInt_As_int(values[9]); if (unlikely((__pyx_v_num_samples == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L3_error)
+    __pyx_v_L = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_L == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
+    __pyx_v_type11 = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_type11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
+    __pyx_v_type12 = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_type12 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
+    __pyx_v_type21 = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_type21 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
+    __pyx_v_type22 = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_type22 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
+    __pyx_v_sigma = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_sigma == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
+    __pyx_v_Delta_T = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_Delta_T == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
+    __pyx_v_Delta_P = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_Delta_P == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
+    __pyx_v_lmaxint = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_lmaxint == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
+    __pyx_v_num_samples = __Pyx_PyInt_As_int(values[9]); if (unlikely((__pyx_v_num_samples == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 249, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, __pyx_nargs); __PYX_ERR(0, 246, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("N", 1, 10, 10, __pyx_nargs); __PYX_ERR(0, 249, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -21053,7 +21078,7 @@ static PyObject *__pyx_pf_14cmb_noise_fast_4N(CYTHON_UNUSED PyObject *__pyx_self
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("N", 1);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_14cmb_noise_fast_N(__pyx_v_L, __pyx_v_type11, __pyx_v_type12, __pyx_v_type21, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P, __pyx_v_lmaxint, __pyx_v_num_samples, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_14cmb_noise_fast_N(__pyx_v_L, __pyx_v_type11, __pyx_v_type12, __pyx_v_type21, __pyx_v_type22, __pyx_v_sigma, __pyx_v_Delta_T, __pyx_v_Delta_P, __pyx_v_lmaxint, __pyx_v_num_samples, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 249, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -22204,7 +22229,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 }
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 155, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 158, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_n_s_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 100, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 141, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 156, __pyx_L1_error)
@@ -22383,41 +22408,41 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__21);
   __Pyx_GIVEREF(__pyx_tuple__21);
 
-  /* "cmb_noise_fast.pyx":178
+  /* "cmb_noise_fast.pyx":181
  *     return dx * total / 3.0
  * 
  * cpdef double simp2dp(double[:, :] data, int n, double xrange) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # integral for square with length xrange
  * 
  */
-  __pyx_tuple__22 = PyTuple_Pack(3, __pyx_n_s_data, __pyx_n_s_n, __pyx_n_s_xrange); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 178, __pyx_L1_error)
+  __pyx_tuple__22 = PyTuple_Pack(3, __pyx_n_s_data, __pyx_n_s_n, __pyx_n_s_xrange); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 181, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__22);
   __Pyx_GIVEREF(__pyx_tuple__22);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cmb_noise_fast_pyx, __pyx_n_s_simp2dp, 178, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 178, __pyx_L1_error)
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cmb_noise_fast_pyx, __pyx_n_s_simp2dp, 181, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 181, __pyx_L1_error)
 
-  /* "cmb_noise_fast.pyx":208
+  /* "cmb_noise_fast.pyx":211
  *         return f(l1x, l1y, l2x, l2y, type1, type2) * F(l1x, l1y, l2x, l2y, type1, type2, sigma, Delta_T, Delta_P)
  * 
  * def A_integrand_p(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P):             # <<<<<<<<<<<<<<
  *     return A_integrand(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P)
  * 
  */
-  __pyx_tuple__24 = PyTuple_Pack(8, __pyx_n_s_l1x, __pyx_n_s_l1y, __pyx_n_s_L, __pyx_n_s_type1, __pyx_n_s_type2, __pyx_n_s_sigma, __pyx_n_s_Delta_T, __pyx_n_s_Delta_P); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_tuple__24 = PyTuple_Pack(8, __pyx_n_s_l1x, __pyx_n_s_l1y, __pyx_n_s_L, __pyx_n_s_type1, __pyx_n_s_type2, __pyx_n_s_sigma, __pyx_n_s_Delta_T, __pyx_n_s_Delta_P); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 211, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__24);
   __Pyx_GIVEREF(__pyx_tuple__24);
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(8, 0, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cmb_noise_fast_pyx, __pyx_n_s_A_integrand_p, 208, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(8, 0, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cmb_noise_fast_pyx, __pyx_n_s_A_integrand_p, 211, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 211, __pyx_L1_error)
 
-  /* "cmb_noise_fast.pyx":246
+  /* "cmb_noise_fast.pyx":249
  *         return term1 + term2
  * 
  * cpdef N(double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):             # <<<<<<<<<<<<<<
  *     cdef double[:, :] int_data = np.zeros((num_samples, num_samples))
  *     cdef double[:] ls = np.linspace(-1*lmaxint, lmaxint, num_samples)
  */
-  __pyx_tuple__26 = PyTuple_Pack(10, __pyx_n_s_L, __pyx_n_s_type11, __pyx_n_s_type12, __pyx_n_s_type21, __pyx_n_s_type22, __pyx_n_s_sigma, __pyx_n_s_Delta_T, __pyx_n_s_Delta_P, __pyx_n_s_lmaxint, __pyx_n_s_num_samples); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __pyx_tuple__26 = PyTuple_Pack(10, __pyx_n_s_L, __pyx_n_s_type11, __pyx_n_s_type12, __pyx_n_s_type21, __pyx_n_s_type22, __pyx_n_s_sigma, __pyx_n_s_Delta_T, __pyx_n_s_Delta_P, __pyx_n_s_lmaxint, __pyx_n_s_num_samples); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 249, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__26);
   __Pyx_GIVEREF(__pyx_tuple__26);
-  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cmb_noise_fast_pyx, __pyx_n_s_N, 246, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(10, 0, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cmb_noise_fast_pyx, __pyx_n_s_N, 249, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 249, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -23655,40 +23680,40 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_14cmb_noise_fast_arcmintorad = __pyx_t_10;
 
-  /* "cmb_noise_fast.pyx":178
+  /* "cmb_noise_fast.pyx":181
  *     return dx * total / 3.0
  * 
  * cpdef double simp2dp(double[:, :] data, int n, double xrange) noexcept nogil:             # <<<<<<<<<<<<<<
  *     # integral for square with length xrange
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_14cmb_noise_fast_1simp2dp, 0, __pyx_n_s_simp2dp, NULL, __pyx_n_s_cmb_noise_fast, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 178, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_14cmb_noise_fast_1simp2dp, 0, __pyx_n_s_simp2dp, NULL, __pyx_n_s_cmb_noise_fast, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 181, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_simp2dp, __pyx_t_7) < 0) __PYX_ERR(0, 178, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_simp2dp, __pyx_t_7) < 0) __PYX_ERR(0, 181, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "cmb_noise_fast.pyx":208
+  /* "cmb_noise_fast.pyx":211
  *         return f(l1x, l1y, l2x, l2y, type1, type2) * F(l1x, l1y, l2x, l2y, type1, type2, sigma, Delta_T, Delta_P)
  * 
  * def A_integrand_p(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P):             # <<<<<<<<<<<<<<
  *     return A_integrand(l1x, l1y, L, type1, type2, sigma, Delta_T, Delta_P)
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_14cmb_noise_fast_3A_integrand_p, 0, __pyx_n_s_A_integrand_p, NULL, __pyx_n_s_cmb_noise_fast, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_14cmb_noise_fast_3A_integrand_p, 0, __pyx_n_s_A_integrand_p, NULL, __pyx_n_s_cmb_noise_fast, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 211, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_A_integrand_p, __pyx_t_7) < 0) __PYX_ERR(0, 208, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_A_integrand_p, __pyx_t_7) < 0) __PYX_ERR(0, 211, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "cmb_noise_fast.pyx":246
+  /* "cmb_noise_fast.pyx":249
  *         return term1 + term2
  * 
  * cpdef N(double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):             # <<<<<<<<<<<<<<
  *     cdef double[:, :] int_data = np.zeros((num_samples, num_samples))
  *     cdef double[:] ls = np.linspace(-1*lmaxint, lmaxint, num_samples)
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_14cmb_noise_fast_5N, 0, __pyx_n_s_N, NULL, __pyx_n_s_cmb_noise_fast, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_14cmb_noise_fast_5N, 0, __pyx_n_s_N, NULL, __pyx_n_s_cmb_noise_fast, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 249, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_N, __pyx_t_7) < 0) __PYX_ERR(0, 246, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_N, __pyx_t_7) < 0) __PYX_ERR(0, 249, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "cmb_noise_fast.pyx":1

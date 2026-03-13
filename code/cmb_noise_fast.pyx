@@ -85,7 +85,7 @@ cdef double cmbps_noise(double l, int type1, int type2, double sigma, double Del
     sigma *= arcmintorad # in radians
     Delta_T *= arcmintorad
     Delta_P *= arcmintorad
-    
+
     if type1 == 1 and type2 == 1:
         noise = (Delta_T / Tcmb)**2 * exp(l * (l + 1) * sigma**2 / (8 * log(2)))
     if (type1 == 2 and type2 == 2) or (type1 == 3 and type2 == 3):
@@ -109,9 +109,12 @@ cdef double f(double l1x, double l1y, double l2x, double l2y, int type1, int typ
 
     if type1 == 1 and type2 == 1:
         return cmbps_ul(l1, 1, 1) * Ll1 + cmbps_ul(l2, 1, 1) * Ll2
-    if (type1 == 1 and type2 == 2) or (type1 == 2 and type2 == 1):
-        # used to be cmbps_ul(l1, 1, 2) * Ll1 * cos(angle12) + cmbps_ul(l2, 1, 2) * Ll2
+
+    if type1 == 1 and type2 == 2:   # TE
         return cmbps_ul(l1, 1, 2) * Ll1 * cos(2 * angle12) + cmbps_ul(l2, 1, 2) * Ll2
+    if type1 == 2 and type2 == 1:   # ET
+        return cmbps_ul(l1, 1, 2) * Ll1 + cmbps_ul(l2, 1, 2) * Ll2 * cos(2 * angle12)
+
     if (type1 == 1 and type2 == 3) or (type1 == 3 and type2 == 1):
         return cmbps_ul(l1, 1, 2) * sin(2 * angle12) * Ll1
     if type1 == 2 and type2 == 2:
@@ -140,7 +143,7 @@ cdef double F(double l1x, double l1y, double l2x, double l2y, int type1, int typ
         denominator = cmbps_obs(l1, type1, type1, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type2, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l1, type2, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type1, sigma, Delta_T, Delta_P) - (cmbps_obs(l1, type1, type2, sigma, Delta_T, Delta_P) * cmbps_obs(l2, type1, type2, sigma, Delta_T, Delta_P))**2
 
     result = numerator / denominator
-            
+
     return result
 
 cdef double simp(double[:] data, int n, double xrange) noexcept nogil:
@@ -157,7 +160,7 @@ cdef double simp(double[:] data, int n, double xrange) noexcept nogil:
             total += 4.0 * data[i]
         else:              # i even
             total += 2.0 * data[i]
-    
+
     return dx * total / 3.0
 
 cdef double simp2d(double[:, :] data, int n, double xrange) noexcept nogil:
@@ -172,7 +175,7 @@ cdef double simp2d(double[:, :] data, int n, double xrange) noexcept nogil:
             total += 4.0 * simp(data[i, :], n, xrange) 
         else:              # i even
             total += 2.0 * simp(data[i, :], n, xrange) 
-    
+
     return dx * total / 3.0
 
 cpdef double simp2dp(double[:, :] data, int n, double xrange) noexcept nogil:
@@ -187,7 +190,7 @@ cpdef double simp2dp(double[:, :] data, int n, double xrange) noexcept nogil:
             total += 4.0 * simp(data[i, :], n, xrange) 
         else:              # i even
             total += 2.0 * simp(data[i, :], n, xrange) 
-    
+
     return dx * total / 3.0
 
 cdef double A_integrand(double l1x, double l1y, double L, int type1, int type2, double sigma, double Delta_T, double Delta_P) noexcept nogil:
@@ -234,13 +237,13 @@ cdef double N_integrand(double l1x, double l1y, double L, int type11, int type12
     else:
         term1 = (F(l1x, l1y, l2x, l2y, type11, type12, sigma, Delta_T, Delta_P) *
                 F(l1x, l1y, l2x, l2y, type21, type22, sigma, Delta_T, Delta_P) *
-                cmbps_obs(l1, type11, type12, sigma, Delta_T, Delta_P) *
-                cmbps_obs(l2, type21, type22, sigma, Delta_T, Delta_P))
+                cmbps_obs(l1, type11, type21, sigma, Delta_T, Delta_P) *
+                cmbps_obs(l2, type12, type22, sigma, Delta_T, Delta_P))
         term2 = (F(l1x, l1y, l2x, l2y, type11, type12, sigma, Delta_T, Delta_P) * 
                 F(l2x, l2y, l1x, l1y, type21, type22, sigma, Delta_T, Delta_P) *
                 cmbps_obs(l1, type11, type22, sigma, Delta_T, Delta_P) *
-                cmbps_obs(l2, type21, type12, sigma, Delta_T, Delta_P))
-        
+                cmbps_obs(l2, type12, type21, sigma, Delta_T, Delta_P))
+
         return term1 + term2
 
 cpdef N(double L, int type11, int type12, int type21, int type22, double sigma, double Delta_T, double Delta_P, double lmaxint, int num_samples):
@@ -256,5 +259,5 @@ cpdef N(double L, int type11, int type12, int type21, int type22, double sigma, 
         for i in range(num_samples):
             for j in range(num_samples):
                 int_data[i, j] = N_integrand(ls[i], ls[j], L, type11, type12, type21, type22, sigma, Delta_T, Delta_P)
-        
+
         return L**(-2) * A(L, type11, type12, sigma, Delta_T, Delta_P, lmaxint, num_samples) * A(L, type21, type22, sigma, Delta_T, Delta_P, lmaxint, num_samples) * (2 * np.pi)**(-2) * simp2d(int_data, num_samples, 2 * lmaxint)

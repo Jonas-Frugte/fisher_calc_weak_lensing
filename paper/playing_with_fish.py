@@ -316,7 +316,7 @@ def select_plot_type(fish_pond_number):
     '''
 
     plt_name = ''
-    which_indices_to_keep = 1
+    which_indices_to_keep = 2
     f_sky = 0.5
 
     if fish_pond_number == 0:
@@ -542,10 +542,10 @@ def save_table(param_names, param_vals, which_pars, constraints, labels, plt_nam
 if __name__ == "__main__":
     # plots_to_make = [2, 3, 4, 5, 6, 7, 8, 9]
     # create_plots(plots_to_make)
-    plots_to_make = [10,]
-    create_plots(plots_to_make)
-    # tables_to_make = [0, 0.5, 1, 1.5]
-    # create_tables(tables_to_make)
+    # plots_to_make = [10,]
+    # create_plots(plots_to_make)
+    tables_to_make = [0, 0.5, 1, 1.5]
+    create_tables(tables_to_make)
     
 
 # if __name__ == "__main__":

@@ -28,8 +28,8 @@ def config_mat(L, sigma, Delta_T, Delta_P, num_samples, lmaxint):
     return mat
 
 def lps_noise(L, sigma, Delta_T, Delta_P, num_samples, lmaxint = 10000):
-    #result = 1 / np.sum(np.linalg.inv(config_mat(L, sigma, Delta_T, Delta_P, num_samples, lmaxint)))
-    result = 1 / sum([1 / cmbnf.N(L, *config, *config, sigma, Delta_T, Delta_P, lmaxint, num_samples) for config in configs])
+    result = 1 / np.sum(np.linalg.inv(config_mat(L, sigma, Delta_T, Delta_P, num_samples, lmaxint)))
+    #result = 1 / sum([1 / cmbnf.N(L, *config, *config, sigma, Delta_T, Delta_P, lmaxint, num_samples) for config in configs])
     print(result * L**2)
     return result
 
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # Create a logarithmically spaced array for L.
     lmin = 1
     lmax = 3000
-    lnum = 64
+    lnum = 32
     Ls = np.logspace(np.log10(lmin), np.log10(lmax), lnum)
     np.savetxt(f"cmb_noise_files/ls_{lmin}_{lmax}_{lnum}.txt", Ls)
     
@@ -69,6 +69,8 @@ if __name__ == '__main__':
         plt.loglog(Ls, np.array(noise_vals) * Ls * (Ls + 1) / 2 / np.pi)
         plt.xlim(1, 2000)
         plt.savefig('test.png')
+        print('saved test.png')
+        return noise_vals
     
     # Noise configurations: (sigma, Delta_T, Delta_P)
     # noise_configs = [
@@ -78,15 +80,19 @@ if __name__ == '__main__':
     #     #(4, 1, 1.41)
     # ]
 
+    # noise_configs = [
+    #     (3, 0.71, 1),
+    # ]
+
     noise_configs = [
-        (3, 0.71, 1),
+        (1, 4.2, 6),
     ]
 
     # noise_configs = [
     #     (7, 27, 40 * 1.41),
     # ]
 
-    num_samples = 3001
+    num_samples = 5001
     # Loop over the noise configurations.
     for sigma, Delta_T, Delta_P in noise_configs:
         create_noise_vals(sigma, Delta_T, Delta_P, num_samples)

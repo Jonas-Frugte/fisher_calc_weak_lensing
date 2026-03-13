@@ -54,11 +54,11 @@ extensions = [
     #     extra_link_args=["-fopenmp"],
     #     include_dirs=[np.get_include()],
     # ),
-    # Extension(
-    # name="cmb_noise_fast",
-    #     sources=["cmb_noise_fast.pyx"],
-    #     include_dirs=[np.get_include()],
-    # )
+    Extension(
+    name="cmb_noise_fast",
+        sources=["cmb_noise_fast.pyx"],
+        include_dirs=[np.get_include()],
+    )
 ]
 
 # Setup
