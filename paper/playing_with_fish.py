@@ -299,6 +299,7 @@ def plot_confidence_ellipses(
         sampss.append(samps)
     
     # Create the triangle plot once with all samples
+    plots.set_rc_sizes(lab_fontsize=20, axes_fontsize=18)
     g = plots.get_subplot_plotter()
     g.triangle_plot(sampss, filled=True)
     
@@ -517,7 +518,7 @@ def create_plots(plot_type_numbers):
     for fish_pond_number in plot_type_numbers:
         fish_matrices, labels, plt_name, which_indices_to_keep = select_plot_type(fish_pond_number)
         g = plot_confidence_ellipses(fish_matrices, labels, which_indices_to_keep)
-        plt.savefig('/home3/p319950/ResearchProject/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300, bbox_inches="tight")
+        plt.savefig('/Users/Frugt001/Desktop/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300, bbox_inches="tight")
         print('created: ', plt_name)
 
 def create_tables(table_type_numbers):
@@ -540,12 +541,12 @@ def save_table(param_names, param_vals, which_pars, constraints, labels, plt_nam
     print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.3e'))
 
 if __name__ == "__main__":
-    # plots_to_make = [2, 3, 4, 5, 6, 7, 8, 9]
-    # create_plots(plots_to_make)
+    plots_to_make = [6, 7, 8, 9]
+    create_plots(plots_to_make)
     # plots_to_make = [10,]
     # create_plots(plots_to_make)
-    tables_to_make = [0, 0.5, 1, 1.5]
-    create_tables(tables_to_make)
+    # tables_to_make = [0, 0.5, 1, 1.5]
+    # create_tables(tables_to_make)
     
 
 # if __name__ == "__main__":
