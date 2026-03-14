@@ -299,8 +299,10 @@ def plot_confidence_ellipses(
         sampss.append(samps)
     
     # Create the triangle plot once with all samples
-    plots.set_rc_sizes(lab_fontsize=20, axes_fontsize=18)
     g = plots.get_subplot_plotter()
+    g.settings.lab_fontsize = 20     # axis labels
+    g.settings.axes_fontsize = 18    # tick numbers
+    g.settings.legend_fontsize = 18  # legend (if any)
     g.triangle_plot(sampss, filled=True)
     
     return g
@@ -518,7 +520,7 @@ def create_plots(plot_type_numbers):
     for fish_pond_number in plot_type_numbers:
         fish_matrices, labels, plt_name, which_indices_to_keep = select_plot_type(fish_pond_number)
         g = plot_confidence_ellipses(fish_matrices, labels, which_indices_to_keep)
-        plt.savefig('/Users/Frugt001/Desktop/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300, bbox_inches="tight")
+        plt.savefig('/home3/p319950/ResearchProject/fisher_calc_weak_lensing/paper/figures/' + plt_name, dpi = 300, bbox_inches="tight")
         print('created: ', plt_name)
 
 def create_tables(table_type_numbers):
