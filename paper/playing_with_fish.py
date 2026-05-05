@@ -303,7 +303,7 @@ def plot_confidence_ellipses(
     g.settings.lab_fontsize = 20     # axis labels
     g.settings.axes_fontsize = 18    # tick numbers
     g.settings.legend_fontsize = 18  # legend (if any)
-    g.triangle_plot(sampss, filled=True)
+    g.triangle_plot(sampss, filled=True, legend_loc='upper right')
     
     return g
 
@@ -319,7 +319,7 @@ def select_plot_type(fish_pond_number):
     '''
 
     plt_name = ''
-    which_indices_to_keep = 2
+    which_indices_to_keep = 1
     f_sky = 0.5
 
     if fish_pond_number == 0:
@@ -543,12 +543,12 @@ def save_table(param_names, param_vals, which_pars, constraints, labels, plt_nam
     print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.3e'))
 
 if __name__ == "__main__":
-    # plots_to_make = [2, 3, 4, 5, 6, 7, 8, 9, 10]
+    plots_to_make = [2, 3, 4, 5, 6, 7, 8, 9, 10]
     # create_plots(plots_to_make)
     # plots_to_make = [10,]
-    # create_plots(plots_to_make)
-    tables_to_make = [0, 0.5, 1, 1.5]
-    create_tables(tables_to_make)
+    create_plots(plots_to_make)
+    # tables_to_make = [0, 0.5, 1, 1.5]
+    #create_tables(tables_to_make)
     
 
 # if __name__ == "__main__":
