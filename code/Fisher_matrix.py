@@ -11,7 +11,7 @@ np.set_printoptions(precision=1, suppress=False)
 
 lmin = 2
 lmax = 1900
-stepsizes = [60, 200, 400]
+stepsizes = [30, 100, 200]
 # stepsizes = [70, 300, 600]
 #stepsizes = [20 * 5, 5 * 20 * 5, 10 * 20 * 5] # for testing
 num_bispec_samples = 100 # should be 100 or so

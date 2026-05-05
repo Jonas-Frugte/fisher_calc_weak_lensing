@@ -94,13 +94,13 @@ def data_export(folder_name, cosm_par, lps = True, a_create = True, b_create = T
     if b_create:
         print(f'creating b for {folder_name}')
         # b (2d: k, z)
-        np.save(filepath + '/b', [[cosm_data.b(k, z) for z in zs_fine] for k in ks_log_fine])
+        np.save(filepath + '/b', [cosm_data.b(k) for k in ks_log_fine])
         print(f'b created to {folder_name}')
 
     if c_create:
         print(f'creating c for {folder_name}')
         # c (2d: k, z)
-        np.save(filepath + '/c', [[cosm_data.c(k, z) for z in zs_fine] for k in ks_log_fine])
+        np.save(filepath + '/c', [cosm_data.c(k) for k in ks_log_fine])
         print(f'c created to {folder_name}')
 
     if gal_bins:
@@ -132,7 +132,7 @@ cosm_par_delta = np.array([
 num_pars = len(par_names)
 
 # Build export list: fiducial + perturbed parameters (±1σ for each parameter)
-which_to_create = [[True, True, True, True, True, True, True]]
+which_to_create = [[False, True, True, True, False, False, False]]
 exports = [['data_fiducial', fiducial_cosm_par, *create_settings] for create_settings in which_to_create]
 
 for i in range(num_pars):

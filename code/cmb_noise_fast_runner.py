@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # Create a logarithmically spaced array for L.
     lmin = 1
     lmax = 3000
-    lnum = 32
+    lnum = 64
     Ls = np.logspace(np.log10(lmin), np.log10(lmax), lnum)
     np.savetxt(f"cmb_noise_files/ls_{lmin}_{lmax}_{lnum}.txt", Ls)
     
@@ -86,13 +86,14 @@ if __name__ == '__main__':
 
     noise_configs = [
         (1, 4.2, 6),
+        (3, 0.71, 1),
     ]
 
     # noise_configs = [
     #     (7, 27, 40 * 1.41),
     # ]
 
-    num_samples = 5001
+    num_samples = 3001
     # Loop over the noise configurations.
     for sigma, Delta_T, Delta_P in noise_configs:
         create_noise_vals(sigma, Delta_T, Delta_P, num_samples)

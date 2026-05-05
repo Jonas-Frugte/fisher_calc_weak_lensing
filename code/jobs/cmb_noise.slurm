@@ -3,7 +3,7 @@
 #SBATCH --output=/home3/p319950/ResearchProject/outputs/cmb_noise_output.log
 #SBATCH --error=/home3/p319950/ResearchProject/outputs/cmb_noise_error.log
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=32
+#SBATCH --cpus-per-task=64
 #SBATCH --time=01:00:00
 #SBATCH --mem=10GB
 

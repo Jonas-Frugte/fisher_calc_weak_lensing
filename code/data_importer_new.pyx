@@ -86,8 +86,8 @@ def data_import_func(folder_name):
     cdef double[:] cosm_par = np.load(filepath + '/cosm_par.npy')
     cdef double C
     cdef double[:, :] a_data = np.load(filepath + '/a.npy')
-    cdef double[:, :] b_data = np.load(filepath + '/b.npy')
-    cdef double[:, :] c_data = np.load(filepath + '/c.npy')
+    cdef double[:] b_data = np.load(filepath + '/b.npy')
+    cdef double[:] c_data = np.load(filepath + '/c.npy')
 
     cdef double[:, :] lps_data = np.load(filepath + '/lensing_power_spectrum.npy')
 
@@ -111,10 +111,11 @@ def data_import_func(folder_name):
 
 cpdef double a(double k, double z, double[:, :] a_data) noexcept nogil:
     return interp.logspace_linear_interp2d(k, z, k_min, k_max, k_num_fine, z_min, z_max, z_num_fine, a_data)
-cpdef double b(double k, double z, double[:, :] b_data) noexcept nogil:
-    return interp.logspace_linear_interp2d(k, z, k_min, k_max, k_num_fine, z_min, z_max, z_num_fine, b_data)
-cpdef double c(double k, double z, double[:, :] c_data) noexcept nogil:
-    return interp.logspace_linear_interp2d(k, z, k_min, k_max, k_num_fine, z_min, z_max, z_num_fine, c_data)
+# z is now not used anymore in b and c
+cpdef double b(double k, double[:] b_data) noexcept nogil:
+    return interp.logspace_linear_interp(k, k_min, k_max, k_num_fine, b_data)
+cpdef double c(double k, double[:] c_data) noexcept nogil:
+    return interp.logspace_linear_interp(k, k_min, k_max, k_num_fine, c_data)
 
 cdef int lps_tracer_pair_index(int idx1, int idx2) noexcept nogil:
     # Integer-indexed version: (0,0) (0,1) etc., where 0=c, 1=s1, 2=s2, 3=s3, 4=s4
@@ -206,15 +207,15 @@ cdef double law_cosines(double x, double y, double z) noexcept nogil:
     # 27/03/25 added -1 factor
     return -1 * (x**2 + y**2 - z**2) / (2 * x * y)
 
-cpdef double F_2(double k1, double k2, double k3, double z_input, double[:, :] a_data, double[:, :] b_data, double[:, :] c_data) noexcept nogil:
+cpdef double F_2(double k1, double k2, double k3, double z_input, double[:, :] a_data, double[:] b_data, double[:] c_data) noexcept nogil:
     # cosine factors in term 2 and term 3 are determined by the delta^(3)(k_1, k_2, k_3) factor combined with law of cosines
     # this is why we also need k3, it is only used in the calculations to determine the angle between k1 and k2
     cdef double term_1 = (5. / 7.) * a(k1, z_input, a_data) * a(k2, z_input, a_data)
-    cdef double term_2 = 0.5 * law_cosines(k1, k2, k3) * (k1 / k2 + k2 / k1) * b(k1, z_input, b_data) * b(k2, z_input, b_data)
-    cdef double term_3 = (2. / 7.) * law_cosines(k1, k2, k3)**2 * c(k1, z_input, c_data) * c(k2, z_input, c_data)
+    cdef double term_2 = 0.5 * law_cosines(k1, k2, k3) * (k1 / k2 + k2 / k1) * b(k1, b_data) * b(k2, b_data)
+    cdef double term_3 = (2. / 7.) * law_cosines(k1, k2, k3)**2 * c(k1, c_data) * c(k2, c_data)
     return term_1 + term_2 + term_3
 
-cpdef double mbs(double k1, double k2, double k3, double z, double[:, :] mps_data, double[:, :] a_data, double[:, :] b_data, double[:, :] c_data) noexcept nogil:
+cpdef double mbs(double k1, double k2, double k3, double z, double[:, :] mps_data, double[:, :] a_data, double[:] b_data, double[:] c_data) noexcept nogil:
     # precalculate to avoid having to calculate twice
     cdef double mps_k1 = matter_power_spectrum(k1, z, mps_data)
     cdef double mps_k2 = matter_power_spectrum(k2, z, mps_data)
@@ -436,8 +437,8 @@ cdef inline double lbs_integrand(
     int type2, 
     int type3,
     double[:, :] a_data, 
-    double[:, :] b_data, 
-    double[:, :] c_data, 
+    double[:] b_data, 
+    double[:] c_data, 
     double[:] scale_factor_data, 
     double[:, :] window_data, 
     double[:, :] mps_data, 
@@ -471,7 +472,7 @@ cdef inline double lbs_integrand(
 
     return integrand_val
 
-# cdef inline double lbs_integrand(double chi, double k1, double k2, double k3, char* type1, char* type2, char* type3, double[:, :] a_data, double[:, :] b_data, double[:, :] c_data, double[:] scale_factor_data, double[:, :] window_data, double[:, :] mps_data, double[:] z_at_chi_data) noexcept nogil:
+# cdef inline double lbs_integrand(double chi, double k1, double k2, double k3, char* type1, char* type2, char* type3, double[:, :] a_data, double[:] b_data, double[:] c_data, double[:] scale_factor_data, double[:, :] window_data, double[:, :] mps_data, double[:] z_at_chi_data) noexcept nogil:
 #     cdef double integrand_val
 #     integrand_val = chi**2 * scale_factor(chi, scale_factor_data)**(-3) * window_func(chi, type1, window_data) * window_func(chi, type2, window_data) * window_func(chi, type3, window_data) * mbs(k1 / chi, k2 / chi, k3 / chi, z_at_chi(chi, z_at_chi_data), mps_data, a_data, b_data, c_data)
 #     if integrand_val < 0.:
@@ -489,8 +490,8 @@ cdef double lbs_flat(
     bint pb_correction,
     double C,
     double[:, :] a_data,
-    double[:, :] b_data,
-    double[:, :] c_data,
+    double[:] b_data,
+    double[:] c_data,
     double[:] scale_factor_data,
     double[:, :] window_data,
     double[:, :] mps_data,
@@ -583,8 +584,8 @@ cpdef double lbs(
     bint pb_correction,
     double C,
     double[:, :] a_data,
-    double[:, :] b_data,
-    double[:, :] c_data,
+    double[:] b_data,
+    double[:] c_data,
     double[:] scale_factor_data,
     double[:, :] window_data,
     double[:, :] mps_data,
@@ -612,8 +613,8 @@ cpdef double lbs(
 cdef double[:] cosm_par_f
 cdef double C_f
 cdef double[:, :] a_data_f = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_f = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_f = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_f = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_f = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_f = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_f = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_f = np.zeros((5, chi_num), dtype=np.float64)
@@ -754,8 +755,8 @@ cdef double lps_f_obs(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_H_p
 cdef double C_H_p
 cdef double[:, :] a_data_H_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_H_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_H_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_H_p = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_H_p = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_H_p = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_H_p = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_H_p = np.zeros((5, chi_num), dtype=np.float64)
@@ -776,8 +777,8 @@ cdef double lps_H_p(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_H_m
 cdef double C_H_m
 cdef double[:, :] a_data_H_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_H_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_H_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_H_m = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_H_m = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_H_m = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_H_m = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_H_m = np.zeros((5, chi_num), dtype=np.float64)
@@ -798,8 +799,8 @@ cdef double lps_H_m(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_ombh2_p
 cdef double C_ombh2_p
 cdef double[:, :] a_data_ombh2_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_ombh2_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_ombh2_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_ombh2_p = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_ombh2_p = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_ombh2_p = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_ombh2_p = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_ombh2_p = np.zeros((5, chi_num), dtype=np.float64)
@@ -820,8 +821,8 @@ cdef double lps_ombh2_p(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_ombh2_m
 cdef double C_ombh2_m
 cdef double[:, :] a_data_ombh2_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_ombh2_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_ombh2_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_ombh2_m = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_ombh2_m = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_ombh2_m = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_ombh2_m = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_ombh2_m = np.zeros((5, chi_num), dtype=np.float64)
@@ -842,8 +843,8 @@ cdef double lps_ombh2_m(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_omch2_p
 cdef double C_omch2_p
 cdef double[:, :] a_data_omch2_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_omch2_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_omch2_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_omch2_p = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_omch2_p = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_omch2_p = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_omch2_p = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_omch2_p = np.zeros((5, chi_num), dtype=np.float64)
@@ -864,8 +865,8 @@ cdef double lps_omch2_p(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_omch2_m
 cdef double C_omch2_m
 cdef double[:, :] a_data_omch2_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_omch2_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_omch2_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_omch2_m = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_omch2_m = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_omch2_m = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_omch2_m = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_omch2_m = np.zeros((5, chi_num), dtype=np.float64)
@@ -886,8 +887,8 @@ cdef double lps_omch2_m(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_ns_p
 cdef double C_ns_p
 cdef double[:, :] a_data_ns_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_ns_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_ns_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_ns_p = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_ns_p = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_ns_p = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_ns_p = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_ns_p = np.zeros((5, chi_num), dtype=np.float64)
@@ -908,8 +909,8 @@ cdef double lps_ns_p(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_ns_m
 cdef double C_ns_m
 cdef double[:, :] a_data_ns_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_ns_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_ns_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_ns_m = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_ns_m = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_ns_m = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_ns_m = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_ns_m = np.zeros((5, chi_num), dtype=np.float64)
@@ -930,8 +931,8 @@ cdef double lps_ns_m(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_As_p
 cdef double C_As_p
 cdef double[:, :] a_data_As_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_As_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_As_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_As_p = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_As_p = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_As_p = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_As_p = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_As_p = np.zeros((5, chi_num), dtype=np.float64)
@@ -952,8 +953,8 @@ cdef double lps_As_p(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_As_m
 cdef double C_As_m
 cdef double[:, :] a_data_As_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_As_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_As_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_As_m = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_As_m = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_As_m = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_As_m = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_As_m = np.zeros((5, chi_num), dtype=np.float64)
@@ -974,8 +975,8 @@ cdef double lps_As_m(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_tau_p
 cdef double C_tau_p
 cdef double[:, :] a_data_tau_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_tau_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_tau_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_tau_p = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_tau_p = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_tau_p = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_tau_p = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_tau_p = np.zeros((5, chi_num), dtype=np.float64)
@@ -996,8 +997,8 @@ cdef double lps_tau_p(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_tau_m
 cdef double C_tau_m
 cdef double[:, :] a_data_tau_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_tau_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_tau_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_tau_m = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_tau_m = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_tau_m = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_tau_m = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_tau_m = np.zeros((5, chi_num), dtype=np.float64)
@@ -1018,8 +1019,8 @@ cdef double lps_tau_m(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_mnu_p
 cdef double C_mnu_p
 cdef double[:, :] a_data_mnu_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_mnu_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_mnu_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_mnu_p = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_mnu_p = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_mnu_p = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_mnu_p = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_mnu_p = np.zeros((5, chi_num), dtype=np.float64)
@@ -1040,8 +1041,8 @@ cdef double lps_mnu_p(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_mnu_m
 cdef double C_mnu_m
 cdef double[:, :] a_data_mnu_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_mnu_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_mnu_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_mnu_m = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_mnu_m = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_mnu_m = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_mnu_m = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_mnu_m = np.zeros((5, chi_num), dtype=np.float64)
@@ -1062,8 +1063,8 @@ cdef double lps_mnu_m(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_w0_p
 cdef double C_w0_p
 cdef double[:, :] a_data_w0_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_w0_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_w0_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_w0_p = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_w0_p = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_w0_p = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_w0_p = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_w0_p = np.zeros((5, chi_num), dtype=np.float64)
@@ -1084,8 +1085,8 @@ cdef double lps_w0_p(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_w0_m
 cdef double C_w0_m
 cdef double[:, :] a_data_w0_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_w0_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_w0_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_w0_m = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_w0_m = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_w0_m = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_w0_m = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_w0_m = np.zeros((5, chi_num), dtype=np.float64)
@@ -1106,8 +1107,8 @@ cdef double lps_w0_m(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_logT_AGN_p
 cdef double C_logT_AGN_p
 cdef double[:, :] a_data_logT_AGN_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_logT_AGN_p = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_logT_AGN_p = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_logT_AGN_p = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_logT_AGN_p = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_logT_AGN_p = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_logT_AGN_p = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_logT_AGN_p = np.zeros((5, chi_num), dtype=np.float64)
@@ -1128,8 +1129,8 @@ cdef double lps_logT_AGN_p(int l, int type1, int type2) noexcept nogil:
 cdef double[:] cosm_par_logT_AGN_m
 cdef double C_logT_AGN_m
 cdef double[:, :] a_data_logT_AGN_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] b_data_logT_AGN_m = np.zeros((z_num, k_num), dtype=np.float64)
-cdef double[:, :] c_data_logT_AGN_m = np.zeros((z_num, k_num), dtype=np.float64)
+cdef double[:] b_data_logT_AGN_m = np.zeros(k_num, dtype=np.float64)
+cdef double[:] c_data_logT_AGN_m = np.zeros(k_num, dtype=np.float64)
 cdef double[:, :] lps_data_logT_AGN_m = np.zeros((15, k_num), dtype=np.float64)
 cdef double[:] scale_factor_data_logT_AGN_m = np.zeros(chi_num, dtype=np.float64)
 cdef double[:, :] window_data_logT_AGN_m = np.zeros((5, chi_num), dtype=np.float64)
@@ -1237,11 +1238,11 @@ cdef double lbs_der(int k1, int k2, int k3, int type1, int type2, int type3, int
 cpdef double a_test(double l, double z):
     return a(l, z, a_data_f)
 
-cpdef double b_test(double l, double z):
-    return b(l, z, b_data_f)
+cpdef double b_test(double l):
+    return b(l, b_data_f)
 
-cpdef double c_test(double l, double z):
-    return c(l, z, c_data_f)
+cpdef double c_test(double l):
+    return c(l, c_data_f)
 
 def mps_test(l, z):
     return matter_power_spectrum(l, z, mps_data_f)

@@ -543,12 +543,12 @@ def save_table(param_names, param_vals, which_pars, constraints, labels, plt_nam
     print(tabulate(table, headers=labels, tablefmt='latex_raw', floatfmt='.3e'))
 
 if __name__ == "__main__":
-    plots_to_make = [6, 7, 8, 9]
-    create_plots(plots_to_make)
+    # plots_to_make = [2, 3, 4, 5, 6, 7, 8, 9, 10]
+    # create_plots(plots_to_make)
     # plots_to_make = [10,]
     # create_plots(plots_to_make)
-    # tables_to_make = [0, 0.5, 1, 1.5]
-    # create_tables(tables_to_make)
+    tables_to_make = [0, 0.5, 1, 1.5]
+    create_tables(tables_to_make)
     
 
 # if __name__ == "__main__":

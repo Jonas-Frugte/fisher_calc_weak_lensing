@@ -94,6 +94,7 @@ class lensing_spectra:
 
     self.k_nl = self.find_k_nl()
     print(f"k_nl = {self.k_nl}.")
+    self._build_smoothed_ns_eff()
 
     # Precompute galaxy density per chi for each bin and build an interpolant
     # to speed up repeated evaluations (used by window_func).
@@ -182,6 +183,43 @@ class lensing_spectra:
     # if result > 2:
     #   print('ns_eff > 2:', result, k, z)
     return result
+  
+  def _build_smoothed_ns_eff(self, sigma_lnk=0.25,
+                           k_h_min=0.001, k_h_max=2.0, n_wide=2000,
+                           k_h_eval_min=0.005, k_h_eval_max=1.0, n_eval=400,
+                           z=0.0):
+    print('Building smoothed n(k) interpolant.')
+    
+    # Wide sampling grid for ns_eff (in Mpc^-1 internally to match ns_eff)
+    k_h_wide = np.logspace(np.log10(k_h_min), np.log10(k_h_max), n_wide)
+    lnk_h_wide = np.log(k_h_wide)
+    n_wide_vals = np.array([self.ns_eff(ki * self.h, z) for ki in k_h_wide])
+    
+    # Eval grid where we store the smoothed result
+    k_h_eval = np.logspace(np.log10(k_h_eval_min), np.log10(k_h_eval_max), n_eval)
+    n_smooth = np.empty_like(k_h_eval)
+    
+    inv_two_sigma2 = 0.5 / sigma_lnk**2
+    for i, k_h_i in enumerate(k_h_eval):
+        w = np.exp(-((lnk_h_wide - np.log(k_h_i))**2) * inv_two_sigma2)
+        n_smooth[i] = np.sum(w * n_wide_vals) / np.sum(w)
+    
+    # Interpolate in ln(k) where k is in Mpc^-1 (so callers pass k in Mpc^-1
+    # just like to ns_eff). Constant extrapolation outside the eval range.
+    lnk_eval_mpc = np.log(k_h_eval * self.h)
+    self._smoothed_ns_eff_lnk = lnk_eval_mpc
+    self._smoothed_ns_eff_vals = n_smooth
+    
+    def _interp(k):
+        return np.interp(np.log(k), lnk_eval_mpc, n_smooth,
+                         left=n_smooth[0], right=n_smooth[-1])
+    self._smoothed_ns_eff_interp = _interp
+    
+    print('Smoothed n(k) interpolant ready.')
+
+
+  def smoothed_ns_eff(self, k):
+    return self._smoothed_ns_eff_interp(k)
 
   def sigma_8(self, z):
     '''
@@ -289,12 +327,12 @@ class lensing_spectra:
     a_2 = self.matter_bispec_fit_params[1]
     a_6 = self.matter_bispec_fit_params[5]
 
-    numerator = 1 + self.sigma_8(z)**a_6 * np.sqrt(0.7 * self.Q_3(self.ns_eff(k, z))) * (self.q(k) * a_1)**(self.ns_eff(k, z) + a_2)
-    denominator = 1 + (self.q(k) * a_1)**(self.ns_eff(k, z) + a_2)
+    numerator = 1 + self.sigma_8(z)**a_6 * np.sqrt(0.7 * self.Q_3(self.smoothed_ns_eff(k))) * (self.q(k) * a_1)**(self.smoothed_ns_eff(k) + a_2)
+    denominator = 1 + (self.q(k) * a_1)**(self.smoothed_ns_eff(k) + a_2)
   
     return numerator / denominator
   
-  def b(self, k, z):
+  def b(self, k):
     '''
     used in matter bisepc fitting func
 
@@ -311,12 +349,12 @@ class lensing_spectra:
     a_7 = self.matter_bispec_fit_params[6]
     a_8 = self.matter_bispec_fit_params[7]
 
-    numerator = 1 + 0.2 * a_3 * (self.ns_eff(k, z) + 3) * (self.q(k) * a_7) ** (self.ns_eff(k, z) + 3 + a_8)
-    denominator = 1 + (self.q(k) * a_7) ** (self.ns_eff(k, z) + 3.5 + a_8)
+    numerator = 1 + 0.2 * a_3 * (self.smoothed_ns_eff(k) + 3) * (self.q(k) * a_7) ** (self.smoothed_ns_eff(k) + 3 + a_8)
+    denominator = 1 + (self.q(k) * a_7) ** (self.smoothed_ns_eff(k) + 3.5 + a_8)
 
     return numerator / denominator
   
-  def c(self, k, z):
+  def c(self, k):
     '''
     used in matter bisepc fitting func
 
@@ -333,8 +371,8 @@ class lensing_spectra:
     a_5 = self.matter_bispec_fit_params[4]
     a_9 = self.matter_bispec_fit_params[8]
     
-    numerator = 1 + (4.5 * a_4 / (1.5 + (self.ns_eff(k, z) + 3)**4)) * (self.q(k) * a_5)**(self.ns_eff(k, z) + 3 + a_9)
-    denominator = 1 + (self.q(k) * a_5)**(self.ns_eff(k, z) + 3.5 + a_9)
+    numerator = 1 + (4.5 * a_4 / (1.5 + (self.smoothed_ns_eff(k) + 3)**4)) * (self.q(k) * a_5)**(self.smoothed_ns_eff(k) + 3 + a_9)
+    denominator = 1 + (self.q(k) * a_5)**(self.smoothed_ns_eff(k) + 3.5 + a_9)
 
     return numerator / denominator
   
